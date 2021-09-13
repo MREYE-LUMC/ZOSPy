@@ -32,6 +32,14 @@ oss.fft_through_focus_mtf(sampling='64x64', deltafocus=0.1, oncomplete='Close')
 ```
 A full description of the available function parameters is provided in each function docstring.
 
+### Convenient functions
+Some conventiant functions are available through `zp.functions`, e.g. to change a surface to a standard stuface:
+
+```python
+newsurf = oss.LDE.InsertNewSurfaceAt(0)
+zp.functions.lde.surface_change_type(newsurf, 'Standard')
+```
+
 ### Logging
 Some basic logging is implemented through the standard [python logging module](https://docs.python.org/3/library/logging.html) (but still under development). The following implementation examples assume that `import logging` is executed.
 
