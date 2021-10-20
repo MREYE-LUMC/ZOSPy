@@ -1,0 +1,41 @@
+{
+    "ZOSAPI": {
+        "Analysis": {
+            "Data": "",
+            "RayTracing": "",
+            "Settings": {
+                "Aberrations": "",
+                "EncircledEnergy": "",
+                "Fans": "",
+                "Materials": "",
+                "Mtf": "",
+                "Psf": "",
+                "RayTracing": "",
+                "RMS": {
+                    "RMSField": "",
+                    "RMSFieldMap": ""
+                },
+                "Spot": "",
+                "Surface": "",
+                "Wavefront": ""
+            }
+        },
+        "Common": "",
+        "Editors": {
+            "LDE": "",
+            "MCE": "",
+            "MFE": "",
+            "NCE": "",
+            "TDE": ""
+        },
+        "Preferences": "",
+        "SystemData": "",
+        "Tools": {
+            "General": "",
+            "Optimization": "",
+            "RayTrace": "",
+            "Tolerancing": ""
+        },
+        "Wizards": ""
+    }
+}
