@@ -3,6 +3,8 @@
 ## About
 Wrapper around the [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API. Provides a more pythonic and intuitive way to interact with the API through python using a .NET connection. Also takes care of initiating the connection.
 
+[![DOI](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
+
 ## Basic usage
 ### Initiating connection
 The connection as extension to running software OpticStudio is initiated as:
