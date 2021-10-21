@@ -3,6 +3,18 @@
 ## About
 Wrapper around the [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API. Provides a more pythonic and intuitive way to interact with the API through python using a .NET connection. Also takes care of initiating the connection.
 
+When utilizing this package, please reference it using the following DOI:
+
+[![DOI](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
+
+## Installing
+
+ZOSPy is available through pip:
+
+```
+pip install zospy
+```
+
 ## Basic usage
 ### Initiating connection
 The connection as extension to running software OpticStudio is initiated as:
@@ -71,3 +83,8 @@ Some basic logging is implemented through the standard [python logging module](h
 
 ### Software
 - [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) (Tested with version 20.3.2)
+
+## Contact
+Feel free to contact us for any inquiries:
+- L. van Vught ([email](mailto:l.van_vught@lumc.nl))
+- J.W.M. Beenakker ([email](mailto:j.w.m.beenakker@lumc.nl))
