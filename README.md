@@ -7,6 +7,14 @@ When utilizing this package, please reference it using the following DOI:
 
 [![DOI](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
 
+## Installing
+
+ZOSPy is available through pip:
+
+```
+pip install zospy
+```
+
 ## Basic usage
 ### Initiating connection
 The connection as extension to running software OpticStudio is initiated as:
