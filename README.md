@@ -1,7 +1,7 @@
 # ZOSPy
 
 ## About
-Wrapper around the [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API. Provides a more pythonic and intuitive way to interact with the API through python using a .NET connection. Also takes care of initiating the connection.
+Wrapper around the [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API. Provides a more pythonic and intuitive way to interact with the ZOS-API through python using a .NET connection. Also takes care of initiating the connection.
 
 When utilizing this package, please reference it using the following DOI:
 
@@ -9,7 +9,7 @@ When utilizing this package, please reference it using the following DOI:
 
 ## Installing
 
-ZOSPy is available through pip:
+ZOSPy is available on PyPi
 
 ```
 pip install zospy
