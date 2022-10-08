@@ -543,7 +543,6 @@ class ZOS:
         """
 
         self._load_zos_dlls(preload=preload, zosapi_nethelper=zosapi_nethelper)
-        self._update_constants()
         self._assign_connection()
 
     def _load_zos_dlls(self, preload=False, zosapi_nethelper=None):
@@ -573,10 +572,6 @@ class ZOS:
         logger.debug('Loading ZOS DLLs with preload set to {}'.format(preload))
         self.ZOSAPI_NetHelper = load_zosapi_nethelper(filepath=zosapi_nethelper, preload=preload)
         self.ZOSAPI = load_zosapi(self.ZOSAPI_NetHelper, preload=preload)
-
-    def _update_constants(self):
-        """Updates the stored constants using the ZOSAPI instance."""
-        constants.update_from_zosapi(self.ZOSAPI)
 
     def _assign_connection(self):
         """Assigns the ZOSAPI Connection to self.Connection"""
