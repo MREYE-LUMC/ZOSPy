@@ -7,6 +7,7 @@ import pandas as pd
 
 from zospy import utils
 from zospy.analyses.base import AnalysisResult, AttrDict
+from zospy.api import constants
 
 
 def _structure_zernike_standard_coefficients_result(line_list):
@@ -134,10 +135,10 @@ def zernike_standard_coefficients(oss, sampling='64x64', maximum_term=37, wavele
         cleantxt = False
 
     # Create analysis
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Apply settings
-    analysis.Settings.SampleSize = utils.zputils.proc_constant(oss.Constants.Analysis.SampleSizes,
+    analysis.Settings.SampleSize = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
                                                                utils.zputils.standardize_sampling(sampling))
     analysis.Settings.MaximumNumberOfTerms = maximum_term
     utils.zputils.analysis_set_wavelength(analysis, wavelength)
@@ -161,13 +162,13 @@ def zernike_standard_coefficients(oss, sampling='64x64', maximum_term=37, wavele
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
 
-    settings.loc['SampleSize'] = utils.zputils.series_index_by_value( oss.Constants.Analysis.SampleSizes,
-                                                                      analysis.Settings.SampleSize)
+    settings.loc['SampleSize'] = constants.get_constantname_by_value(constants.Analysis.SampleSizes,
+                                                                     analysis.Settings.SampleSize)
     settings.loc['MaximumNumberOfTerms'] = analysis.Settings.MaximumNumberOfTerms
     settings.loc['Wavelength'] = analysis.Settings.Wavelength.GetWavelengthNumber()  # Todo Evaluate with 'all'
     settings.loc['Field'] = analysis.Settings.Field.GetFieldNumber()  # Todo Evaluate with 'all'

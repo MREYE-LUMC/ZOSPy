@@ -6,9 +6,11 @@ import numpy as np
 import pandas as pd
 
 from zospy import utils
-from zospy.analyses.base import AnalysisResult
+from zospy.analyses.base import AnalysisResult, AttrDict
+from zospy.api import constants
 
 REFLOAT = re.compile(r'^[-+]?(?:(?:\d*\.\d+)|(?:\d+\.?))(?:[Ee][+-]?\d+)?$')
+RECOMMASEP = re.compile(r'(?<=\d),(?=\d)')
 
 
 def _structure_surface_data_result(line_list):
@@ -184,7 +186,7 @@ def surface_data(oss, surf, oncomplete='Close', cfgoutfile=None, txtoutfile=None
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Modify surface in the settings file
     an_sett = analysis.GetSettings()
@@ -210,7 +212,7 @@ def surface_data(oss, surf, oncomplete='Close', cfgoutfile=None, txtoutfile=None
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
@@ -284,7 +286,7 @@ def surface_data_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Load settings
     analysis.Settings.LoadFrom(cfgfile)
@@ -300,7 +302,7 @@ def surface_data_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
@@ -485,7 +487,7 @@ def cardinal_points(oss, surf1, surf2, oncomplete='Close', cfgoutfile=None, txto
             raise ValueError('txtoutfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Modify surface in the settings file
     an_sett = analysis.GetSettings()
@@ -512,7 +514,7 @@ def cardinal_points(oss, surf1, surf2, oncomplete='Close', cfgoutfile=None, txto
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
@@ -584,7 +586,7 @@ def cardinal_points_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Load the settings file
     analysis.Settings.LoadFrom(cfgfile)
@@ -600,7 +602,7 @@ def cardinal_points_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
