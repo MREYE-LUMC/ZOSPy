@@ -267,7 +267,7 @@ class OpticStudioSystem:
         pd.Series
             The pupildata.
         """
-        return get_pupil(self.LDE)
+        return get_pupil(self)
 
     def cardinal_points(self, surf1, surf2, oncomplete='Close', cfgoutfile=None, txtoutfile=None):
         """Wrapper around the OpticStudio Cardinal Point Analysis.
