@@ -259,6 +259,9 @@ class OpticStudioSystem:
         logger.debug('Closing connections with Zemax OpticStudio')
         # ToDo Add cleanup
 
+    #######
+    # Functions
+    #######
     def get_pupil(self):
         """Obtains the pupil data.
 
@@ -269,6 +272,9 @@ class OpticStudioSystem:
         """
         return get_pupil(self)
 
+    #######
+    # Analyses
+    #######
     def cardinal_points(self, surf1, surf2, oncomplete='Close', cfgoutfile=None, txtoutfile=None):
         """Wrapper around the OpticStudio Cardinal Point Analysis.
 
