@@ -1,12 +1,12 @@
+import logging
 import os
 import sys
-import json
-import logging
 import winreg
-import clr  # noqa
-import warnings
 
-from zospy import utils
+import clr  # noqa
+
+import zospy.api.constants
+from zospy.utils import clrutils
 
 logger = logging.getLogger(__name__)
 
@@ -139,33 +139,20 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, preload=False):
             logger.critical('Cannot locate {}.dll'.format(dll))
             raise FileNotFoundError('Cannot locate {}.dll in {}'.format(dll, zos_dir))
 
-    zosapi = None
+    logger.debug('Checking content of ZOSAPI_Interfaces.dll')
+    content = clrutils.reflect_dll_content(os.path.join(zos_dir, 'ZOSAPI_Interfaces.dll'))
 
-    if preload:  # Load nested namespaces if preload is True for more code insight
-        logger.debug('Obtaining nested namepaces from configuration file')
-
-        # Load info over the nested namespaces
-        expected_jfilepath = os.path.join(os.path.dirname(__file__), r'ZOSAPINestedNameSpaces.json')
-        if os.path.exists(expected_jfilepath):
-            with open(expected_jfilepath, 'r') as jfile:
-                # Flatten the json tree to obtain all nested namespaces
-                importhooks = utils.zputils.flatten_dict(json.load(jfile), parent_key='', sep='.', keep_unflattend=True)
-
-            logger.info('Preloading nested namespaces')
-            for hook in importhooks:
-                try:
-                    zosapi = __import__(hook, globals(), locals(), [], 0)
-                    logger.debug('Nested namespace {} preloaded'.format(hook))
-                except ModuleNotFoundError:
-                    logger.error('Nested namespace {} is not available for preloading'.format(hook))
-            logger.info('Finished loading nested namespaces')
-
-        else:
-            warnings.warn('Cannot find ZOSAPINestedNamespaces.json, preload is not performed', ImportWarning)
-            logger.warning('Cannot find ZOSAPINestedNamespaces.json, preload is not performed')
-
-    logger.debug('Final load of ZOSAPI')
+    logger.debug('Loading ZOSAPI')
     zosapi = __import__('ZOSAPI', globals(), locals(), [], 0)
-    logger.info('ZOSAPI DLLs loaded successfully')
+    logger.debug('ZOSAPI loaded')
+
+    logger.debug('Loading nested namespaces')
+    for nsp in content['namespaces']:
+        if nsp == 'ZOSAPI':
+            continue
+        __import__(nsp, globals(), locals(), [], 0)
+        logger.debug('Nested namespace {} preloaded'.format(nsp))
+
+    zospy.api.constants._construct_from_zosapi_and_enumkeys(zosapi, content['enums'])  # noqa
 
     return zosapi
