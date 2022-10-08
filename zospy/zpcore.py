@@ -632,11 +632,6 @@ class ZOS:
 
         logger.info('ZOS instance initialized')
 
-    @property
-    def Constants(self):  # noqa
-        """Class level access to constants to maintain compatibility with older code."""
-        return constants
-
     def wakeup(self, preload=False, zosapi_nethelper=None):
         """Wakes the zosapi instance.
 
