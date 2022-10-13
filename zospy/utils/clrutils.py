@@ -1,11 +1,13 @@
+import os
 from datetime import datetime as dt
 
 import clr  # noqa
-from System import Enum, Double  # noqa
+from System import Enum, Double, Reflection  # noqa
 from pandas import Series
 
 DUMMY_DOUBLE = Double(0.)
 DUMMY_ENUM = 0
+
 
 def clr_get_available_assemblies(with_meta=True):
     """Gets all the avaialble assemblies from the Common Language Runtime.
@@ -21,6 +23,32 @@ def clr_get_available_assemblies(with_meta=True):
         A list of all available assemblies
     """
     return list(clr.ListAssemblies(with_meta))
+
+
+def reflect_dll_content(dllfilepath):
+    """Reflects the content of a dll.
+
+    Parameters
+    ----------
+    dllfilepath: str
+        The absolute path to the dll, including extension.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the namespaces ('namespaces') and the enumerations ('enums').
+    """
+    if not os.path.isabs(dllfilepath):
+        raise ValueError('dllfilepath should be an absolute path')
+    if not dllfilepath.lower().endswith('.dll'):
+        raise ValueError('dllfilepath should end with .dll (case is ignored)')
+
+    content = list(Reflection.Assembly.LoadFile(dllfilepath).GetTypes())
+
+    namespaces = sorted(list(set([item.Namespace for item in content])))
+    enums = sorted([item.FullName for item in content if item.IsEnum])
+    ret = {'namespaces': namespaces, 'enums': enums}
+    return ret
 
 
 def system_get_enum_key_from_value(enum, value):

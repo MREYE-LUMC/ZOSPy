@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setup(
     name='zospy',
-    version='0.5.1',
+    version='0.6.0',
     packages=['zospy'] + ['zospy.' + ii for ii in find_namespace_packages(where='zospy')],
     url='https://github.com/MREYE-LUMC/ZOSPy',
-    license='CC0 1.0 Universal',
+    license='GNU General Public License version 3',
     author='Luc van Vught, Jan-Willem Beenakker',
     author_email='l.van_vught@lumc.nl',
     description="A Python package used to communicate with Zemax OpticStudio through the API",

@@ -5,7 +5,8 @@ from collections.abc import MutableMapping
 import numpy as np
 import pandas as pd
 
-from zospy.utils.clrutils import system_get_enum_key_from_value, system_datetime_to_datetime
+from zospy.api import constants
+from zospy.utils.clrutils import system_datetime_to_datetime
 
 
 def flatten_dict(unflattend_dict, parent_key='', sep='.', keep_unflattend=False):
@@ -359,16 +360,13 @@ def analysis_get_headerdata(analysis):
     return list(analysis.Results.HeaderData.Lines)
 
 
-def analysis_get_messages(analysis, constants=None):
+def analysis_get_messages(analysis):
     """Obtains the messages from an OpticStudio analysis.
 
     Parameters
     ----------
     analysis: Any
         An OpticStudio Analysis.
-    constants: Any, optional
-        A OpticStudioSystem.Constants instance. Is used to convert error codes into actual error messages. If not
-        supplied, the error code rather than the error message is returned.
 
     Returns
     -------
@@ -380,10 +378,7 @@ def analysis_get_messages(analysis, constants=None):
     for ii in range(analysis.Results.NumberOfMessages):
         message = analysis.Results.GetMessageAt(ii)
 
-        if constants is None:
-            err = message.ErrorCode
-        else:
-            err = system_get_enum_key_from_value(constants.Analysis.ErrorType, message.ErrorCode)
+        err = constants.get_constantname_by_value(constants.Analysis.ErrorType, message.ErrorCode)
 
         ret.loc[len(ret), :] = [err, message.Text]
 

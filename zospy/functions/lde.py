@@ -5,13 +5,13 @@ from zospy.utils.clrutils import DUMMY_DOUBLE, DUMMY_ENUM
 from zospy.utils.zputils import proc_constant
 
 
-def get_pupil(lde):
+def get_pupil(oss):
     """Obtains the pupil data.
 
     Parameters
     ----------
-    lde: OpticStudioSystem().LDE
-        The LDE of the OpticStudioSystem that is to be analyzed.
+    oss: zospy.core.OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance.
 
     Returns
     -------
@@ -24,10 +24,9 @@ def get_pupil(lde):
     >>> zos = zp.ZOS()
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
-    >>> zp.functions.lde.get_pupil(oss.LDE)
+    >>> zp.functions.lde.get_pupil(oss)
     """
-    pupdat = lde.GetPupil(DUMMY_ENUM, DUMMY_DOUBLE, DUMMY_DOUBLE, DUMMY_DOUBLE, DUMMY_DOUBLE, DUMMY_DOUBLE, DUMMY_ENUM,
-                          DUMMY_DOUBLE)
+    pupdat = oss.LDE.GetPupil(int(), *[float()]*5, int(), float())
 
     ret = pd.Series(
         index=['ApertureType', 'ApertureValue', 'EntrancePupilDiameter', 'EntrancePupilPosition', 'ExitPupilDiameter',
