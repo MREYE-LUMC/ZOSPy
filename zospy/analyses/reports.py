@@ -6,9 +6,11 @@ import numpy as np
 import pandas as pd
 
 from zospy import utils
-from zospy.analyses.base import AnalysisResult
+from zospy.analyses.base import AnalysisResult, AttrDict
+from zospy.api import constants
 
 REFLOAT = re.compile(r'^[-+]?(?:(?:\d*\.\d+)|(?:\d+\.?))(?:[Ee][+-]?\d+)?$')
+RECOMMASEP = re.compile(r'(?<=\d),(?=\d)')
 
 
 def _structure_surface_data_result(line_list):
@@ -184,7 +186,7 @@ def surface_data(oss, surf, oncomplete='Close', cfgoutfile=None, txtoutfile=None
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Modify surface in the settings file
     an_sett = analysis.GetSettings()
@@ -210,7 +212,7 @@ def surface_data(oss, surf, oncomplete='Close', cfgoutfile=None, txtoutfile=None
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
@@ -284,7 +286,7 @@ def surface_data_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Load settings
     analysis.Settings.LoadFrom(cfgfile)
@@ -300,7 +302,7 @@ def surface_data_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
@@ -311,6 +313,294 @@ def surface_data_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
                          UsedCfgFile=cfgfile, RawTextData=line_list, TxtOutFile=txtoutfile)  # Set additional params
 
     # cleanup
+    if cleantxt:
+        os.remove(txtoutfile)
+
+    # Process oncomplete
+    if oncomplete == 'Close':  # Close if needed
+        analysis.Close()
+    elif oncomplete == 'Release':  # Keep the analysis open within OpticStudio but release it
+        analysis.Release()
+    elif oncomplete == 'Sustain':  # Add the analysis to the return
+        ret.Analysis = analysis
+    else:
+        raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
+
+    return ret
+
+
+def _structure_system_data_result(line_list):
+    """Structures the result of a system data report.
+
+    Parameters
+    ----------
+    line_list: list of str
+        The line list obtained by reading in the results
+
+    Returns
+    -------
+    dict
+        The results structured in a dictionary
+    """
+    # Create output dict
+    res = AttrDict()
+
+    # Add header
+    hdr = line_list[0].strip().replace('\ufeff', '')
+    res['Header'] = hdr
+
+    # Register landmarks
+    landmarks = ['GENERAL LENS DATA', 'Fields', 'Vignetting Factors', 'Wavelengths', 'Predicted coordinate ABCD matrix']
+    comp = re.compile(rf'^({"|".join(landmarks)})', re.IGNORECASE)
+    inds = {comp.match(line).group().lower(): {'rnum': rnum, 'name': comp.match(line).group()}
+            for rnum, line in enumerate(line_list) if comp.match(line)}
+
+    order_of_appearance = [item[0] for item in sorted(inds.items(), key=lambda x: x[1]['rnum'])]
+
+    # Add general lens data
+    target = 'general lens data'
+    gld = pd.Series(dtype=object)
+    if target in inds:
+        section_start = inds[target]['rnum'] + 1  # + 1 to ignore section title
+
+        # Get endpoint
+        if order_of_appearance.index(target) == len(inds) - 1:
+            section_end = len(line_list)
+        else:
+            target2 = order_of_appearance[order_of_appearance.index(target) + 1]
+            section_end = inds[target2]['rnum']
+
+        for line in line_list[section_start:section_end]:
+            if line.strip() == '':
+                continue
+
+            # Get param and value, strip whitespaces
+            param, val = line.split(':')
+            param = re.sub(r'\s+', ' ', param).strip()
+
+            # convert value to float if needed
+            val = re.sub(r'\s+', ' ', val).strip()
+            val = RECOMMASEP.sub('.', val)
+            if REFLOAT.match(val):
+                if '.' in val:
+                    val = float(val)
+                else:
+                    val = int(val)
+
+            # add
+            ii = 0
+            while param in gld.index:
+                ii += 1
+                param = f'{param} {ii}'
+            gld.loc[param] = val
+    res['GeneralLensData'] = gld
+
+    # Fields, Wavelengths
+    for target in ['fields', 'wavelengths']:
+        info = pd.Series(dtype=object)
+        data = pd.DataFrame()
+        if target in inds:
+            section_start = inds[target]['rnum']
+
+            # Get endpoint
+            if order_of_appearance.index(target) == len(inds) - 1:
+                section_end = len(line_list)
+            else:
+                target2 = order_of_appearance[order_of_appearance.index(target) + 1]
+                section_end = inds[target2]['rnum']
+
+            for ii, line in enumerate(line_list[section_start:section_end]):
+                if line.strip().startswith('#'):
+                    ht_loc = section_start + ii
+                    break
+            else:
+                ht_loc = None
+
+            param_end = ht_loc if ht_loc is not None else section_end
+            for line in line_list[section_start:param_end]:
+                if line.strip() == '':
+                    continue
+
+                # Get param and value, strip whitespaces
+                param, val = line.split(':')
+                param = re.sub(r'\s+', ' ', param).strip()
+
+                # convert value to float if needed
+                val = re.sub(r'\s+', ' ', val).strip()
+                val = RECOMMASEP.sub('.', val)
+                if REFLOAT.match(val):
+                    if '.' in val:
+                        val = float(val)
+                    else:
+                        val = int(val)
+
+                # add
+                ii = 0
+                while param in gld.index:
+                    ii += 1
+                    param = f'{param} {ii}'
+                info.loc[param] = val
+
+            if ht_loc is not None:
+                columns = re.sub(r'\s+', ' ', line_list[ht_loc]).strip().split(' ')
+                data = []
+                for ii in range(ht_loc+1, section_end):
+                    if line_list[ii].strip() == '':
+                        continue
+                    items = re.sub(r'\s+', ' ', line_list[ii]).strip().split(' ')
+                    values = []
+                    for item in items:
+                        val = RECOMMASEP.sub('.', item)
+                        if REFLOAT.match(val):
+                            if '.' in val:
+                                val = float(val)
+                            else:
+                                val = int(val)
+                        values.append(val)
+                    data.append(values)
+                data = pd.DataFrame(columns=columns, data=data)
+            res[inds[target]['name']] = AttrDict(Info=info, Data=data)
+
+    # Vignetting factors
+    target = 'vignetting factors'
+    if target in inds:
+        section_start = inds[target]['rnum'] + 1  # + 1 to ignore section title
+
+        # Get endpoint
+        if order_of_appearance.index(target) == len(inds) - 1:
+            section_end = len(line_list)
+        else:
+            target2 = order_of_appearance[order_of_appearance.index(target) + 1]
+            section_end = inds[target2]['rnum']
+
+        for ii, line in enumerate(line_list[section_start:section_end]):
+            if line.strip().startswith('#'):
+                ht_loc = section_start + ii
+                break
+        else:
+            ht_loc = None
+
+        if ht_loc is not None:
+            columns = re.sub(r'\s+', ' ', line_list[ht_loc]).strip().split(' ')
+            data = []
+            for ii in range(ht_loc+1, section_end):
+                if line_list[ii].strip() == '':
+                    continue
+                items = re.sub(r'\s+', ' ', line_list[ii]).strip().split(' ')
+                values = []
+                for item in items:
+                    val = RECOMMASEP.sub('.', item)
+                    if REFLOAT.match(val):
+                        if '.' in val:
+                            val = float(val)
+                        else:
+                            val = int(val)
+                    values.append(val)
+                data.append(values)
+            data = pd.DataFrame(columns=columns, data=data)
+        res['VignettingFactors'] = data
+
+    # Predicted ABCD matrix
+    target = 'predicted coordinate abcd matrix'
+    abcd = pd.Series(dtype=object)
+    if target in inds:
+        section_start = inds[target]['rnum'] + 1  # + 1 to ignore section title
+
+        # Get endpoint
+        if order_of_appearance.index(target) == len(inds) - 1:
+            section_end = len(line_list)
+        else:
+            target2 = order_of_appearance[order_of_appearance.index(target) + 1]
+            section_end = inds[target2]['rnum']
+
+        for line in line_list[section_start:section_end]:
+            if line.strip() == '':
+                continue
+
+            # Get param and value, strip whitespaces
+            param, val = line.split('=')
+            param = re.sub(r'\s+', ' ', param).strip()
+
+            # convert value to float if needed
+            val = re.sub(r'\s+', ' ', val).strip()
+            val = RECOMMASEP.sub('.', val)
+            if REFLOAT.match(val):
+                if '.' in val:
+                    val = float(val)
+                else:
+                    val = int(val)
+
+            # add
+            ii = 0
+            while param in gld.index:
+                ii += 1
+                param = f'{param} {ii}'
+            abcd.loc[param] = val
+        res['PredictedCoordinateABCDMatrix'] = abcd
+
+        return res
+
+
+def system_data(oss, oncomplete='Close', txtoutfile=None):
+    """Wrapper around the OpticStudio System Data Analysis.
+
+    Due to limitations in the ZOS-API, the output is obtained by writing the OpticStudio results to a file and
+    subsequently reading in this file
+
+    Parameters
+    ----------
+    oss: zospy.core.OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance. Should be sequential.
+    oncomplete: str
+        Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
+        the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
+        the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
+        with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
+        instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
+    txtoutfile: str or None
+        The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
+        string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
+        location. Defaults to None.
+
+    Returns
+    -------
+    AnalysisResult
+        A SystemData analysis result. Next to the standard data, the raw text return obtained from the analysis
+        will be present under 'RawTextData', the cfgoutfile under 'CfgOutFile', and the txtoutfile under 'TxtOutFile'.
+    """
+
+    analysistype = 'SystemData'
+
+    if txtoutfile is None:
+        fd, txtoutfile = mkstemp(suffix='.txt', prefix='zospy_')
+        os.close(fd)
+        cleantxt = True
+    else:
+        if not txtoutfile.endswith('.txt'):
+            raise ValueError('txtfile should end with ".txt"')
+        cleantxt = False
+
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
+
+    # Run analysis
+    analysis.ApplyAndWaitForCompletion()
+
+    # Get results
+    analysis.Results.GetTextFile(txtoutfile)
+    line_list = [line for line in open(txtoutfile, 'r', encoding='utf-16-le')]
+    data = _structure_system_data_result(line_list)
+
+    # Get headerdata, metadata and messages
+    headerdata = utils.zputils.analysis_get_headerdata(analysis)
+    metadata = utils.zputils.analysis_get_metadata(analysis)
+    messages = utils.zputils.analysis_get_messages(analysis)
+
+    # Create output
+    ret = AnalysisResult(analysistype=analysistype, data=data, settings=None, metadata=metadata,
+                         headerdata=headerdata, messages=messages,
+                         RawTextData=line_list, TxtOutFile=txtoutfile)  # Set additional params
+
+    # cleanup if needed
     if cleantxt:
         os.remove(txtoutfile)
 
@@ -485,7 +775,7 @@ def cardinal_points(oss, surf1, surf2, oncomplete='Close', cfgoutfile=None, txto
             raise ValueError('txtoutfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Modify surface in the settings file
     an_sett = analysis.GetSettings()
@@ -512,7 +802,7 @@ def cardinal_points(oss, surf1, surf2, oncomplete='Close', cfgoutfile=None, txto
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')
@@ -584,7 +874,7 @@ def cardinal_points_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Load the settings file
     analysis.Settings.LoadFrom(cfgfile)
@@ -600,7 +890,7 @@ def cardinal_points_fromcfg(oss, cfgfile, oncomplete='Close', txtoutfile=None):
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Manually create settings as they cannot be accessed
     settings = pd.Series(name='Settings')

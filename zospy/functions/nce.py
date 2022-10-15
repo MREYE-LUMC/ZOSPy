@@ -23,7 +23,7 @@ def object_change_type(obj, newtype):
     >>> zos = zp.ZOS()
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
-    >>> oss.System.MakeNonSequential()
+    >>> oss.make_nonsequential()
     >>> newobj = oss.NCE.InsertNewObjectAt(0)
     >>> object_change_type(newobj, 'StandardLens')
     """

@@ -2,6 +2,7 @@ import pandas as pd
 
 from zospy import utils
 from zospy.analyses.base import AnalysisResult, AttrDict
+from zospy.api import constants
 
 
 def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta=0, rotation=0, wavelength='All',
@@ -54,19 +55,19 @@ def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta
     analysistype = 'HuygensPsf'
 
     # Create analysis
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Apply settings
-    analysis.Settings.PupilSampleSize = utils.zputils.proc_constant(oss.Constants.Analysis.SampleSizes,
+    analysis.Settings.PupilSampleSize = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
                                                                     utils.zputils.standardize_sampling(pupil_sampling))
-    analysis.Settings.ImageSampleSize = utils.zputils.proc_constant(oss.Constants.Analysis.SampleSizes,
+    analysis.Settings.ImageSampleSize = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
                                                                     utils.zputils.standardize_sampling(image_sampling))
     analysis.Settings.ImageDelta = image_delta
-    analysis.Settings.Rotation = oss.Constants.Analysis.Settings.Rotations.loc[f'Rotate_{rotation}']
+    analysis.Settings.Rotation = constants.Analysis.Settings.Rotations.loc[f'Rotate_{rotation}']
     utils.zputils.analysis_set_wavelength(analysis, wavelength)
     utils.zputils.analysis_set_field(analysis, field)
-    analysis.Settings.Type = oss.Constants.Analysis.Settings.HuygensPsfTypes.loc[psftype]
-    analysis.Settings.ShowAsType = oss.Constants.Analysis.HuygensShowAsTypes.loc[show_as]
+    analysis.Settings.Type = constants.Analysis.Settings.HuygensPsfTypes.loc[psftype]
+    analysis.Settings.ShowAsType = constants.Analysis.HuygensShowAsTypes.loc[show_as]
     analysis.Settings.UsePolarization = use_polarization
     analysis.Settings.UseCentroid = use_centroid
     analysis.Settings.Normalize = normalize
@@ -77,23 +78,23 @@ def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Get settings
     settings = pd.Series(name='Settings')
 
-    settings.loc['PupilSampleSize'] = utils.zputils.series_index_by_value(oss.Constants.Analysis.SampleSizes,
+    settings.loc['PupilSampleSize'] = constants.get_constantname_by_value(constants.Analysis.SampleSizes,
                                                                           analysis.Settings.PupilSampleSize)
-    settings.loc['ImageSampleSize'] = utils.zputils.series_index_by_value(oss.Constants.Analysis.SampleSizes,
+    settings.loc['ImageSampleSize'] = constants.get_constantname_by_value(constants.Analysis.SampleSizes,
                                                                           analysis.Settings.ImageSampleSize)
     settings.loc['ImageDelta'] = analysis.Settings.ImageDelta
-    settings.loc['Rotation'] = int(utils.zputils.series_index_by_value(oss.Constants.Analysis.Settings.Rotations,
+    settings.loc['Rotation'] = int(constants.get_constantname_by_value(constants.Analysis.Settings.Rotations,
                                                                        analysis.Settings.Rotation).split('_')[1])
     settings.loc['Wavelength'] = utils.zputils.analysis_get_wavelength(analysis)
     settings.loc['Field'] = utils.zputils.analysis_get_field(analysis)
-    settings.loc['Type'] = utils.zputils.series_index_by_value(oss.Constants.Analysis.Settings.HuygensPsfTypes,
+    settings.loc['Type'] = constants.get_constantname_by_value(constants.Analysis.Settings.HuygensPsfTypes,
                                                                analysis.Settings.Type)
-    settings.loc['ShowAsType'] = utils.zputils.series_index_by_value(oss.Constants.Analysis.HuygensShowAsTypes,
+    settings.loc['ShowAsType'] = constants.get_constantname_by_value(constants.Analysis.HuygensShowAsTypes,
                                                                      analysis.Settings.Type)
     settings.loc['UsePolarization'] = analysis.Settings.UsePolarization
     settings.loc['UseCentroid'] = analysis.Settings.UseCentroid

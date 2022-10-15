@@ -2,6 +2,7 @@ import pandas as pd
 
 from zospy import utils
 from zospy.analyses.base import AnalysisResult
+from zospy.api import constants
 
 
 def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
@@ -48,17 +49,17 @@ def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
     analysistype = 'FftThroughFocusMtf'
 
     # Create analysis
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Apply settings
-    analysis.Settings.SampleSize = utils.zputils.proc_constant(oss.Constants.Analysis.SampleSizes,
+    analysis.Settings.SampleSize = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
                                                                utils.zputils.standardize_sampling(sampling))
     analysis.Settings.DeltaFocus = deltafocus
     analysis.Settings.Frequency = frequency
     analysis.Settings.NumberOfSteps = numberofsteps
     utils.zputils.analysis_set_wavelength(analysis, wavelength)
     utils.zputils.analysis_set_field(analysis, field)
-    analysis.Settings.Type = utils.zputils.proc_constant(oss.Constants.Analysis.Settings.Mtf.MtfTypes, mtftype)
+    analysis.Settings.Type = utils.zputils.proc_constant(constants.Analysis.Settings.Mtf.MtfTypes, mtftype)
     analysis.Settings.UsePolarization = use_polarization
     analysis.Settings.UseDashes = use_dashes
 
@@ -68,18 +69,18 @@ def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Get settings
     settings = pd.Series(name='Settings')
 
-    settings.loc['SampleSize'] = utils.zputils.series_index_by_value(oss.Constants.Analysis.SampleSizes,
+    settings.loc['SampleSize'] = utils.zputils.series_index_by_value(constants.Analysis.SampleSizes,
                                                                      analysis.Settings.SampleSize)
     settings.loc['DeltaFocus'] = analysis.Settings.DeltaFocus
     settings.loc['Frequency'] = analysis.Settings.Frequency
     settings.loc['Wavelength'] = utils.zputils.analysis_get_wavelength(analysis)
     settings.loc['Field'] = utils.zputils.analysis_get_field(analysis)
-    settings.loc['Type'] = utils.zputils.series_index_by_value(oss.Constants.Analysis.Settings.Mtf.MtfTypes,
+    settings.loc['Type'] = utils.zputils.series_index_by_value(constants.Analysis.Settings.Mtf.MtfTypes,
                                                                analysis.Settings.Type)
     settings.loc['UsePolarization'] = analysis.Settings.UsePolarization
     settings.loc['UseDashes'] = analysis.Settings.UseDashes
@@ -137,7 +138,7 @@ def fft_through_focus_mtf_fromcfg(oss, cfgfile, oncomplete='Close'):
     analysistype = 'FftThroughFocusMtf'
 
     # Create analysis
-    analysis = oss.System.Analyses.New_Analysis_SettingsFirst(oss.Constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Apply settings
     analysis.Settings.LoadFrom(cfgfile)
@@ -148,21 +149,21 @@ def fft_through_focus_mtf_fromcfg(oss, cfgfile, oncomplete='Close'):
     # Get headerdata, metadata and messages
     headerdata = utils.zputils.analysis_get_headerdata(analysis)
     metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis, constants=oss.Constants)
+    messages = utils.zputils.analysis_get_messages(analysis)
 
     # Get settings
     settings = pd.Series()
     settings.drop(settings.index, inplace=True)
 
-    settings.loc['SampleSize'] = utils.clrutils.system_get_enum_key_from_value(
-        oss.Constants.Analysis.SampleSizes, analysis.Settings.SampleSize)
+    settings.loc['SampleSize'] = constants.get_constantname_by_value(
+        constants.Analysis.SampleSizes, analysis.Settings.SampleSize)
     settings.loc['DeltaFocus'] = analysis.Settings.DeltaFocus
     settings.loc['Frequency'] = analysis.Settings.Frequency
     settings.loc['NumberOfSteps'] = analysis.Settings.NumberOfSteps
     settings.loc['Wavelength'] = analysis.Settings.Wavelength.GetWavelengthNumber()  # Todo Evaluate
     settings.loc['Field'] = analysis.Settings.Field.GetFieldNumber()  # Todo Evaluate
-    settings.loc['Type'] = utils.clrutils.system_get_enum_key_from_value(
-        oss.Constants.Analysis.Settings.Mtf.MtfTypes, analysis.Settings.Type)
+    settings.loc['Type'] = constants.get_constantname_by_value(
+        constants.Analysis.Settings.Mtf.MtfTypes, analysis.Settings.Type)
     settings.loc['UsePolarization'] = analysis.Settings.UsePolarization
     settings.loc['UseDashes'] = analysis.Settings.UseDashes
 

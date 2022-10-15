@@ -1,19 +1,37 @@
 # ZOSPy
 
 ## About
-Wrapper around the [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API. Provides a more pythonic and intuitive way to interact with the API through python using a .NET connection. Also takes care of initiating the connection.
+Wrapper around the [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API that provides a more pythonic and intuitive way to interact with the ZOS-API through python using a .NET connection. It also takes care of initiating the connection.
 
-When utilizing this package, please reference it using the following DOI:
-
-[![DOI](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
+## Waranty and liability
+The code is provided as is, without any warranty. It is solely intended for research purposes. No warranty is given and no rights can be derived from it, as is also stated in the [GNU General Public License Version 3](https://github.com/MREYE-LUMC/ZOSPy/blob/b26c2627d625f19545159dbf938847a9ebaf5a67/LICENSE.txt).
 
 ## Installing
 
-ZOSPy is available through pip:
+ZOSPy is available on PyPi
 
 ```
 pip install zospy
 ```
+
+## Dependencies
+### Python packages
+- [Python for .NET](http://pythonnet.github.io/) (tested with version 2.4)
+- [pandas](https://pandas.pydata.org/)
+- [NumPy](https://numpy.org/)
+
+### Software
+- [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) (Tested with version 20.3.2)
+
+## Referencing
+When publishing results obtained with this package, please cite the paper in which the package was first used:<br>
+van Vught L, Que I, Luyten GPM and Beenakker JWM.
+_Effect of anatomical differences and intraocular lens design on Negative Dysphotopsia._
+JCRS: Sep 06, 2022.
+[doi: [10.1097/j.jcrs.0000000000001054](https://doi.org/10.1097/j.jcrs.0000000000001054) ] [[JCRS](https://journals.lww.com/jcrs/Abstract/9900/Effect_of_anatomical_differences_and_intraocular.107.aspx)]
+
+If a direct reference of the package is also required, reference it using the following DOI:<br>
+[![DOI](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
 
 ## Basic usage
 ### Initiating connection
@@ -33,16 +51,29 @@ zos.create_new_application()
 oss = zos.get_primary_system()
 ```
 
-### Constants
-After initiating the connection, all api constants are available through `zp.constants` (e.g. `zp.constants.Editors.LDE.SurfaceType`). Note that that are only available after `zos.wakeup() is called as defined under **Initiating connection**. 
-
 ### Performing analyses
-Implementat analyses are are available though the `OpticStudioSystem()` (referred to as `oss` above). For instance:
+Implemented analyses are are available though `zp.analyses`. The available analyses are grouped in files that correspond to the analysis groups in OpticStudio (e.g. `zp.analyses.mtf`and `zp.analyses.wavefront`). Every analysis requires the OptiStudioSystem `oss` as first parameter.
+
+> **Note**:
+> Up to version 0.6.0, some analyses where directly available through the OpticStudioSystem (`oss`) class. This has been changed as the namespace became cluttered.
+
+#### Examples
+```python
+from zp.analyses.mtf import fft_through_focus_mtf
+mtf = fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, oncomplete='Close')
+```
 
 ```python
-oss.fft_through_focus_mtf(sampling='64x64', deltafocus=0.1, oncomplete='Close')
+from zp.analyses.reports import cardinal_points
+cp = cardinal_points(oss, surf1=3, surf2=4, oncomplete='Release')
 ```
-A full description of the available function parameters is provided in each function docstring.
+
+A full description of the available function parameters is provided in the docstrings.
+
+
+### Constants
+After initiating the connection, all api constants are available through `zp.constants` (e.g. `zp.constants.Editors.LDE.SurfaceType`). Note that that are only available after `zos.wakeup() is called as defined under **Initiating connection**.
+
 
 ### Convenient functions
 Some conventiant functions are available through `zp.functions`, e.g. to change a surface to a standard stuface:
@@ -69,20 +100,11 @@ Some basic logging is implemented through the standard [python logging module](h
     logger = logging.getLogger()
     logger.addHandler(sh)
     ```
-3. To enable logging output from ONLY ZOSPy
+3. To enable logging output from only ZOSPy
     ```python
     logging.getLogger('zospy').addHandler(logging.StreamHandler())
     logging.getLogger('zospy').setLevel(logging.INFO)
     ```
-
-## Dependencies
-### Python packages
-- [Python for .NET](http://pythonnet.github.io/) (tested with version 2.4)
-- [pandas](https://pandas.pydata.org/)
-- [NumPy](https://numpy.org/)
-
-### Software
-- [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) (Tested with version 20.3.2)
 
 ## Contact
 Feel free to contact us for any inquiries:
