@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='zospy',
-    version='0.6.0',
+    version='0.6.1',
     packages=['zospy'] + ['zospy.' + ii for ii in find_namespace_packages(where='zospy')],
     url='https://github.com/MREYE-LUMC/ZOSPy',
     license='GNU General Public License version 3',
@@ -19,6 +19,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Programming Language :: Python :: 3',
             ],
-    python_requires='>=3.0', install_requires=['pythonnet', 'pandas', 'numpy'],
+    python_requires='>=3.0', install_requires=['pythonnet==2.5.2', 'pandas', 'numpy'],
     include_package_data=True
 )

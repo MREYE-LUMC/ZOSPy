@@ -16,7 +16,10 @@ pip install zospy
 
 ## Dependencies
 ### Python packages
-- [Python for .NET](http://pythonnet.github.io/) (tested with version 2.4)
+- [Python for .NET](http://pythonnet.github.io/) (tested with version 2.5.2)
+   > **Warning**: _(Oktober 2022)_
+   Some functions of the ZOS-API seem fail with the newest available version of Pythonnet (version 3.0.0.post1), resulting in the following error: **"since Python.NET 3.0 int can not be converted to Enum implicitly."**. Therefore, the required version of pythonnet has been set to version 2.5.2 as this seems to work fine. Upon running into similar errors, please check the installed pythonnet version. We are working on a solution for this problem.
+
 - [pandas](https://pandas.pydata.org/)
 - [NumPy](https://numpy.org/)
 
