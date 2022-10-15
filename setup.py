@@ -19,6 +19,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Programming Language :: Python :: 3',
             ],
-    python_requires='>=3.0', install_requires=['pythonnet', 'pandas', 'numpy'],
+    python_requires='>=3.0', install_requires=['pythonnet==2.5.2', 'pandas', 'numpy'],
     include_package_data=True
 )
