@@ -36,10 +36,10 @@ for ii, hy in enumerate(fields):
     # Loop through pupil coordinates
     for py in np.linspace(-1,1,Nr):
         # Run single ray trace
-        raydata = zp.analyses.raytrace.single_ray_trace(oss,
-                                                        Hy=hy,Py=py,
-                                                        wavelength=2,
-                                                        global_coordinates=True)
+        raydata = zp.analyses.raysandspots.single_ray_trace(oss,
+                                                            Hy=hy,Py=py,
+                                                            wavelength=2,
+                                                            global_coordinates=True)
 
         # Extract real ray data
         raydf = raydata['Data']['RealRayTraceData']
