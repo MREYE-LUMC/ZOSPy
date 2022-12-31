@@ -167,3 +167,92 @@ def single_ray_trace(oss, Hx=0, Hy=0, Px=0, Py=1, wavelength=1, field=0, ztype=0
         raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
 
     return ret
+
+
+
+def ray_fan(oss, number_of_rays=20, wavelength='All', field='All', surface='Image', oncomplete='Close'):
+    """Wrapper around the OpticStudio Ray Fan Analysis.
+
+    Parameters
+    ----------
+    oss: zospy.core.OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance. Should be sequential.
+    number_of_rays: int
+        This is the number of rays traced on each side of the origin of the plot.
+    wavelength: str or int
+        The wavelength number that is to be used. Either 'All' or an integer specifying the wavelength number. 
+        Defaults to 'All'.
+    field: str or int
+        The field number that is to be used. Either 'All' or an integer specifying the field number. Defaults to 'All'. 
+    surface: str or int
+        The surface that is to be analyzed. Either 'Image', 'Object' or an integer. Defaults to 'Image'.
+    oncomplete: str
+        Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
+        the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
+        the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
+        with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
+        instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
+
+    Returns
+    -------
+    AnalysisResult
+        A Ray Fan result.
+    """
+
+    # Set up analysis type
+    analysistype = 'RayFan'
+    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
+
+    # Settings for ray fan
+    analysis.Settings.NumberOfRays = number_of_rays
+    utils.zputils.analysis_set_wavelength(analysis, wavelength)
+    utils.zputils.analysis_set_field(analysis, field)
+    utils.zputils.analysis_set_surface(analysis, surface)
+    
+    # Run analysis
+    analysis.ApplyAndWaitForCompletion()
+
+    # Parse results
+    results = analysis.GetResults()
+    data = AttrDict()
+    data['Header'] = 'Ray Fan Data'
+    for ii in range(results.DataSeries.Length):
+        # get raw .NET data into numpy array
+        ds = results.GetDataSeries(ii)
+        xRaw = np.asarray(tuple(ds.XData.Data))
+        yRaw = np.asarray(tuple(ds.YData.Data))
+
+        # Reshape data
+        x = xRaw
+        y = yRaw.reshape(ds.YData.Data.GetLength(0), ds.YData.Data.GetLength(1))
+
+        # Make data frame
+        df = {ds.XLabel:x}
+        for jj, label in enumerate(ds.SeriesLabels):
+            df[label] = y[:,jj]
+        df = pd.DataFrame(data=df)
+        
+        # Add data to dictionary
+        data[ds.Description] = df
+
+    # Get headerdata, metadata and messages
+    headerdata = utils.zputils.analysis_get_headerdata(analysis)
+    metadata = utils.zputils.analysis_get_metadata(analysis)
+    messages = utils.zputils.analysis_get_messages(analysis)
+
+    # Create output
+    ret = AnalysisResult(analysistype=analysistype, data=data, settings=None, metadata=metadata,
+                         headerdata=headerdata, messages=messages)  # Set additional params
+
+    # Process oncomplete
+    if oncomplete == 'Close':  # Close if needed
+        analysis.Close()
+    elif oncomplete == 'Release':  # Keep the analysis open within OpticStudio but release it
+        analysis.Release()
+    elif oncomplete == 'Sustain':  # Add the analysis to the return
+        ret.Analysis = analysis
+    else:
+        raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
+
+    return ret
+
