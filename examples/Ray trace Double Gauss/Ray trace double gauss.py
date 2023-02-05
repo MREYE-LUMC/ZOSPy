@@ -28,7 +28,7 @@ zos.create_new_application()
 oss = zos.get_primary_system()
 
 # Load example file
-file = "Double Gauss 28 degree field.zos"
+file = "Double Gauss 28 degree field.zmx"
 testFile = zos.Application.SamplesDir + "\\Sequential\\Objectives\\" + file
 print('Loading file "%s" ...' %file)
 oss.load(testFile)
