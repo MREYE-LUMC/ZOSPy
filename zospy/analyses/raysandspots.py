@@ -1,5 +1,6 @@
 import os
 import re
+import locale
 from tempfile import mkstemp
 from io import StringIO
 
@@ -10,6 +11,7 @@ from zospy import utils
 from zospy.analyses.base import AnalysisResult, AttrDict
 from zospy.api import constants
 
+DECIMAL = locale.localeconv()["decimal_point"]
 
 def _structure_ray_trace_data_result(line_list):
     """Structures the result of a ray trace data report.
@@ -54,7 +56,7 @@ def _structure_ray_trace_data_result(line_list):
 
         # Read as dataframe
         df = pd.read_csv(StringIO(''.join(line_list[section_start:section_end]).replace(' ','')),
-                          delimiter='\t')
+                          delimiter='\t',decimal=DECIMAL)
 
         # Recover case of target
         keyname = inds[target]['name'].replace(' ','')
