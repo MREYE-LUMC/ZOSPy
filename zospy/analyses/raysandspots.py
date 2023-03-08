@@ -66,7 +66,7 @@ def _structure_ray_trace_data_result(line_list):
     return res
 
 
-def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, ztype=0,
+def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, rttype='DirectionCosines',
                      global_coordinates=False, oncomplete='Close', txtoutfile=None):
     """Wrapper around the OpticStudio Single Ray Trace Analysis.
 
@@ -85,6 +85,8 @@ def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, ztype=0
         Normalized X Pupil Coord. Defaults to 0.
     py: float
         Normalized Y Pupil Coord. Defaults to 1.
+    rttype: str or int
+        The Ray Trace type (e.g. 'DirectionCosines') that is calculated.
     wavelength: int
         The wavelength number that is to be used. Must be an integer specifying the wavelength number. 
         Defaults to 1.
@@ -132,7 +134,7 @@ def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, ztype=0
     analysis.Settings.Py = py
     utils.zputils.analysis_set_wavelength(analysis, wavelength)
     utils.zputils.analysis_set_field(analysis, field)
-    analysis.Settings.Type = ztype
+    analysis.Settings.Type = utils.zputils.proc_constant(constants.Analysis.Settings.Aberrations.RayTraceType, rttype)
     analysis.Settings.UseGlobal = global_coordinates
     
     # Run analysis
