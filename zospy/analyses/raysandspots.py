@@ -66,7 +66,7 @@ def _structure_ray_trace_data_result(line_list):
     return res
 
 
-def single_ray_trace(oss, Hx=0, Hy=0, Px=0, Py=1, wavelength=1, field=0, ztype=0,
+def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, ztype=0,
                      global_coordinates=False, oncomplete='Close', txtoutfile=None):
     """Wrapper around the OpticStudio Single Ray Trace Analysis.
 
@@ -77,13 +77,13 @@ def single_ray_trace(oss, Hx=0, Hy=0, Px=0, Py=1, wavelength=1, field=0, ztype=0
     ----------
     oss: zospy.core.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    Hx: float
+    hx: float
         Normalized X Field Coord. Defaults to 0.
-    Hy: float
+    hy: float
         Normalized Y Field Coord. Defaults to 0.
-    Px: float
+    px: float
         Normalized X Pupil Coord. Defaults to 0.
-    Py: float
+    py: float
         Normalized Y Pupil Coord. Defaults to 1.
     wavelength: int
         The wavelength number that is to be used. Must be an integer specifying the wavelength number. 
@@ -126,10 +126,10 @@ def single_ray_trace(oss, Hx=0, Hy=0, Px=0, Py=1, wavelength=1, field=0, ztype=0
     analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Settings for ray trace
-    analysis.Settings.Hx = Hx
-    analysis.Settings.Hy = Hy
-    analysis.Settings.Px = Px
-    analysis.Settings.Py = Py
+    analysis.Settings.Hx = hx
+    analysis.Settings.Hy = hy
+    analysis.Settings.Px = px
+    analysis.Settings.Py = py
     utils.zputils.analysis_set_wavelength(analysis, wavelength)
     utils.zputils.analysis_set_field(analysis, field)
     analysis.Settings.Type = ztype
