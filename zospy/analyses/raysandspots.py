@@ -150,8 +150,21 @@ def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, rttype=
     metadata = utils.zputils.analysis_get_metadata(analysis)
     messages = utils.zputils.analysis_get_messages(analysis)
 
+    # Get settings
+    settings = pd.Series(name='Settings')
+
+    settings.loc['Hx'] = analysis.Settings.Hx
+    settings.loc['Hy'] = analysis.Settings.Hy
+    settings.loc['Px'] = analysis.Settings.Px
+    settings.loc['Py'] = analysis.Settings.Py
+    settings.loc['Wavelength'] = utils.zputils.analysis_get_wavelength(analysis)
+    settings.loc['Field'] = utils.zputils.analysis_get_field(analysis)
+    settings.loc['Type'] = utils.zputils.series_index_by_value(constants.Analysis.Settings.Aberrations.RayTraceType,
+                                                               analysis.Settings.Type)
+    settings.loc['GlobalCoordinates'] = analysis.Settings.UseGlobal
+
     # Create output
-    ret = AnalysisResult(analysistype=analysistype, data=data, settings=None, metadata=metadata,
+    ret = AnalysisResult(analysistype=analysistype, data=data, settings=settings, metadata=metadata,
                          headerdata=headerdata, messages=messages,
                          RawTextData=line_list, TxtOutFile=txtoutfile)  # Set additional params
 
