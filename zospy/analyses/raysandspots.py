@@ -1,6 +1,5 @@
 import os
 import re
-import locale
 
 from tempfile import mkstemp
 from io import StringIO
