@@ -186,22 +186,38 @@ def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, rttype=
 
 
 
-def ray_fan(oss, number_of_rays=20, wavelength='All', field='All', surface='Image', oncomplete='Close'):
+def ray_fan(oss, plot_scale=0, number_of_rays=20, field='All', wavelength='All', tangential='Aberration_Y',
+            sagittal='Aberration_X', surface='Image', use_dashes=False, vignetted_pupil=True, check_apertures=True,
+            oncomplete='Close'):
     """Wrapper around the OpticStudio Ray Fan Analysis.
 
     Parameters
     ----------
     oss: zospy.core.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
+    plot_scale: int or float
+        Sets the maximum vertical scale for the plots. When 0, automatic scaling is used. Defaults to 0.
     number_of_rays: int
         This is the number of rays traced on each side of the origin of the plot.
+    field: str or int
+        The field number that is to be used. Either 'All' or an integer specifying the field number. Defaults to 'All'.
     wavelength: str or int
         The wavelength number that is to be used. Either 'All' or an integer specifying the wavelength number. 
         Defaults to 'All'.
-    field: str or int
-        The field number that is to be used. Either 'All' or an integer specifying the field number. Defaults to 'All'. 
+    tangential: str or int
+        The aberration component that is plotted for the tangential fan. Accepts sting ('Aberration_Y' or
+        'Aberration_X') or int (respectively 0 and 1). Defaults to 'Aberration_Y'.
+    sagittal: str or int
+        The aberration component that is plotted for the sagittal fan. Accepts sting ('Aberration_X' or
+        'Aberration_Y') or int (respectively 0 and 1). Defaults to 'Aberration_X'.
     surface: str or int
         The surface that is to be analyzed. Either 'Image', 'Object' or an integer. Defaults to 'Image'.
+    use_dashes: bool
+        Defines whether solid lines or dashes are used to differentiate curves. Defaults to False.
+    vignetted_pupil: bool
+        Defines whether the pupil axis is scaled to the unvignetted pupil or not. Defaults to True.
+    check_apertures: bool
+        Defines whether only rays that pass all surface apertures are drawn or not. Defaults to True.
     oncomplete: str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
@@ -220,11 +236,19 @@ def ray_fan(oss, number_of_rays=20, wavelength='All', field='All', surface='Imag
     analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
 
     # Settings for ray fan
-    analysis.Settings.NumberOfRays = number_of_rays
-    utils.zputils.analysis_set_wavelength(analysis, wavelength)
     utils.zputils.analysis_set_field(analysis, field)
     utils.zputils.analysis_set_surface(analysis, surface)
-    
+    utils.zputils.analysis_set_wavelength(analysis, wavelength)
+    analysis.Settings.NumberOfRays = number_of_rays
+    analysis.Settings.PlotScale = plot_scale
+    analysis.Settings.CheckApertures = check_apertures
+    analysis.Settings.VignettedPupil = vignetted_pupil
+    analysis.Settings.UseDashes = use_dashes
+    analysis.Settings.Sagittal = \
+        utils.zputils.proc_constant(constants.Analysis.Settings.Fans.SagittalAberrationComponent, sagittal)
+    analysis.Settings.Tangential = \
+        utils.zputils.proc_constant(constants.Analysis.Settings.Fans.TangentialAberrationComponent, tangential)
+
     # Run analysis
     analysis.ApplyAndWaitForCompletion()
 
@@ -256,8 +280,25 @@ def ray_fan(oss, number_of_rays=20, wavelength='All', field='All', surface='Imag
     metadata = utils.zputils.analysis_get_metadata(analysis)
     messages = utils.zputils.analysis_get_messages(analysis)
 
+    # Get settings
+    settings = pd.Series(name='Settings')
+    settings.loc['Field'] = utils.zputils.analysis_get_field(analysis)
+    settings.loc['Surface'] = analysis.Settings.Surface.GetSurfaceNumber()
+    settings.loc['Wavelength'] = utils.zputils.analysis_get_wavelength(analysis)
+    settings.loc['NumberOfRays'] = analysis.Settings.NumberOfRays
+    settings.loc['PlotScale'] = analysis.Settings.PlotScale
+    settings.loc['CheckApertures'] = analysis.Settings.CheckApertures
+    settings.loc['VignettedPupil'] = analysis.Settings.VignettedPupil
+    settings.loc['UseDashes'] = analysis.Settings.UseDashes
+    settings.loc['Sagittal'] = \
+        utils.zputils.series_index_by_value(constants.Analysis.Settings.Fans.SagittalAberrationComponent,
+                                            analysis.Settings.Sagittal)
+    settings.loc['Tangential'] = \
+        utils.zputils.series_index_by_value(constants.Analysis.Settings.Fans.TangentialAberrationComponent,
+                                            analysis.Settings.Tangential)
+
     # Create output
-    ret = AnalysisResult(analysistype=analysistype, data=data, settings=None, metadata=metadata,
+    ret = AnalysisResult(analysistype=analysistype, data=data, settings=settings, metadata=metadata,
                          headerdata=headerdata, messages=messages)  # Set additional params
 
     # Process oncomplete
@@ -271,4 +312,3 @@ def ray_fan(oss, number_of_rays=20, wavelength='All', field='All', surface='Imag
         raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
 
     return ret
-
