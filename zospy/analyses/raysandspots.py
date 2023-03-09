@@ -86,12 +86,13 @@ def single_ray_trace(oss, hx=0, hy=0, px=0, py=1, wavelength=1, field=0, rttype=
     py: float
         Normalized Y Pupil Coord. Defaults to 1.
     rttype: str or int
-        The Ray Trace type (e.g. 'DirectionCosines') that is calculated.
+        The Ray Trace type (e.g. 'DirectionCosines') that is calculated. Defaults to 'DirectionCosines'.
     wavelength: int
         The wavelength number that is to be used. Must be an integer specifying the wavelength number. 
         Defaults to 1.
     field: int
-        The field number that is to be used. Must an integer specifying the field number. "Arbitrary" is 0. Defaults to 0.
+        The field number that is to be used. Must be an integer specifying the field number. "Arbitrary" is 0. Defaults 
+        to 0.
     global_coordinates: bool
         Defines if global coordinates are used. Defaults to False.
     oncomplete: str
