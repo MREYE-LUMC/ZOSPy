@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='zospy',
-    version='0.6.1',
+    version='0.6.2',
     packages=['zospy'] + ['zospy.' + ii for ii in find_namespace_packages(where='zospy')],
     url='https://github.com/MREYE-LUMC/ZOSPy',
     license='GNU General Public License version 3',
