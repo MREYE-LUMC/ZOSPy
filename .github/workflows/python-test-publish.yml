@@ -9,8 +9,11 @@
 name: Publish to TestPyPI
 
 on:
-  # Only allow manual triggering
+  # Allow manual triggering
   workflow_dispatch:
+  
+  release:
+    types: [created, edited, prereleased]
 
 permissions:
   contents: read
@@ -19,6 +22,7 @@ jobs:
   deploy:
 
     runs-on: ubuntu-latest
+    environment: TestPyPI
 
     steps:
     - uses: actions/checkout@v3
