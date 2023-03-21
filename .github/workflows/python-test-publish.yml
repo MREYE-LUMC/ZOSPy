@@ -64,6 +64,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     needs: build
+    
+    permissions:
+      contents: write
 
     steps:
     - name: Download dist
