@@ -62,7 +62,7 @@ jobs:
         
   publish_to_github:
     runs-on: ubuntu-latest
-    if: github.event_name == "release"
+    if: github.event_name == 'release'
     needs: build
 
     steps:
