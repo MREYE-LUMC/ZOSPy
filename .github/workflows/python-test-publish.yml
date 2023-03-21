@@ -58,7 +58,7 @@ jobs:
         password: ${{ secrets.TESTPYPI_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
         # If the release is already present, overwrite it
-        skip-existing: true
+        skip_existing: true
         
   publish_to_github:
     runs-on: ubuntu-latest
