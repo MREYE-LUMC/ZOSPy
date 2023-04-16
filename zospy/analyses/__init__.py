@@ -1,5 +1,6 @@
 from .base import AnalysisResult, AttrDict
 from .mtf import *
+from .polarization import *
 from .psf import *
 from .reports import *
 from .raysandspots import *
