@@ -2,6 +2,18 @@ import copy
 from collections.abc import MutableMapping
 
 
+def process_oncomplete(analysis, oncomplete, ret):
+    # Process oncomplete
+    if oncomplete == 'Close':  # Close if needed
+        analysis.Close()
+    elif oncomplete == 'Release':  # Keep the analysis open within OpticStudio but release it
+        analysis.Release()
+    elif oncomplete == 'Sustain':  # Add the analysis to the return
+        ret.Analysis = analysis
+    else:
+        raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
+
+
 def _pprint(d, indent=0):
     """Pretty print an attribute dict.
     """
