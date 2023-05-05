@@ -17,7 +17,7 @@ def rsetattr(obj, attr, val):
     -------
         None
     """
-    pre, _, post = attr.rpartition('.')
+    pre, _, post = attr.rpartition(".")
     return setattr(rgetattr(obj, pre) if pre else obj, post, val)
 
 
@@ -48,4 +48,4 @@ def rgetattr(obj, attr, *args):
     def _getattr(subobj, subattr, *subargs):
         return getattr(subobj, subattr, *subargs)
 
-    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj] + attr.split('.'))
+    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj] + attr.split("."))

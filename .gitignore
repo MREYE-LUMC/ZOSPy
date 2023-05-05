@@ -1,0 +1,24 @@
+# Compiled files
+*.pyc
+*.pyd
+
+# Build files
+build/
+dist/
+zospy.egg-info/
+
+# Tool and cache folders
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.tox/
+.ruff_cache/
+
+# Editor settings
+.idea/
+.vscode/
+
+# Temporary data files
+scripts/**/*.pickle
+scripts/**/*.zos
+scripts/**/*.ZDA

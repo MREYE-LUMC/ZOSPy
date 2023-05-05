@@ -33,11 +33,11 @@ zos.Application.CloseApplication()
 
 import os
 
-import zospy as zp
-
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+
+import zospy as zp
 
 
 def set_axes_equal_3d(ax):
@@ -63,7 +63,7 @@ def set_axes_equal_3d(ax):
 
     # The plot bounding box is a sphere in the sense of the infinity
     # norm, hence I call half the max range the plot radius.
-    plot_radius = 0.5*max([x_range, y_range, z_range])
+    plot_radius = 0.5 * max([x_range, y_range, z_range])
 
     ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
     ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
@@ -73,7 +73,7 @@ def set_axes_equal_3d(ax):
 zos = zp.ZOS()
 zos.wakeup()
 
-# Make sure that Zemax OpticStudio in in `Interactive Extension` mode (Programming > Interactive Extension)
+# Make sure that Zemax OpticStudio in `Interactive Extension` mode (Programming > Interactive Extension)
 zos.connect_as_extension()
 
 oss = zos.get_primary_system()
@@ -83,10 +83,8 @@ cornea_irisdist = 3.12
 object_distance = 30  # distance object -> pupil center
 
 results = {}
-for model in ['NegativeDysphotopsia',
-              'PseudophakicControl'
-              ]:
-    fp = os.path.join(os.getcwd(), rf'{model}Model.zmx')
+for model in ["NegativeDysphotopsia", "PseudophakicControl"]:
+    fp = os.path.join(os.getcwd(), rf"{model}Model.zmx")
     oss.load(fp)
 
     # Get pointers to source and retina objects
@@ -97,7 +95,7 @@ for model in ['NegativeDysphotopsia',
     obj_source.GetCellAt(12).Value = str(1e5)
 
     first = True  # use this to get position of detectors on first analysis only
-    results[model] = {'Irradiance': {}, 'AbsorbedIrradiance': {}, 'Flux': {}, 'AbsorbedFlux': {}}
+    results[model] = {"Irradiance": {}, "AbsorbedIrradiance": {}, "Flux": {}, "AbsorbedFlux": {}}
     for angle in range(0, 165, 5):
         xnew = np.sin(np.deg2rad(angle)) * object_distance
         znew = np.cos(np.deg2rad(angle)) * object_distance
@@ -128,7 +126,7 @@ for model in ['NegativeDysphotopsia',
         for facenum in range(fd.NumberOfFaces):
             fd.CurrentFace = facenum
             if first:
-                verts = np.array([list(fd.GetVertex(vertnum, 0, 0, 0)[1:]) for vertnum in range(fd.NumberOfVertices)])
+                verts = np.array([list(fd.GetVertex(vertnum)[1:]) for vertnum in range(fd.NumberOfVertices)])
                 centroids.append(verts.mean(axis=0))
             irradiance.append(fd.Irradiance)
             absorbed_irradiance.append(fd.AbsorbedIrradiance)
@@ -136,19 +134,21 @@ for model in ['NegativeDysphotopsia',
             absorbed_flux.append(fd.AbsorbedFlux)
 
         if first:
-            results[model]['Centroids'] = np.array(centroids)
+            results[model]["Centroids"] = np.array(centroids)
             first = False  # Make sure centroids are only read in once
-        results[model]['Irradiance'][angle] = np.array(irradiance)
-        results[model]['AbsorbedIrradiance'][angle] = np.array(absorbed_irradiance)
-        results[model]['Flux'][angle] = np.array(flux)
-        results[model]['AbsorbedFlux'][angle] = np.array(absorbed_flux)
+        results[model]["Irradiance"][angle] = np.array(irradiance)
+        results[model]["AbsorbedIrradiance"][angle] = np.array(absorbed_irradiance)
+        results[model]["Flux"][angle] = np.array(flux)
+        results[model]["AbsorbedFlux"][angle] = np.array(absorbed_flux)
 
 # Show results
-cumulative_irr_nd = np.array([results['NegativeDysphotopsia']['Irradiance'][key]
-                              for key in results['NegativeDysphotopsia']['Irradiance'].keys()]).sum(axis=0)
+cumulative_irr_nd = np.array(
+    [results["NegativeDysphotopsia"]["Irradiance"][key] for key in results["NegativeDysphotopsia"]["Irradiance"].keys()]
+).sum(axis=0)
 
-cumulative_irr_co = np.array([results['PseudophakicControl']['Irradiance'][key]
-                              for key in results['PseudophakicControl']['Irradiance'].keys()]).sum(axis=0)
+cumulative_irr_co = np.array(
+    [results["PseudophakicControl"]["Irradiance"][key] for key in results["PseudophakicControl"]["Irradiance"].keys()]
+).sum(axis=0)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121, projection=Axes3D.name)
@@ -156,25 +156,37 @@ ax2 = fig.add_subplot(122, projection=Axes3D.name)
 
 vmax = np.max([cumulative_irr_nd.max(), cumulative_irr_co.max()])
 filter_nd = cumulative_irr_nd != 0
-ax1.scatter(*results['NegativeDysphotopsia']['Centroids'][filter_nd].T[np.array([0, 2, 1])],
-            c=cumulative_irr_nd[filter_nd], cmap='Greys_r', vmin=0, vmax=vmax, s=1)
+ax1.scatter(
+    *results["NegativeDysphotopsia"]["Centroids"][filter_nd].T[np.array([0, 2, 1])],
+    c=cumulative_irr_nd[filter_nd],
+    cmap="Greys_r",
+    vmin=0,
+    vmax=vmax,
+    s=1,
+)
 
 filter_co = cumulative_irr_co != 0
-ax2.scatter(*results['PseudophakicControl']['Centroids'][filter_co].T[np.array([0, 2, 1])],
-            c=cumulative_irr_co[filter_co], cmap='Greys_r', vmin=0, vmax=vmax, s=1)
+ax2.scatter(
+    *results["PseudophakicControl"]["Centroids"][filter_co].T[np.array([0, 2, 1])],
+    c=cumulative_irr_co[filter_co],
+    cmap="Greys_r",
+    vmin=0,
+    vmax=vmax,
+    s=1,
+)
 
-ax1.set_title('ND')
-ax2.set_title('Control')
+ax1.set_title("ND")
+ax2.set_title("Control")
 
 set_axes_equal_3d(ax1)
 set_axes_equal_3d(ax2)
 
-ax1.set_xlabel('x')
-ax1.set_ylabel('z')
-ax1.set_zlabel('y')
+ax1.set_xlabel("x")
+ax1.set_ylabel("z")
+ax1.set_zlabel("y")
 
-ax2.set_xlabel('x')
-ax2.set_ylabel('z')
-ax2.set_zlabel('y')
+ax2.set_xlabel("x")
+ax2.set_ylabel("z")
+ax2.set_zlabel("y")
 
 plt.show()

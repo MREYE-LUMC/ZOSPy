@@ -1,11 +1,24 @@
-import pandas as pd
+from __future__ import annotations
 
-from zospy.api import constants
-from zospy.utils.clrutils import DUMMY_DOUBLE, DUMMY_ENUM
-from zospy.utils.zputils import proc_constant
+from dataclasses import dataclass
+
+from zospy.api import _ZOSAPI, constants
+from zospy.zpcore import OpticStudioSystem
 
 
-def get_pupil(oss):
+@dataclass(frozen=True)
+class PupilData:
+    ApertureType: int
+    ApertureValue: float
+    EntrancePupilDiameter: float
+    EntrancePupilPosition: float
+    ExitPupilDiameter: float
+    ExitPupilPosition: float
+    ApodizationType: int
+    ApodizationFactor: float
+
+
+def get_pupil(oss: OpticStudioSystem):
     """Obtains the pupil data.
 
     Parameters
@@ -15,7 +28,7 @@ def get_pupil(oss):
 
     Returns
     -------
-    pd.Series
+    PupilData
         The pupildata.
 
     Examples
@@ -26,25 +39,17 @@ def get_pupil(oss):
     >>> oss = zos.get_primary_system()
     >>> zp.functions.lde.get_pupil(oss)
     """
-    pupdat = oss.LDE.GetPupil(int(), *[float()]*5, int(), float())
-
-    ret = pd.Series(
-        index=['ApertureType', 'ApertureValue', 'EntrancePupilDiameter', 'EntrancePupilPosition', 'ExitPupilDiameter',
-               'ExitPupilPosition', 'ApodizationType', 'ApodizationFactor'],
-        data=pupdat[1:]
-        )
-
-    return ret
+    return PupilData(*oss.LDE.GetPupil())
 
 
-def surface_change_type(surf, newtype):
+def surface_change_type(surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constants.Editors.LDE.SurfaceType | str):
     """Simple function to change the type of a surface in the LDE.
 
     Parameters
     ----------
-    surf: ILDERow
+    surface: ZOSAPI.Editors.LDE.ILDERow
         The Row/Surface for which the change is to be made.
-    newtype: str or int
+    new_type: zospy.constants.Editors.LDE.SurfaceType | str
         The new surface type, either string (e.g. 'Standard') or int. The integer will be treated as if obtained from
         zp.constants.Editors.LDE.SurfaceType.
 
@@ -59,12 +64,10 @@ def surface_change_type(surf, newtype):
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
     >>> newsurf = oss.LDE.InsertNewSurfaceAt(0)
-    >>> surface_change_type(newsurf, 'Standard')
+    >>> surface_change_type(newsurf, zp.constants.Editors.LDE.SurfaceType.Standard)
     """
-    # Obtain the integer representing the new type if needed
-    newtype = proc_constant(constants.Editors.LDE.SurfaceType, newtype)
+    new_type = constants.process_constant(constants.Editors.LDE.SurfaceType, new_type)
 
     # Apply
-    newsurftypesettings = surf.GetSurfaceTypeSettings(newtype)
-    surf.ChangeType(newsurftypesettings)
-
+    new_surface_type_settings = surface.GetSurfaceTypeSettings(new_type)
+    surface.ChangeType(new_surface_type_settings)
