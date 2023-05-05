@@ -1,37 +1,53 @@
+"""Zemax OpticStudio analyses from the PSF category."""
+
+from __future__ import annotations
+
 import pandas as pd
 
 from zospy import utils
-from zospy.analyses.base import AnalysisResult, AttrDict
+from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
 
 
-def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta=0, rotation=0, wavelength='All',
-                field=1, psftype='Linear', show_as='Surface', use_polarization=False, use_centroid=False,
-                normalize=False, oncomplete='Close'):
-    """Wrapper around the OpticStudio Huygens PSF
-    
+def huygens_psf(
+    oss,
+    pupil_sampling: str | int = "32x32",
+    image_sampling: str | int = "32x32",
+    image_delta: float = 0,
+    rotation: float = 0,
+    wavelength: str | int = "All",
+    field: str | int = 1,
+    psftype: constants.Analysis.Settings.HuygensPsfTypes | str = "Linear",
+    show_as: constants.Analysis.HuygensShowAsTypes | str = "Surface",
+    use_polarization: bool = False,
+    use_centroid: bool = False,
+    normalize: bool = False,
+    oncomplete: OnComplete | str = OnComplete.Close,
+) -> AnalysisResult:
+    """Wrapper around the OpticStudio Huygens PSF.
+
     Parameters
     ----------
     oss: zospy.core.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    pupil_sampling: str or int
-        The pupil sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants 
+    pupil_sampling: str | int
+        The pupil sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants
         integer.
-    image_sampling: str or int
-        The image sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants 
+    image_sampling: str | int
+        The image sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants
         integer.
-    image_delta: float or int
+    image_delta: float | int
         The image delta
     rotation: int
-        The rotation, should be one off [0, 90, 180, 270].
-    wavelength: str or int
-        The wavelength number that is to be used. Either 'All' or an integer specifying the wavelength number. 
+        The rotation, should be one of [0, 90, 180, 270].
+    wavelength: str | int
+        The wavelength number that is to be used. Either 'All' or an integer specifying the wavelength number.
         Defaults to 'All'.
-    field: str or int
-        The field number that is to be used. Either 'All' or an integer specifying the field number. Defaults to 1. 
-    psftype: str or int
+    field: str | int
+        The field number that is to be used. Either 'All' or an integer specifying the field number. Defaults to 1.
+    psftype: str | int
         The PSF type (e.g. 'Linear') that is calculated. Defaults to 'Linear'.
-    show_as: str or int
+    show_as: str | int
         Defines how the data is showed within OpticStudio. Defaults to 'Surface'
     use_polarization: bool
         Defines if polarization is used. Defaults to False.
@@ -39,7 +55,7 @@ def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta
         Defines if centroid is used. Defaults to False.
     normalize: bool
         Defines if normalization is used. Defaults to False.
-    oncomplete: str
+    oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -51,23 +67,24 @@ def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta
     AnalysisResult
         A HuygensPsf analysis result
     """  # ToDo check if default for filed is correct
-
-    analysistype = 'HuygensPsf'
+    analysistype = constants.Analysis.AnalysisIDM.HuygensPsf
 
     # Create analysis
-    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = new_analysis(oss, analysistype)
 
     # Apply settings
-    analysis.Settings.PupilSampleSize = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
-                                                                    utils.zputils.standardize_sampling(pupil_sampling))
-    analysis.Settings.ImageSampleSize = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
-                                                                    utils.zputils.standardize_sampling(image_sampling))
+    analysis.Settings.PupilSampleSize = getattr(
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(pupil_sampling)
+    )
+    analysis.Settings.ImageSampleSize = getattr(
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(image_sampling)
+    )
     analysis.Settings.ImageDelta = image_delta
-    analysis.Settings.Rotation = constants.Analysis.Settings.Rotations.loc[f'Rotate_{rotation}']
-    utils.zputils.analysis_set_wavelength(analysis, wavelength)
-    utils.zputils.analysis_set_field(analysis, field)
-    analysis.Settings.Type = constants.Analysis.Settings.HuygensPsfTypes.loc[psftype]
-    analysis.Settings.ShowAsType = constants.Analysis.HuygensShowAsTypes.loc[show_as]
+    analysis.Settings.Rotation = getattr(constants.Analysis.Settings.Rotations, f"Rotate_{rotation}")
+    analysis.set_wavelength(wavelength)
+    analysis.set_field(field)
+    analysis.Settings.Type = constants.process_constant(constants.Analysis.Settings.HuygensPsfTypes, psftype)
+    analysis.Settings.ShowAsType = constants.process_constant(constants.Analysis.HuygensShowAsTypes, show_as)
     analysis.Settings.UsePolarization = use_polarization
     analysis.Settings.UseCentroid = use_centroid
     analysis.Settings.Normalize = normalize
@@ -76,29 +93,24 @@ def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta
     analysis.ApplyAndWaitForCompletion()
 
     # Get headerdata, metadata and messages
-    headerdata = utils.zputils.analysis_get_headerdata(analysis)
-    metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis)
+    headerdata = analysis.get_header_data()
+    metadata = analysis.get_metadata()
+    messages = analysis.get_messages()
 
     # Get settings
-    settings = pd.Series(name='Settings')
+    settings = pd.Series(name="Settings", dtype=object)
 
-    settings.loc['PupilSampleSize'] = constants.get_constantname_by_value(constants.Analysis.SampleSizes,
-                                                                          analysis.Settings.PupilSampleSize)
-    settings.loc['ImageSampleSize'] = constants.get_constantname_by_value(constants.Analysis.SampleSizes,
-                                                                          analysis.Settings.ImageSampleSize)
-    settings.loc['ImageDelta'] = analysis.Settings.ImageDelta
-    settings.loc['Rotation'] = int(constants.get_constantname_by_value(constants.Analysis.Settings.Rotations,
-                                                                       analysis.Settings.Rotation).split('_')[1])
-    settings.loc['Wavelength'] = utils.zputils.analysis_get_wavelength(analysis)
-    settings.loc['Field'] = utils.zputils.analysis_get_field(analysis)
-    settings.loc['Type'] = constants.get_constantname_by_value(constants.Analysis.Settings.HuygensPsfTypes,
-                                                               analysis.Settings.Type)
-    settings.loc['ShowAsType'] = constants.get_constantname_by_value(constants.Analysis.HuygensShowAsTypes,
-                                                                     analysis.Settings.Type)
-    settings.loc['UsePolarization'] = analysis.Settings.UsePolarization
-    settings.loc['UseCentroid'] = analysis.Settings.UseCentroid
-    settings.loc['Normalize'] = analysis.Settings.Normalize
+    settings.loc["PupilSampleSize"] = str(analysis.Settings.PupilSampleSize)
+    settings.loc["ImageSampleSize"] = str(analysis.Settings.ImageSampleSize)
+    settings.loc["ImageDelta"] = analysis.Settings.ImageDelta
+    settings.loc["Rotation"] = int(str(analysis.Settings.Rotation).split("_")[1])
+    settings.loc["Wavelength"] = analysis.get_wavelength()
+    settings.loc["Field"] = analysis.get_field()
+    settings.loc["Type"] = str(analysis.Settings.Type)
+    settings.loc["ShowAsType"] = str(analysis.Settings.ShowAsType)
+    settings.loc["UsePolarization"] = analysis.Settings.UsePolarization
+    settings.loc["UseCentroid"] = analysis.Settings.UseCentroid
+    settings.loc["Normalize"] = analysis.Settings.Normalize
 
     # Get data
     if analysis.Results.NumberOfDataGrids <= 0:
@@ -109,19 +121,16 @@ def huygens_psf(oss, pupil_sampling='32x32', image_sampling='32x32', image_delta
         data = AttrDict()
         for ii in range(analysis.Results.NumberOfDataGrids):
             desc = analysis.Results.DataGrids[ii].Description
-            key = desc if desc != '' else str(ii)
+            key = desc if desc != "" else str(ii)
             data[key] = utils.zputils.unpack_datagrid(analysis.Results.DataGrids[ii])
 
-    ret = AnalysisResult(analysistype=analysistype, data=data, settings=settings, metadata=metadata,
-                         headerdata=headerdata, messages=messages)
+    result = AnalysisResult(
+        analysistype=str(analysistype),
+        data=data,
+        settings=settings,
+        metadata=metadata,
+        headerdata=headerdata,
+        messages=messages,
+    )
 
-    if oncomplete == 'Close':  # Close if needed
-        analysis.Close()
-    elif oncomplete == 'Release':  # Keep the analysis open within OpticStudio but release it
-        analysis.Release()
-    elif oncomplete == 'Sustain':  # Add the analysis to the return
-        ret.Analysis = analysis
-    else:
-        raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
-
-    return ret
+    return analysis.complete(oncomplete, result)
