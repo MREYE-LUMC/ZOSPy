@@ -2,7 +2,7 @@
 
 ## About
 
-Wrapper around the [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API that provides a more pythonic and
+Wrapper around the [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API that provides a more pythonic and
 intuitive way to interact with the [ZOS-API](https://www.zemax.com/blogs/free-tutorials/getting-started-with-zos-api)
 through python using a .NET connection. It thereby allows you to do more
 optics modelling with less coding.
@@ -40,11 +40,14 @@ these versions.
 
 ### Software
 
-- [Zemax OpticStudio](https://www.zemax.com/pages/opticstudio)
+- [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio)
 
 ### Compatibility
 
-ZOSPy is tested with the following versions of Python and Zemax OpticStudio:
+> :warning: Version 1.0.0 introduced some breaking changes. See
+> the [release notes](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.0.0) for more information.
+
+ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudio:
 
 | Zemax       | 20.3.2 | 23.0.1 |
 |-------------|--------|--------|
