@@ -34,10 +34,10 @@ oss.load(test_file)
 
 # Polarization
 print('Calculating Transmission ...\n')
-ret0 = zp.analyses.transmission(oss, jx=jx, jy=jy,
+return_transmission = zp.analyses.transmission(oss, jx=jx, jy=jy,
                                 x_phase=x_phase, y_phase=y_phase,
                                 sampling='64x64')
-for key, value in ret0['Data'].items():
+for key, value in return_transmission['Data'].items():
     if key != 'Header':
         print('%s  \t%.2f%%' %(key,value['Total Transmission']*100))
 
