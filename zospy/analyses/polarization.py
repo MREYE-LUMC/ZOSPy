@@ -1,22 +1,40 @@
+"""Zemax OpticStudio analyses from the Polarization category."""
+
+from __future__ import annotations
+
 import os
 import re
 import struct
-
-from tempfile import mkstemp
 from io import StringIO
+from tempfile import mkstemp
+from typing import Any
 
 import numpy as np
 import pandas as pd
 
 from zospy import utils
-from zospy.analyses.base import AnalysisResult, AttrDict, process_oncomplete
+from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
 import zospy.api.config as _config
+from zospy.zpcore import OpticStudioSystem
 
-
-def polarization_pupil_map(oss, jx=1, jy=0, x_phase=0, y_phase=0, wavelength=1, field=1,
-                           surface='Image', sampling='11x11', add_configs = '', sub_configs = '',
-                           oncomplete='Close', cfgoutfile = None, txtoutfile=None):
+    
+def polarization_pupil_map(
+    oss: OpticStudioSystem,
+    jx: float = 1,
+    jy: float = 0,
+    x_phase: float = 0,
+    y_phase: float = 0,
+    wavelength: int = 1,
+    field: int = 1,
+    surface: str | int = "Image",
+    sampling: str | int = '11x11',
+    add_configs: str = '',
+    sub_configs: str = '',
+    oncomplete: OnComplete | str = OnComplete.Close,
+    cfgoutfile: str | None = None,
+    txtoutfile: str | None = None
+) -> AnalysisResult:
     """Wrapper around the OpticStudio Polarization Pupil Map Analysis.
 
     Due to limitations in the ZOS-API, the output is obtained by writing the OpticStudio results to a file and
@@ -72,7 +90,7 @@ def polarization_pupil_map(oss, jx=1, jy=0, x_phase=0, y_phase=0, wavelength=1, 
         will be present under 'RawTextData', and the txtoutfile under 'TxtOutFile'.
     """
 
-    analysistype = 'PolarizationPupilMap'
+    analysistype = constants.Analysis.AnalysisIDM.PolarizationPupilMap
 
     if cfgoutfile is None:
         fd, cfgoutfile = mkstemp(suffix='.CFG', prefix='zospy_')
@@ -92,27 +110,28 @@ def polarization_pupil_map(oss, jx=1, jy=0, x_phase=0, y_phase=0, wavelength=1, 
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = new_analysis(oss, analysistype)
 
     # Modify the settings file
-    an_sett = analysis.GetSettings()
-    an_sett.SaveTo(cfgoutfile)
+    analysis_settings = analysis.GetSettings()
+    analysis_settings.SaveTo(cfgoutfile)
 
     # MODIFYSETTINGS are defined in the ZPL help files: The Programming Tab > About the ZPL > Keywords
-    an_sett.ModifySettings(cfgoutfile, 'PPM_JX', str(jx))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_JY', str(jy))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_PX', str(x_phase))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_PY', str(y_phase))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_WAVE', str(int(wavelength)))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_FIELD', str(int(field)))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_SURFACE', str(surface))
-    samp = utils.zputils.proc_constant(constants.Analysis.SampleSizes_ContrastLoss,
-                                 utils.zputils.standardize_sampling(sampling))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_SAMP', str(samp-1))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_ADDCONFIG', str(add_configs))
-    an_sett.ModifySettings(cfgoutfile, 'PPM_SUBCONFIGS', str(sub_configs))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_JX', str(jx))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_JY', str(jy))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_PX', str(x_phase))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_PY', str(y_phase))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_WAVE', str(int(wavelength)))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_FIELD', str(int(field)))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_SURFACE', str(surface))
+    sampling_value = getattr(
+        constants.Analysis.SampleSizes_ContrastLoss,utils.zputils.standardize_sampling(sampling)
+        ).value__
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_SAMP', str(sampling_value-1))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_ADDCONFIG', str(add_configs))
+    analysis_settings.ModifySettings(cfgoutfile, 'PPM_SUBCONFIGS', str(sub_configs))
 
-    an_sett.LoadFrom(cfgoutfile)
+    analysis_settings.LoadFrom(cfgoutfile)
 
     # Run analysis
     analysis.ApplyAndWaitForCompletion()
@@ -141,9 +160,9 @@ def polarization_pupil_map(oss, jx=1, jy=0, x_phase=0, y_phase=0, wavelength=1, 
     data['Table'] = df
 
     # Get headerdata, metadata and messages
-    headerdata = utils.zputils.analysis_get_headerdata(analysis)
-    metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis)
+    headerdata = analysis.get_header_data()
+    metadata = analysis.get_metadata()
+    messages = analysis.get_messages()
 
     # Get settings
     settings = pd.Series(name='Settings',dtype=object)
@@ -160,9 +179,16 @@ def polarization_pupil_map(oss, jx=1, jy=0, x_phase=0, y_phase=0, wavelength=1, 
     settings.loc['Sub Configs'] = sub_configs
 
     # Create output
-    ret = AnalysisResult(analysistype=analysistype, data=data, settings=settings, metadata=metadata,
-                         headerdata=headerdata, messages=messages,
-                         RawTextData=line_list, CgfOutFile=cfgoutfile, TxtOutFile=txtoutfile)
+    result = AnalysisResult(
+        analysistype=str(analysistype),
+        data=data,
+        settings=settings,
+        metadata=metadata,
+        headerdata=headerdata,
+        messages=messages,
+        RawTextData=line_list,
+        CgfOutFile=cfgoutfile,
+        TxtOutFile=txtoutfile)
 
     # cleanup if needed
     if cleancfg:
@@ -170,16 +196,22 @@ def polarization_pupil_map(oss, jx=1, jy=0, x_phase=0, y_phase=0, wavelength=1, 
     if cleantxt:
         os.remove(txtoutfile)
 
-    # Process oncomplete
-    process_oncomplete(analysis=analysis, oncomplete=oncomplete, ret=ret)
-
-    return ret
+    return analysis.complete(oncomplete, result)
 
 
 
-
-def transmission(oss, sampling='32x32', unpolarized=False, jx=1, jy=0, x_phase=0, y_phase=0,
-                 oncomplete='Close', cfgoutfile = None, txtoutfile=None):
+def transmission(
+    oss: OpticStudioSystem,
+    sampling: str | int = '32x32',
+    unpolarized: bool = False,
+    jx: float = 1,
+    jy: float = 0,
+    x_phase: float = 0,
+    y_phase: float = 0,
+    oncomplete: OnComplete | str = OnComplete.Close,
+    cfgoutfile: str | None = None,
+    txtoutfile: str | None = None
+) -> AnalysisResult:
     """Wrapper around the OpticStudio Polarization Transmission Analysis.
 
     Due to limitations in the ZOS-API, the output is obtained by writing the OpticStudio results to a file and
@@ -225,7 +257,7 @@ def transmission(oss, sampling='32x32', unpolarized=False, jx=1, jy=0, x_phase=0
         will be present under 'RawTextData', and the txtoutfile under 'TxtOutFile'.
     """
 
-    analysistype = 'Transmission'
+    analysistype = constants.Analysis.AnalysisIDM.Transmission
 
     if cfgoutfile is None:
         fd, cfgoutfile = mkstemp(suffix='.CFG', prefix='zospy_')
@@ -245,19 +277,20 @@ def transmission(oss, sampling='32x32', unpolarized=False, jx=1, jy=0, x_phase=0
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = new_analysis(oss, analysistype)
 
     # Modify the settings file
-    an_sett = analysis.GetSettings()
-    an_sett.SaveTo(cfgoutfile)
+    analysis_settings = analysis.GetSettings()
+    analysis_settings.SaveTo(cfgoutfile)
 
     settingsbstr = b''.join(open(cfgoutfile, 'rb').readlines())
     settingsbarr = bytearray(settingsbstr)
 
     # Change settings - all byte indices could only be found via reverse engineering :(
-    samp = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
-                                 utils.zputils.standardize_sampling(sampling))
-    settingsbarr[56] = samp
+    sampling_value = getattr(
+        constants.Analysis.SampleSizes,utils.zputils.standardize_sampling(sampling)
+        ).value__
+    settingsbarr[56] = sampling_value
     settingsbarr[60] = int(unpolarized)
     settingsbarr[24:32] = struct.pack('<d', jx)
     settingsbarr[32:40] = struct.pack('<d', jy)
@@ -267,7 +300,7 @@ def transmission(oss, sampling='32x32', unpolarized=False, jx=1, jy=0, x_phase=0
     with open(cfgoutfile, 'wb') as bfile:
         bfile.write(settingsbarr)
 
-    an_sett.LoadFrom(cfgoutfile)
+    analysis_settings.LoadFrom(cfgoutfile)
 
     # Run analysis
     analysis.ApplyAndWaitForCompletion()
@@ -312,9 +345,9 @@ def transmission(oss, sampling='32x32', unpolarized=False, jx=1, jy=0, x_phase=0
             data[field][wvl] = df
 
     # Get headerdata, metadata and messages
-    headerdata = utils.zputils.analysis_get_headerdata(analysis)
-    metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis)
+    headerdata = analysis.get_header_data()
+    metadata = analysis.get_metadata()
+    messages = analysis.get_messages()
 
     # Get settings
     settings = pd.Series(name='Settings',dtype=object)
@@ -327,9 +360,16 @@ def transmission(oss, sampling='32x32', unpolarized=False, jx=1, jy=0, x_phase=0
     settings.loc['Y-Phase'] = y_phase
 
     # Create output
-    ret = AnalysisResult(analysistype=analysistype, data=data, settings=settings, metadata=metadata,
-                         headerdata=headerdata, messages=messages,
-                         RawTextData=line_list, CgfOutFile=cfgoutfile, TxtOutFile=txtoutfile)
+    result = AnalysisResult(
+        analysistype=str(analysistype),
+        data=data,
+        settings=settings,
+        metadata=metadata,
+        headerdata=headerdata,
+        messages=messages,
+        RawTextData=line_list,
+        CgfOutFile=cfgoutfile,
+        TxtOutFile=txtoutfile)
 
     # cleanup if needed
     if cleancfg:
@@ -337,8 +377,5 @@ def transmission(oss, sampling='32x32', unpolarized=False, jx=1, jy=0, x_phase=0
     if cleantxt:
         os.remove(txtoutfile)
 
-    # Process oncomplete
-    process_oncomplete(analysis=analysis, oncomplete=oncomplete, ret=ret)
-
-    return ret
+    return analysis.complete(oncomplete, result)
 
