@@ -1,0 +1,150 @@
+connection_mode: standalone
+output_directory: test_output
+redact_patterns:
+  # Simple Windows path (only local)
+  - '(?:[a-z]:)?(?:\\\\[\w\s.]+)+'
+tests:
+  - model: simple_system
+    analysis: wavefront.zernike_standard_coefficients
+    file: test_wavefront.py
+    test: test_zernike_standard_coefficients_returns_correct_result
+    parametrized: [sampling, maximum_term]
+    parameters:
+      - sampling: 64x64
+        maximum_term: 37
+      - sampling: 128x128
+        maximum_term: 64
+  - model: simple_system
+    analysis: mtf.fft_through_focus_mtf
+    file: test_mtf.py
+    test: test_fft_through_focus_mtf_returns_correct_result
+    parametrized: [sampling, deltafocus, frequency, numberofsteps, mtftype]
+    parameters:
+      - sampling: 64x64
+        deltafocus: 0.1
+        frequency: 0
+        numberofsteps: 5
+        mtftype: Modulation
+      - sampling: 128x128
+        deltafocus: 0.3
+        frequency: 3
+        numberofsteps: 10
+        mtftype: Imaginary
+  - model: simple_system
+    analysis: psf.huygens_psf
+    file: test_psf.py
+    test: test_huygens_psf_returns_correct_result
+  - model: simple_system
+    analysis: raysandspots.single_ray_trace
+    file: test_raysandspots.py
+    test: test_single_ray_trace_returns_correct_result
+    parametrized: [hx, hy, px, py, raytrace_type, global_coordinates]
+    parameters:
+      - hx: 1
+        hy: 1
+        px: 0
+        py: 0
+        raytrace_type: DirectionCosines
+        global_coordinates: false
+      - hx: 0
+        hy: 0
+        px: 1
+        py: 1
+        raytrace_type: DirectionCosines
+        global_coordinates: true
+      - hx: 1
+        hy: 1
+        px: 0
+        py: 0
+        raytrace_type: TangentAngle
+        global_coordinates: true
+  - model: simple_system
+    analysis: raysandspots.ray_fan
+    file: test_raysandspots.py
+    test: test_ray_fan_returns_correct_result
+    parametrized: [plot_scale, number_of_rays, tangential, sagittal]
+    parameters:
+      - plot_scale: 0
+        number_of_rays: 20
+        tangential: Aberration_Y
+        sagittal: Aberration_X
+      - plot_scale: 1
+        number_of_rays: 40
+        tangential: Aberration_Y
+        sagittal: Aberration_X
+      - plot_scale: 0
+        number_of_rays: 20
+        tangential: Aberration_X
+        sagittal: Aberration_Y
+  - model: simple_system
+    analysis: reports.surface_data
+    file: test_reports.py
+    test: test_surface_data_returns_correct_result
+    parameters:
+      - surface: 2
+  - model: simple_system
+    analysis: reports.system_data
+    file: test_reports.py
+    test: test_system_data_returns_correct_result
+  - model: simple_system
+    analysis: reports.cardinal_points
+    file: test_reports.py
+    test: test_cardinal_points_returns_correct_result
+    parameters:
+      - surface_1: 2
+        surface_2: 3
+  - model: simple_system
+    analysis: surface.curvature
+    file: test_surface.py
+    test: test_curvature_returns_correct_result
+    parametrized: [sampling, data, remove, surface, showas, contourformat, bfs_criterion, bfs_reversedirection]
+    parameters:
+      - sampling: 65x65
+        data: TangentialCurvature
+        remove: null
+        surface: 2
+        showas: Surface
+        contourformat: ""
+        bfs_criterion: MinimumVolume
+        bfs_reversedirection: false
+      - sampling: 129x129
+        data: SagitalCurvature
+        remove: null
+        surface: 2
+        showas: Contour
+        contourformat: ""
+        bfs_criterion: MinimumVolume
+        bfs_reversedirection: false
+      - sampling: 129x129
+        data: SagitalCurvature
+        remove: BaseROC
+        surface: 2
+        showas: Contour
+        contourformat: "0.1"
+        bfs_criterion: MinimumVolume
+        bfs_reversedirection: false
+      - sampling: 33x33
+        data: X_Curvature
+        remove: BestFitSphere
+        surface: 3
+        showas: Contour
+        contourformat: ""
+        bfs_criterion: MinimumRMS
+        bfs_reversedirection: false
+      - sampling: 33x33
+        data: X_Curvature
+        remove: BestFitSphere
+        surface: 3
+        showas: Contour
+        contourformat: ""
+        bfs_criterion: MinimumVolume
+        bfs_reversedirection: false
+      - sampling: 33x33
+        data: X_Curvature
+        remove: BestFitSphere
+        surface: 3
+        showas: Contour
+        contourformat: "0.2"
+        bfs_criterion: MinimumVolume
+        bfs_reversedirection: true
+

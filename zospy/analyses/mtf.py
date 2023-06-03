@@ -1,13 +1,28 @@
+"""Zemax OpticStudio analyses from the MTF category."""
+
+from __future__ import annotations
+
 import pandas as pd
 
 from zospy import utils
-from zospy.analyses.base import AnalysisResult
+from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import constants
+from zospy.zpcore import OpticStudioSystem
 
 
-def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
-                          numberofsteps=5, wavelength='All', field='All', mtftype='Modulation',
-                          use_polarization=False, use_dashes=False, oncomplete='Close'):
+def fft_through_focus_mtf(
+    oss: OpticStudioSystem,
+    sampling: str | int = "64x64",
+    deltafocus: float = 0.1,
+    frequency: float = 0,
+    numberofsteps: int = 5,
+    wavelength: str | int = "All",
+    field: str | int = "All",
+    mtftype: constants.Analysis.Settings.Mtf.MtfTypes | str = "Modulation",
+    use_polarization: bool = False,
+    use_dashes: bool = False,
+    oncomplete: OnComplete | str = OnComplete.Close,
+) -> AnalysisResult:
     """Wrapper around the OpticStudio FFT Through Focus MTF.
 
     For an in depth explanation of the parameters, see the Zemax OpticStudio user manual
@@ -16,7 +31,7 @@ def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
     ----------
     oss: zospy.core.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    sampling: str or int
+    sampling: str | int
         The sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants integer.
     deltafocus: float
         The delta focus, defaults to 0.1
@@ -24,17 +39,17 @@ def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
         The frequency. Defaults to 0.
     numberofsteps: int
         The number of steps. Defaults to 5.
-    wavelength: str or int
+    wavelength: str | int
         The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
-    field: str or int
+    field: str | int
         The field to use in the MTF. Either 'All' or an integer specifying the field number.
-    mtftype: str or int
-        The MTF type (e.g. 'Modulation') that is calculated.
+    mtftype: zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
+        The MTF type (e.g. `Modulation`) that is calculated.
     use_polarization: bool
         Use polarization. Defaults to False.
     use_dashes: bool
         Use dashes. Defaults to False.
-    oncomplete: str
+    oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -46,45 +61,42 @@ def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
     AnalysisResult
         A FftThroughFocusMtf analysis result
     """
-    analysistype = 'FftThroughFocusMtf'
+    analysis_type = constants.Analysis.AnalysisIDM.FftThroughFocusMtf
 
     # Create analysis
-    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = new_analysis(oss, analysis_type)
 
     # Apply settings
-    analysis.Settings.SampleSize = utils.zputils.proc_constant(constants.Analysis.SampleSizes,
-                                                               utils.zputils.standardize_sampling(sampling))
+    analysis.Settings.SampleSize = getattr(constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(sampling))
     analysis.Settings.DeltaFocus = deltafocus
     analysis.Settings.Frequency = frequency
     analysis.Settings.NumberOfSteps = numberofsteps
-    utils.zputils.analysis_set_wavelength(analysis, wavelength)
-    utils.zputils.analysis_set_field(analysis, field)
-    analysis.Settings.Type = utils.zputils.proc_constant(constants.Analysis.Settings.Mtf.MtfTypes, mtftype)
+    analysis.set_wavelength(wavelength)
+    analysis.set_field(field)
+    analysis.Settings.Type = constants.process_constant(constants.Analysis.Settings.Mtf.MtfTypes, mtftype)
     analysis.Settings.UsePolarization = use_polarization
     analysis.Settings.UseDashes = use_dashes
 
     # Calculate
     analysis.ApplyAndWaitForCompletion()
-    
+
     # Get headerdata, metadata and messages
-    headerdata = utils.zputils.analysis_get_headerdata(analysis)
-    metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis)
+    headerdata = analysis.get_header_data()
+    metadata = analysis.get_metadata()
+    messages = analysis.get_messages()
 
     # Get settings
-    settings = pd.Series(name='Settings')
+    settings = pd.Series(name="Settings", dtype=object)
 
-    settings.loc['SampleSize'] = utils.zputils.series_index_by_value(constants.Analysis.SampleSizes,
-                                                                     analysis.Settings.SampleSize)
-    settings.loc['DeltaFocus'] = analysis.Settings.DeltaFocus
-    settings.loc['Frequency'] = analysis.Settings.Frequency
-    settings.loc['Wavelength'] = utils.zputils.analysis_get_wavelength(analysis)
-    settings.loc['Field'] = utils.zputils.analysis_get_field(analysis)
-    settings.loc['Type'] = utils.zputils.series_index_by_value(constants.Analysis.Settings.Mtf.MtfTypes,
-                                                               analysis.Settings.Type)
-    settings.loc['UsePolarization'] = analysis.Settings.UsePolarization
-    settings.loc['UseDashes'] = analysis.Settings.UseDashes
-    
+    settings.loc["SampleSize"] = str(analysis.Settings.SampleSize)
+    settings.loc["DeltaFocus"] = analysis.Settings.DeltaFocus
+    settings.loc["Frequency"] = analysis.Settings.Frequency
+    settings.loc["Wavelength"] = analysis.get_wavelength()
+    settings.loc["Field"] = analysis.get_field()
+    settings.loc["Type"] = str(analysis.Settings.Type)
+    settings.loc["UsePolarization"] = analysis.Settings.UsePolarization
+    settings.loc["UseDashes"] = analysis.Settings.UseDashes
+
     # Get data and unpack
     data = []
     for ii in range(analysis.Results.NumberOfDataSeries):
@@ -96,23 +108,22 @@ def fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, frequency=0,
         data = data[0]
     else:
         data = pd.concat(data, axis=1)
-    
-    ret = AnalysisResult(analysistype=analysistype, data=data, settings=settings, metadata=metadata,
-                         headerdata=headerdata, messages=messages)
 
-    if oncomplete == 'Close':  # Close if needed
-        analysis.Close()
-    elif oncomplete == 'Release':  # Keep the analysis open within OpticStudio but release it
-        analysis.Release()
-    elif oncomplete == 'Sustain':  # Add the analysis to the return
-        ret.Analysis = analysis
-    else:
-        raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
+    result = AnalysisResult(
+        analysistype=str(analysis_type),
+        data=data,
+        settings=settings,
+        metadata=metadata,
+        headerdata=headerdata,
+        messages=messages,
+    )
 
-    return ret
+    return analysis.complete(oncomplete, result)
 
 
-def fft_through_focus_mtf_fromcfg(oss, cfgfile, oncomplete='Close'):
+def fft_through_focus_mtf_fromcfg(
+    oss: OpticStudioSystem, cfgfile: str, oncomplete: OnComplete | str = OnComplete.Close
+):
     """Wrapper around the OpticStudio FFT Through Focus MTF using a configuration file.
 
     For an in depth explanation of the parameters, see the Zemax OpticStudio user manual
@@ -123,7 +134,7 @@ def fft_through_focus_mtf_fromcfg(oss, cfgfile, oncomplete='Close'):
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     cfgfile: str
         Full filepath (including extension) to a configuration file.
-    oncomplete: str
+    oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -135,10 +146,10 @@ def fft_through_focus_mtf_fromcfg(oss, cfgfile, oncomplete='Close'):
     AnalysisResult
         An FftThroughFocusMtf analysis result. Next to the standard data, the cfgfile will be added under 'UsedCfgFile'
     """
-    analysistype = 'FftThroughFocusMtf'
+    analysis_type = constants.Analysis.AnalysisIDM.FftThroughFocusMtf
 
     # Create analysis
-    analysis = oss.Analyses.New_Analysis_SettingsFirst(constants.Analysis.AnalysisIDM.loc[analysistype])
+    analysis = new_analysis(oss, analysis_type)
 
     # Apply settings
     analysis.Settings.LoadFrom(cfgfile)
@@ -147,25 +158,23 @@ def fft_through_focus_mtf_fromcfg(oss, cfgfile, oncomplete='Close'):
     analysis.ApplyAndWaitForCompletion()
 
     # Get headerdata, metadata and messages
-    headerdata = utils.zputils.analysis_get_headerdata(analysis)
-    metadata = utils.zputils.analysis_get_metadata(analysis)
-    messages = utils.zputils.analysis_get_messages(analysis)
+    headerdata = analysis.get_header_data()
+    metadata = analysis.get_metadata()
+    messages = analysis.get_messages()
 
     # Get settings
-    settings = pd.Series()
+    settings = pd.Series(name="Settings", dtype=object)
     settings.drop(settings.index, inplace=True)
 
-    settings.loc['SampleSize'] = constants.get_constantname_by_value(
-        constants.Analysis.SampleSizes, analysis.Settings.SampleSize)
-    settings.loc['DeltaFocus'] = analysis.Settings.DeltaFocus
-    settings.loc['Frequency'] = analysis.Settings.Frequency
-    settings.loc['NumberOfSteps'] = analysis.Settings.NumberOfSteps
-    settings.loc['Wavelength'] = analysis.Settings.Wavelength.GetWavelengthNumber()  # Todo Evaluate
-    settings.loc['Field'] = analysis.Settings.Field.GetFieldNumber()  # Todo Evaluate
-    settings.loc['Type'] = constants.get_constantname_by_value(
-        constants.Analysis.Settings.Mtf.MtfTypes, analysis.Settings.Type)
-    settings.loc['UsePolarization'] = analysis.Settings.UsePolarization
-    settings.loc['UseDashes'] = analysis.Settings.UseDashes
+    settings.loc["SampleSize"] = str(analysis.Settings.SampleSize)
+    settings.loc["DeltaFocus"] = analysis.Settings.DeltaFocus
+    settings.loc["Frequency"] = analysis.Settings.Frequency
+    settings.loc["NumberOfSteps"] = analysis.Settings.NumberOfSteps
+    settings.loc["Wavelength"] = analysis.Settings.Wavelength.GetWavelengthNumber()  # Todo Evaluate
+    settings.loc["Field"] = analysis.Settings.Field.GetFieldNumber()  # Todo Evaluate
+    settings.loc["Type"] = str(analysis.Settings.Type)
+    settings.loc["UsePolarization"] = analysis.Settings.UsePolarization
+    settings.loc["UseDashes"] = analysis.Settings.UseDashes
 
     # Get data and unpack
     data = []
@@ -179,18 +188,14 @@ def fft_through_focus_mtf_fromcfg(oss, cfgfile, oncomplete='Close'):
     else:
         data = pd.concat(data, axis=1)
 
-    ret = AnalysisResult(analysistype=analysistype, data=data, settings=settings, metadata=metadata,
-                         headerdata=headerdata, messages=messages,
-                         UsedCfgFile=cfgfile)
+    result = AnalysisResult(
+        analysistype=str(analysis_type),
+        data=data,
+        settings=settings,
+        metadata=metadata,
+        headerdata=headerdata,
+        messages=messages,
+        UsedCfgFile=cfgfile,
+    )
 
-    # Process oncomplete
-    if oncomplete == 'Close':  # Close if needed
-        analysis.Close()
-    elif oncomplete == 'Release':  # Keep the analysis open within OpticStudio but release it
-        analysis.Release()
-    elif oncomplete == 'Sustain':  # Add the analysis to the return
-        ret.Analysis = analysis
-    else:
-        raise ValueError('oncomplete should be one of "Close", "Release", "Sustain"')
-
-    return ret
+    return analysis.complete(oncomplete, result)

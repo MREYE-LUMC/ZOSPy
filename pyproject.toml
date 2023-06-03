@@ -1,6 +1,101 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "zospy"
+authors = [
+    {name = "Luc van Vught", email = "l.van_vught@lumc.nl"},
+    {name = "Jan-Willem Beenakker", email = "j.w.m.beenakker@lumc.nl"},
+    {name = "Corné Haasjes", email = "c.haasjes@lumc.nl" }
 ]
-build-backend = "setuptools.build_meta"
+description = "A Python package used to communicate with Zemax OpticStudio through the API"
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+keywords = ["Zemax", "OpticStudio", "API", "ZOSAPI"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Typing :: Typed"
+]
+requires-python = ">=3.9,<3.12"
+dependencies = [
+    "pythonnet ~= 3.0.1",
+    "pandas",
+    "numpy"
+]
+dynamic = ["version"]
+
+[project.urls]
+Source = "https://github.com/MREYE-LUMC/ZOSPy"
+Documentation = "https://mreye-lumc.github.io/ZOSPy"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "tox",
+]
+
+dev = [
+    "zospy[test]",
+    "black[jupyter] == 23.3.0",
+    "isort",
+    "pydantic",
+    "ruff",
+]
+
+[tool.pytest.ini_options]
+markers = ["must_pass: test must pass, otherwise all other tests will be skipped"]
+
+[tool.mypy]
+files = [
+    "zospy"
+]
+pretty = true
+
+[[tool.mypy.overrides]]
+module = [
+    "zospy.api._ZOSAPI",
+    "zospy.api._ZOSAPI_constants"
+]
+ignore_errors = "True"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+line-length = 120
+ignore-init-module-imports = true
+
+exclude = [
+    "zospy/api/_ZOSAPI",
+    "zospy/api/_ZOSAPI_constants"
+]
+
+# Rule sets for linting
+select = [
+    "F",    # pyflakes
+    "E",    # pycodestyle error
+    "W",    # pycodestyle warning
+    "I",    # isort
+    "D",    # pydocstyle
+    "TCH",  # flake8 type checking
+    "NPY",  # numpy-specific
+]
+
+ignore = [
+    "TCH001",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D401"
+]
+
+[tool.ruff.pydocstyle]
+convention = "numpy"

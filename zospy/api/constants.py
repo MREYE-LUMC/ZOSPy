@@ -1,4 +1,5 @@
-"""
+"""Constants for the ZOS-API.
+
 Submodule used for package wide access to all ZOS api constants. Note that the constant-naming within this module breaks
 pep, but is kept as such to be in-sync with the api documentation. Constants should in general be accessed through
 'zospy.constants' (or 'zp.constants'). All constants are obtained dynamically from the api. Therefore, they are only
@@ -11,24 +12,26 @@ zos = zp.ZOS()
 zos.wakeup()
 zp.constants
 """
+from __future__ import annotations
 
 import itertools as _itertools
 import logging as _logging
 from types import SimpleNamespace as _SimpleNamespace
+from typing import Iterable, TypeVar
 
-from pandas import Index as _Index
-
+from zospy.api._ZOSAPI_constants import *  # noqa
 from zospy.utils import clrutils as _clrutils
 from zospy.utils import pyutils as _pyutils
 
 _logger = _logging.getLogger(__name__)
+
 
 # Note: the above imports (and all but one function) are named private, to incease clarity on which Module components
 # are constants and which are not.
 
 
 def _itertools_joinfunc(*args):
-    return '.'.join(args)
+    return ".".join(args)
 
 
 def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
@@ -47,12 +50,10 @@ def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
     -------
     None
     """
-
     zosapi_enumkeys = sorted(zosapi_enumkeys)
     added_namespaces = set()
     for enumkey in zosapi_enumkeys:
-
-        subkeys = enumkey.split('.')
+        subkeys = enumkey.split(".")
 
         assert len(subkeys) > 1  # should at least be 2
 
@@ -60,7 +61,7 @@ def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
             clrattr = getattr(zosapi, subkeys[-1], None)
 
             # Set constant
-            globals()[subkeys[-1]] = _clrutils.series_from_system_enum(clrattr)
+            globals()[subkeys[-1]] = _clrutils.system_enum_to_namedtuple(clrattr)
 
         else:  # with nesting
             base = subkeys[1]
@@ -70,25 +71,38 @@ def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
                 globals()[base] = _SimpleNamespace()  # Create the base as simplenamespace
                 added_namespaces.add(base)
             for nsp in nsp_parts:
-                if '.'.join((base, nsp)) in added_namespaces:  # check if already added
+                if ".".join((base, nsp)) in added_namespaces:  # check if already added
                     continue
                 else:
                     _pyutils.rsetattr(globals()[base], nsp, _SimpleNamespace())  # add nested objects
-                    added_namespaces.add('.'.join((base, nsp)))
+                    added_namespaces.add(".".join((base, nsp)))
 
-            clrattr = _pyutils.rgetattr(zosapi, '.'.join(subkeys[1:]), None)
+            clrattr = _pyutils.rgetattr(zosapi, ".".join(subkeys[1:]), None)
 
             # set constants
-            _pyutils.rsetattr(globals()[base], '.'.join(subkeys[2:]),
-                              _clrutils.series_from_system_enum(clrattr))
+            _pyutils.rsetattr(globals()[base], ".".join(subkeys[2:]), _clrutils.system_enum_to_namedtuple(clrattr))
 
 
-def get_constantname_by_value(constant_series, value):
-    """Obtain a constant name from a value
+Constant = TypeVar("Constant")
+
+
+def process_constant(constant: Iterable[Constant], value: Constant | str | None) -> Constant:
+    if (value is None or value == "None") and hasattr(constant, "None_"):
+        return getattr(constant, "None_")
+    elif isinstance(value, str) and hasattr(constant, value):
+        return getattr(constant, value)
+    elif value in constant:
+        return value
+
+    raise ValueError(f"Constant {type(constant).__name__} does not contain value {str(value)}")
+
+
+def get_constantname_by_value(constant_tuple, value):
+    """Obtain a constant name from a value.
 
     Parameters
     ----------
-    constant_series: pd.Series
+    constant_tuple: tuple
         The set of constants used to look up the value
     value: int
         The value for which the constant name is to be found
@@ -98,8 +112,10 @@ def get_constantname_by_value(constant_series, value):
     str
         The constant name
     """
-
     try:
-        return constant_series.index[_Index(constant_series).get_loc(value)]
+        if isinstance(value, int):
+            return constant_tuple._fields[value]  # noqa
+
+        return constant_tuple._fields[constant_tuple.index(value)]  # noqa
     except KeyError:
-        raise ValueError('None of the constants has value {} assigned'.format(value))
+        raise ValueError(f"None of the constants has value {value} assigned")
