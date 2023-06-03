@@ -28,9 +28,9 @@ oss = zos.get_primary_system()
 
 # Load example file
 file = "Prism using total internal reflection.zmx"
-testFile = zos.Application.SamplesDir + "\\Sequential\\Tilted systems & prisms\\" + file
+test_file = zos.Application.SamplesDir + "\\Sequential\\Tilted systems & prisms\\" + file
 print('Loading file "%s" ...' %file)
-oss.load(testFile)
+oss.load(test_file)
 
 # Polarization
 print('Calculating Transmission ...\n')
