@@ -24,9 +24,9 @@ zos.create_new_application()
 oss = zos.get_primary_system()
 
 # Load example file
-file = "Prism using total internal reflection.zmx"
-test_file = zos.Application.SamplesDir + "\\Sequential\\Tilted systems & prisms\\" + file
-print('Loading file "%s" ...' % file)
+example_file = "Prism using total internal reflection.zmx"
+print(f"Loading file {example_file} ...")
+oss.load(example_file)
 oss.load(test_file)
 
 # Polarization
@@ -64,6 +64,6 @@ for ii in range(len(df)):
 plt.xlabel("Px")
 plt.ylabel("Py")
 plt.axis("equal")
-plt.title(file)
+plt.title(example_file)
 print("Done.")
 plt.show()
