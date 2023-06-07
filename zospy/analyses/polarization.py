@@ -88,7 +88,7 @@ def polarization_pupil_map(
         A Polarization Pupil Map. Next to the standard data, the raw text return obtained from the analysis
         will be present under 'RawTextData', and the txtoutfile under 'TxtOutFile'.
     """
-    analysistype = constants.Analysis.AnalysisIDM.PolarizationPupilMap
+    analysis_type = constants.Analysis.AnalysisIDM.PolarizationPupilMap
 
     if cfgoutfile is None:
         fd, cfgoutfile = mkstemp(suffix=".CFG", prefix="zospy_")
@@ -108,7 +108,7 @@ def polarization_pupil_map(
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = new_analysis(oss, analysistype)
+    analysis = new_analysis(oss, analysis_type)
 
     # Modify the settings file
     analysis_settings = analysis.GetSettings()
@@ -177,7 +177,7 @@ def polarization_pupil_map(
 
     # Create output
     result = AnalysisResult(
-        analysistype=str(analysistype),
+        analysistype=str(analysis_type),
         data=data,
         settings=settings,
         metadata=metadata,
@@ -253,7 +253,7 @@ def transmission(
         A Polarization Transmission Analysis. Next to the standard data, the raw text return obtained from the analysis
         will be present under 'RawTextData', and the txtoutfile under 'TxtOutFile'.
     """
-    analysistype = constants.Analysis.AnalysisIDM.Transmission
+    analysis_type = constants.Analysis.AnalysisIDM.Transmission
 
     if cfgoutfile is None:
         fd, cfgoutfile = mkstemp(suffix=".CFG", prefix="zospy_")
@@ -273,26 +273,26 @@ def transmission(
             raise ValueError('txtfile should end with ".txt"')
         cleantxt = False
 
-    analysis = new_analysis(oss, analysistype)
+    analysis = new_analysis(oss, analysis_type)
 
     # Modify the settings file
     analysis_settings = analysis.GetSettings()
     analysis_settings.SaveTo(cfgoutfile)
 
-    settingsbstr = b"".join(open(cfgoutfile, "rb").readlines())
-    settingsbarr = bytearray(settingsbstr)
+    settings_bytestring = b"".join(open(cfgoutfile, "rb").readlines())
+    settings_bytearray = bytearray(settings_bytestring)
 
     # Change settings - all byte indices could only be found via reverse engineering :(
     sampling_value = getattr(constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(sampling)).value__
-    settingsbarr[56] = sampling_value
-    settingsbarr[60] = int(unpolarized)
-    settingsbarr[24:32] = struct.pack("<d", jx)
-    settingsbarr[32:40] = struct.pack("<d", jy)
-    settingsbarr[40:48] = struct.pack("<d", x_phase)
-    settingsbarr[48:56] = struct.pack("<d", y_phase)
+    settings_bytearray[56] = sampling_value
+    settings_bytearray[60] = int(unpolarized)
+    settings_bytearray[24:32] = struct.pack("<d", jx)
+    settings_bytearray[32:40] = struct.pack("<d", jy)
+    settings_bytearray[40:48] = struct.pack("<d", x_phase)
+    settings_bytearray[48:56] = struct.pack("<d", y_phase)
 
     with open(cfgoutfile, "wb") as bfile:
-        bfile.write(settingsbarr)
+        bfile.write(settings_bytearray)
 
     analysis_settings.LoadFrom(cfgoutfile)
 
@@ -356,7 +356,7 @@ def transmission(
 
     # Create output
     result = AnalysisResult(
-        analysistype=str(analysistype),
+        analysistype=str(analysis_type),
         data=data,
         settings=settings,
         metadata=metadata,
