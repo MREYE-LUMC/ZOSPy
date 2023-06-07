@@ -27,7 +27,6 @@ oss = zos.get_primary_system()
 example_file = "Prism using total internal reflection.zmx"
 print(f"Loading file {example_file} ...")
 oss.load(example_file)
-oss.load(test_file)
 
 # Polarization
 print("Calculating Transmission ...\n")
@@ -36,14 +35,14 @@ return_transmission = zp.analyses.polarization.transmission(
 )
 for key, value in return_transmission["Data"].items():
     if key != "Header":
-        print("%s  \t%.2f%%" % (key, value["Total Transmission"] * 100))
+        print(f"{key}  \t{value['Total Transmission'] * 100}%")
 
 # Get polarization map
 print("\nGenerating Polarization Pupil Map ...")
-ret = zp.analyses.polarization.polarization_pupil_map(
+result = zp.analyses.polarization.polarization_pupil_map(
     oss, jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase, sampling="17x17"
 )
-df = ret["Data"]["Table"]
+df = result["Data"]["Table"]
 
 # Plot map
 xy_length = len(np.unique(df["Px"]))
