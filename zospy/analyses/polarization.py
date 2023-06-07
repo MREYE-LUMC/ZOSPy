@@ -312,8 +312,7 @@ def transmission(
 
     # Go line by line (skip first 5 lines) and sort data into data dictionary
     ifield = 0
-    for ind, line in enumerate(line_list[5:]):
-        ind += 5
+    for ind, line in enumerate(line_list[5:], start=5):
         if "Field Pos :" in line:
             field = line.strip()
             if field not in data:
