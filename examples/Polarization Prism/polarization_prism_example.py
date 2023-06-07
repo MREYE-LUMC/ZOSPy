@@ -29,7 +29,7 @@ print(f"Loading file {example_file} ...")
 oss.load(example_file)
 
 # Polarization
-print("Calculating Transmission ...\n")
+print("Calculating Transmission ...")
 return_transmission = zp.analyses.polarization.transmission(
     oss, jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase, sampling="64x64"
 )
