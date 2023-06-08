@@ -136,7 +136,9 @@ def polarization_pupil_map(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+
+    with open(txtoutfile, "r", encoding="utf-16-le") as f:
+        line_list = [line for line in f]
 
     # Create output dict
     data = AttrDict()
@@ -301,7 +303,9 @@ def transmission(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+
+    with open(txtoutfile, "r", encoding="utf-16-le") as f:
+        line_list = [line for line in f]
 
     # Create output dict
     data = AttrDict()
