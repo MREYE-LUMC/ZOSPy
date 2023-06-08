@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import locale
 import os
 import re
 import struct
+from dataclasses import dataclass
 from io import StringIO
 from tempfile import mkstemp
 
@@ -16,6 +18,27 @@ from zospy import utils
 from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.zpcore import OpticStudioSystem
+
+
+def _get_number_field(name: str, text: str) -> str:
+    return re.search(rf"{name}\s*:\s*([\d{_config.DECIMAL}]+)", text).group(1)
+
+
+@dataclass
+class PupilMapData:
+    """Pupil map analysis data."""
+
+    Header: str
+    Wavelength: float
+    FieldPos: float
+    XField: float
+    YField: float
+    XPhase: float
+    YPhase: float
+    Configs: int
+    Surface: int
+    Transmission: float
+    Table: pd.DataFrame
 
 
 def polarization_pupil_map(
@@ -138,25 +161,28 @@ def polarization_pupil_map(
     analysis.Results.GetTextFile(txtoutfile)
 
     with open(txtoutfile, "r", encoding="utf-16-le") as f:
-        line_list = [line for line in f]
+        text_output = f.read()
+        line_list = text_output.split("\n")
 
-    # Create output dict
-    data = AttrDict()
-
-    # Add header
-    hdr = line_list[0].strip().replace("\ufeff", "")
-    data["Header"] = hdr
-
-    # Add settings
-    for ii in range(9):
-        name = line_list[7 + ii].replace(" ", "").split(":")[0]
-        data[name] = float(re.sub(r"[^\d.]+", "", line_list[7 + ii]))
+    # Get header
+    header = line_list[0].strip().replace("\ufeff", "")
 
     # Read data table as dataframe
-    df = pd.read_csv(StringIO("".join(line_list[17:]).replace(" ", "")), delimiter="\t", decimal=_config.DECIMAL)
+    df = pd.read_csv(StringIO("\n".join(line_list[17:]).replace(" ", "")), delimiter="\t", decimal=_config.DECIMAL)
 
-    # Add to result dictionary
-    data["Table"] = df
+    data = PupilMapData(
+        Header=header,
+        Wavelength=locale.atof(_get_number_field("Wavelength", text_output)),
+        FieldPos=locale.atof(_get_number_field("Field Pos", text_output)),
+        XField=locale.atof(_get_number_field("X-Field", text_output)),
+        YField=locale.atof(_get_number_field("Y-Field", text_output)),
+        XPhase=locale.atof(_get_number_field("X-Phase", text_output)),
+        YPhase=locale.atof(_get_number_field("Y-Phase", text_output)),
+        Configs=locale.atoi(_get_number_field("Configs", text_output)),
+        Surface=locale.atoi(_get_number_field("Surface", text_output)),
+        Transmission=locale.atof(_get_number_field("Transmission", text_output)),
+        Table=df,
+    )
 
     # Get headerdata, metadata and messages
     headerdata = analysis.get_header_data()

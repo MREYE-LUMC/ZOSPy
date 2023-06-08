@@ -1,4 +1,5 @@
 """In standalone runs and plots polarization analyses in Prism using total internal reflection."""
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -23,10 +24,10 @@ zos.wakeup()
 zos.create_new_application()
 oss = zos.get_primary_system()
 
-# Load example file
-example_file = "Prism using total internal reflection.zmx"
+# Load example file; OpticStudio requires absolute paths
+example_file = Path("Prism using total internal reflection.zmx").absolute()
 print(f"Loading file {example_file} ...")
-oss.load(example_file)
+oss.load(str(example_file))
 
 # Polarization
 print("Calculating Transmission ...")
@@ -42,7 +43,7 @@ print("\nGenerating Polarization Pupil Map ...")
 result = zp.analyses.polarization.polarization_pupil_map(
     oss, jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase, sampling="17x17"
 )
-df = result["Data"]["Table"]
+df = result.Data.Table
 
 # Plot map
 xy_length = len(np.unique(df["Px"]))
@@ -63,6 +64,6 @@ for ii in range(len(df)):
 plt.xlabel("Px")
 plt.ylabel("Py")
 plt.axis("equal")
-plt.title(example_file)
+plt.title(example_file.stem)
 print("Done.")
 plt.show()
