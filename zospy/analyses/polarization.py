@@ -150,7 +150,7 @@ def polarization_pupil_map(
     # Add settings
     for ii in range(9):
         name = line_list[7 + ii].replace(" ", "").split(":")[0]
-        data[name] = float(re.sub(r"[^\d\.]+", "", line_list[7 + ii]))
+        data[name] = float(re.sub(r"[^\d.]+", "", line_list[7 + ii]))
 
     # Read data table as dataframe
     df = pd.read_csv(StringIO("".join(line_list[17:]).replace(" ", "")), delimiter="\t", decimal=_config.DECIMAL)
