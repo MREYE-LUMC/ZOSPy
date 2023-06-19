@@ -146,7 +146,8 @@ def polarization_pupil_map(
     analysis_settings.ModifySettings(cfgoutfile, "PPM_FIELD", str(int(field)))
     analysis_settings.ModifySettings(cfgoutfile, "PPM_SURFACE", str(surface))
     sampling_value = getattr(
-        constants.Analysis.SampleSizes_ContrastLoss, utils.zputils.standardize_sampling(sampling)
+        constants.Analysis.SampleSizes_ContrastLoss,
+        utils.zputils.standardize_sampling(sampling),
     ).value__
     analysis_settings.ModifySettings(cfgoutfile, "PPM_SAMP", str(sampling_value - 1))
     analysis_settings.ModifySettings(cfgoutfile, "PPM_ADDCONFIG", str(add_configs))
@@ -168,7 +169,11 @@ def polarization_pupil_map(
     header = line_list[0].strip().replace("\ufeff", "")
 
     # Read data table as dataframe
-    df = pd.read_csv(StringIO("\n".join(line_list[17:]).replace(" ", "")), delimiter="\t", decimal=_config.DECIMAL)
+    df = pd.read_csv(
+        StringIO("\n".join(line_list[17:]).replace(" ", "")),
+        delimiter="\t",
+        decimal=_config.DECIMAL,
+    )
 
     data = PupilMapData(
         Header=header,
@@ -223,6 +228,18 @@ def polarization_pupil_map(
         os.remove(txtoutfile)
 
     return analysis.complete(oncomplete, result)
+
+
+@dataclass
+class TransmissionData:
+    """Transmission analysis data."""
+
+    # TODO add support for multiple fields and wavelengths
+    Header: str
+    FieldPos: float
+    TotalTransmission: float
+    Wavelength: float
+    Table: pd.DataFrame
 
 
 def transmission(
@@ -281,6 +298,14 @@ def transmission(
         A Polarization Transmission Analysis. Next to the standard data, the raw text return obtained from the analysis
         will be present under 'RawTextData', and the txtoutfile under 'TxtOutFile'.
     """
+    if (
+        oss.SystemData.Fields.NumberOfFields > 1
+        or oss.SystemData.Wavelengths.NumberOfWavelengths > 1
+    ):
+        raise NotImplementedError(
+            "Only systems with a single field and a single wavelength are currently supported."
+        )
+
     analysis_type = constants.Analysis.AnalysisIDM.Transmission
 
     if cfgoutfile is None:
@@ -311,7 +336,9 @@ def transmission(
     settings_bytearray = bytearray(settings_bytestring)
 
     # Change settings - all byte indices could only be found via reverse engineering :(
-    sampling_value = getattr(constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(sampling)).value__
+    sampling_value = getattr(
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(sampling)
+    ).value__
     settings_bytearray[56] = sampling_value
     settings_bytearray[60] = int(unpolarized)
     settings_bytearray[24:32] = struct.pack("<d", jx)
@@ -331,42 +358,65 @@ def transmission(
     analysis.Results.GetTextFile(txtoutfile)
 
     with open(txtoutfile, "r", encoding="utf-16-le") as f:
-        line_list = [line for line in f]
+        text_output = f.read()
+        line_list = text_output.split("\n")
 
-    # Create output dict
-    data = AttrDict()
+    # Get header
+    header = line_list[0].strip().replace("\ufeff", "")
 
-    # Add header and sections
-    hdr = line_list[0].strip().replace("\ufeff", "")
-    data["Header"] = hdr
+    # Read data table as dataframe
+    df = pd.read_csv(
+        StringIO("\n".join(line_list[26:]).strip()),
+        delimiter="\t",
+        decimal=_config.DECIMAL,
+    )
+    df.columns = df.columns.str.strip()
 
-    # Go line by line (skip first 5 lines) and sort data into data dictionary
-    ifield = 0
-    for ind, line in enumerate(line_list[5:], start=5):
-        if "Field Pos :" in line:
-            field = line.strip()
-            if field not in data:
-                data[field] = {}
-                ifield += 1
-                data[field]["Field number"] = ifield
-        elif "Transmission at" in line or "Total Transmission " in line:
-            line_split = line.split(":")
-            data[field][re.sub(" +", " ", line_split[0]).strip()] = float(line_split[-1])
-        elif "Wavelength " in line:
-            wvl = "Chief ray " + line.strip()
-        elif " Surf    	Tot. Tran    	Rel. Tran" in line:
-            # Read as dataframe
-            df = pd.read_csv(
-                StringIO("".join(line_list[ind:]).strip()), dtype=object, delimiter="\t", decimal=_config.DECIMAL
-            )
-            df.columns = df.columns.str.strip()
+    data = TransmissionData(
+        Header=header,
+        FieldPos=locale.atof(_get_number_field("Field Pos", text_output)),
+        Wavelength=locale.atof(_get_number_field("Wavelength 1", text_output)),
+        TotalTransmission=locale.atof(
+            _get_number_field("Total Transmission", text_output)
+        ),
+        Table=df,
+    )
 
-            # Find nan, truncate and add to data
-            nan_idxs = np.where(df["Tot. Tran"].isna())[0]
-            if len(nan_idxs) != 0:
-                first_nan = nan_idxs[0]
-                df = df.truncate(after=first_nan - 1)
-            data[field][wvl] = df
+    # # Create output dict
+    # data = AttrDict()
+    #
+    # # Go line by line (skip first 5 lines) and sort data into data dictionary
+    # ifield = 0
+    # for ind, line in enumerate(line_list[5:], start=5):
+    #     if "Field Pos :" in line:
+    #         field = line.strip()
+    #         if field not in data:
+    #             data[field] = {}
+    #             ifield += 1
+    #             data[field]["Field number"] = ifield
+    #     elif "Transmission at" in line or "Total Transmission " in line:
+    #         line_split = line.split(":")
+    #         data[field][re.sub(" +", " ", line_split[0]).strip()] = float(
+    #             line_split[-1]
+    #         )
+    #     elif "Wavelength " in line:
+    #         wvl = "Chief ray " + line.strip()
+    #     elif " Surf    	Tot. Tran    	Rel. Tran" in line:
+    #         # Read as dataframe
+    #         df = pd.read_csv(
+    #             StringIO("".join(line_list[ind:]).strip()),
+    #             dtype=object,
+    #             delimiter="\t",
+    #             decimal=_config.DECIMAL,
+    #         )
+    #         df.columns = df.columns.str.strip()
+    #
+    #         # Find nan, truncate and add to data
+    #         nan_idxs = np.where(df["Tot. Tran"].isna())[0]
+    #         if len(nan_idxs) != 0:
+    #             first_nan = nan_idxs[0]
+    #             df = df.truncate(after=first_nan - 1)
+    #         data[field][wvl] = df
 
     # Get headerdata, metadata and messages
     headerdata = analysis.get_header_data()
