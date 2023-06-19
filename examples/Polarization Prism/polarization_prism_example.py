@@ -34,9 +34,10 @@ print("Calculating Transmission ...")
 return_transmission = zp.analyses.polarization.transmission(
     oss, jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase, sampling="64x64"
 )
-for key, value in return_transmission["Data"].items():
-    if key != "Header":
-        print(f"{key}  \t{value['Total Transmission'] * 100}%")
+
+print(
+    f"{return_transmission.FieldPos}  \t{return_transmission.TotalTransmission * 100}%"
+)
 
 # Get polarization map
 print("\nGenerating Polarization Pupil Map ...")
@@ -52,7 +53,11 @@ for ii in range(len(df)):
     phi = np.linspace(0, 2 * np.pi) - np.pi / 3
     Ex = np.real(df["Ex"][ii] * np.exp(1j * phi)) / xy_length + df["Px"].iloc[ii]
     Ey = (
-        np.real(df["Ey"].iloc[ii] * np.exp(1j * phi + 1j * df["Phase(Deg)"].iloc[ii] * np.pi / 180)) / xy_length
+        np.real(
+            df["Ey"].iloc[ii]
+            * np.exp(1j * phi + 1j * df["Phase(Deg)"].iloc[ii] * np.pi / 180)
+        )
+        / xy_length
         + df["Py"].iloc[ii]
     )
 
@@ -60,7 +65,12 @@ for ii in range(len(df)):
     line = plt.plot(Ex, Ey, "k")
 
     # Add arrows
-    line[0].axes.annotate("", xytext=(Ex[0], Ey[0]), xy=(Ex[1], Ey[1]), arrowprops=dict(arrowstyle="->", color="k"))
+    line[0].axes.annotate(
+        "",
+        xytext=(Ex[0], Ey[0]),
+        xy=(Ex[1], Ey[1]),
+        arrowprops=dict(arrowstyle="->", color="k"),
+    )
 plt.xlabel("Px")
 plt.ylabel("Py")
 plt.axis("equal")
