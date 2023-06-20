@@ -10,12 +10,11 @@ from dataclasses import dataclass
 from io import StringIO
 from tempfile import mkstemp
 
-import numpy as np
 import pandas as pd
 
 import zospy.api.config as _config
 from zospy import utils
-from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
+from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.zpcore import OpticStudioSystem
 
