@@ -382,42 +382,6 @@ def transmission(
         Table=df,
     )
 
-    # # Create output dict
-    # data = AttrDict()
-    #
-    # # Go line by line (skip first 5 lines) and sort data into data dictionary
-    # ifield = 0
-    # for ind, line in enumerate(line_list[5:], start=5):
-    #     if "Field Pos :" in line:
-    #         field = line.strip()
-    #         if field not in data:
-    #             data[field] = {}
-    #             ifield += 1
-    #             data[field]["Field number"] = ifield
-    #     elif "Transmission at" in line or "Total Transmission " in line:
-    #         line_split = line.split(":")
-    #         data[field][re.sub(" +", " ", line_split[0]).strip()] = float(
-    #             line_split[-1]
-    #         )
-    #     elif "Wavelength " in line:
-    #         wvl = "Chief ray " + line.strip()
-    #     elif " Surf    	Tot. Tran    	Rel. Tran" in line:
-    #         # Read as dataframe
-    #         df = pd.read_csv(
-    #             StringIO("".join(line_list[ind:]).strip()),
-    #             dtype=object,
-    #             delimiter="\t",
-    #             decimal=_config.DECIMAL,
-    #         )
-    #         df.columns = df.columns.str.strip()
-    #
-    #         # Find nan, truncate and add to data
-    #         nan_idxs = np.where(df["Tot. Tran"].isna())[0]
-    #         if len(nan_idxs) != 0:
-    #             first_nan = nan_idxs[0]
-    #             df = df.truncate(after=first_nan - 1)
-    #         data[field][wvl] = df
-
     # Get headerdata, metadata and messages
     headerdata = analysis.get_header_data()
     metadata = analysis.get_metadata()
