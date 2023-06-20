@@ -21,7 +21,7 @@ from zospy.zpcore import OpticStudioSystem
 
 
 def _get_number_field(name: str, text: str) -> str:
-    return re.search(rf"{name}\s*:\s*([\d{_config.DECIMAL}]+)", text).group(1)
+    return re.search(rf"{name}\s*:\s*(-?[\d{_config.DECIMAL}]+)", text).group(1)
 
 
 @dataclass
@@ -298,13 +298,8 @@ def transmission(
         A Polarization Transmission Analysis. Next to the standard data, the raw text return obtained from the analysis
         will be present under 'RawTextData', and the txtoutfile under 'TxtOutFile'.
     """
-    if (
-        oss.SystemData.Fields.NumberOfFields > 1
-        or oss.SystemData.Wavelengths.NumberOfWavelengths > 1
-    ):
-        raise NotImplementedError(
-            "Only systems with a single field and a single wavelength are currently supported."
-        )
+    if oss.SystemData.Fields.NumberOfFields > 1 or oss.SystemData.Wavelengths.NumberOfWavelengths > 1:
+        raise NotImplementedError("Only systems with a single field and a single wavelength are currently supported.")
 
     analysis_type = constants.Analysis.AnalysisIDM.Transmission
 
@@ -336,9 +331,7 @@ def transmission(
     settings_bytearray = bytearray(settings_bytestring)
 
     # Change settings - all byte indices could only be found via reverse engineering :(
-    sampling_value = getattr(
-        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(sampling)
-    ).value__
+    sampling_value = getattr(constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(sampling)).value__
     settings_bytearray[56] = sampling_value
     settings_bytearray[60] = int(unpolarized)
     settings_bytearray[24:32] = struct.pack("<d", jx)
@@ -376,9 +369,7 @@ def transmission(
         Header=header,
         FieldPos=locale.atof(_get_number_field("Field Pos", text_output)),
         Wavelength=locale.atof(_get_number_field("Wavelength 1", text_output)),
-        TotalTransmission=locale.atof(
-            _get_number_field("Total Transmission", text_output)
-        ),
+        TotalTransmission=locale.atof(_get_number_field("Total Transmission", text_output)),
         Table=df,
     )
 
