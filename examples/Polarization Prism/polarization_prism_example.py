@@ -36,7 +36,7 @@ return_transmission = zp.analyses.polarization.transmission(
 )
 
 print(
-    f"{return_transmission.FieldPos}  \t{return_transmission.TotalTransmission * 100}%"
+    f"{return_transmission.Data.FieldPos}  \t{return_transmission.Data.TotalTransmission * 100}%"
 )
 
 # Get polarization map
