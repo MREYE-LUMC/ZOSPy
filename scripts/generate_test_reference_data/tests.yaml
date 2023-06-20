@@ -1,5 +1,5 @@
 connection_mode: standalone
-output_directory: test_output
+output_directory: ../../tests/data/reference
 redact_patterns:
   # Simple Windows path (only local)
   - '(?:[a-z]:)?(?:\\\\[\w\s.]+)+'
@@ -30,6 +30,60 @@ tests:
         frequency: 3
         numberofsteps: 10
         mtftype: Imaginary
+  - model: fabry_perot_system
+    analysis: polarization.polarization_pupil_map
+    file: test_polarization.py
+    test: test_polarization_pupil_map_returns_correct_result
+    parametrized: [jx, jy, x_phase, y_phase, surface, sampling]
+    parameters:
+      - jx: 1
+        jy: 0
+        x_phase: 0
+        y_phase: 0
+        surface: Image
+        sampling: 11x11
+      - jx: 1
+        jy: 1
+        x_phase: 0
+        y_phase: 0
+        surface: 2
+        sampling: 11x11
+      - jx: 1
+        jy: 1
+        x_phase: 3
+        y_phase: -3
+        surface: 2
+        sampling: 17x17
+  - model: fabry_perot_system
+    analysis: polarization.transmission
+    file: test_polarization.py
+    test: test_transmission_returns_correct_result
+    parametrized: [sampling, unpolarized, jx, jy, x_phase, y_phase]
+    parameters:
+      - sampling: 32x32
+        unpolarized: false
+        jx: 1
+        jy: 0
+        x_phase: 0
+        y_phase: 0
+      - sampling: 32x32
+        unpolarized: false
+        jx: 1
+        jy: 1
+        x_phase: 0
+        y_phase: 0
+      - sampling: 64x64
+        unpolarized: false
+        jx: 1
+        jy: 1
+        x_phase: -3
+        y_phase: 3
+      - sampling: 64x64
+        unpolarized: true
+        jx: 1
+        jy: 0
+        x_phase: 0
+        y_phase: 0
   - model: simple_system
     analysis: psf.huygens_psf
     file: test_psf.py
