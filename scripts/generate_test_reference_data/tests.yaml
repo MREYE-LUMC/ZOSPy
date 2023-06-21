@@ -30,7 +30,7 @@ tests:
         frequency: 3
         numberofsteps: 10
         mtftype: Imaginary
-  - model: fabry_perot_system
+  - model: polarized_system
     analysis: polarization.polarization_pupil_map
     file: test_polarization.py
     test: test_polarization_pupil_map_returns_correct_result
@@ -48,13 +48,19 @@ tests:
         y_phase: 0
         surface: 2
         sampling: 11x11
+      - jx: 0
+        jy: 1
+        x_phase: 0
+        y_phase: 0
+        surface: Image
+        sampling: 11x11
       - jx: 1
         jy: 1
-        x_phase: 3
-        y_phase: -3
-        surface: 2
+        x_phase: 45
+        y_phase: 90
+        surface: Image
         sampling: 17x17
-  - model: fabry_perot_system
+  - model: polarized_system
     analysis: polarization.transmission
     file: test_polarization.py
     test: test_transmission_returns_correct_result
@@ -68,6 +74,12 @@ tests:
         y_phase: 0
       - sampling: 32x32
         unpolarized: false
+        jx: 0
+        jy: 1
+        x_phase: 0
+        y_phase: 0
+      - sampling: 32x32
+        unpolarized: false
         jx: 1
         jy: 1
         x_phase: 0
@@ -76,8 +88,8 @@ tests:
         unpolarized: false
         jx: 1
         jy: 1
-        x_phase: -3
-        y_phase: 3
+        x_phase: 45
+        y_phase: 90
       - sampling: 64x64
         unpolarized: true
         jx: 1

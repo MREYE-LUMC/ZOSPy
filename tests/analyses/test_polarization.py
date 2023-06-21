@@ -60,8 +60,8 @@ def fabry_perot_system(empty_system: zp.zpcore.OpticStudioSystem):
 
 
 class TestPolarizationPupilMap:
-    def test_can_run_polarization_pupil_map(self, fabry_perot_system):
-        result = polarization_pupil_map(fabry_perot_system)
+    def test_can_run_polarization_pupil_map(self, polarized_system):
+        result = polarization_pupil_map(polarized_system)
 
         assert result.Data is not None
 
@@ -70,15 +70,14 @@ class TestPolarizationPupilMap:
         [
             (1, 0, 0, 0, "Image", "11x11"),
             (1, 1, 0, 0, 2, "11x11"),
-            (1, 1, 3, -3, 2, "17x17"),
+            (0, 1, 0, 0, "Image", "11x11"),
+            (1, 1, 45, 90, "Image", "17x17"),
         ],
     )
     def test_polarization_pupil_map_returns_correct_result(
-        self, fabry_perot_system, jx, jy, x_phase, y_phase, surface, sampling, expected_data
+        self, polarized_system, jx, jy, x_phase, y_phase, surface, sampling, expected_data
     ):
-        result = polarization_pupil_map(
-            fabry_perot_system, jx, jy, x_phase, y_phase, surface=surface, sampling=sampling
-        )
+        result = polarization_pupil_map(polarized_system, jx, jy, x_phase, y_phase, surface=surface, sampling=sampling)
 
         assert result.Data.Transmission == expected_data.Data.Transmission
         assert np.allclose(result.Data.Table, expected_data.Data.Table)
@@ -88,23 +87,22 @@ class TestPolarizationPupilMap:
         [
             (1, 0, 0, 0, "Image", "11x11"),
             (1, 1, 0, 0, 2, "11x11"),
-            (1, 1, 3, -3, 2, "17x17"),
+            (0, 1, 0, 0, "Image", "11x11"),
+            (1, 1, 45, 90, "Image", "17x17"),
         ],
     )
     def test_polarization_pupil_map_matches_reference_data(
-            self, fabry_perot_system, jx, jy, x_phase, y_phase, surface, sampling, reference_data
+        self, polarized_system, jx, jy, x_phase, y_phase, surface, sampling, reference_data
     ):
-        result = polarization_pupil_map(
-            fabry_perot_system, jx, jy, x_phase, y_phase, surface=surface, sampling=sampling
-        )
+        result = polarization_pupil_map(polarized_system, jx, jy, x_phase, y_phase, surface=surface, sampling=sampling)
 
         assert result.Data.Transmission == reference_data.Data.Transmission
         assert np.allclose(result.Data.Table, reference_data.Data.Table)
 
 
 class TestTransmission:
-    def test_can_run_transmission(self, fabry_perot_system):
-        result = transmission(fabry_perot_system)
+    def test_can_run_transmission(self, polarized_system):
+        result = transmission(polarized_system)
 
         assert result.Data is not None
 
@@ -112,15 +110,16 @@ class TestTransmission:
         "sampling,unpolarized,jx,jy,x_phase,y_phase",
         [
             ("32x32", False, 1, 0, 0, 0),
+            ("32x32", False, 0, 1, 0, 0),
             ("32x32", False, 1, 1, 0, 0),
-            ("64x64", False, 1, 1, -3, 3),
+            ("64x64", False, 1, 1, 45, 90),
             ("64x64", True, 1, 0, 0, 0),
         ],
     )
     def test_transmission_returns_correct_result(
-        self, fabry_perot_system, sampling, unpolarized, jx, jy, x_phase, y_phase, expected_data
+        self, polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase, expected_data
     ):
-        result = transmission(fabry_perot_system, sampling, unpolarized, jx, jy, x_phase, y_phase)
+        result = transmission(polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase)
 
         assert result.Data.FieldPos == expected_data.Data.FieldPos
         assert result.Data.Wavelength == expected_data.Data.Wavelength
@@ -131,15 +130,16 @@ class TestTransmission:
         "sampling,unpolarized,jx,jy,x_phase,y_phase",
         [
             ("32x32", False, 1, 0, 0, 0),
+            ("32x32", False, 0, 1, 0, 0),
             ("32x32", False, 1, 1, 0, 0),
-            ("64x64", False, 1, 1, -3, 3),
+            ("64x64", False, 1, 1, 45, 90),
             ("64x64", True, 1, 0, 0, 0),
         ],
     )
     def test_transmission_matches_reference_data(
-            self, fabry_perot_system, sampling, unpolarized, jx, jy, x_phase, y_phase, reference_data
+        self, polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase, reference_data
     ):
-        result = transmission(fabry_perot_system, sampling, unpolarized, jx, jy, x_phase, y_phase)
+        result = transmission(polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase)
 
         assert result.Data.FieldPos == reference_data.Data.FieldPos
         assert result.Data.Wavelength == reference_data.Data.Wavelength
