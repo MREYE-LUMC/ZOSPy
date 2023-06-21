@@ -109,3 +109,20 @@ def simple_system(empty_system) -> zp.zpcore.OpticStudioSystem:
     lens_back.Thickness = 19.792  # System is in focus
 
     return oss
+
+
+@pytest.fixture
+def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
+    """Simple system with a polarizing front lens surface"""
+    oss = simple_system
+
+    lens_front = oss.LDE.GetSurfaceAt(2)
+
+    # Change surface to Jones Matrix
+    zp.functions.lde.surface_change_type(lens_front, zp.constants.Editors.LDE.SurfaceType.JonesMatrix)
+
+    # Set Jones Matrix elements to horizontal polarization
+    lens_front.GetCellAt(12).DoubleValue = 1  # A real
+    lens_front.GetCellAt(18).DoubleValue = 0  # D real
+
+    return oss

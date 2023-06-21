@@ -107,7 +107,7 @@ def process_test(oss: zp.zpcore.OpticStudioSystem, test: TestConfiguration, conf
             result_file_name += f"[{'-'.join(str(parameters[p]) for p in parametrized)}]"
 
         output_json = config.output_directory / f"{result_file_name}.json"
-        output_zos = config.output_directory / f"{result_file_name}.zos"
+        output_zos = config.output_directory / f"{result_file_name}.zmx"
 
         if output_json.exists():
             print(f"Skipping {result_file_name} because it already exists")
@@ -154,6 +154,3 @@ oss = zos.get_primary_system()
 
 for t in config.tests:
     process_test(oss, t, config)
-
-re.compile(r"(?:[a-zA-Z]:|(?:\\\\)+[\w\s\.]+\\[\w\s\.$]+)\\+(?:[\w\s\.]+\\+)*[\w\s.]*?$")
-re.compile(r"[a-z]:(\\\\[\w\s.]+)+")
