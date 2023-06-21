@@ -256,7 +256,11 @@ def transmission(
     """Wrapper around the OpticStudio Polarization Transmission Analysis.
 
     Due to limitations in the ZOS-API, the output is obtained by writing the OpticStudio results to a file and
-    subsequently reading in this file
+    subsequently reading in this file.
+
+    WARNING: This analysis currently only works for systems with a single wavelength and field. A
+    `NotImplementedException` will be raised if multiple fields or wavelengths are used. See the discussion in
+    https://github.com/MREYE-LUMC/ZOSPy/pull/14 for more details.
 
     Parameters
     ----------
@@ -296,6 +300,11 @@ def transmission(
     AnalysisResult
         A Polarization Transmission Analysis. Next to the standard data, the raw text return obtained from the analysis
         will be present under 'RawTextData', and the txtoutfile under 'TxtOutFile'.
+
+    Raises
+    ------
+    NotImplementedException
+        If multiple fields or wavelenghts are present in the optical system/
     """
     if oss.SystemData.Fields.NumberOfFields > 1 or oss.SystemData.Wavelengths.NumberOfWavelengths > 1:
         raise NotImplementedError("Only systems with a single field and a single wavelength are currently supported.")
