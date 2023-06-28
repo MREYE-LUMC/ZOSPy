@@ -54,7 +54,18 @@ def find_object_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: 
 
     Examples
     ----------
-    >>> To be added
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> zos.connect_as_extension()
+    >>> oss = zos.get_primary_system()
+    >>> oss.make_nonsequential()
+    >>> newobj1 = oss.NCE.InsertNewObjectAt(0)
+    >>> newobj1.Comment = 'aa'
+    >>> newobj2 = oss.NCE.InsertNewObjectAt(0)
+    >>> newobj2.Comment = 'bb'
+    >>> newobj3 = oss.NCE.InsertNewObjectAt(0)
+    >>> newobj3.Comment = 'aA'
+    >>> find_object_comment(oss.NCE, 'aa')
     """
     
     # Number of objects in the NCE
