@@ -24,7 +24,7 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
     >>> oss.make_nonsequential()
-    >>> newobj = oss.NCE.InsertNewObjectAt(0)
+    >>> newobj = oss.NCE.InsertNewObjectAt(1)
     >>> object_change_type(newobj, zp.constants.Editors.NCE.ObjectType.StandardLens)
     """
     new_type = constants.process_constant(constants.Editors.NCE.ObjectType, new_type)
@@ -58,11 +58,11 @@ def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitiv
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
     >>> oss.make_nonsequential()
-    >>> newobj1 = oss.NCE.InsertNewObjectAt(0)
+    >>> newobj1 = oss.NCE.InsertNewObjectAt(1)
     >>> newobj1.Comment = 'aa'
-    >>> newobj2 = oss.NCE.InsertNewObjectAt(0)
+    >>> newobj2 = oss.NCE.InsertNewObjectAt(1)
     >>> newobj2.Comment = 'bb'
-    >>> newobj3 = oss.NCE.InsertNewObjectAt(0)
+    >>> newobj3 = oss.NCE.InsertNewObjectAt(1)
     >>> newobj3.Comment = 'aA'
     >>> find_object_by_comment(oss.NCE, 'aa')
     """
