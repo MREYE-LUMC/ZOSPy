@@ -33,9 +33,10 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
     new_surface_type_settings = obj.GetObjectTypeSettings(new_type)
     obj.ChangeType(new_surface_type_settings)
 
-def find_object_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool=False) -> list[int] | int:
-    """Function equivalent to ZPL numeric function OBJC($A).
-
+def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool=False) -> list[_ZOSAPI.Editors.NCE.INCERow]:
+    """Returns a list of objects, in ascending order from the NCE, that have a Comment column value which matches
+    the comment string argument.
+    
     Parameters
     ----------
     nce: ZOSAPI.Editors.NCE
@@ -43,14 +44,12 @@ def find_object_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: 
     comment: str
         String that is searched for in the Comment column of the NCE.
     case_sensitive: bool=False
-        Flag that specifies whether the search is case-sensitive or not.
-
+        Flag that specifies whether the search is case-sensitive or not (default value).
 
     Returns
     ----------
-    A list of integer indices corresponding to the rows of the NCE
-    that had a matching comment, or -1 if no correspondance was
-    found.
+    list[_ZOSAPI.Editors.NCE.INCERow]
+        A list of object in the NCE that have a Comment column value which matches the comment argument.
 
     Examples
     ----------
@@ -65,7 +64,7 @@ def find_object_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: 
     >>> newobj2.Comment = 'bb'
     >>> newobj3 = oss.NCE.InsertNewObjectAt(0)
     >>> newobj3.Comment = 'aA'
-    >>> find_object_comment(oss.NCE, 'aa')
+    >>> find_object_by_comment(oss.NCE, 'aa')
     """
     
     # Number of objects in the NCE
@@ -73,32 +72,28 @@ def find_object_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: 
 
     # Is the search case-sensitive?
     if not case_sensitive:
-        # If the search is NOT case-sensitive put 
-        # comment argument in all small letters
+        # If the search is NOT case-sensitive put comment argument in all small letters
         comment = comment.lower()
 
-    # Initialize list of return indexes corresponding
-    # to NCE rows with matched Comment column
-    return_indices = []
+    # Initialize list of objects with matching comment
+    matching_objects = []
 
-    # Loop over the objects and check the comments
+    # Loop over the objects in the NCE and check if their comment matches
     for object_index in range(1, number_of_objects+1):
+        # Retrieve current object
+        current_object = nce.GetObjectAt(object_index)
+        
         # Retrieve current object comment
-        object_comment = nce.GetObjectAt(object_index).Comment
+        object_comment = current_object.Comment
 
         # Is the search case-sensitive?
         if not case_sensitive:
-            # If the search is NOT case-sensitive put 
-            # current object comment in all small letters
+            # If the search is NOT case-sensitive put current object comment in all small letters
             object_comment = object_comment.lower()           
 
-        # If the comment matches, store the corresponding object index
+        # If the comment matches, append the corresponding object to the return list
         if comment == object_comment:
-            return_indices.append(object_index)
+            matching_objects.append(current_object)
 
-    # If no match are found set the return list to -1
-    if not return_indices:
-        return_indices = -1
-
-    # Return list of matched inices
-    return return_indices
+    # Return list of objects with matching comment
+    return matching_objects
