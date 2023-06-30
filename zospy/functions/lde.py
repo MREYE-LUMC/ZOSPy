@@ -74,7 +74,7 @@ def surface_change_type(surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constant
 
 
 def find_surface_by_comment(
-    lde: _ZOSAPI.Editors.LDE, comment: str, case_sensitive: bool = False
+    lde: _ZOSAPI.Editors.LDE, comment: str, case_sensitive: bool = True
 ) -> list[_ZOSAPI.Editors.LDE.ILDERow]:
     """Returns a list of surfaces from the LDE that have the supplied string as Comment.
 
@@ -85,9 +85,9 @@ def find_surface_by_comment(
     lde: ZOSAPI.Editors.LDE
         The Lens Data Editor (LDE)
     comment: str
-        String that is searched for in the Comment column of the NCE.
-    case_sensitive: bool=False
-        Flag that specifies whether the search is case-sensitive or not. Defaults to False.
+        String that is searched for in the Comment column of the LDE.
+    case_sensitive: bool
+        Flag that specifies whether the search is case-sensitive or not. Defaults to True.
 
     Returns
     -------
