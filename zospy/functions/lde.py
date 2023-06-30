@@ -91,7 +91,7 @@ def find_surface_by_comment(
 
     Returns
     -------
-    list[_ZOSAPI.Editors.LDE.ILDERow]
+    list[ZOSAPI.Editors.LDE.ILDERow]
         A list of surfaces in the LDE that have a Comment column value which matches the supplied comment argument.
 
     Examples
