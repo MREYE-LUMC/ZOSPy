@@ -71,3 +71,67 @@ def surface_change_type(surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constant
     # Apply
     new_surface_type_settings = surface.GetSurfaceTypeSettings(new_type)
     surface.ChangeType(new_surface_type_settings)
+
+
+def find_surface_by_comment(
+    lde: _ZOSAPI.Editors.LDE, comment: str, case_sensitive: bool = False
+) -> list[_ZOSAPI.Editors.LDE.ILDERow]:
+    """Returns a list of surfaces from the LDE that have the supplied string as Comment.
+
+    In case of multiple matches, the surfaces are returned in ascending order.
+
+    Parameters
+    ----------
+    lde: ZOSAPI.Editors.LDE
+        The Lens Data Editor (LDE)
+    comment: str
+        String that is searched for in the Comment column of the NCE.
+    case_sensitive: bool=False
+        Flag that specifies whether the search is case-sensitive or not. Defaults to False.
+
+    Returns
+    -------
+    list[_ZOSAPI.Editors.LDE.ILDERow]
+        A list of surfaces in the LDE that have a Comment column value which matches the supplied comment argument.
+
+    Examples
+    --------
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> zos.wakeup()
+    >>> zos.connect_as_extension()
+    >>> oss = zos.get_primary_system()
+    >>> newobj1 = oss.LDE.GetSurfaceAt(0)
+    >>> newobj1.Comment = 'aa'
+    >>> newobj2 = oss.LDE.GetSurfaceAt(1)
+    >>> newobj2.Comment = 'bb'
+    >>> newobj3 = oss.LDE.GetSurfaceAt(2)
+    >>> newobj3.Comment = 'aA'
+    >>> zp.functions.lde.find_surface_by_comment(oss.LDE, 'aa')
+    """
+    # Is the search case-sensitive?
+    if not case_sensitive:
+        # If the search is NOT case-sensitive put comment argument in all small letters
+        comment = comment.lower()
+
+    # Initialize list of return indexes corresponding to LDE rows with matched Comment column
+
+    return_indices = []
+    # Loop over the objects and check the comments
+
+    for surface_index in range(lde.NumberOfSurfaces):
+        # Retrieve current object comment
+        surface = lde.GetSurfaceAt(surface_index)
+        surface_comment = surface.Comment
+
+        # Is the search case-sensitive?
+        if not case_sensitive:
+            # If the search is NOT case-sensitive put current object comment in all small letters
+            surface_comment = surface_comment.lower()
+
+        # If the comment matches, store the corresponding object index
+        if comment == surface_comment:
+            return_indices.append(surface)
+
+    # Return list of matched inices
+    return return_indices
