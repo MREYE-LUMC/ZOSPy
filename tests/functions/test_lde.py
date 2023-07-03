@@ -6,7 +6,7 @@ from zospy.functions.lde import find_surface_by_comment
 @pytest.mark.parametrize(
     "comment,case_sensitive,expected_indices",
     [
-        ("Abcd", True, [0]), # When using .SurfaceNumber, the returned value matches the LDE numbering (starting at 0)
+        ("Abcd", True, [0]),  # When using .SurfaceNumber, the returned value matches the LDE numbering (starting at 0)
         ("Abcd", False, [0, 1, 2, 3]),
         ("ABcd", True, [1]),
         ("ABCD", True, []),
