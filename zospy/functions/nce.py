@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from zospy.api import _ZOSAPI, constants
 
+
 def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Editors.NCE.ObjectType | str):
     """Simple function to change the object type in the NCE.
 
@@ -33,10 +34,14 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
     new_surface_type_settings = obj.GetObjectTypeSettings(new_type)
     obj.ChangeType(new_surface_type_settings)
 
-def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool=True) -> list[_ZOSAPI.Editors.NCE.INCERow]:
-    """Returns a list of objects, in ascending order from the NCE, that have a Comment column value which matches
-    the comment string argument.
-    
+
+def find_object_by_comment(
+    nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool = True
+) -> list[_ZOSAPI.Editors.NCE.INCERow]:
+    """Returns a list of objects from the NCE that have the supplied string as Comment.
+
+    In case of multiple matches, the objects are returned in ascending order.
+
     Parameters
     ----------
     nce: ZOSAPI.Editors.NCE
@@ -47,12 +52,12 @@ def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitiv
         Flag that specifies whether the search is case-sensitive (default value) or not.
 
     Returns
-    ----------
+    -------
     list[ZOSAPI.Editors.NCE.INCERow]
         A list of object in the NCE that have a Comment column value which matches the comment argument.
 
     Examples
-    ----------
+    --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
     >>> zos.connect_as_extension()
@@ -66,7 +71,6 @@ def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitiv
     >>> newobj3.Comment = 'aA'
     >>> find_object_by_comment(oss.NCE, 'aa')
     """
-    
     # Number of objects in the NCE
     number_of_objects = nce.NumberOfObjects
 
@@ -79,17 +83,17 @@ def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitiv
     matching_objects = []
 
     # Loop over the objects in the NCE and check if their comment matches
-    for object_index in range(1, number_of_objects+1):
+    for object_index in range(1, number_of_objects + 1):
         # Retrieve current object
         current_object = nce.GetObjectAt(object_index)
-        
+
         # Retrieve current object comment
         object_comment = current_object.Comment
 
         # Is the search case-sensitive?
         if not case_sensitive:
             # If the search is NOT case-sensitive put current object comment in all small letters
-            object_comment = object_comment.lower()           
+            object_comment = object_comment.lower()
 
         # If the comment matches, append the corresponding object to the return list
         if comment == object_comment:
