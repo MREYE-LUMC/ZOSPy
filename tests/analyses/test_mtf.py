@@ -3,6 +3,15 @@ import pytest
 
 from zospy.analyses.mtf import fft_through_focus_mtf, fft_through_focus_mtf_fromcfg
 
+_FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN = {
+    # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf
+    "Modulation": "5",
+    "Real": "6",
+    "Imaginary": "7",
+    "Phase": "8",
+    "SquareWave": "9",
+}
+
 
 class TestFFTThroughFocusMTF:
     def test_can_run_fft_through_focus_mtf(self, simple_system):
@@ -65,3 +74,15 @@ class TestFFTThroughFocusMTF:
         )
 
         assert np.allclose(result.Data.astype(float), reference_data.Data.astype(float), rtol=1e-3)
+
+    @pytest.mark.parametrize(
+        "mtftype",
+        ["Modulation", "Real", "Imaginary", "Phase", "SquareWave"],
+    )
+    def test_fft_through_focus_mtf_sets_mtftype_correctly(self, simple_system, mtftype):
+        result = fft_through_focus_mtf(
+            simple_system,
+            mtftype=mtftype,
+        )
+
+        assert result.Settings["Type"] == _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN[mtftype]

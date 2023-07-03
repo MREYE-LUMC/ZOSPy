@@ -2,12 +2,47 @@
 
 from __future__ import annotations
 
+import os
+from tempfile import mkstemp
+
 import pandas as pd
 
 from zospy import utils
 from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.zpcore import OpticStudioSystem
+
+
+def _correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype) -> None:
+    """Correction for an API bug in OpticStudio versions < 21.2.
+
+    In these versions, the MTF Type cannot be set through the ZOS-API for the FFT Through Focus MTF
+    See also: https://community.zemax.com/zos-api-12/zos-api-setting-mtf-property-type-not-working-730
+
+    Parameters
+    ----------
+    oss: zospy.core.OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance. Should be sequential.
+    analysis: Analysis
+        An FFT Through Focus MTF analysis.
+    mtftype: zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
+
+    Returns
+    -------
+    None
+    """
+    if oss._ZOS.version < "21.2.0":
+        fd, cfgoutfile = mkstemp(suffix=".CFG", prefix="zospy_")
+        os.close(fd)
+        analysis.Settings.SaveTo(cfgoutfile)
+
+        analysis.Settings.ModifySettings(
+            cfgoutfile,
+            "TFM_TYPE",
+            str(int(constants.process_constant(constants.Analysis.Settings.Mtf.MtfTypes, mtftype))),
+        )
+        analysis.Settings.LoadFrom(cfgoutfile)
+        os.remove(cfgoutfile)
 
 
 def fft_through_focus_mtf(
@@ -76,6 +111,9 @@ def fft_through_focus_mtf(
     analysis.Settings.Type = constants.process_constant(constants.Analysis.Settings.Mtf.MtfTypes, mtftype)
     analysis.Settings.UsePolarization = use_polarization
     analysis.Settings.UseDashes = use_dashes
+
+    # Correct an API bug in setting API type for OpticStudio version <21.2
+    _correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype)
 
     # Calculate
     analysis.ApplyAndWaitForCompletion()

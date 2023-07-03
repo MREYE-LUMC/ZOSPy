@@ -1,0 +1,38 @@
+{
+  "title": "ZOSPy",
+
+  "creators": [
+    {
+      "orcid": "0000-0001-8290-9071",
+      "affiliation": "Leiden University Medical Center",
+      "name": "van Vught, Luc"
+    },
+    {
+      "orcid": "0000-0003-0187-4116",
+      "affiliation": "Leiden University Medical Center",
+      "name": "Haasjes, Corné"
+    },
+    {
+      "orcid": "0000-0003-0479-5587",
+      "affiliation": "Leiden University Medical Center",
+      "name": "Beenakker, Jan-Willem"
+    }
+
+  ],
+  "contributors": [
+    {
+      "name": "Barg, Andi",
+      "type": "Other"
+    },
+    {
+      "name": "Nguyen, David",
+      "type": "Other"
+    }
+  ],
+
+  "upload_type": "software",
+  "license": "GNU General Public License v3.0",
+  "access_right": "open",
+
+  "keywords": ["Ray tracing", "OpticStudio", "Zemax"]
+}

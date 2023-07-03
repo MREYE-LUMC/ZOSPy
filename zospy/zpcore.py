@@ -4,6 +4,8 @@ import logging
 import warnings
 import weakref
 
+from semver.version import Version
+
 from zospy.api import _ZOSAPI, constants
 from zospy.api.apisupport import load_zosapi, load_zosapi_nethelper
 
@@ -437,10 +439,14 @@ class ZOS:
         return self._OpticStudioSystem(zos_instance=self, system_instance=opticstudiosystem)
 
     def get_system(self, pos: int = 0) -> OpticStudioSystem:
-        warnings.warn("ZOS.get_system() has not been tested yet")
-        # ToDo test
-        opticstudiosystem = self.Application.PrimarySystem.GetSystemAt(pos)
+        opticstudiosystem = self.Application.GetSystemAt(pos)
         return self._OpticStudioSystem(zos_instance=self, system_instance=opticstudiosystem)
 
-    def licence_check(self):
-        pass
+    @property
+    def version(self) -> Version:
+        """Returns the OpticStudio version as Version object."""
+        return Version(
+            major=self.Application.ZOSMajorVersion,
+            minor=self.Application.ZOSMinorVersion,
+            patch=self.Application.ZOSSPVersion,
+        )
