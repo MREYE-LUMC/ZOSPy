@@ -33,7 +33,7 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
     new_surface_type_settings = obj.GetObjectTypeSettings(new_type)
     obj.ChangeType(new_surface_type_settings)
 
-def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool=False) -> list[_ZOSAPI.Editors.NCE.INCERow]:
+def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool=True) -> list[_ZOSAPI.Editors.NCE.INCERow]:
     """Returns a list of objects, in ascending order from the NCE, that have a Comment column value which matches
     the comment string argument.
     
@@ -44,11 +44,11 @@ def find_object_by_comment(nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitiv
     comment: str
         String that is searched for in the Comment column of the NCE.
     case_sensitive: bool=False
-        Flag that specifies whether the search is case-sensitive or not (default value).
+        Flag that specifies whether the search is case-sensitive (default value) or not.
 
     Returns
     ----------
-    list[_ZOSAPI.Editors.NCE.INCERow]
+    list[ZOSAPI.Editors.NCE.INCERow]
         A list of object in the NCE that have a Comment column value which matches the comment argument.
 
     Examples
