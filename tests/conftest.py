@@ -126,3 +126,44 @@ def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
     lens_front.GetCellAt(18).DoubleValue = 0  # D real
 
     return oss
+
+
+@pytest.fixture
+def nsc_empty_system(oss, system_save_file) -> zp.zpcore.OpticStudioSystem:
+    oss.new()
+    oss.make_nonsequential()
+
+    yield oss
+
+    if system_save_file:
+        oss.save_as(str(system_save_file))
+
+
+@pytest.fixture
+def nsc_simple_system(nsc_empty_system) -> zp.zpcore.OpticStudioSystem:
+    oss = nsc_empty_system
+
+    oss.SystemData.Wavelengths.GetWavelength(1).Wavelength = 0.543
+
+    source_object = oss.NCE.GetObjectAt(1)
+    zp.functions.nce.object_change_type(source_object, zp.constants.Editors.NCE.ObjectType.SourceEllipse)
+    source_object.GetCellAt(11).IntegerValue = 100  # Layout Rays
+    source_object.GetCellAt(12).IntegerValue = 100  # Analysis Rays
+    source_object.GetCellAt(16).DoubleValue = 1  # X Half Width
+    source_object.GetCellAt(17).DoubleValue = 1  # Y Half Width
+
+    lens_object = oss.NCE.InsertNewObjectAt(2)
+    zp.functions.nce.object_change_type(lens_object, zp.constants.Editors.NCE.ObjectType.StandardLens)
+    lens_object.ZPosition = 10
+    lens_object.GetCellAt(11).DoubleValue = 20  # Radius front
+    lens_object.GetCellAt(13).DoubleValue = 2  # Semi diameter front
+    lens_object.GetCellAt(15).DoubleValue = 1  # Thickness
+    lens_object.GetCellAt(16).DoubleValue = -20
+    lens_object.GetCellAt(18).DoubleValue = 2  # Semi diameter back
+
+    zp.solvers.material_model(lens_object.MaterialCell, refractive_index=1.5)
+
+    detector_object = oss.NCE.InsertNewObjectAt(3)
+    zp.functions.nce.object_change_type(detector_object, zp.constants.Editors.NCE.ObjectType.DetectorSurface)
+    detector_object.ZPosition = 10 + 1 + 19.792
+    return oss

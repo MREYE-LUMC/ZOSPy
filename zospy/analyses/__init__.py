@@ -1,6 +1,15 @@
 """Analysis functions for Zemax OpticStudio."""
 
-from . import mtf, polarization, psf, raysandspots, reports, surface, wavefront
+from . import (
+    mtf,
+    polarization,
+    psf,
+    raysandspots,
+    reports,
+    surface,
+    systemviewers,
+    wavefront,
+)
 from .base import OnComplete, new_analysis
 
 __all__ = (
@@ -10,6 +19,7 @@ __all__ = (
     "raysandspots",
     "polarization",
     "surface",
+    "systemviewers",
     "wavefront",
     "new_analysis",
     "OnComplete",

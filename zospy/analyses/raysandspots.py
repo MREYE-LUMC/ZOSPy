@@ -67,7 +67,7 @@ def _structure_ray_trace_data_result(line_list: list[str]) -> dict[str, Any]:
         df = pd.read_csv(
             StringIO("".join(line_list[section_start:section_end]).replace(" ", "")),
             delimiter="\t",
-            decimal=_config.DECIMAL,
+            decimal=_config.DECIMAL_POINT,
         )
 
         # Recover case of target

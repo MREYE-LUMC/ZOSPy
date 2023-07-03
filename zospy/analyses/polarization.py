@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import locale
 import os
 import re
 import struct
@@ -20,7 +19,7 @@ from zospy.zpcore import OpticStudioSystem
 
 
 def _get_number_field(name: str, text: str) -> str:
-    return re.search(rf"{name}\s*:\s*(-?[\d{_config.DECIMAL}]+)", text).group(1)
+    return re.search(rf"{name}\s*:\s*(-?[\d{_config.DECIMAL_POINT}]+)", text).group(1)
 
 
 @dataclass
@@ -137,18 +136,27 @@ def polarization_pupil_map(
     analysis_settings.SaveTo(cfgoutfile)
 
     # MODIFYSETTINGS are defined in the ZPL help files: The Programming Tab > About the ZPL > Keywords
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_JX", str(jx))
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_JY", str(jy))
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_PX", str(x_phase))
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_PY", str(y_phase))
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_WAVE", str(int(wavelength)))
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_FIELD", str(int(field)))
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_SURFACE", str(surface))
+    analysis_settings.ModifySettings(cfgoutfile, "PPM_JX", utils.pyutils.xtoa(jx, thousands_separator=None))
+    analysis_settings.ModifySettings(cfgoutfile, "PPM_JY", utils.pyutils.xtoa(jy, thousands_separator=None))
+    analysis_settings.ModifySettings(cfgoutfile, "PPM_PX", utils.pyutils.xtoa(x_phase, thousands_separator=None))
+    analysis_settings.ModifySettings(cfgoutfile, "PPM_PY", utils.pyutils.xtoa(y_phase, thousands_separator=None))
+    analysis_settings.ModifySettings(
+        cfgoutfile, "PPM_WAVE", utils.pyutils.xtoa(int(wavelength), thousands_separator=None)
+    )
+    analysis_settings.ModifySettings(cfgoutfile, "PPM_FIELD", utils.pyutils.xtoa(int(field), thousands_separator=None))
+    if isinstance(surface, str):
+        analysis_settings.ModifySettings(cfgoutfile, "PPM_SURFACE", surface)
+    else:
+        analysis_settings.ModifySettings(
+            cfgoutfile, "PPM_SURFACE", utils.pyutils.xtoa(surface, thousands_separator=None)
+        )
     sampling_value = getattr(
         constants.Analysis.SampleSizes_ContrastLoss,
         utils.zputils.standardize_sampling(sampling),
     ).value__
-    analysis_settings.ModifySettings(cfgoutfile, "PPM_SAMP", str(sampling_value - 1))
+    analysis_settings.ModifySettings(
+        cfgoutfile, "PPM_SAMP", utils.pyutils.xtoa(sampling_value - 1, thousands_separator=None)
+    )
     analysis_settings.ModifySettings(cfgoutfile, "PPM_ADDCONFIG", str(add_configs))
     analysis_settings.ModifySettings(cfgoutfile, "PPM_SUBCONFIGS", str(sub_configs))
 
@@ -171,20 +179,20 @@ def polarization_pupil_map(
     df = pd.read_csv(
         StringIO("\n".join(line_list[17:]).replace(" ", "")),
         delimiter="\t",
-        decimal=_config.DECIMAL,
+        decimal=_config.DECIMAL_POINT,
     )
 
     data = PupilMapData(
         Header=header,
-        Wavelength=locale.atof(_get_number_field("Wavelength", text_output)),
-        FieldPos=locale.atof(_get_number_field("Field Pos", text_output)),
-        XField=locale.atof(_get_number_field("X-Field", text_output)),
-        YField=locale.atof(_get_number_field("Y-Field", text_output)),
-        XPhase=locale.atof(_get_number_field("X-Phase", text_output)),
-        YPhase=locale.atof(_get_number_field("Y-Phase", text_output)),
-        Configs=locale.atoi(_get_number_field("Configs", text_output)),
-        Surface=locale.atoi(_get_number_field("Surface", text_output)),
-        Transmission=locale.atof(_get_number_field("Transmission", text_output)),
+        Wavelength=utils.pyutils.atox(_get_number_field("Wavelength", text_output), dtype=float),
+        FieldPos=utils.pyutils.atox(_get_number_field("Field Pos", text_output), dtype=float),
+        XField=utils.pyutils.atox(_get_number_field("X-Field", text_output), dtype=float),
+        YField=utils.pyutils.atox(_get_number_field("Y-Field", text_output), dtype=float),
+        XPhase=utils.pyutils.atox(_get_number_field("X-Phase", text_output), dtype=float),
+        YPhase=utils.pyutils.atox(_get_number_field("Y-Phase", text_output), dtype=float),
+        Configs=utils.pyutils.atox(_get_number_field("Configs", text_output), dtype=int),
+        Surface=utils.pyutils.atox(_get_number_field("Surface", text_output), dtype=int),
+        Transmission=utils.pyutils.atox(_get_number_field("Transmission", text_output), dtype=float),
         Table=df,
     )
 
@@ -369,15 +377,15 @@ def transmission(
     df = pd.read_csv(
         StringIO("\n".join(line_list[26:]).strip()),
         delimiter="\t",
-        decimal=_config.DECIMAL,
+        decimal=_config.DECIMAL_POINT,
     )
     df.columns = df.columns.str.strip()
 
     data = TransmissionData(
         Header=header,
-        FieldPos=locale.atof(_get_number_field("Field Pos", text_output)),
-        Wavelength=locale.atof(_get_number_field("Wavelength 1", text_output)),
-        TotalTransmission=locale.atof(_get_number_field("Total Transmission", text_output)),
+        FieldPos=utils.pyutils.atox(_get_number_field("Field Pos", text_output), dtype=float),
+        Wavelength=utils.pyutils.atox(_get_number_field("Wavelength 1", text_output), dtype=float),
+        TotalTransmission=utils.pyutils.atox(_get_number_field("Total Transmission", text_output), dtype=float),
         Table=df,
     )
 

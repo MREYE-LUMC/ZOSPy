@@ -25,8 +25,8 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
     >>> oss.make_nonsequential()
-    >>> newobj = oss.NCE.InsertNewObjectAt(0)
-    >>> object_change_type(newobj, zp.constants.Editors.NCE.ObjectType.StandardLens)
+    >>> newobj = oss.NCE.InsertNewObjectAt(1)
+    >>> zp.functions.nce.object_change_type(newobj, zp.constants.Editors.NCE.ObjectType.StandardLens)
     """
     new_type = constants.process_constant(constants.Editors.NCE.ObjectType, new_type)
 

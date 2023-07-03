@@ -30,14 +30,21 @@ def test_save_as(simple_system, tmp_path):
     assert save_path.exists()
 
 
-def test_create_new_system(zos, simple_system, connection_mode):
+def test_get_system(zos, oss, connection_mode):
+    system = zos.get_system(0)
+
+    assert system._System is not None
+    assert system.SystemID == oss.SystemID
+
+
+def test_create_new_system(zos, oss, connection_mode):
     if connection_mode == "extension":
         pytest.skip("Test is only applicable in standalone mode")
 
     new_system = zos.create_new_system()
 
     assert zos.Application.NumberOfOpticalSystems == 2
-    assert simple_system.SystemID != new_system.SystemID
+    assert oss.SystemID != new_system.SystemID
 
 
 def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode):

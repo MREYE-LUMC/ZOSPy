@@ -22,7 +22,8 @@ requires-python = ">=3.9,<3.12"
 dependencies = [
     "pythonnet ~= 3.0.1",
     "pandas",
-    "numpy"
+    "numpy",
+    "semver ~= 3.0.0"
 ]
 dynamic = ["version"]
 
@@ -82,12 +83,10 @@ select = [
     "W",    # pycodestyle warning
     "I",    # isort
     "D",    # pydocstyle
-    "TCH",  # flake8 type checking
     "NPY",  # numpy-specific
 ]
 
 ignore = [
-    "TCH001",
     "D100",
     "D101",
     "D102",

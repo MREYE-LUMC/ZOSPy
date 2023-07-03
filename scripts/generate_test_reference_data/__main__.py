@@ -14,8 +14,6 @@ import zospy as zp
 from scripts.generate_test_reference_data import systems
 
 CONFIG_FILE = "tests.yaml"
-OPTIC_STUDIO_VERSION: str
-OUTPUT_DIRECTORY: Path = Path("test_output")
 
 
 class TestConfiguration(BaseModel):
@@ -154,3 +152,8 @@ oss = zos.get_primary_system()
 
 for t in config.tests:
     process_test(oss, t, config)
+
+# Clean up Zemax workspace files
+print("Removing Zemax workspace (.ZDA) files...")
+for f in config.output_directory.glob("*.ZDA"):
+    f.unlink()

@@ -64,7 +64,7 @@ def surface_change_type(surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constant
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
     >>> newsurf = oss.LDE.InsertNewSurfaceAt(0)
-    >>> surface_change_type(newsurf, zp.constants.Editors.LDE.SurfaceType.Standard)
+    >>> zp.functions.lde.surface_change_type(newsurf, zp.constants.Editors.LDE.SurfaceType.Standard)
     """
     new_type = constants.process_constant(constants.Editors.LDE.SurfaceType, new_type)
 
