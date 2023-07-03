@@ -1,6 +1,6 @@
 """A Python package to communicate with Zemax OpticStudio through its API."""
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 import logging
 
