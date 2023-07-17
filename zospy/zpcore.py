@@ -318,6 +318,8 @@ class ZOS:
 
         logger.info("ZOS instance initialized")
 
+        self.wakeup()
+
     def wakeup(self, preload: bool = False, zosapi_nethelper: str = None):
         """Wakes the zosapi instance.
 
