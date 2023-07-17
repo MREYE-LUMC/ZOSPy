@@ -294,7 +294,7 @@ class ZOS:
             # number of ZOS instances
             raise ValueError(
                 "Cannot have more than one active ZOS instance.\n\n"
-                "Since OpticStudio limits the number of connections to the ZOS-API to 1, only a single ZOS instance"
+                "Since OpticStudio limits the number of connections to the ZOS-API to 1, only a single ZOS instance "
                 "is allowed. Re-use the existing instance, or delete the existing instance prior to initializing a "
                 "new one."
             )
