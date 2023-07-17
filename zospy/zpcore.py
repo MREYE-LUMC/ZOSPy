@@ -337,8 +337,9 @@ class ZOS:
         -------
         None
         """
-        self._load_zos_dlls(preload=preload, zosapi_nethelper=zosapi_nethelper)
-        self._assign_connection()
+        if self.Connection is None:
+            self._load_zos_dlls(preload=preload, zosapi_nethelper=zosapi_nethelper)
+            self._assign_connection()
 
     def _load_zos_dlls(self, preload: bool = False, zosapi_nethelper: str = None):
         """Loads the ZOS-API DLLs and makes them available for usage through ZOS.ZOSAPI and ZOS.ZOSAPI_NetHelper.
