@@ -282,13 +282,21 @@ class ZOS:
     ----------
         ZOSAPI (None | netModuleObject): The ZOSAPI interface or if loaded.
         ZOSAPI_NetHelper (None | netModuleObject): The ZOSAPI_NetHelper interface if loaded.
+
+    Parameters
+    ----------
+    preload: bool
+        A boolean indicating if nested namespaces should be preloaded.
+    zosapi_nethelper: str, optional
+        Optional filepath to the ZOSAPI_NetHelper dll, if None, the windows registry will be used to find
+        ZOSAPI_NetHelper dll. Defaults to None.
     """
 
     _OpticStudioSystem = OpticStudioSystem
 
     _instances = set()
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, preload: bool = False, zosapi_nethelper: str = None, *args, **kwargs):
         if len(cls._instances) >= 1:
             # As the number of applications within runtime is limited to 1 by Zemax, it is logical to also limit the
             # number of ZOS instances
@@ -303,7 +311,7 @@ class ZOS:
 
         return instance
 
-    def __init__(self):
+    def __init__(self, preload: bool = False, zosapi_nethelper: str = None):
         """Initiation of the ZOS Instance."""
         logger.debug("Initializing ZOS instance")
 
@@ -318,7 +326,7 @@ class ZOS:
 
         logger.info("ZOS instance initialized")
 
-        self.wakeup()
+        self.wakeup(preload=preload, zosapi_nethelper=zosapi_nethelper)
 
     def wakeup(self, preload: bool = False, zosapi_nethelper: str = None):
         """Wakes the zosapi instance.
