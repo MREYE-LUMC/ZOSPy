@@ -400,8 +400,8 @@ class ZOS:
         Returns
         -------
         bool | OpticStudioSystem
-            True if a valid connection is made, else False. If 'return_primary_system = True', the function
-            runs 'get_primary_system()' and directly returns OpticStudioSystem.
+            True if a valid connection is made, else False. If return_primary_system = True, the function
+            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         self._assign_connection()
 
@@ -431,8 +431,8 @@ class ZOS:
         Returns
         -------
         bool | OpticStudioSystem
-            True if a valid connection is made, else False. If 'return_primary_system = True', the function
-            runs 'get_primary_system()' and directly returns OpticStudioSystem.
+            True if a valid connection is made, else False. If return_primary_system = True, the function
+            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         self._assign_connection()
 
@@ -451,9 +451,7 @@ class ZOS:
     def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
 
-        The application will be assigned to self.Application.
-
-        This function is identical to 'create_new_application()'
+        Equal to ZOS.create_new_application().
 
         Parameters
         ----------
@@ -463,8 +461,8 @@ class ZOS:
         Returns
         -------
         bool | OpticStudioSystem
-            True if a valid connection is made, else False. If 'return_primary_system = True', the function
-            runs 'get_primary_system()' and directly returns OpticStudioSystem.
+            True if a valid connection is made, else False. If return_primary_system = True, the function
+            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         return self.create_new_application(return_primary_system=return_primary_system)
 
