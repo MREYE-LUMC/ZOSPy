@@ -376,15 +376,15 @@ class ZOS:
         else:
             logger.debug("ZOSAPI_Connection() already assigned self.Connection")
 
-    def connect_as_extension(self, instancenumber: int = 0) -> bool:
-        """Creates a standalone Zemax Opticstudio instance.
+    def connect_as_extension(self, instancenumber: int = 0) -> OpticStudioSystem:
+        """Connects to Zemax Opticstudio as extension.
 
         The application will be assigned to self.Application.
 
         Returns
         -------
-        bool
-            True if a valid connection is made, else False
+        OpticStudioSystem
+        
         """
         self._assign_connection()
 
@@ -399,17 +399,16 @@ class ZOS:
         assert self.Application.IsValidLicenseForAPI, "OpticStudio Licence is not valid for API, connection not established"
         
         return self.get_primary_system()
-        
-
-    def create_new_application(self) -> bool:
+    
+    def create_new_application(self) -> OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
 
         The application will be assigned to self.Application.
 
         Returns
         -------
-        bool
-            True if a valid connection is made, else False
+        OpticStudioSystem
+
         """
         self._assign_connection()
 
@@ -424,7 +423,18 @@ class ZOS:
         assert self.Application.IsValidLicenseForAPI, "OpticStudio Licence is not valid for API, connection not established"
         
         return self.get_primary_system()
-        
+ 
+    def connect_as_standalone(self) -> OpticStudioSystem:
+        """Creates a standalone Zemax Opticstudio instance.
+
+        The application will be assigned to self.Application.
+
+        Returns
+        -------
+        OpticStudioSystem
+
+        """
+        return self.create_new_application()
 
     def create_new_system(self, system_mode: constants.SystemType | str = "Sequential") -> OpticStudioSystem:
         """Creates a new OpticStudioSystem. This works only if ZOSPy is connected to a standalone application.
