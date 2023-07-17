@@ -385,15 +385,23 @@ class ZOS:
         else:
             logger.debug("ZOSAPI_Connection() already assigned self.Connection")
 
-    def connect_as_extension(self, instancenumber: int = 0) -> OpticStudioSystem:
+    def connect_as_extension(self, instancenumber: int = 0, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Connects to Zemax Opticstudio as extension.
 
         The application will be assigned to self.Application.
 
+        Parameters
+        ----------
+        instancenumber: int
+            An integer to specify the number of instance used.
+        return_primary_system: bool
+            A boolean indicating if OpticStudioSystem should be returned directly.
+
         Returns
         -------
-        OpticStudioSystem
-        
+        bool | OpticStudioSystem
+            True if a valid connection is made, else False. If 'return_primary_system = True', the function
+            runs 'get_primary_system()' and directly returns OpticStudioSystem.
         """
         self._assign_connection()
 
@@ -410,15 +418,21 @@ class ZOS:
         
         return self.get_primary_system()
     
-    def create_new_application(self) -> OpticStudioSystem:
+    def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
 
         The application will be assigned to self.Application.
 
+        Parameters
+        ----------
+        return_primary_system: bool
+            A boolean indicating if OpticStudioSystem should be returned directly.
+
         Returns
         -------
-        OpticStudioSystem
-
+        bool | OpticStudioSystem
+            True if a valid connection is made, else False. If 'return_primary_system = True', the function
+            runs 'get_primary_system()' and directly returns OpticStudioSystem.
         """
         self._assign_connection()
 
@@ -434,17 +448,25 @@ class ZOS:
         
         return self.get_primary_system()
  
-    def connect_as_standalone(self) -> OpticStudioSystem:
+    def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
 
         The application will be assigned to self.Application.
 
+        This function is identical to 'create_new_application()'
+
+        Parameters
+        ----------
+        return_primary_system: bool
+            A boolean indicating if OpticStudioSystem should be returned directly.
+
         Returns
         -------
-        OpticStudioSystem
-
+        bool | OpticStudioSystem
+            True if a valid connection is made, else False. If 'return_primary_system = True', the function
+            runs 'get_primary_system()' and directly returns OpticStudioSystem.
         """
-        return self.create_new_application()
+        return self.create_new_application(return_primary_system=return_primary_system)
 
     def create_new_system(self, system_mode: constants.SystemType | str = "Sequential") -> OpticStudioSystem:
         """Creates a new OpticStudioSystem. This works only if ZOSPy is connected to a standalone application.
