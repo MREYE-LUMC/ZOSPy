@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update the error message in `zospy.ZOS` to explain why only a single instance of `ZOS` is allowed (#24)
+
 ### Deprecated
 
 ### Removed
