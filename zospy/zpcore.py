@@ -417,7 +417,7 @@ class ZOS:
         else:
             if not return_primary_system:
                 return True
-            else
+            else:
                 return self.get_primary_system()
     
     def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
@@ -450,7 +450,7 @@ class ZOS:
         else:
             if not return_primary_system:
                 return True
-            else
+            else:
                 return self.get_primary_system()
  
     def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
