@@ -407,7 +407,6 @@ class ZOS:
             raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
 
-        assert self.Application.IsValidLicenseForAPI, "OpticStudio Licence is not valid for API, connection not established"
         
         return self.get_primary_system()
     
