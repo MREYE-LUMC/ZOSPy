@@ -393,11 +393,13 @@ class ZOS:
 
         self.Application = self.Connection.ConnectAsExtension(instancenumber)
 
-        if self.Application.IsValidLicenseForAPI:
-            return True
-        else:
+        if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
-            return False
+
+        assert self.Application.IsValidLicenseForAPI, "OpticStudio Licence is not valid for API, connection not established"
+        
+        return self.get_primary_system()
+        
 
     def create_new_application(self) -> bool:
         """Creates a standalone Zemax Opticstudio instance.
@@ -416,11 +418,13 @@ class ZOS:
 
         self.Application = self.Connection.CreateNewApplication()
 
-        if self.Application.IsValidLicenseForAPI:
-            return True
-        else:
+        if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
-            return False
+
+        assert self.Application.IsValidLicenseForAPI, "OpticStudio Licence is not valid for API, connection not established"
+        
+        return self.get_primary_system()
+        
 
     def create_new_system(self, system_mode: constants.SystemType | str = "Sequential") -> OpticStudioSystem:
         """Creates a new OpticStudioSystem. This works only if ZOSPy is connected to a standalone application.
