@@ -436,7 +436,7 @@ class ZOS:
         Parameters
         ----------
         instancenumber: int
-            An integer to specify the number of instance used.
+            An integer to specify the number of the instance used.
         return_primary_system: bool
             A boolean indicating if OpticStudioSystem should be returned directly.
 
