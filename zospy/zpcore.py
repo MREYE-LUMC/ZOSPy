@@ -296,7 +296,7 @@ class ZOS:
 
     _instances = set()
 
-    def __new__(cls, preload: bool = False, zosapi_nethelper: str = None, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):
         if len(cls._instances) >= 1:
             # As the number of applications within runtime is limited to 1 by Zemax, it is logical to also limit the
             # number of ZOS instances
@@ -307,7 +307,7 @@ class ZOS:
                 "new one."
             )
 
-        instance = super(ZOS, cls).__new__(cls, *args, **kwargs)
+        instance = super(ZOS, cls).__new__(cls)
 
         return instance
 
