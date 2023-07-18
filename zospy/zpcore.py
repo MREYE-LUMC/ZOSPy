@@ -438,7 +438,7 @@ class ZOS:
         instancenumber: int
             An integer to specify the number of the instance used.
         return_primary_system: bool
-            A boolean indicating if the primary  OpticStudioSystem  should be returned.
+            A boolean indicating if the primary OpticStudioSystem should be returned.
 
         Returns
         -------
@@ -471,17 +471,18 @@ class ZOS:
     def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
 
-        The application will be assigned to self.Application.
+        The application will be assigned to ZOS.Application.
 
         Parameters
         ----------
         return_primary_system: bool
-            A boolean indicating if OpticStudioSystem should be returned directly.
+            A boolean indicating if the primary OpticStudioSystem should be returned.
 
         Returns
         -------
         bool | OpticStudioSystem
-            True if a valid connection is made, else False. If return_primary_system = True, the function
+            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
+            returns the primary `OpticStudioSystem`.
             runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         self._assign_connection()
@@ -512,12 +513,13 @@ class ZOS:
         Parameters
         ----------
         return_primary_system: bool
-            A boolean indicating if OpticStudioSystem should be returned directly.
+            A boolean indicating if the primary OpticStudioSystem should be returned.
 
         Returns
         -------
         bool | OpticStudioSystem
-            True if a valid connection is made, else False. If return_primary_system = True, the function
+            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
+            returns the primary `OpticStudioSystem`.
             runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         return self.create_new_application(return_primary_system=return_primary_system)
