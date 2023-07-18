@@ -443,7 +443,8 @@ class ZOS:
         Returns
         -------
         bool | OpticStudioSystem
-            True if a valid connection is made, else False. If return_primary_system = True, the function
+            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
+            returns the primary `OpticStudioSystem`.
             runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         self._assign_connection()
