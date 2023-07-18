@@ -263,8 +263,10 @@ class ZOS:
     """A Communication instance for Zemax OpticStudio.
 
     This class can be used to establish a link between Python and Zemax OpticStudio through .NET,
-    and subsequently control OpticStudio. The connection is established in two ways, the preferred method as wel as a
-    legacy method for backwards compatability. See examples.
+    and subsequently control OpticStudio. Only one instance of ZOS() can exist at any time.
+
+    The connection is established in two ways, the preferred method as wel as a legacy method for backwards
+    compatability. See examples.
 
     Parameters
     ----------
@@ -282,6 +284,10 @@ class ZOS:
     ZOSAPI_NetHelper : None | netModuleObject
         The ZOSAPI_NetHelper interface once loaded, else None.
 
+    Raises
+    ------
+    ValueError
+        When it is attempted to initiate a second instance of ZOS(). Only one instance can exist at any time.
     Examples
     --------
     >>> # Preferred methods:
