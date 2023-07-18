@@ -263,33 +263,56 @@ class ZOS:
     """A Communication instance for Zemax OpticStudio.
 
     This class can be used to establish a link between Python and Zemax OpticStudio through .NET,
-    and control OpticStudio. The connection is established as following:
-
-    Simple:
-    1. self.wakeup().
-    2. self.create_new_session() or self.connect_as_extension().
-    3. self.get_primary_system()
-
-    Advanced:
-    1. self._load_zos_dlls()
-    2. self._update_constants()
-    3. self.create_new_session() or self.connect_as_extension().
-    4. self.get_primary_system()
-
-    After connection, many OpticStudio functionalities are controllable through ZOS.ZOSAPI()
-
-    Attributes
-    ----------
-        ZOSAPI (None | netModuleObject): The ZOSAPI interface or if loaded.
-        ZOSAPI_NetHelper (None | netModuleObject): The ZOSAPI_NetHelper interface if loaded.
+    and subsequently control OpticStudio. The connection is established in two ways, the preferred method as wel as a
+    legacy method for backwards compatability. See examples.
 
     Parameters
     ----------
-    preload: bool
-        A boolean indicating if nested namespaces should be preloaded.
-    zosapi_nethelper: str, optional
-        Optional filepath to the ZOSAPI_NetHelper dll, if None, the windows registry will be used to find
-        ZOSAPI_NetHelper dll. Defaults to None.
+    preload : bool
+        A boolean indicating if nested namespaces should be preloaded upon initiating ZOS. Defaults to False.
+    zosapi_nethelper : str | None
+        Optional filepath to the ZOSAPI_NetHelper dll that is required to connect to OpticStudio. If None, the
+        Windows registry will be used to find the ZOSAPI_NetHelper dll. Defaults to None.
+
+
+    Attributes
+    ----------
+    ZOSAPI : None | netModuleObject
+        The ZOSAPI interface once loaded, else None.
+    ZOSAPI_NetHelper : None | netModuleObject
+        The ZOSAPI_NetHelper interface once loaded, else None.
+
+    Examples
+    --------
+    >>> # Preferred methods:
+    >>>
+    >>> # Connecting as extension:
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> oss = zos.connect_as_extension(return_primary_system=True)
+    >>>
+    >>> # Launching OpticStudio in standalone mode:
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> oss = zos.create_new_application(return_primary_system=True)
+    >>>
+    >>>
+    >>>
+    >>> # Legacy methods:
+    >>>
+    >>> # Connecting as extension:
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> zos.wakeup()
+    >>> zos.connect_as_extension()
+    >>> oss = zos.get_primary_system()
+    >>>
+    >>> # Launching OpticStudio in standalone mode:
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> zos.wakeup()
+    >>> zos.create_new_application()
+    >>> oss = zos.get_primary_system()
     """
 
     _OpticStudioSystem = OpticStudioSystem
@@ -312,7 +335,19 @@ class ZOS:
         return instance
 
     def __init__(self, preload: bool = False, zosapi_nethelper: str = None):
-        """Initiation of the ZOS Instance."""
+        """Initiation of the ZOS Instance.
+
+        The ZOS instance can subsequently be used to connect to OpticStudio. See the examples in the class docstring for
+        more information
+
+        Parameters
+        ----------
+        preload : bool
+            A boolean indicating if nested namespaces should be preloaded upon initiating ZOS. Defaults to False.
+        zosapi_nethelper : str | None
+            Optional filepath to the ZOSAPI_NetHelper dll that is required to connect to OpticStudio. If None, the
+            Windows registry will be used to find the ZOSAPI_NetHelper dll. Defaults to None.
+        """
         logger.debug("Initializing ZOS instance")
 
         self.ZOSAPI: _ZOSAPI = None
