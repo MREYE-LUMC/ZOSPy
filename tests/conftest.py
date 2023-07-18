@@ -36,13 +36,26 @@ def system_save_file(request):
 @pytest.fixture(scope="session")
 def zos() -> zp.ZOS:
     zos = zp.ZOS()
-    zos.wakeup()
 
     return zos
 
 
 @pytest.fixture
 def oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
+    if connection_mode == "extension":
+        oss = zos.connect_as_extension(return_primary_system=True)
+    else:
+        oss = zos.create_new_application(return_primary_system=True)
+
+    yield oss
+
+    # Close the system
+    if zos.Connection.IsAlive:
+        zos.Application.CloseApplication()
+
+
+@pytest.fixture
+def oss_legacy(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
     if connection_mode == "extension":
         connected = zos.connect_as_extension()
     else:
