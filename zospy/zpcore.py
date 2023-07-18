@@ -300,7 +300,7 @@ class ZOS:
         if len(cls._instances) >= 1:
             # As the number of applications within runtime is limited to 1 by Zemax, it is logical to also limit the
             # number of ZOS instances
-            raise ValueError(
+            raise ConnectionRefusedError(
                 "Cannot have more than one active ZOS instance.\n\n"
                 "Since OpticStudio limits the number of connections to the ZOS-API to 1, only a single ZOS instance "
                 "is allowed. Re-use the existing instance, or delete the existing instance prior to initializing a "
