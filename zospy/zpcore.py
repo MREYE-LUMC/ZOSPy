@@ -420,7 +420,9 @@ class ZOS:
         else:
             logger.debug("ZOSAPI_Connection() already assigned self.Connection")
 
-    def connect_as_extension(self, instancenumber: int = 0, return_primary_system: bool = False) -> bool | OpticStudioSystem:
+    def connect_as_extension(
+        self, instancenumber: int = 0, return_primary_system: bool = False
+    ) -> bool | OpticStudioSystem:
         """Connects to Zemax Opticstudio as extension.
 
         The application will be assigned to self.Application.
@@ -454,7 +456,7 @@ class ZOS:
                 return True
             else:
                 return self.get_primary_system()
-    
+
     def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
 
@@ -487,7 +489,7 @@ class ZOS:
                 return True
             else:
                 return self.get_primary_system()
- 
+
     def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
 
