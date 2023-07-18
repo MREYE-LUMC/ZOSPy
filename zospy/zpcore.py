@@ -431,7 +431,7 @@ class ZOS:
     ) -> bool | OpticStudioSystem:
         """Connects to Zemax Opticstudio as extension.
 
-        The application will be assigned to self.Application.
+        The application will be assigned to ZOS.Application.
 
         Parameters
         ----------
