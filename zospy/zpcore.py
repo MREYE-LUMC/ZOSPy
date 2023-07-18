@@ -466,14 +466,7 @@ class ZOS:
             return self.get_primary_system()
             
         return True
-            logger.critical("OpticStudio Licence is not valid for API, connection not established")
-            raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
-            return False
-        else:
-            if not return_primary_system:
-                return True
-            else:
-                return self.get_primary_system()
+
 
     def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
@@ -500,13 +493,16 @@ class ZOS:
 
         if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
-            raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
+            
+            if return_primary_system:
+                raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
+            
             return False
-        else:
-            if not return_primary_system:
-                return True
-            else:
-                return self.get_primary_system()
+        
+        if return_primary_system:
+            return self.get_primary_system()
+            
+        return True
 
     def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
