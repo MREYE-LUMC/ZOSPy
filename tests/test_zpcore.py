@@ -3,9 +3,9 @@ import pytest
 
 @pytest.mark.must_pass
 @pytest.mark.parametrize(
-        "oss_fixture",
-        ['oss_legacy', 'oss'],
-    )
+    "oss_fixture",
+    ["oss_legacy", "oss"],
+)
 def test_can_connect(oss_fixture, request):
     oss = request.getfixturevalue(oss_fixture)
     assert oss._System is not None

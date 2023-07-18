@@ -276,7 +276,6 @@ class ZOS:
         Optional filepath to the ZOSAPI_NetHelper dll that is required to connect to OpticStudio. If None, the
         Windows registry will be used to find the ZOSAPI_NetHelper dll. Defaults to None.
 
-
     Attributes
     ----------
     ZOSAPI : None | netModuleObject
@@ -288,6 +287,7 @@ class ZOS:
     ------
     ValueError
         When it is attempted to initiate a second instance of ZOS(). Only one instance can exist at any time.
+
     Examples
     --------
     >>> # Preferred methods:
@@ -456,17 +456,16 @@ class ZOS:
 
         if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
-            
+
             if return_primary_system:
                 raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
-            
+
             return False
-        
+
         if return_primary_system:
             return self.get_primary_system()
-            
-        return True
 
+        return True
 
     def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
         """Creates a standalone Zemax Opticstudio instance.
@@ -494,15 +493,15 @@ class ZOS:
 
         if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
-            
+
             if return_primary_system:
                 raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
-            
+
             return False
-        
+
         if return_primary_system:
             return self.get_primary_system()
-            
+
         return True
 
     def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
