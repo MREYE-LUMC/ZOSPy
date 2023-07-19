@@ -8,6 +8,8 @@ import zospy as zp
 def pytest_addoption(parser):
     parser.addoption("--extension", action="store_true", help="Connect to Zemax OpticStudio as extension")
 
+    parser.addoption("--legacy-connection-setup", action="store_true", help="Use legacy method to setup connection")
+
     parser.addoption("--output-directory", type=Path)
 
 
@@ -23,6 +25,11 @@ def connection_mode(request):
 
 
 @pytest.fixture(scope="session")
+def legacy_connection_setup(request):
+    return request.config.getoption("--legacy-connection-setup")
+
+
+@pytest.fixture(scope="session")
 def system_save_file(request):
     output_directory = request.config.getoption("--output-directory")
 
@@ -34,14 +41,17 @@ def system_save_file(request):
 
 
 @pytest.fixture(scope="session")
-def zos() -> zp.ZOS:
-    zos = zp.ZOS()
+def zos(legacy_connection_setup) -> zp.ZOS:
+    if not legacy_connection_setup:
+        zos = zp.ZOS()
+    else:
+        zos = zp.ZOS()
+        zos.wakeup()
 
     return zos
 
 
-@pytest.fixture
-def oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
+def _oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
     if connection_mode == "extension":
         oss = zos.connect_as_extension(return_primary_system=True)
     else:
@@ -54,8 +64,7 @@ def oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
         zos.Application.CloseApplication()
 
 
-@pytest.fixture
-def oss_legacy(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
+def _oss_legacy(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
     if connection_mode == "extension":
         connected = zos.connect_as_extension()
     else:
@@ -68,6 +77,14 @@ def oss_legacy(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
     # Close the system
     if connected:
         zos.Application.CloseApplication()
+
+
+@pytest.fixture
+def oss(zos: zp.ZOS, connection_mode, legacy_connection_setup) -> zp.zpcore.OpticStudioSystem:
+    if not legacy_connection_setup:
+        yield from _oss(zos=zos, connection_mode=connection_mode)
+    else:
+        yield from _oss_legacy(zos=zos, connection_mode=connection_mode)
 
 
 @pytest.fixture(scope="session")
