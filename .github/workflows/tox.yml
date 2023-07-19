@@ -5,6 +5,20 @@ on:
   - pull_request
 
 jobs:
+  # build:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v4
+  #   - name: Install dependencies
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       python -m pip install tox
+  #   - name: Test with tox
+  #     run: tox -e github-actions
+
   build:
     runs-on: ubuntu-latest
 
@@ -15,6 +29,66 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install tox
-    - name: Test with tox
-      run: tox -e github-actions
+        pip install build
+    - name: Build package
+      run: python -m build
+
+# jobs:
+  lint-isort:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${matrix.python}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .[dev]
+      - name: Lint with isort
+        run: isort -c .
+
+  lint-black:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${matrix.python}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .[dev]
+      - name: Lint with isort
+        run: black --check .
+
+  lint-ruff:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${matrix.python}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .[dev]
+      - name: Lint with isort
+        run: ruff zospy
+
+      
