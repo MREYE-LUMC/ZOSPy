@@ -14,7 +14,7 @@
 
 - [ ] Example (a notebook demonstrating how to use ZOSPy for a specific application)
 - [ ] Bugfix (non-breaking change which fixes an issue)
-- [ ] New analysis
+- [ ] New analysis (a wrapper around an OpticStudio analysis)
 - [ ] New feature (other than an analysis)
 - [ ] Breaking change (fix/feature causing existing functionality to break)
 - [ ] Code quality improvements to existing code or addition of tests
