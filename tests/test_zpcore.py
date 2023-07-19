@@ -8,9 +8,7 @@ import zospy as zp
 def patch_zos(zos: zp.ZOS, monkeypatch: pytest.MonkeyPatch):
     patch_application = SimpleNamespace(IsValidLicenseForAPI=False)
     patch_connection = SimpleNamespace(
-        IsAlive=False,
-        ConnectAsExtension=lambda n: patch_application,
-        CreateNewApplication=lambda: patch_application
+        IsAlive=False, ConnectAsExtension=lambda n: patch_application, CreateNewApplication=lambda: patch_application
     )
 
     def patch_assign_connection(self: zp.ZOS):
@@ -42,6 +40,9 @@ def test_connect_as_extension_without_valid_license_returns_false(zos, monkeypat
 def test_connect_as_extension_with_valid_license_returns_true(zos, monkeypatch):
     assert zos.connect_as_extension() is True
 
+    # Close the connection
+    zos.Application.CloseApplication()
+
 
 @pytest.mark.require_mode("standalone")
 def test_create_new_application_without_valid_license_raises_exception(zos, monkeypatch):
@@ -61,6 +62,9 @@ def test_create_new_application_without_valid_license_returns_false(zos, monkeyp
 @pytest.mark.require_mode("standalone")
 def test_create_new_application_with_valid_license_returns_false(zos, monkeypatch):
     assert zos.create_new_application() is True
+
+    # Close the connection
+    zos.Application.CloseApplication()
 
 
 @pytest.mark.must_pass
