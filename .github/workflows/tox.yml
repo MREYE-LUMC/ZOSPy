@@ -44,7 +44,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${matrix.python}
+          python-version: ${{ matrix.python }}
           cache: pip
       - name: Install dependencies
         run: |
@@ -63,7 +63,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${matrix.python}
+          python-version: ${{ matrix.python }}
           cache: pip
       - name: Install dependencies
         run: |
@@ -82,7 +82,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${matrix.python}
+          python-version: ${{ matrix.python }}
           cache: pip
       - name: Install dependencies
         run: |
@@ -90,5 +90,3 @@ jobs:
           python -m pip install .[dev]
       - name: Lint with isort
         run: ruff zospy
-
-      
