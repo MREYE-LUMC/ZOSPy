@@ -24,6 +24,14 @@ def connection_mode(request):
     return "extension" if request.config.getoption("--extension") else "standalone"
 
 
+@pytest.fixture(autouse=True)
+def skip_by_connection_mode(request, connection_mode):
+    if request.node.get_closest_marker("require_mode"):
+        required_mode = request.node.get_closest_marker("require_mode").args[0]
+        if required_mode != connection_mode:
+            pytest.skip(f"Test is only applicable in {required_mode} mode.")
+
+
 @pytest.fixture(scope="session")
 def legacy_connection_setup(request):
     return request.config.getoption("--legacy-connection-setup")
