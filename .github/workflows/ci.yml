@@ -1,4 +1,4 @@
-name: Run tox environments
+name: Continuous Integration
 
 on:
   - push
