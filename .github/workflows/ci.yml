@@ -5,20 +5,6 @@ on:
   - pull_request
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Set up Python
-  #     uses: actions/setup-python@v4
-  #   - name: Install dependencies
-  #     run: |
-  #       python -m pip install --upgrade pip
-  #       python -m pip install tox
-  #   - name: Test with tox
-  #     run: tox -e github-actions
-
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -38,7 +24,6 @@ jobs:
     - name: Build package
       run: python -m build
 
-# jobs:
   lint-isort:
     runs-on: ubuntu-latest
     strategy:
@@ -74,7 +59,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install .[dev]
-      - name: Lint with isort
+      - name: Lint with black
         run: black --check .
 
   lint-ruff:
@@ -93,5 +78,5 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install .[dev]
-      - name: Lint with isort
+      - name: Lint with ruff
         run: ruff zospy
