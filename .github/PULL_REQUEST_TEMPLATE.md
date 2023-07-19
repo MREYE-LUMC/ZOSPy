@@ -2,6 +2,7 @@
   Thanks a lot for contributing to our project!
   Please, do not remove any text from this template (unless instructed otherwise).
 -->
+
 ## Proposed change
 <!--
   What did you change and why did you change it?
@@ -57,10 +58,10 @@ If you contributed an analysis:
 If you contributed an example:
 
 - [ ] I contributed my example as a Jupyter notebook.
-<!--
-  This is important, because it allows users to see the results without
-  executing the complete example.
--->
+    <!--
+    This is important, because it allows users to see the results without
+    executing the complete example.
+    -->
 
 <!--
   Thanks again for your contribution! We will look into it soon.
