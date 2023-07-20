@@ -263,25 +263,64 @@ class ZOS:
     """A Communication instance for Zemax OpticStudio.
 
     This class can be used to establish a link between Python and Zemax OpticStudio through .NET,
-    and control OpticStudio. The connection is established as following:
+    and subsequently control OpticStudio. Only one instance of `ZOS` can exist at any time.
 
-    Simple:
-    1. self.wakeup().
-    2. self.create_new_session() or self.connect_as_extension().
-    3. self.get_primary_system()
+    The connection is established in two ways, the preferred method as wel as a legacy method for backwards
+    compatability. See examples.
 
-    Advanced:
-    1. self._load_zos_dlls()
-    2. self._update_constants()
-    3. self.create_new_session() or self.connect_as_extension().
-    4. self.get_primary_system()
-
-    After connection, many OpticStudio functionalities are controllable through ZOS.ZOSAPI()
+    Parameters
+    ----------
+    preload : bool
+        A boolean indicating if nested namespaces should be preloaded upon initiating ZOS. Defaults to False.
+    zosapi_nethelper : str | None
+        Optional filepath to the ZOSAPI_NetHelper dll that is required to connect to OpticStudio. If None, the
+        Windows registry will be used to find the ZOSAPI_NetHelper dll. Defaults to None.
 
     Attributes
     ----------
-        ZOSAPI (None | netModuleObject): The ZOSAPI interface or if loaded.
-        ZOSAPI_NetHelper (None | netModuleObject): The ZOSAPI_NetHelper interface if loaded.
+    ZOSAPI : None | netModuleObject
+        The ZOSAPI interface once loaded, else None.
+    ZOSAPI_NetHelper : None | netModuleObject
+        The ZOSAPI_NetHelper interface once loaded, else None.
+
+    Raises
+    ------
+    ValueError
+        When it is attempted to initiate a second instance of  `ZOS`. Only one instance can exist at any time.
+
+    Examples
+    --------
+    Preferred methods:
+
+    1. Connecting as extension:
+
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> oss = zos.connect_as_extension(return_primary_system=True)
+
+    2. Launching OpticStudio in standalone mode:
+
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> oss = zos.create_new_application(return_primary_system=True)
+
+    Legacy methods:
+
+    1. Connecting as extension:
+
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> zos.wakeup()
+    >>> zos.connect_as_extension()
+    >>> oss = zos.get_primary_system()
+
+    2. Launching OpticStudio in standalone mode:
+
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> zos.wakeup()
+    >>> zos.create_new_application()
+    >>> oss = zos.get_primary_system()
     """
 
     _OpticStudioSystem = OpticStudioSystem
@@ -299,12 +338,24 @@ class ZOS:
                 "new one."
             )
 
-        instance = super(ZOS, cls).__new__(cls, *args, **kwargs)
+        instance = super(ZOS, cls).__new__(cls)
 
         return instance
 
-    def __init__(self):
-        """Initiation of the ZOS Instance."""
+    def __init__(self, preload: bool = False, zosapi_nethelper: str = None):
+        """Initiation of the ZOS instance.
+
+        The ZOS instance can subsequently be used to connect to OpticStudio. See the examples in the class docstring for
+        more information.
+
+        Parameters
+        ----------
+        preload : bool
+            A boolean indicating if nested namespaces should be preloaded upon initiating ZOS. Defaults to False.
+        zosapi_nethelper : str | None
+            Optional filepath to the ZOSAPI_NetHelper dll that is required to connect to OpticStudio. If None, the
+            Windows registry will be used to find the ZOSAPI_NetHelper dll. Defaults to None.
+        """
         logger.debug("Initializing ZOS instance")
 
         self.ZOSAPI: _ZOSAPI = None
@@ -318,6 +369,8 @@ class ZOS:
 
         logger.info("ZOS instance initialized")
 
+        self.wakeup(preload=preload, zosapi_nethelper=zosapi_nethelper)
+
     def wakeup(self, preload: bool = False, zosapi_nethelper: str = None):
         """Wakes the zosapi instance.
 
@@ -325,18 +378,19 @@ class ZOS:
 
         Parameters
         ----------
-        preload: bool
+        preload : bool
             A boolean indicating if nested namespaces should be preloaded.
-        zosapi_nethelper: str, optional
-            Optional filepath to the ZOSAPI_NetHelper dll, if None, the windows registry will be used to find
+        zosapi_nethelper : str, optional
+            File path to the ZOSAPI_NetHelper dll, if None, the Windows registry will be used to find
             ZOSAPI_NetHelper dll. Defaults to None.
 
         Returns
         -------
         None
         """
-        self._load_zos_dlls(preload=preload, zosapi_nethelper=zosapi_nethelper)
-        self._assign_connection()
+        if self.Connection is None:
+            self._load_zos_dlls(preload=preload, zosapi_nethelper=zosapi_nethelper)
+            self._assign_connection()
 
     def _load_zos_dlls(self, preload: bool = False, zosapi_nethelper: str = None):
         """Loads the ZOS-API DLLs and makes them available for usage through ZOS.ZOSAPI and ZOS.ZOSAPI_NetHelper.
@@ -359,8 +413,6 @@ class ZOS:
             An error occurred in locating one of the DLLs.
         ModuleNotFoundError:
             One of the nested namespaces cannot be found. This error can only occur with preload set to True.
-
-
         """
         logger.debug("Loading ZOS DLLs with preload set to {}".format(preload))
         self.ZOSAPI_NetHelper = load_zosapi_nethelper(filepath=zosapi_nethelper, preload=preload)
@@ -374,15 +426,25 @@ class ZOS:
         else:
             logger.debug("ZOSAPI_Connection() already assigned self.Connection")
 
-    def connect_as_extension(self, instancenumber: int = 0) -> bool:
-        """Creates a standalone Zemax Opticstudio instance.
+    def connect_as_extension(
+        self, instancenumber: int = 0, return_primary_system: bool = False
+    ) -> bool | OpticStudioSystem:
+        """Connects to Zemax OpticStudio as extension.
 
-        The application will be assigned to self.Application.
+        The application will be assigned to ZOS.Application.
+
+        Parameters
+        ----------
+        instancenumber : int, optional
+            An integer to specify the number of the instance used.
+        return_primary_system: bool, optional
+            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
 
         Returns
         -------
-        bool
-            True if a valid connection is made, else False
+        bool | OpticStudioSystem
+            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
+            returns the primary `OpticStudioSystem`.
         """
         self._assign_connection()
 
@@ -391,21 +453,34 @@ class ZOS:
 
         self.Application = self.Connection.ConnectAsExtension(instancenumber)
 
-        if self.Application.IsValidLicenseForAPI:
-            return True
-        else:
+        if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
+
+            if return_primary_system:
+                raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
+
             return False
 
-    def create_new_application(self) -> bool:
-        """Creates a standalone Zemax Opticstudio instance.
+        if return_primary_system:
+            return self.get_primary_system()
 
-        The application will be assigned to self.Application.
+        return True
+
+    def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
+        """Creates a standalone Zemax OpticStudio instance.
+
+        The application will be assigned to ZOS.Application.
+
+        Parameters
+        ----------
+        return_primary_system : bool, optional
+            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
 
         Returns
         -------
-        bool
-            True if a valid connection is made, else False
+        bool | OpticStudioSystem
+            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
+            returns the primary `OpticStudioSystem`.
         """
         self._assign_connection()
 
@@ -414,11 +489,37 @@ class ZOS:
 
         self.Application = self.Connection.CreateNewApplication()
 
-        if self.Application.IsValidLicenseForAPI:
-            return True
-        else:
+        if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
+
+            if return_primary_system:
+                raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
+
             return False
+
+        if return_primary_system:
+            return self.get_primary_system()
+
+        return True
+
+    def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
+        """Creates a standalone Zemax OpticStudio instance.
+
+        Equal to `ZOS.create_new_application`.
+
+        Parameters
+        ----------
+        return_primary_system : bool, optional
+            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
+
+        Returns
+        -------
+        bool | OpticStudioSystem
+            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
+            returns the primary `OpticStudioSystem`.
+            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
+        """
+        return self.create_new_application(return_primary_system=return_primary_system)
 
     def create_new_system(self, system_mode: constants.SystemType | str = "Sequential") -> OpticStudioSystem:
         """Creates a new OpticStudioSystem. This works only if ZOSPy is connected to a standalone application.
