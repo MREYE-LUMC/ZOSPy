@@ -263,7 +263,7 @@ class ZOS:
     """A Communication instance for Zemax OpticStudio.
 
     This class can be used to establish a link between Python and Zemax OpticStudio through .NET,
-    and subsequently control OpticStudio. Only one instance of ZOS() can exist at any time.
+    and subsequently control OpticStudio. Only one instance of `ZOS` can exist at any time.
 
     The connection is established in two ways, the preferred method as wel as a legacy method for backwards
     compatability. See examples.
@@ -286,34 +286,36 @@ class ZOS:
     Raises
     ------
     ValueError
-        When it is attempted to initiate a second instance of ZOS(). Only one instance can exist at any time.
+        When it is attempted to initiate a second instance of  `ZOS`. Only one instance can exist at any time.
 
     Examples
     --------
-    >>> # Preferred methods:
-    >>>
-    >>> # Connecting as extension:
+    Preferred methods:
+
+    1. Connecting as extension:
+
     >>> import zospy as zp
     >>> zos = zp.ZOS()
     >>> oss = zos.connect_as_extension(return_primary_system=True)
-    >>>
-    >>> # Launching OpticStudio in standalone mode:
+
+    2. Launching OpticStudio in standalone mode:
+
     >>> import zospy as zp
     >>> zos = zp.ZOS()
     >>> oss = zos.create_new_application(return_primary_system=True)
-    >>>
-    >>>
-    >>>
-    >>> # Legacy methods:
-    >>>
-    >>> # Connecting as extension:
+
+    Legacy methods:
+
+    1. Connecting as extension:
+
     >>> import zospy as zp
     >>> zos = zp.ZOS()
     >>> zos.wakeup()
     >>> zos.connect_as_extension()
     >>> oss = zos.get_primary_system()
-    >>>
-    >>> # Launching OpticStudio in standalone mode:
+
+    2. Launching OpticStudio in standalone mode:
+
     >>> import zospy as zp
     >>> zos = zp.ZOS()
     >>> zos.wakeup()
@@ -341,10 +343,10 @@ class ZOS:
         return instance
 
     def __init__(self, preload: bool = False, zosapi_nethelper: str = None):
-        """Initiation of the ZOS Instance.
+        """Initiation of the ZOS instance.
 
         The ZOS instance can subsequently be used to connect to OpticStudio. See the examples in the class docstring for
-        more information
+        more information.
 
         Parameters
         ----------
@@ -376,10 +378,10 @@ class ZOS:
 
         Parameters
         ----------
-        preload: bool
+        preload : bool
             A boolean indicating if nested namespaces should be preloaded.
-        zosapi_nethelper: str, optional
-            Optional filepath to the ZOSAPI_NetHelper dll, if None, the windows registry will be used to find
+        zosapi_nethelper : str, optional
+            File path to the ZOSAPI_NetHelper dll, if None, the Windows registry will be used to find
             ZOSAPI_NetHelper dll. Defaults to None.
 
         Returns
@@ -411,8 +413,6 @@ class ZOS:
             An error occurred in locating one of the DLLs.
         ModuleNotFoundError:
             One of the nested namespaces cannot be found. This error can only occur with preload set to True.
-
-
         """
         logger.debug("Loading ZOS DLLs with preload set to {}".format(preload))
         self.ZOSAPI_NetHelper = load_zosapi_nethelper(filepath=zosapi_nethelper, preload=preload)
@@ -429,23 +429,22 @@ class ZOS:
     def connect_as_extension(
         self, instancenumber: int = 0, return_primary_system: bool = False
     ) -> bool | OpticStudioSystem:
-        """Connects to Zemax Opticstudio as extension.
+        """Connects to Zemax OpticStudio as extension.
 
         The application will be assigned to ZOS.Application.
 
         Parameters
         ----------
-        instancenumber: int
+        instancenumber : int, optional
             An integer to specify the number of the instance used.
-        return_primary_system: bool
-            A boolean indicating if the primary OpticStudioSystem should be returned.
+        return_primary_system: bool, optional
+            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
 
         Returns
         -------
         bool | OpticStudioSystem
             `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
             returns the primary `OpticStudioSystem`.
-            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         self._assign_connection()
 
@@ -468,21 +467,20 @@ class ZOS:
         return True
 
     def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
-        """Creates a standalone Zemax Opticstudio instance.
+        """Creates a standalone Zemax OpticStudio instance.
 
         The application will be assigned to ZOS.Application.
 
         Parameters
         ----------
-        return_primary_system: bool
-            A boolean indicating if the primary OpticStudioSystem should be returned.
+        return_primary_system : bool, optional
+            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
 
         Returns
         -------
         bool | OpticStudioSystem
             `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
             returns the primary `OpticStudioSystem`.
-            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
         """
         self._assign_connection()
 
@@ -505,14 +503,14 @@ class ZOS:
         return True
 
     def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
-        """Creates a standalone Zemax Opticstudio instance.
+        """Creates a standalone Zemax OpticStudio instance.
 
-        Equal to ZOS.create_new_application().
+        Equal to `ZOS.create_new_application`.
 
         Parameters
         ----------
-        return_primary_system: bool
-            A boolean indicating if the primary OpticStudioSystem should be returned.
+        return_primary_system : bool, optional
+            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
 
         Returns
         -------
