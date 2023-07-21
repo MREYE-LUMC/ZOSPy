@@ -11,13 +11,19 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- `ZOS.connect_as_standalone` as alias for `ZOS.create_new_application` (#26)
+- New parameter `return_primary_system` for `ZOS.connect_as_extension` and `ZOS.create_new_application`. These methods return the primary optical system if this parameter is `True`. If the license is not valid for the ZOS-API, a `ConnectionRefusedError` is raised (#26)
+
 ### Fixed
 
 ### Changed
 
 - Update the error message in `zospy.ZOS` to explain why only a single instance of `ZOS` is allowed (#24)
+- Load ZOS-API DLLs in `ZOS.__init__` (#26)
 
 ### Deprecated
+
+- Separate calls to `ZOS.wakeup` are now redundant. This method will be removed in a later release (#26)
 
 ### Removed
 
