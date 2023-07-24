@@ -51,7 +51,8 @@ tox
 ```
 
 in the project directory. More information about running the unit tests can be found [here](tests/README.md).
-If you added tests for analysis wrappers, do not forget to generate reference data for these tests.
+If you run the tests for a previously untested version of OpticStudio or added tests for analysis wrappers, 
+do not forget to generate reference data for these tests.
 More information about this can be found in [the test documentation](tests/README.md#generating-test-reference-data).
 
 ### 4. Open a Pull Request
