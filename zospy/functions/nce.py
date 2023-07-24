@@ -104,7 +104,7 @@ def find_object_by_comment(
 
 
 def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IObject:
-    """ Returns the object-specific data.
+    """Returns the object-specific data.
 
     Parameters
     ----------
@@ -117,7 +117,7 @@ def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IOb
         The object-specific data with the inherited implementation.
 
     Examples
-    -------
+    --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
     >>> zos.connect_as_extension()
@@ -130,4 +130,3 @@ def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IOb
     >>> detector_data.NumberXPixels
     """
     return obj.ObjectData.__implementation__
-        
