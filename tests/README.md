@@ -12,7 +12,7 @@ package can be properly installed.
   ```
 - Run all tests:
   ```shell
-  tox run
+  tox
   ```
 - Alternatively, only selected test environments can be run:
   ```shell
