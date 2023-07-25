@@ -41,7 +41,7 @@ class TestGetNumberField:
     def test_get_number_field_returns_correct_result_for_floats(self, number_string, decimal_separator):
         original_decimal_point = _config.DECIMAL_POINT  # store original decimal separator to revert later
         if decimal_separator is not None:
-            _config.DECIMAL_POINT = decimal_separator  # adjust configured decimal point separator
+        monkeypatch.setattr(_config, "DECIMAL_POINT", decimal_separator)
 
         res = _get_number_field("Test", f"Test: {number_string}")
 
