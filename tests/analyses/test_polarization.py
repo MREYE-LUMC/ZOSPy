@@ -16,36 +16,26 @@ _exps = ["", "e1", "e123", "e+1", "e+123", "e-1", "e-123", "E1", "E123", "E+1", 
 
 
 class TestGetNumberField:
-    @pytest.mark.parametrize("sign", _signs)
-    @pytest.mark.parametrize("number", _int_numbers)
     @pytest.mark.parametrize("exp", _exps)
+    @pytest.mark.parametrize("number", _int_numbers)
+    @pytest.mark.parametrize("sign", _signs)
     def test_get_number_field_returns_correct_result_for_integers(self, sign, number, exp):
-        ...
-        "number_string", [_sign + _number + _exp for _sign in _signs for _number in _int_numbers for _exp in _exps]
-    )
-    def test_get_number_field_returns_correct_result_for_integers(self, number_string):
+        number_string = sign+number+exp
         res = _get_number_field("Test", f"Test: {number_string}")
 
         assert res == number_string
 
-    @pytest.mark.parametrize(
-        "number_string, decimal_separator",
-        [
-            ((_sign + _number + _exp).replace(".", _decimal_separator), _decimal_separator)
-            for _sign in _signs
-            for _number in _float_numbers
-            for _exp in _exps
-            for _decimal_separator in _decimal_separators
-        ],
-    )
-    def test_get_number_field_returns_correct_result_for_floats(self, number_string, decimal_separator):
-        original_decimal_point = _config.DECIMAL_POINT  # store original decimal separator to revert later
-        if decimal_separator is not None:
+    @pytest.mark.parametrize("decimal_separator", _decimal_separators)
+    @pytest.mark.parametrize("exp", _exps)
+    @pytest.mark.parametrize("number", _float_numbers)
+    @pytest.mark.parametrize("sign", _signs)
+    def test_get_number_field_returns_correct_result_for_floats(self, sign, number, exp, decimal_separator,
+                                                                monkeypatch: pytest.MonkeyPatch):
         monkeypatch.setattr(_config, "DECIMAL_POINT", decimal_separator)
 
-        res = _get_number_field("Test", f"Test: {number_string}")
+        number_string = (sign+number+exp).replace('.', decimal_separator)
 
-        _config.DECIMAL_POINT = original_decimal_point  # restore originally configured decimal point
+        res = _get_number_field("Test", f"Test: {number_string}")
 
         assert res == number_string
 
