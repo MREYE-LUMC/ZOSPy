@@ -1,8 +1,49 @@
 import numpy as np
 import pytest
 
-import zospy as zp
-from zospy.analyses.polarization import polarization_pupil_map, transmission
+import zospy.api.config as _config
+from zospy.analyses.polarization import (
+    _get_number_field,
+    polarization_pupil_map,
+    transmission,
+)
+
+_signs = ["", "+", "-"]
+_int_numbers = ["1", "123"]
+_float_numbers = [".1", ".123", "1.", "1.2", "1.23", "12.3"]
+_decimal_separators = [",", "."]
+_exps = ["", "e1", "e123", "e+1", "e+123", "e-1", "e-123", "E1", "E123", "E+1", "E+123", "E-1", "E-123"]
+
+
+class TestGetNumberField:
+    @pytest.mark.parametrize(
+        "number_string", [_sign + _number + _exp for _sign in _signs for _number in _int_numbers for _exp in _exps]
+    )
+    def test_get_number_field_returns_correct_result_for_integers(self, number_string):
+        res = _get_number_field("Test", f"Test: {number_string}")
+
+        assert res == number_string
+
+    @pytest.mark.parametrize(
+        "number_string, decimal_separator",
+        [
+            ((_sign + _number + _exp).replace(".", _decimal_separator), _decimal_separator)
+            for _sign in _signs
+            for _number in _float_numbers
+            for _exp in _exps
+            for _decimal_separator in _decimal_separators
+        ],
+    )
+    def test_get_number_field_returns_correct_result_for_floats(self, number_string, decimal_separator):
+        original_decimal_point = _config.DECIMAL_POINT  # store original decimal separator to revert later
+        if decimal_separator is not None:
+            _config.DECIMAL_POINT = decimal_separator  # adjust configured decimal point separator
+
+        res = _get_number_field("Test", f"Test: {number_string}")
+
+        _config.DECIMAL_POINT = original_decimal_point  # restore originally configured decimal point
+
+        assert res == number_string
 
 
 class TestPolarizationPupilMap:
