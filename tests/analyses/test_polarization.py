@@ -12,11 +12,11 @@ _signs = ["", "+", "-"]
 _int_numbers = ["1", "123"]
 _float_numbers = [".1", ".123", "1.", "1.2", "1.23", "12.3"]
 _decimal_separators = [",", "."]
-_exps = ["", "e1", "e123", "e+1", "e+123", "e-1", "e-123", "E1", "E123", "E+1", "E+123", "E-1", "E-123"]
+_exponents = ["", "e1", "e123", "e+1", "e+123", "e-1", "e-123", "E1", "E123", "E+1", "E+123", "E-1", "E-123"]
 
 
 class TestGetNumberField:
-    @pytest.mark.parametrize("exp", _exps)
+    @pytest.mark.parametrize("exp", _exponents)
     @pytest.mark.parametrize("number", _int_numbers)
     @pytest.mark.parametrize("sign", _signs)
     def test_parses_int(self, sign, number, exp):
@@ -26,7 +26,7 @@ class TestGetNumberField:
         assert res == number_string
 
     @pytest.mark.parametrize("decimal_separator", _decimal_separators)
-    @pytest.mark.parametrize("exp", _exps)
+    @pytest.mark.parametrize("exp", _exponents)
     @pytest.mark.parametrize("number", _float_numbers)
     @pytest.mark.parametrize("sign", _signs)
     def test_parses_float(self, sign, number, exp, decimal_separator, monkeypatch: pytest.MonkeyPatch):
