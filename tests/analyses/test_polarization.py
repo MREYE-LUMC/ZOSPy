@@ -16,7 +16,11 @@ _exps = ["", "e1", "e123", "e+1", "e+123", "e-1", "e-123", "E1", "E123", "E+1", 
 
 
 class TestGetNumberField:
-    @pytest.mark.parametrize(
+    @pytest.mark.parametrize("sign", _signs)
+    @pytest.mark.parametrize("number", _int_numbers)
+    @pytest.mark.parametrize("exp", _exps)
+    def test_get_number_field_returns_correct_result_for_integers(self, sign, number, exp):
+        ...
         "number_string", [_sign + _number + _exp for _sign in _signs for _number in _int_numbers for _exp in _exps]
     )
     def test_get_number_field_returns_correct_result_for_integers(self, number_string):
