@@ -19,7 +19,10 @@ from zospy.zpcore import OpticStudioSystem
 
 
 def _get_number_field(name: str, text: str) -> str:
-    return re.search(rf"{name}\s*:\s*(-?[\d{_config.DECIMAL_POINT}]+)", text).group(1)
+    return re.search(
+        rf"{re.escape(name)}\s*:\s*([-+]?(\d+({re.escape(_config.DECIMAL_POINT)}\d*)?|{re.escape(_config.DECIMAL_POINT)}\d+)(?:[Ee][-+]?\d+)?)",
+        text,
+    ).group(1)
 
 
 @dataclass

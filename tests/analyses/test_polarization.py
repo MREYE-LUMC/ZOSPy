@@ -1,8 +1,42 @@
 import numpy as np
 import pytest
 
-import zospy as zp
-from zospy.analyses.polarization import polarization_pupil_map, transmission
+import zospy.api.config as _config
+from zospy.analyses.polarization import (
+    _get_number_field,
+    polarization_pupil_map,
+    transmission,
+)
+
+_signs = ["", "+", "-"]
+_int_numbers = ["1", "123"]
+_float_numbers = [".1", ".123", "1.", "1.2", "1.23", "12.3"]
+_decimal_separators = [",", "."]
+_exponents = ["", "e1", "e123", "e+1", "e+123", "e-1", "e-123", "E1", "E123", "E+1", "E+123", "E-1", "E-123"]
+
+
+class TestGetNumberField:
+    @pytest.mark.parametrize("exp", _exponents)
+    @pytest.mark.parametrize("number", _int_numbers)
+    @pytest.mark.parametrize("sign", _signs)
+    def test_parses_int(self, sign, number, exp):
+        number_string = sign + number + exp
+        res = _get_number_field("Test", f"Test: {number_string}")
+
+        assert res == number_string
+
+    @pytest.mark.parametrize("decimal_separator", _decimal_separators)
+    @pytest.mark.parametrize("exp", _exponents)
+    @pytest.mark.parametrize("number", _float_numbers)
+    @pytest.mark.parametrize("sign", _signs)
+    def test_parses_float(self, sign, number, exp, decimal_separator, monkeypatch: pytest.MonkeyPatch):
+        monkeypatch.setattr(_config, "DECIMAL_POINT", decimal_separator)
+
+        number_string = (sign + number + exp).replace(".", decimal_separator)
+
+        res = _get_number_field("Test", f"Test: {number_string}")
+
+        assert res == number_string
 
 
 class TestPolarizationPupilMap:
@@ -58,6 +92,7 @@ class TestTransmission:
             ("32x32", False, 1, 0, 0, 0),
             ("32x32", False, 0, 1, 0, 0),
             ("32x32", False, 1, 1, 0, 0),
+            ("32x32", False, 0.001, 1, 0, 0),
             ("64x64", False, 1, 1, 45, 90),
             ("64x64", True, 1, 0, 0, 0),
         ],
@@ -78,6 +113,7 @@ class TestTransmission:
             ("32x32", False, 1, 0, 0, 0),
             ("32x32", False, 0, 1, 0, 0),
             ("32x32", False, 1, 1, 0, 0),
+            ("32x32", False, 0.001, 1, 0, 0),
             ("64x64", False, 1, 1, 45, 90),
             ("64x64", True, 1, 0, 0, 0),
         ],
