@@ -51,7 +51,7 @@ def system_save_file(request):
 @pytest.fixture(scope="session")
 def zos(legacy_connection_setup) -> zp.ZOS:
     if not legacy_connection_setup:
-        zos = zp.ZOS()
+        zos = zp.ZOS(zosapi_nethelper="C:\Program Files\Ansys Zemax OpticStudio 2023 R1.03")
     else:
         zos = zp.ZOS()
         zos.wakeup()
