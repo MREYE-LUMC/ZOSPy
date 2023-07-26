@@ -84,6 +84,12 @@ tests:
         jy: 1
         x_phase: 0
         y_phase: 0
+      - sampling: 32x32
+        unpolarized: false
+        jx: 0.001
+        jy: 1
+        x_phase: 0
+        y_phase: 0
       - sampling: 64x64
         unpolarized: false
         jx: 1
