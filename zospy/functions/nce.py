@@ -101,3 +101,32 @@ def find_object_by_comment(
 
     # Return list of objects with matching comment
     return matching_objects
+
+
+def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IObject:
+    """Returns the object-specific data.
+
+    Parameters
+    ----------
+    obj: ZOSAPI.Editors.NCE.INCERow
+        The Row/Object for which the data is requested.
+
+    Returns
+    -------
+    ZOSAPI.Editors.NCE.IObject
+        The object-specific data with the inherited implementation.
+
+    Examples
+    --------
+    >>> import zospy as zp
+    >>> zos = zp.ZOS()
+    >>> zos.connect_as_extension()
+    >>> oss = zos.get_primary_system()
+    >>> oss.make_nonsequential()
+    >>> detector_object = oss.NCE.GetObjectAt(1)
+    >>> detector_type = detector_object.GetObjectTypeSettings(zp.constants.Editors.NCE.ObjectType.DetectorRectangle)
+    >>> detector_object.ChangeType(detector_type)
+    >>> detector_data = zp.functions.nce.get_object_data(detector_object)
+    >>> number_of_x_pixels = detector_data.NumberXPixels
+    """
+    return obj.ObjectData.__implementation__

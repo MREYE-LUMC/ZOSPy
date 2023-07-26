@@ -1,6 +1,6 @@
 import pytest
 
-from zospy.functions.nce import find_object_by_comment
+from zospy.functions.nce import find_object_by_comment, get_object_data
 
 
 @pytest.mark.parametrize(
@@ -25,3 +25,9 @@ def test_can_find_object_by_comment(nsc_simple_system, comment, case_sensitive, 
     indices = [obj.ObjectNumber for obj in result]
 
     assert indices == expected_indices
+
+
+def test_get_object_data(nsc_simple_system):
+    object_data = get_object_data(nsc_simple_system.NCE.GetObjectAt(2))
+
+    assert object_data.Radius1 == 20

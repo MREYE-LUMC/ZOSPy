@@ -13,6 +13,7 @@ ZOS-API can also be added in patch releases.
 
 - `ZOS.connect_as_standalone` as alias for `ZOS.create_new_application` (#26)
 - New parameter `return_primary_system` for `ZOS.connect_as_extension` and `ZOS.create_new_application`. These methods return the primary optical system if this parameter is `True`. If the license is not valid for the ZOS-API, a `ConnectionRefusedError` is raised (#26)
+- `zospy.functions.nce.get_object_data` to get the data of an NCE object (#30)
 
 ### Fixed
 
