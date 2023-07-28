@@ -17,8 +17,6 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- Forgetting to update the changelog
-
 ### Changed
 
 - Update the error message in `zospy.ZOS` to explain why only a single instance of `ZOS` is allowed (#24)
