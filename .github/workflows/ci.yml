@@ -71,3 +71,18 @@ jobs:
           python -m pip install .[dev]
       - name: Lint with ruff
         run: ruff zospy
+
+  check_file_updates:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    name: Check CHANGELOG.md for updates
+    steps:
+        - uses: actions/checkout@v3
+        - name: Check for file updates
+          id: changed-files
+          uses: tj-actions/changed-files@v37
+          with:
+            files: CHANGELOG.md
+        - name: Fail if nothing changed
+          if: ${{ steps.changed-files.outputs.any_changed != 'true' }}
+          run: exit 1
