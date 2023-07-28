@@ -74,7 +74,7 @@ jobs:
 
   check_file_updates:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }} && !contains(github.event.pull_request.labels.*.name, 'skip changelog')
+    if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip changelog')
     name: Check CHANGELOG.md for updates
     steps:
         - uses: actions/checkout@v3
@@ -84,5 +84,5 @@ jobs:
           with:
             files: CHANGELOG.md
         - name: Fail if nothing changed
-          if: ${{ steps.changed-files.outputs.any_changed != 'true' }}
+          if: steps.changed-files.outputs.any_changed != 'true'
           run: exit 1
