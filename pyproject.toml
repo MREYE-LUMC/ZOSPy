@@ -32,11 +32,13 @@ Source = "https://github.com/MREYE-LUMC/ZOSPy"
 Documentation = "https://mreye-lumc.github.io/ZOSPy"
 
 [project.optional-dependencies]
+# Dependencies for unit testing
 test = [
     "pytest",
     "tox",
 ]
 
+# Dependencies for building the documentation
 docs = [
     "ipython",
     "myst-parser",
@@ -48,6 +50,7 @@ docs = [
     "sphinx-design",
 ]
 
+# Development tools
 dev = [
     "zospy[test]",
     "black[jupyter] == 23.3.0",
@@ -114,7 +117,10 @@ ignore = [
 convention = "numpy"
 
 [tool.hatch.envs.docs]
-detached = true
-dependencies = [
-    ".[docs]"
+features = [
+    "docs"
 ]
+
+[tool.hatch.envs.docs.scripts]
+# Run this with "hatch run docs:build"
+build = "sphinx-build -M {args:html} ./docs ./docs/_build"
