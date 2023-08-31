@@ -12,6 +12,12 @@ build:
   apt_packages:
     - pandoc
     - dotnet-runtime-7.0
+    - locales
+  jobs:
+    post_system_dependencies:
+      - locale-gen en_US.UTF-8
+    pre_build:
+      - export PYTHONNET_RUNTIME="coreclr"
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
