@@ -21,13 +21,12 @@ build:
       - touch ./winreg/winreg/__init__.py
       - |
           printf \
-          '[build-system]
-          requires = ["flit_core >=3.2,<4"]
-          build-backend = "flit_core.buildapi"
-          
-          [project]
-          name = "winreg"
-          description = "a fake version of winreg"
+          '[build-system]\n \
+          requires = ["flit_core >=3.2,<4"]\n \
+          build-backend = "flit_core.buildapi"\n \
+          [project]\n \
+          name = "winreg"\n \
+          description = "a fake version of winreg"\n \
           version = "1.0.0"\n' > ./winreg/pyproject.toml
       - cat ./winreg/pyproject.toml
       - pip install ./winreg
