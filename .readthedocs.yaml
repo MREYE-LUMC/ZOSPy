@@ -14,22 +14,22 @@ build:
     - dotnet-runtime-7.0
     - language-pack-en-base
   jobs:
-    pre_build:
-      # Fake the existence of winreg
-      - mkdir ./winreg
-      - mkdir ./winreg/winreg
-      - touch ./winreg/winreg/__init__.py
-#      - printf '[build-system]\nrequires = ["flit_core >=3.2,<4"]\nbuild-backend = "flit_core.buildapi"\n[project]\nname = "winreg"\ndescription = "a fake version of winreg"\nversion = "1.0.0"\n' > ./winreg/pyproject.toml
-      - >-
-          printf '[build-system]\n
-          requires = ["flit_core >=3.2,<4"]\n
-          build-backend = "flit_core.buildapi"\n\n
-          [project]\n
-          name = "winreg"\n
-          description = "a fake version of winreg"\n
-          version = "1.0.0"\n' > ./winreg/pyproject.toml
-      - cat ./winreg/pyproject.toml
-      - pip install ./winreg
+    pre_build: []
+#      # Fake the existence of winreg
+#      - mkdir ./winreg
+#      - mkdir ./winreg/winreg
+#      - touch ./winreg/winreg/__init__.py
+##      - printf '[build-system]\nrequires = ["flit_core >=3.2,<4"]\nbuild-backend = "flit_core.buildapi"\n[project]\nname = "winreg"\ndescription = "a fake version of winreg"\nversion = "1.0.0"\n' > ./winreg/pyproject.toml
+#      - >-
+#          printf '[build-system]\n
+#          requires = ["flit_core >=3.2,<4"]\n
+#          build-backend = "flit_core.buildapi"\n\n
+#          [project]\n
+#          name = "winreg"\n
+#          description = "a fake version of winreg"\n
+#          version = "1.0.0"\n' > ./winreg/pyproject.toml
+#      - cat ./winreg/pyproject.toml
+#      - pip install ./winreg
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:

@@ -10,5 +10,6 @@ title: API
 
 api/core
 api/analyses
+api/solvers
 ```
 
