@@ -12,7 +12,7 @@ build:
   apt_packages:
     - pandoc
     - dotnet-runtime-7.0
-    - locales
+    - language-pack-en-base
   jobs:
 #    post_system_dependencies:
 #      - su -c "locale-gen en_US.UTF-8"
@@ -20,8 +20,8 @@ build:
       # Configure the .NET runtime
       - export PYTHONNET_RUNTIME="coreclr"
       # Set the locale to en_US, otherwise zospy.api.config will crash
-      - export LC_ALL="en_US.UTF-8"
-      - export LC_CTYPE="en_US.UTF-8"
+#      - export LC_ALL="en_US.UTF-8"
+#      - export LC_CTYPE="en_US.UTF-8"
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
