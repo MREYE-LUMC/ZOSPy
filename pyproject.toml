@@ -37,6 +37,16 @@ test = [
     "tox",
 ]
 
+docs = [
+    "ipython",
+    "myst-parser",
+    "nbsphinx",
+    "numpydoc",
+    "sphinx",
+    "sphinx-book-theme",
+    "sphinx-design",
+]
+
 dev = [
     "zospy[test]",
     "black[jupyter] == 23.3.0",
@@ -101,3 +111,9 @@ ignore = [
 
 [tool.ruff.pydocstyle]
 convention = "numpy"
+
+[tool.hatch.envs.docs]
+detached = true
+dependencies = [
+    ".[docs]"
+]
