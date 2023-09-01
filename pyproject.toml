@@ -115,12 +115,3 @@ ignore = [
 
 [tool.ruff.pydocstyle]
 convention = "numpy"
-
-[tool.hatch.envs.docs]
-features = [
-    "docs"
-]
-
-[tool.hatch.envs.docs.scripts]
-# Run this with "hatch run docs:build"
-build = "sphinx-build -M {args:html} ./docs ./docs/_build"

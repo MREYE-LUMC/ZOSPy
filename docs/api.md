@@ -1,15 +1,16 @@
----
-title: API
----
-
 # API documentation
 
-```{toctree}
-:maxdepth: 1
-:caption: Contents
+```{eval-rst}
+.. currentmodule:: zospy
 
-api/core
-api/analyses
-api/solvers
+.. autosummary::
+   :toctree: _autosummary
+   :template: custom-module.rst
+   :recursive:
+
+   zospy.zpcore
+   zospy.analyses
+   zospy.api.constants
+   zospy.functions
+   zospy.solvers
 ```
-

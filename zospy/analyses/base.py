@@ -360,9 +360,37 @@ class AnalysisResult(AttrDict):
 
 
 class OnComplete(str, Enum):
+    """
+    Action to perform after running an OpticStudio analysis.
+
+    This `Enum` can be passed to analysis methods in `zospy.analyses`.
+
+    Attributes
+    ----------
+    Close : str
+        Close the analysis.
+    Release : str
+        Keep the analysis open, but not active.
+    Sustain : str
+        Keep the analysis open and active.
+
+    Examples
+    --------
+
+    Run a System Data analysis and keep the analysis open:
+
+    >>> from zospy.analyses import OnComplete
+    >>> from zospy.analyses.reports import system_data
+    >>> result = system_data(oss, OnComplete.Sustain)
+    """
     Close = "Close"
+    """Close the analysis."""
+
     Release = "Release"
+    """Keep the analysis open, but not active."""
+
     Sustain = "Sustain"
+    """Keep the analysis open and active."""
 
 
 class Analysis:

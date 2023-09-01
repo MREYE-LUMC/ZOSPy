@@ -2,7 +2,7 @@
 title: Examples flurp
 ---
 
-## Examples
+# Examples
 
 Below are examples of various functionalities and applications of ZOSPy.
 
