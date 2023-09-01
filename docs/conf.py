@@ -42,7 +42,13 @@ html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_theme_options = {"home_page_in_toc": True}
 
+
+# -- Options for Sphinx autodoc ----------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
+autodoc_typehints = "none"
+autodoc_mock_imports = ["winreg", "clr"]
+
 # -- Enviroment configuration ------------------------------------------------
-if os.environ.get("READTHEDOCS"):
-    winreg_module = ModuleType("winreg")
-    sys.modules["winreg"] = winreg_module
+# if os.environ.get("READTHEDOCS"):
+#     winreg_module = ModuleType("winreg")
+#     sys.modules["winreg"] = winreg_module
