@@ -4,7 +4,7 @@
 .. currentmodule:: zospy
 
 .. autosummary::
-   :toctree: _autosummary
+   :toctree: api
    :template: custom-module.rst
    :recursive:
 

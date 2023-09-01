@@ -7,7 +7,7 @@ build/
 dist/
 zospy.egg-info/
 docs/_build/
-docs/_autosummary/
+docs/api/
 
 # Tool and cache folders
 __pycache__/
