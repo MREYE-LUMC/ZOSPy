@@ -376,13 +376,13 @@ class OnComplete(str, Enum):
 
     Examples
     --------
-
     Run a System Data analysis and keep the analysis open:
 
     >>> from zospy.analyses import OnComplete
     >>> from zospy.analyses.reports import system_data
     >>> result = system_data(oss, OnComplete.Sustain)
     """
+
     Close = "Close"
     """Close the analysis."""
 

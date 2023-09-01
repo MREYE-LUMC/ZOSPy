@@ -1,6 +1,5 @@
 """
-Utility functions for ZOSPy
-===========================
+Utility functions for ZOSPy.
 
 `zospy.functions` contains utility functions for zospy. These functions are available through its submodules:
 

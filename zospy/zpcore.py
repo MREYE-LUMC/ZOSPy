@@ -47,7 +47,6 @@ class OpticStudioSystem:
 
         Examples
         --------
-
         Create two different optical systems in a single instance of OpticStudio:
 
         >>> import zospy as zp
@@ -88,7 +87,6 @@ class OpticStudioSystem:
 
         Examples
         --------
-
         Change the aperture type to "FloatByStopSize":
 
         >>> oss.SystemData.Aperture.ApertureType = zp.constants.SystemData.ZemaxApertureType.FloatByStopSize

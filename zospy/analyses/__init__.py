@@ -1,6 +1,4 @@
-"""
-OpticStudio Analyses
-====================
+"""OpticStudio Analyses.
 
 Analyses in OpticStudio are available through `zospy.analyses`.
 This module provides basic classes and functions for interacting with
@@ -9,7 +7,6 @@ to several analyses.
 
 Examples
 --------
-
 Run a Single Ray Trace analysis:
 
 >>> from zospy.analyses.wavefront import zernike_standard_coefficients

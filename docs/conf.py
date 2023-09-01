@@ -61,9 +61,7 @@ numpydoc_show_inherited_class_members = {
 
 
 # -- Docstring preprocessing -------------------------------------------------
-ANNOTATION_SUBSTITUTIONS = {
-    "_ZOSAPI": "ZOSAPI"
-}
+ANNOTATION_SUBSTITUTIONS = {"_ZOSAPI": "ZOSAPI"}
 
 
 def apply_annotation_substitutions(app, obj: object, bound_method):
