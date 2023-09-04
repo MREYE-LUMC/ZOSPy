@@ -32,11 +32,25 @@ Source = "https://github.com/MREYE-LUMC/ZOSPy"
 Documentation = "https://mreye-lumc.github.io/ZOSPy"
 
 [project.optional-dependencies]
+# Dependencies for unit testing
 test = [
     "pytest",
     "tox",
 ]
 
+# Dependencies for building the documentation
+docs = [
+    "ipython",
+    "myst-parser",
+    "nbsphinx",
+    "nbsphinx_link",
+    "numpydoc",
+    "sphinx",
+    "sphinx-book-theme",
+    "sphinx-design",
+]
+
+# Development tools
 dev = [
     "zospy[test]",
     "black[jupyter] == 23.3.0",

@@ -1,7 +1,20 @@
-"""Solvers for Zemax OpticStudio.
+"""OpticStudio Solvers.
 
+`zospy.solvers` provides easy access to various solvers offered by OpticStudio.
 Solvers have the general structure `solver_function(cell, *args)`, with `cell` the EditorCell of the solver,
-and all subsequent arguments the parameters for the solver.
+followed by the parameters for the solver.
+
+Examples
+--------
+Make the radius of a surface variable:
+
+>>> surface = oss.InsertNewSurfaceAt(1)
+>>> zp.solvers.variable(surface.RadiusCell)
+
+Change the refractive index of a medium:
+
+>>> surface = oss.InsertNewSurfaceAt(1)
+>>> zp.solvers.material_model(surface.MaterialCell, refractive_index=1.5)
 """
 from __future__ import annotations
 
