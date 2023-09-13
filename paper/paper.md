@@ -97,9 +97,9 @@ huygens_psf = zp.analyses.psf.huygens_psf(
 
 ![**Results of the example code**. **A)** The created optical system results in a slightly out of focus image. **B)** The calculated Modulation Transfer Function (MTF) shows that the image plane needs a 1.9 mm shift towards the lens to be in focus. **C)** The Huygens Point Spread Function (PSF) shows the aberrations of the system.\label{fig:1}](Figure%201.png)
 
-Furthermore, `ZOSPy` has been used in different ophthalmic studies. In one of these studies, `ZOSPy` was used to evaluate the relation of ocular anatomy to peripheral visual complaints (\autoref{fig:2}A) [@vanVught2022]. In another study, `ZOSPy` showed that the extent of an intra-ocular tumor can be overestimated during surgery due to its shadow (\autoref{fig:2}B) [@Jaarsma2023].
+Furthermore, `ZOSPy` has been used in different ophthalmic studies. In one of these studies, `ZOSPy` was used to evaluate the relation of ocular anatomy to peripheral visual complaints [@vanVught2022]. In another study, `ZOSPy` showed that the extent of an intra-ocular tumor can be overestimated during surgery due to its shadow (\autoref{fig:2}) [@Jaarsma2023].
 
-![**Scientific research conducted using `ZOSPy`.** **A)** Evaluation of the peripheral vision of the human eye with an artificial intra-ocular lens [@vanVught2022]. **B)** Simulation mimicking the clip surgery for ocular radiotherapy [@Jaarsma2023].\label{fig:2}](Figure%202.png)
+![**Simulation mimicking the clip surgery for radiotherapy of an intraocular tumor [@Jaarsma2023]**. The ocular geometry including the dimension of the tumor were loaded into OpticStudio using `ZOSPy` and the *CAD Part: STL* object type, after which the retinal illumination was simulated. The results were rendered using the non-sequential Shaded Model analysis `zospy.analyses.systemviewers.nsc_shaded_model`.\label{fig:2}](Figure%202.png)
 
 # Acknowledgements
 We would like to thank all users that have reported bugs or implemented new functionality. 
