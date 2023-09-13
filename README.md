@@ -2,7 +2,7 @@
 
 ## About
 
-Wrapper around the [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API that provides a more pythonic and
+Wrapper around the [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API that provides an
 intuitive way to interact with the [ZOS-API](https://www.zemax.com/blogs/free-tutorials/getting-started-with-zos-api)
 through python using a .NET connection. It thereby allows you to do more
 optics modelling with less coding.
