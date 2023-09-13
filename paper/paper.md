@@ -99,7 +99,7 @@ huygens_psf = zp.analyses.psf.huygens_psf(
 
 Furthermore, `ZOSPy` has been used in different ophthalmic studies. In one of these studies, `ZOSPy` was used to evaluate the relation of ocular anatomy to peripheral visual complaints [@vanVught2022]. In another study, `ZOSPy` showed that the extent of an intra-ocular tumor can be overestimated during surgery due to its shadow (\autoref{fig:2}) [@Jaarsma2023].
 
-![**Simulation mimicking the clip surgery for radiotherapy of an intraocular tumor [@Jaarsma2023]**. The ocular geometry including the dimension of the tumor were loaded into OpticStudio using `ZOSPy` and the *CAD Part: STL* object type, after which the retinal illumination was simulated. The results were rendered using the non-sequential Shaded Model analysis `zospy.analyses.systemviewers.nsc_shaded_model`.\label{fig:2}](Figure%202.png)
+![**Simulation mimicking the clip surgery for radiotherapy of an intraocular tumor [@Jaarsma2023]**. The ocular geometry including the dimension of the tumor were loaded into OpticStudio using `ZOSPy` and the *CAD Part: STL* object type, after which the retinal illumination was simulated. The results were rendered using the non-sequential Shaded Model analysis (`zospy.analyses.systemviewers.nsc_shaded_model`).\label{fig:2}](Figure%202.png)
 
 # Acknowledgements
 We would like to thank all users that have reported bugs or implemented new functionality. 
