@@ -35,9 +35,9 @@ Zemax OpticStudio (Ansys, Inc) is a commonly used software package for designing
 # Statement of need
 Ray tracing simulations are widely used to design, optimize and analyze optical systems. Its applications are diverse, ranging from designing spectrometers [@Naeem2022] or telescopes [@Zhang2023], to understanding the optics of the human eye [@Simpson2020; @vanVught2022]. Moreover, in ophthalmology, ray tracing is used to optimize the outcomes of cataract surgery [@Canovas2011; @Artal2023] and evaluate the accuracy of ocular radiotherapy [@Jaarsma2023]. These optical simulations are often performed in OpticStudio, which offers a powerful set of tools to design, optimize and evaluate optical systems.
 
-Although OpticStudio offers an API, the `ZOS-API`, using this API in Python is complex and time-consuming. It involves, for example, establishing a connection with the API through the .NET framework, casting between .NET and Python datatypes, identifying which constants need to be set in specific cases, and working around  non-uniform methods of parsing the output [@GettingStartedWithZOSAPI]. This leads to studies which, in practice, largely rely on user interaction and therefore mostly assess a small number of optical systems. Although this is generally sufficient for the design of an optical system, other applications would benefit from the evaluation a large set of systems. In vision science, for example, clinical studies typically analyze vision-related complaints in cohorts of hundreds of eyes [@Ellis2001; @Osher2008], but the ray-tracing studies aiming to link these complaints to the subject’s ocular optics are limited to a small number of eyes [@Holladay1999; @Simpson2020]. Furthermore, the sharing of methodology is often limited to screenshots [@Hong2011], simple tables [@Naeem2022] or optical systems saved in the proprietary file format of OpticStudio [@Polans2018], which hinders open science initiatives. 
+Although OpticStudio offers an API, the `ZOS-API`, using this API in Python is complex and time-consuming. It involves, for example, establishing a connection with the API through the .NET framework, casting between .NET and Python datatypes, identifying which constants need to be set in specific cases, and working around  non-uniform methods of parsing the output [@GettingStartedWithZOSAPI]. This leads to studies which, in practice, largely rely on user interaction. Although OpticStudio can perform Monte Carlo analyses, where a large number of random perturbations of the system are generated and analysed in an automated way, this type of automation is not suitable when large sets of specific, non-random, combinations of parameters need to be analysed. In vision science, for example, ray tracing is used to design artificial lenses for the eye [@Ellis2001; @Holladay1999], but their evaluation in a large set of patients is hindered as the anatomical parameters of each subject’s eye need to be entered manually. As a result, clinical studies typically describe vision-related complaints in cohorts of hundreds of eyes [@Alfonso2007], but the ray tracing studies aiming to link these outcomes to the subject’s ocular optics are limited to a small number of eyes [@Simpson2020; @vanVught2020].
 
-With `ZOSPy`, we aim to provide an accessible interface to the OpticStudio API, enabling the user to focus on optical modelling instead of complex coding. Furthermore, as users can directly share their optical system via Python scripts or Jupyter Notebooks rather than screenshots or optical systems saved in proprietary file formats, we strive to facilitate open science. 
+With ZOSPy, we provide an easy-to-use and accessible interface to the OpticStudio API, enabling the user to focus on optical modelling instead of complex coding. As a result, those who are not familiar with the intricacies of the `ZOS-API` interface will be able to read and comprehend scripts that use `ZOSPy`. Thereby, `ZOSPy`  provides greater accessibility to conducting analyses in OpticStudio through Python than directly using the `ZOS-API`.
 
 # Functionality
 `ZOSPy` is, in its most basic form, a Python wrapper around the OpticStudio API. It facilitates the .NET connection required to connect to OpticStudio through its API, as well as all subsequent casting of variables between .NET and Python. Additionally, it provides object-oriented methods to define surfaces and their optical properties. Furthermore, it offers single-line, easy to understand, methods to perform analyses that return the analysis results in a uniform way. As a result, `ZOSPy` enables a straight-forward interaction with OpticStudio and improves code readability, which facilitates method sharing between scientists.
@@ -48,25 +48,12 @@ Finally, `ZOSPy` offers a set of unit tests to assure that the software provides
 
 
 # Use cases
-Multiple examples, from modelling the effect of a coated prism on the polarization of light to assessing the optical characteristics of the human eye have been contributed to `ZOSPy`. These examples provide new users with an easy start with `ZOSPy`. A minimal example of using `ZOSPy` to create and evaluate a thick lens is shown below, and the corresponding results are shown in \autoref{fig:1}. 
+Multiple examples, from modelling the effect of a coated prism on the polarization of light to assessing the optical characteristics of the human eye have been contributed to `ZOSPy`. These examples provide new users with an easy start with `ZOSPy`. Part of a [simple example](https://zospy.readthedocs.io/en/latest/examples/thick_lens.html) of using `ZOSPy` to create and evaluate a thick lens is shown below, and the corresponding results are shown in \autoref{fig:1}. 
 
 ```python
-import zospy as zp
+#...
 
-# Initiate the connection to OpticStudio
-zos = zp.ZOS()
-zos.wakeup()
-zos.connect_as_extension()
-oss = zos.get_primary_system()
-oss.new()
-
-# Set up the optical system
-oss.SystemData.Aperture.ApertureValue = 10
-
-input_beam = oss.LDE.InsertNewSurfaceAt(1)
-input_beam.Thickness = 10
-
-# Make a 10 mm thick lens with a radius of curvature of 30mm 
+# Make a 10 mm thick lens with a radius of curvature of 30 mm 
 # and material type BK10 
 front_surface = oss.LDE.GetSurfaceAt(2)
 front_surface.Radius = 30
@@ -79,9 +66,7 @@ back_surface.Radius = -30
 back_surface.Thickness = 29
 back_surface.SemiDiameter = 15
 
-# Make a detector surface
-image_surface = oss.LDE.GetSurfaceAt(4)
-image_surface.SemiDiameter = 5
+#...
 
 # Render the model
 draw3d = zp.analyses.systemviewers.viewer_3d(oss)
