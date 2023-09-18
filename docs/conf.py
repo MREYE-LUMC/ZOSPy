@@ -6,6 +6,8 @@
 from pathlib import Path
 from shutil import copytree
 
+from zospy import __version__ as zp_version
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -77,17 +79,16 @@ for example in example_directory.iterdir():
 # copytree(example_directory, documentation_directory)
 # (documentation_directory / "examples").symlink_to(example_directory, target_is_directory=True)
 
-nbsphinx_prolog = r"""
-{% set docname = env.doc2path(env.docname, base=None) %}
+nbsphinx_prolog = rf"""
+{{% set docname = env.doc2path(env.docname, base=None) %}}
 
 .. raw:: html
 
     <div class="admonition note">
       This page was generated from a Jupyter notebook. 
-      <a href="https://github.com/MREYE-LUMC/ZOSPy/blob/main/examples/{{ env.docname.split('/')[-2] | e }}" 
+      <a href="https://github.com/MREYE-LUMC/ZOSPy/tree/v{zp_version}/examples/{{{{ env.docname.split('/')[-2] | e }}}}"
       class="reference external" download>Check the source code</a>
-      or
-      <a href="{{ env.docname.split('/') | last | e + '.ipynb' }}" 
+      or <a href="{{{{ env.docname.split('/') | last | e + '.ipynb' }}}}" 
       class="reference download internal" download>download the notebook.</a>.
     </div>
 """
