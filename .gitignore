@@ -6,8 +6,12 @@
 build/
 dist/
 zospy.egg-info/
+
+# Documentation build files
 docs/_build/
 docs/api/
+# Examples are automatically copied on build
+docs/examples/
 
 # Tool and cache folders
 __pycache__/

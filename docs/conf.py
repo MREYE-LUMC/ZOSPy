@@ -3,6 +3,9 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+from pathlib import Path
+from shutil import copytree
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -59,6 +62,35 @@ numpydoc_show_inherited_class_members = {
     "zospy.analyses.base.OnComplete": False,
 }
 
+
+# -- Options for nbsphinx (example notebooks) --------------------------------
+# https://nbsphinx.readthedocs.io/
+documentation_directory = Path(__file__).parent
+example_directory = documentation_directory.parent / "examples"
+
+for example in example_directory.iterdir():
+    # Only include examples that are provided as notebooks
+    if len(list(example.glob("*.ipynb"))) > 0:
+        copytree(example, documentation_directory / "examples" / example.name, dirs_exist_ok=True)
+
+# Copy examples to the documentation directory
+# copytree(example_directory, documentation_directory)
+# (documentation_directory / "examples").symlink_to(example_directory, target_is_directory=True)
+
+nbsphinx_prolog = r"""
+{% set docname = env.doc2path(env.docname, base=None) %}
+
+.. raw:: html
+
+    <div class="admonition note">
+      This page was generated from a Jupyter notebook. 
+      <a href="https://github.com/MREYE-LUMC/ZOSPy/blob/main/examples/{{ env.docname.split('/')[-2] | e }}" 
+      class="reference external" download>Check the source code</a>
+      or
+      <a href="{{ env.docname.split('/') | last | e + '.ipynb' }}" 
+      class="reference download internal" download>download the notebook.</a>.
+    </div>
+"""
 
 # -- Docstring preprocessing -------------------------------------------------
 ANNOTATION_SUBSTITUTIONS = {"_ZOSAPI": "ZOSAPI"}
