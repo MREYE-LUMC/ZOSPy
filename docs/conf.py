@@ -19,12 +19,9 @@ author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    # "autodoc2",
     "myst_parser",
     "nbsphinx",
-    "nbsphinx_link",
     "numpydoc",
-    # "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
     "sphinx_design",

@@ -43,7 +43,6 @@ docs = [
     "ipython",
     "myst-parser",
     "nbsphinx",
-    "nbsphinx_link",
     "numpydoc",
     "sphinx",
     "sphinx-book-theme",
