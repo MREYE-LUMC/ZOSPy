@@ -37,7 +37,11 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
-html_theme_options = {"home_page_in_toc": True}
+html_theme_options = {
+    "home_page_in_toc": True,
+    "repository_url": "https://github.com/MREYE-LUMC/ZOSPy",
+    "use_repository_button": True,
+}
 
 
 # -- Options for Sphinx autodoc and numpydoc ---------------------------------
