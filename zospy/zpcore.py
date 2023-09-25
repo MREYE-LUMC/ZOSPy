@@ -147,7 +147,7 @@ class OpticStudioSystem:
 
     @LensUpdateMode.setter
     def LensUpdateMode(self, value: constants.LensUpdateMode | str):
-        self._System.LensUpdateMode = value
+        self._System.UpdateMode = value
 
     @property
     def SessionModes(self) -> str:
