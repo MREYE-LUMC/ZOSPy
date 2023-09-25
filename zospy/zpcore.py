@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import locale
 import logging
 import warnings
 import weakref
@@ -623,6 +624,33 @@ class ZOS:
         """
         opticstudiosystem = self.Application.GetSystemAt(pos)
         return self._OpticStudioSystem(zos_instance=self, system_instance=opticstudiosystem)
+
+    def get_txtfile_encoding(self) -> str:
+        """Determines the encoding used to write textfiles in OpticStudio.
+
+        Returns
+        -------
+        str
+            The encoding used for textfiles by OpticStudio
+
+        Raises
+        ------
+        RuntimeError
+            When ZOS does not have a connection to the OpticStudio application
+        NotImplementedError
+            When the ZOS.Application.Preferences.General.TXTFileEncoding is not one of ["Unicode", "ANSI"]
+        """
+        if self.Application is None:
+            raise RuntimeError("ZOS.get_txtfile_encoding requires a live connection to the OpticStudio application.")
+
+        if str(self.Application.Preferences.General.TXTFileEncoding) == "Unicode":
+            return "UTF-16-le"
+        elif str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
+            return locale.getpreferredencoding(do_setlocale=False)
+        else:
+            raise NotImplementedError(
+                f"ZOSPy cannot handle encoding {str(self.Application.Preferences.General.TXTFileEncoding)}"
+            )
 
     @property
     def version(self) -> Version:

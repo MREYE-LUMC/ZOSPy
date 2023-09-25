@@ -166,7 +166,7 @@ def single_ray_trace(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
     data = _structure_ray_trace_data_result(line_list)
 
     # Get headerdata, metadata and messages

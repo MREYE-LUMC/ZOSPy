@@ -171,7 +171,7 @@ def polarization_pupil_map(
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
 
-    with open(txtoutfile, "r", encoding="utf-16-le") as f:
+    with open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding()) as f:
         text_output = f.read()
         line_list = text_output.split("\n")
 
@@ -369,7 +369,7 @@ def transmission(
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
 
-    with open(txtoutfile, "r", encoding="utf-16-le") as f:
+    with open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding()) as f:
         text_output = f.read()
         line_list = text_output.split("\n")
 

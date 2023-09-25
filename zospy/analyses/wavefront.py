@@ -168,7 +168,7 @@ def zernike_standard_coefficients(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
 
     general_data, zernike_data = _structure_zernike_standard_coefficients_result(line_list)
     data = AttrDict(GeneralData=general_data, Coefficients=zernike_data)

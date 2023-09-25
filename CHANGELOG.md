@@ -17,10 +17,14 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- Erroneous parsing of analyses results when textfile encoding was not set to `Unicode` by implementing `zospy.zpcore.ZOS.get_txt_file_encoding` (!36)
+
+
 - Bug that did not allow users to change the LensUpdateMode directly through `OpticStudioSystem.LensUpdateMode` (#40)
 
 ### Changed
 
+- Updated how and when constants in `zospy.api.config` are determined for more clarity (!39)
 - Update the error message in `zospy.ZOS` to explain why only a single instance of `ZOS` is allowed (#24)
 - Load ZOS-API DLLs in `ZOS.__init__` (#26)
 

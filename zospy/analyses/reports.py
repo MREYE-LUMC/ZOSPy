@@ -224,7 +224,7 @@ def surface_data(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
     data = _structure_surface_data_result(line_list)
 
     # Get headerdata, metadata and messages
@@ -313,7 +313,7 @@ def surface_data_fromcfg(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
     data = _structure_surface_data_result(line_list)
 
     # Get headerdata, metadata and messages
@@ -607,7 +607,7 @@ def system_data(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
     data = _structure_system_data_result(line_list)
 
     # Get headerdata, metadata and messages
@@ -831,7 +831,7 @@ def cardinal_points(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
     data = _structure_cardinal_point_result(line_list)
 
     # Get headerdata, metadata and messages
@@ -918,7 +918,7 @@ def cardinal_points_fromcfg(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding="utf-16-le")]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
     data = _structure_cardinal_point_result(line_list)
 
     # Get headerdata, metadata and messages
