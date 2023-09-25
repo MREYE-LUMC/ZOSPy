@@ -17,7 +17,7 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- Bug that did not allow users to change the LensUpdateMode directly through `OpticStudioSystem.LensUpdateMode`
+- Bug that did not allow users to change the LensUpdateMode directly through `OpticStudioSystem.LensUpdateMode` (#40)
 
 ### Changed
 
