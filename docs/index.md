@@ -7,6 +7,7 @@
 :maxdepth: 1
 :caption: Contents
 
+faq
 compatibility
 examples
 api
