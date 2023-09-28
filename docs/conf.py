@@ -3,6 +3,10 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import importlib.metadata
+from pathlib import Path
+from shutil import copytree
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -14,12 +18,9 @@ author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    # "autodoc2",
     "myst_parser",
     "nbsphinx",
-    "nbsphinx_link",
     "numpydoc",
-    # "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
     "sphinx_design",
@@ -35,7 +36,11 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
-html_theme_options = {"home_page_in_toc": True}
+html_theme_options = {
+    "home_page_in_toc": True,
+    "repository_url": "https://github.com/MREYE-LUMC/ZOSPy",
+    "use_repository_button": True,
+}
 
 
 # -- Options for Sphinx autodoc and numpydoc ---------------------------------
@@ -59,6 +64,33 @@ numpydoc_show_inherited_class_members = {
     "zospy.analyses.base.OnComplete": False,
 }
 
+
+# -- Options for nbsphinx (example notebooks) --------------------------------
+# https://nbsphinx.readthedocs.io/
+documentation_directory = Path(__file__).parent
+example_directory = documentation_directory.parent / "examples"
+
+# Copy examples to the documentation directory
+for example in example_directory.iterdir():
+    # Only include examples that are provided as notebooks
+    if len(list(example.glob("*.ipynb"))) > 0:
+        copytree(example, documentation_directory / "examples" / example.name, dirs_exist_ok=True)
+
+# Add a banner to each example notebook included in the documentation
+zp_version = importlib.metadata.version("zospy")
+nbsphinx_prolog = rf"""
+{{% set docname = env.doc2path(env.docname, base=None) %}}
+
+.. raw:: html
+
+    <div class="admonition note">
+      This page was generated from a Jupyter notebook. 
+      <a href="https://github.com/MREYE-LUMC/ZOSPy/tree/v{zp_version}/examples/{{{{ env.docname.split('/')[-2] | e }}}}"
+      class="reference external" download>Check the source code</a>
+      or <a href="{{{{ env.docname.split('/') | last | e + '.ipynb' }}}}" 
+      class="reference download internal" download>download the notebook.</a>.
+    </div>
+"""
 
 # -- Docstring preprocessing -------------------------------------------------
 ANNOTATION_SUBSTITUTIONS = {"_ZOSAPI": "ZOSAPI"}
