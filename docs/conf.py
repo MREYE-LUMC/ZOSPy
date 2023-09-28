@@ -5,7 +5,7 @@
 
 from pathlib import Path
 from shutil import copytree
-from importlib.metadata import version
+import importlib.metadata
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -77,7 +77,7 @@ for example in example_directory.iterdir():
         copytree(example, documentation_directory / "examples" / example.name, dirs_exist_ok=True)
 
 # Add a banner to each example notebook included in the documentation
-zp_version = version("zospy")
+zp_version = importlib.metadata.version("zospy")
 nbsphinx_prolog = rf"""
 {{% set docname = env.doc2path(env.docname, base=None) %}}
 
