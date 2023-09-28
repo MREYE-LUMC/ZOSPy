@@ -19,6 +19,7 @@
 - [ ] New feature (other than an analysis)
 - [ ] Breaking change (fix/feature causing existing functionality to break)
 - [ ] Code quality improvements to existing code or addition of tests
+- [ ] Documentation (improvement of either the docstrings or the documentation website)
 
 # Additional information
 <!--
