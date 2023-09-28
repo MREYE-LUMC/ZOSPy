@@ -5,8 +5,7 @@
 
 from pathlib import Path
 from shutil import copytree
-
-from zospy import __version__ as zp_version
+from importlib.metadata import version
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -71,15 +70,14 @@ numpydoc_show_inherited_class_members = {
 documentation_directory = Path(__file__).parent
 example_directory = documentation_directory.parent / "examples"
 
+# Copy examples to the documentation directory
 for example in example_directory.iterdir():
     # Only include examples that are provided as notebooks
     if len(list(example.glob("*.ipynb"))) > 0:
         copytree(example, documentation_directory / "examples" / example.name, dirs_exist_ok=True)
 
-# Copy examples to the documentation directory
-# copytree(example_directory, documentation_directory)
-# (documentation_directory / "examples").symlink_to(example_directory, target_is_directory=True)
-
+# Add a banner to each example notebook included in the documentation
+zp_version = version("zospy")
 nbsphinx_prolog = rf"""
 {{% set docname = env.doc2path(env.docname, base=None) %}}
 
