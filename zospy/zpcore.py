@@ -388,7 +388,7 @@ class ZOS:
                 "Cannot have more than one active ZOS instance.\n\n"
                 "Since OpticStudio limits the number of connections to the ZOS-API to 1, only a single ZOS instance "
                 "is allowed. Re-use the existing instance, or delete the existing instance prior to initializing a "
-                "new one."
+                "new one. See https://zospy.rtfd.io/faq#single-zos-instance for more information."
             )
 
         instance = super(ZOS, cls).__new__(cls)
