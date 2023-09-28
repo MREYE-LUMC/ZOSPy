@@ -5,8 +5,8 @@
 
 You can disconnect from OpticStudio using `zos.Application.CloseApplication`:
 
-```{code} python
-:emphasize-lines: 8, 9
+{emphasize-lines="8,9"}
+```python
 import zospy as zp
 
 zos = zp.ZOS()
@@ -31,8 +31,8 @@ raise an error, since [only a single ZOS instance is allowed](faq/single-zos-ins
 
 For example, this will not work:
 
-```{code} python
-:emphasize-lines: 11, 12
+{emphasize-lines="11,12"}
+```python
 import zospy as zp
 
 zos = zp.ZOS()
@@ -51,8 +51,8 @@ oss = zos.connect_as_extension()
 
 But this does work:
 
-```{code} python
-:emphasize-lines: 11, 12
+{emphasize-lines="11,12"}
+```python
 import zospy as zp
 
 zos = zp.ZOS()
