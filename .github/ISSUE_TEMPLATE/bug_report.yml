@@ -16,69 +16,69 @@ body:
       label: Problem
       description: >-
         Describe the issue you are experiencing here. Explain what you were trying to do and what happened.
-- type: markdown
-  attributes:
-    value: |
-      ## System information
-- type: input
-    id: zospy_version
-    validations:
-      required: true
+  - type: markdown
     attributes:
-      label: What version of ZOSPy are you running?
-      description: >
-        The version can be found by running `pip show zospy`. If this doesn't work, run the following Python code:
+      value: |
+        ## System information
+  - type: input
+      id: zospy_version
+      validations:
+        required: true
+      attributes:
+        label: What version of ZOSPy are you running?
+        description: >
+          The version can be found by running `pip show zospy`. If this doesn't work, run the following Python code:
 
-        ```python
-        import zospy
-        print(zospy.__version__)
-        ```
-- type: input
-    id: opticstudio_version
-    validations:
-      required: true
+          ```python
+          import zospy
+          print(zospy.__version__)
+          ```
+  - type: input
+      id: opticstudio_version
+      validations:
+        required: true
+      attributes:
+        label: What version of OpticStudio are you running?
+        description: >
+          The version can be found in [Help ⇒ About].
+  - type: input
+      id: operating_system
+      validations:
+        required: true
+      attributes:
+        label: Which perating system do you use?
+        description: >
+          The operating system can be found in [Help ⇒ System Diagnostic] under the `--Operating System Info--` header.
+  - type: checkboxes
+    id: development_environment
     attributes:
-      label: What version of OpticStudio are you running?
-      description: >
-        The version can be found in [Help ⇒ About].
-- type: input
-    id: operating_system
-    validations:
-      required: true
+      label: In which environment do you use ZOSPy?
+      description: Check all that apply.
+      options:
+        - Plain Pythons scripts (not in Spyder)
+        - Jupyter notebooks
+        - Spyder
+  - type: checkboxes
+    id: connection_mode
     attributes:
-      label: Which perating system do you use?
-      description: >
-        The operating system can be found in [Help ⇒ System Diagnostic] under the `--Operating System Info--` header.
-- type: checkboxes
-  id: development_environment
-  attributes:
-    label: In which environment do you use ZOSPy?
-    description: Check all that apply.
-    options:
-      - Plain Pythons scripts (not in Spyder)
-      - Jupyter notebooks
-      - Spyder
-- type: checkboxes
-  id: connection_mode
-  attributes:
-    label: In which connection modes does the problem occur?
-    options:
-      - Extension mode
-      - Standalone mode
-- type: textarea
-    attributes:
-      label: Example code
-      description: |
-        If applicable, please provide example code that can help reproduce this problem.
-      render: python
-- type: textarea
-    attributes:
-      label: Output
-      description: |
-        If applicable, include all relevant output (error messages, warnings) here.
-      render: python
-- type: textarea
-    attributes:
-      label: Additional information
-      description: >
-        Use this field if you want to share additional information.
+      label: In which connection modes does the problem occur?
+      options:
+        - Extension mode
+        - Standalone mode
+  - type: textarea
+      attributes:
+        label: Example code
+        description: |
+          If applicable, please provide example code that can help reproduce this problem.
+        render: python
+  - type: textarea
+      attributes:
+        label: Output
+        description: |
+          If applicable, include all relevant output (error messages, warnings) here.
+        render: python
+  - type: textarea
+      attributes:
+        label: Additional information
+        description: >
+          Use this field if you want to share additional information.
