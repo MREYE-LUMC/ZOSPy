@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask a question about the ZOS-API
+    url: https://community.zemax.com/zos-api-12/
+    about: If you have a question about the ZOS-API, please ask it here.
+  - name: Request a new feature
+    url: https://github.com/MREYE-LUMC/ZOSPy/discussions/new?category=ideas
+    about: If you want to suggest a new feature, you can open a new discussion.
+  - name: I have a different question
+    url: https://github.com/MREYE-LUMC/ZOSPy/discussions/new/choose
+    about: If your question does not fit in any of the categories listed above, you can ask it here.
