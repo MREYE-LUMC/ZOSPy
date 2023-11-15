@@ -27,12 +27,8 @@ body:
     attributes:
       label: What version of ZOSPy are you running?
       description: >
-        The version can be found by running `pip show zospy`. If this doesn't work, run the following Python code:
-
-        ```python
-        import zospy
-        print(zospy.__version__)
-        ```
+        The version can be found by running `pip show zospy`. Alternatively, you can get the version
+        from `zospy.__version__`.
   - type: input
     id: opticstudio_version
     validations:
@@ -46,7 +42,7 @@ body:
     validations:
       required: true
     attributes:
-      label: Which perating system do you use?
+      label: Which operating system do you use?
       description: >
         The operating system can be found in [Help ⇒ System Diagnostic] under the `--Operating System Info--` header.
   - type: checkboxes
