@@ -58,7 +58,7 @@ body:
     id: connection_mode
     attributes:
       label: In which connection modes does the problem occur?
-      Description: Try to reproduce your problem in both connection modes and check all that apply.
+      description: Try to reproduce your problem in both connection modes and check all that apply.
       options:
         - label: Extension mode
         - label: Standalone mode
