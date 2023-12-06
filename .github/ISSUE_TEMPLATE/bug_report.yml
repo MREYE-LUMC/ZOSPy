@@ -36,7 +36,7 @@ body:
     attributes:
       label: What version of OpticStudio are you running?
       description: >
-        The version can be found in [Help ⇒ About].
+        The version can be found in [Help ⇒ About]. Please report the full version, including the year.
   - type: input
     id: operating_system
     validations:
@@ -58,6 +58,7 @@ body:
     id: connection_mode
     attributes:
       label: In which connection modes does the problem occur?
+      Description: Try to reproduce your problem in both connection modes and check all that apply.
       options:
         - label: Extension mode
         - label: Standalone mode
