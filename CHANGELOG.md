@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 with one exception: small features that only simplify access to certain parts of the
 ZOS-API can also be added in patch releases.
 
+## [Unreleased]
+
+### Added
+- MTF analysis: `huygens_mtf` (#50)
+
 ## [[1.1.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.1.1) - 2023-09-25
 
 ### Added
