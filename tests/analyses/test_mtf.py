@@ -1,7 +1,11 @@
 import numpy as np
 import pytest
 
-from zospy.analyses.mtf import fft_through_focus_mtf, fft_through_focus_mtf_fromcfg
+from zospy.analyses.mtf import (
+    fft_through_focus_mtf,
+    fft_through_focus_mtf_fromcfg,
+    huygens_mtf,
+)
 
 _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN = {
     # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf
@@ -86,3 +90,33 @@ class TestFFTThroughFocusMTF:
         )
 
         assert result.Settings["Type"] == _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN[mtftype]
+
+
+class TestHuygensMTF:
+    def test_can_run_fft_through_focus_mtf(self, simple_system):
+        result = huygens_mtf(simple_system)
+
+        assert result.Data is not None
+
+    def test_to_json(self, simple_system):
+        result = huygens_mtf(simple_system)
+
+        assert result.from_json(result.to_json())
+
+    @pytest.mark.parametrize(
+        "pupilsampling,imagesampling,imagedelta,mtftype,maximumfrequency",
+        [("64x64", "64x64", 0.0, "Modulation", 150.0)],
+    )
+    def test_huygens_mtf_returns_correct_result(
+        self, simple_system, pupilsampling, imagesampling, imagedelta, mtftype, maximumfrequency, expected_data
+    ):
+        result = huygens_mtf(
+            simple_system,
+            pupilsampling=pupilsampling,
+            imagesampling=imagesampling,
+            imagedelta=imagedelta,
+            mtftype=mtftype,
+            maximumfrequency=maximumfrequency,
+        )
+
+        assert np.allclose(result.Data.astype(float), expected_data.Data.astype(float), rtol=1e-3)

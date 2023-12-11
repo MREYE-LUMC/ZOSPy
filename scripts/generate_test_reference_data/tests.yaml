@@ -30,6 +30,17 @@ tests:
         frequency: 3
         numberofsteps: 10
         mtftype: Imaginary
+  - model: simple_system
+    analysis: mtf.huygens_mtf
+    file: test_mtf.py
+    test: test_huygens_mtf_returns_correct_result
+    parametrized: [pupilsampling, imagesampling, imagedelta, mtftype, maximumfrequency]
+    parameters:
+      - pupilsampling: 64x64
+        imagesampling: 64x64
+        imagedelta: 0.0
+        mtftype: Modulation
+        maximumfrequency: 150.0
   - model: polarized_system
     analysis: polarization.polarization_pupil_map
     file: test_polarization.py
