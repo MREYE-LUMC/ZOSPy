@@ -10,7 +10,8 @@ ZOS-API can also be added in patch releases.
 ## [Unreleased]
 
 ### Added
-- MTF analysis: `huygens_mtf` (#50)
+
+- MTF analysis: `huygens_mtf` (#55)
 
 ## [[1.1.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.1.1) - 2023-09-25
 
