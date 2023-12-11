@@ -261,9 +261,11 @@ def huygens_mtf(
     oss: zospy.core.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     pupilsampling: str | int
-        The pupil sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants integer.
+        The pupil sampling, either string (e.g. '64x64') or int.
+        The integer will be treated as a ZOSAPI Constants integer.
     imagesampling: str | int
-        The image sampling, either string (e.g., '64x64') or int. The integer will be treated as a ZOSAPI Constants integer.
+        The image sampling, either string (e.g., '64x64') or int.
+        The integer will be treated as a ZOSAPI Constants integer.
     imagedelta: float
         The Image Delta, defaults to 0.0.
     wavelength: str | int
