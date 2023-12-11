@@ -238,6 +238,7 @@ def fft_through_focus_mtf_fromcfg(
 
     return analysis.complete(oncomplete, result)
 
+
 def huygens_mtf(
     oss: OpticStudioSystem,
     pupilsampling: str | int = "32x32",
@@ -295,8 +296,12 @@ def huygens_mtf(
     analysis = new_analysis(oss, analysis_type)
 
     # Apply settings
-    analysis.Settings.PupilSampleSize = getattr(constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(pupilsampling))
-    analysis.Settings.ImageSampleSize = getattr(constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(imagesampling))
+    analysis.Settings.PupilSampleSize = getattr(
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(pupilsampling)
+    )
+    analysis.Settings.ImageSampleSize = getattr(
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(imagesampling)
+    )
     analysis.Settings.ImageDelta = imagedelta
     analysis.set_wavelength(wavelength)
     analysis.set_field(field)
@@ -307,7 +312,7 @@ def huygens_mtf(
 
     # Correct an API bug in setting API type for OpticStudio version <21.2
     # TODO: not sure if this is needed here; commented for now
-    #_correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype)
+    # _correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype)
 
     # Calculate
     analysis.ApplyAndWaitForCompletion()
