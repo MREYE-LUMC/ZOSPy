@@ -167,6 +167,18 @@ def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
+def decentered_system(simple_system) -> zp.zpcore.OpticStudioSystem:
+    """Simple system with incoming rays at a non-zero angle"""
+    oss = simple_system
+
+    field = oss.SystemData.Fields.GetField(1)
+    field.X = 10
+    field.Y = 20
+
+    return oss
+
+
+@pytest.fixture
 def nsc_empty_system(oss, system_save_file) -> zp.zpcore.OpticStudioSystem:
     oss.new()
     oss.make_nonsequential()

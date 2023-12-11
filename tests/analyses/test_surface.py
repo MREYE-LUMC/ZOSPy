@@ -3,6 +3,8 @@ import pytest
 
 from zospy.analyses.surface import curvature
 
+from pandas.testing import assert_frame_equal
+
 
 class TestCurvature:
     def test_can_run_curvature(self, simple_system):
@@ -51,7 +53,7 @@ class TestCurvature:
             bfs_reversedirection=bfs_reversedirection,
         )
 
-        assert np.allclose(result.Data, expected_data.Data, equal_nan=True)
+        assert_frame_equal(result.Data, expected_data.Data)
 
     @pytest.mark.parametrize(
         "sampling,data,remove,surface,showas,contourformat,bfs_criterion,bfs_reversedirection",
@@ -89,4 +91,4 @@ class TestCurvature:
             bfs_reversedirection=bfs_reversedirection,
         )
 
-        assert np.allclose(result.Data, reference_data.Data, equal_nan=True)
+        assert_frame_equal(result.Data, reference_data.Data)

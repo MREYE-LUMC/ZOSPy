@@ -1,5 +1,6 @@
-import numpy as np
+import pytest
 
+from pandas.testing import assert_frame_equal
 from zospy.analyses.psf import huygens_psf
 
 
@@ -17,9 +18,19 @@ class TestHuygensPSF:
     def test_huygens_psf_returns_correct_result(self, simple_system, expected_data):
         result = huygens_psf(simple_system)
 
-        assert np.allclose(result.Data.astype(float), expected_data.Data.astype(float))
+        assert_frame_equal(result.Data.astype(float), expected_data.Data.astype(float))
 
     def test_huygens_psf_matches_reference_data(self, simple_system, reference_data):
         result = huygens_psf(simple_system)
 
-        assert np.allclose(result.Data.astype(float), reference_data.Data.astype(float))
+        assert_frame_equal(result.Data.astype(float), reference_data.Data.astype(float))
+
+    def test_huygens_psf_asymmetric_returns_correct_result(self, decentered_system, expected_data):
+        result = huygens_psf(decentered_system)
+
+        assert_frame_equal(result.Data.astype(float), expected_data.Data.astype(float))
+
+    def test_huygens_psf_asymmetric_matches_reference_data(self, decentered_system, reference_data):
+        result = huygens_psf(decentered_system)
+
+        assert_frame_equal(result.Data.astype(float), reference_data.Data.astype(float))
