@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 import re
 from collections.abc import MutableMapping
+from typing import TypeVar
 
 import numpy as np
 import pandas as pd
+
+from zospy.api import _ZOSAPI
 
 
 def flatten_dict(unflattend_dict, parent_key="", sep=".", keep_unflattend=False):
@@ -58,18 +63,18 @@ def flatten_dlltreedict(dlltreedict):
     return flatlist
 
 
-def unpack_dataseries(dataseries):
-    """Unpacks a dataseries in a dataframe.
+def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.DataFrame:
+    """Unpacks an OpticStudio dataseries in a dataframe.
 
     Parameters
     ----------
-    dataseries: Zemax OpticStudio DataSeries
-        A Zemax Opticstudio Dataseries.
+    dataseries : ZOSAPI.Analysis.Data.IAR_DataSeries
+        Opticstudio DataSeries object.
 
     Returns
     -------
     pd.DataFrame
-        A DataFrame holding all data and labels
+        A DataFrame holding all data and labels.
     """
     columns = pd.MultiIndex.from_product(
         [[dataseries.Description], list(dataseries.SeriesLabels)], names=["Description", "SeriesLabels"]
@@ -78,55 +83,58 @@ def unpack_dataseries(dataseries):
     data = np.array(list(dataseries.YData.Data)).reshape(dataseries.YData.Rows, dataseries.YData.Cols)
     df = pd.DataFrame(columns=columns, index=index, data=data)  # ToDo evaluate
     df.index.name = dataseries.XLabel
+
     return df
 
 
-def unpack_datagrid(datagrid):
-    """Unpacks an OpticStudio datagrid.
+def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid) -> pd.DataFrame:
+    """Unpack an OpticStudio datagrid to a Pandas DataFrame.
 
     Parameters
     ----------
-    datagrid: OpticStudio DataGrid
-        An OpticStudio DataGrid
+    datagrid : ZOSAPI.Analysis.Data.IAR_DataGrid
+        OpticStudio DataGrid object.
 
     Returns
     -------
     pd.DataFrame
-        A DataFrame containing the grid and the spacing on the rows and columns. The X- and YLabels are assigned to the
-        df.columns.name and df.index.name
+        A DataFrame containing the grid and the spacing on the rows and columns.
+        The X- and YLabels are assigned to `df.columns.name` and `df.index.name`.
     """
-    values = np.array(list(datagrid.Values))
-    values = values.reshape(datagrid.Ny, datagrid.Nx)
+    values = np.array(datagrid.Values)
 
     columns = np.linspace(datagrid.MinX, datagrid.MinX + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
     rows = np.linspace(datagrid.MinY, datagrid.MinY + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
 
-    df = pd.DataFrame(data=values, index=rows[::-1], columns=columns)
-    df.index.name = datagrid.YLabel if datagrid.YLabel is not None else "y"
-    df.columns.name = datagrid.XLabel if datagrid.XLabel is not None else "x"
+    df = pd.DataFrame(data=values, index=rows, columns=columns)
+    df.index.name = datagrid.YLabel or "y"
+    df.columns.name = datagrid.XLabel or "x"
 
     return df
 
 
-def standardize_sampling(sampling):
+SamplingType = TypeVar("SamplingType", int, str)
+
+
+def standardize_sampling(sampling: SamplingType) -> SamplingType:
     """Standardizes the sampling patterns to either int or string (S_00x00) representation.
 
     Parameters
     ----------
-    sampling: int or str
+    sampling: int | str
         The sampling pattern to use. Should be int or string. Accepts both S_00x00 and 00x00 string representation.
 
     Returns
     -------
-    Union[int, str]
+    int | str
         The standardized sampling pattern that can be used for processing.
 
     Raises
     ------
     ValueError
-        When 'sampling' is a string that cannot be interpreted
+        When `sampling` is a string that cannot be interpreted.
     TypeError
-        When 'sampling' is not int or string
+        When `sampling` is not int or string.
     """
     if isinstance(sampling, int):
         return sampling
