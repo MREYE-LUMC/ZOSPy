@@ -312,10 +312,6 @@ def huygens_mtf(
     analysis.Settings.UseDashes = use_dashes
     analysis.Settings.MaximumFrequency = maximum_frequency
 
-    # Correct an API bug in setting API type for OpticStudio version <21.2
-    # TODO: not sure if this is needed here; commented for now
-    # _correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype)
-
     # Calculate
     analysis.ApplyAndWaitForCompletion()
 
