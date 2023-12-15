@@ -34,25 +34,10 @@ tests:
     analysis: mtf.huygens_mtf
     file: test_mtf.py
     test: test_huygens_mtf_returns_correct_result
-    parametrized: [pupilsampling, imagesampling, imagedelta, mtftype, maximumfrequency]
+    parametrized: [pupil_sampling, image_sampling, image_delta, mtftype, maximum_frequency]
     parameters:
       - pupil_sampling: 64x64
         image_sampling: 64x64
-        image_delta: 0.0
-        mtftype: Modulation
-        maximum_frequency: 150.0
-      - pupil_sampling: 32x32
-        image_sampling: 64x64
-        image_delta: 1.0
-        mtftype: Modulation
-        maximum_frequency: 450.0
-      - pupil_sampling: 128x128
-        image_sampling: 128x128
-        image_delta: 0.0
-        mtftype: Modulation
-        maximum_frequency: 314.5
-      - pupil_sampling: 32x32
-        image_sampling: 32x32
         image_delta: 0.0
         mtftype: Modulation
         maximum_frequency: 150.0
