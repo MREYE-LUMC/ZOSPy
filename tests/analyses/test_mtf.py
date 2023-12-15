@@ -104,19 +104,19 @@ class TestHuygensMTF:
         assert result.from_json(result.to_json())
 
     @pytest.mark.parametrize(
-        "pupilsampling,imagesampling,imagedelta,mtftype,maximumfrequency",
+        "pupil_sampling,image_sampling,image_delta,mtftype,maximum_frequency",
         [("64x64", "64x64", 0.0, "Modulation", 150.0)],
     )
     def test_huygens_mtf_returns_correct_result(
-        self, simple_system, pupilsampling, imagesampling, imagedelta, mtftype, maximumfrequency, expected_data
+        self, simple_system, pupil_sampling, image_sampling, image_delta, mtftype, maximum_frequency, expected_data
     ):
         result = huygens_mtf(
             simple_system,
-            pupilsampling=pupilsampling,
-            imagesampling=imagesampling,
-            imagedelta=imagedelta,
+            pupil_sampling=pupil_sampling,
+            image_sampling=image_sampling,
+            image_delta=image_delta,
             mtftype=mtftype,
-            maximumfrequency=maximumfrequency,
+            maximum_frequency=maximum_frequency,
         )
 
         assert np.allclose(result.Data.astype(float), expected_data.Data.astype(float), rtol=1e-3)
