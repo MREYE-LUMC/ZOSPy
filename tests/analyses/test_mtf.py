@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.mtf import (
     fft_through_focus_mtf,
@@ -124,4 +125,4 @@ class TestHuygensMTF:
             maximum_frequency=maximum_frequency,
         )
 
-        assert np.allclose(result.Data.astype(float), expected_data.Data.astype(float), rtol=1e-3)
+       assert_frame_equal(result.Data.astype(float), expected_data.Data.astype(float))
