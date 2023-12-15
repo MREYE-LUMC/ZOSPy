@@ -258,29 +258,29 @@ def huygens_mtf(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss : zospy.core.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    pupil_sampling: str | int
+    pupil_sampling : str | int
         The pupil sampling, either string (e.g. '64x64') or int.
         The integer will be treated as a ZOSAPI Constants integer.
-    image_sampling: str | int
+    image_sampling : str | int
         The image sampling, either string (e.g., '64x64') or int.
         The integer will be treated as a ZOSAPI Constants integer.
-    image_delta: float
+    image_delta : float
         The Image Delta, defaults to 0.0.
-    wavelength: str | int
+    wavelength : str | int
         The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
-    field: str | int
+    field : str | int
         The field to use in the MTF. Either 'All' or an integer specifying the field number.
-    mtftype: zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
+    mtftype : zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
         The MTF type (e.g. `Modulation`) that is calculated.
-    maximum_frequency: float
+    maximum_frequency : float
         The maximum frequency at which the MTF is calculated in lp/mm. Defaults to 150.0.
-    use_polarization: bool
+    use_polarization : bool
         Use polarization. Defaults to False.
-    use_dashes: bool
+    use_dashes : bool
         Use dashes. Defaults to False.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
