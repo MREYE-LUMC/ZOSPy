@@ -247,7 +247,7 @@ def huygens_mtf(
     wavelength: str | int = "All",
     field: str | int = "All",
     mtftype: constants.Analysis.Settings.Mtf.HuygensMtfTypes | str = "Modulation",
-    maximumfrequency: float = 150.0,
+    maximum_frequency: float = 150.0,
     use_polarization: bool = False,
     use_dashes: bool = False,
     oncomplete: OnComplete | str = OnComplete.Close,
@@ -274,7 +274,7 @@ def huygens_mtf(
         The field to use in the MTF. Either 'All' or an integer specifying the field number.
     mtftype: zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
         The MTF type (e.g. `Modulation`) that is calculated.
-    maximumfrequency: float
+    maximum_frequency: float
         The maximum frequency at which the MTF is calculated in lp/mm. Defaults to 150.0.
     use_polarization: bool
         Use polarization. Defaults to False.
@@ -310,7 +310,7 @@ def huygens_mtf(
     analysis.Settings.Type = constants.process_constant(constants.Analysis.Settings.Mtf.HuygensMtfTypes, mtftype)
     analysis.Settings.UsePolarization = use_polarization
     analysis.Settings.UseDashes = use_dashes
-    analysis.Settings.MaximumFrequency = maximumfrequency
+    analysis.Settings.MaximumFrequency = maximum_frequency
 
     # Correct an API bug in setting API type for OpticStudio version <21.2
     # TODO: not sure if this is needed here; commented for now
