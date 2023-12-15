@@ -125,4 +125,4 @@ class TestHuygensMTF:
             maximum_frequency=maximum_frequency,
         )
 
-       assert_frame_equal(result.Data.astype(float), expected_data.Data.astype(float))
+        assert_frame_equal(result.Data.astype(float), expected_data.Data.astype(float))
