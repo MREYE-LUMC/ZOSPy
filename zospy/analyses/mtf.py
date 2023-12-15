@@ -241,9 +241,9 @@ def fft_through_focus_mtf_fromcfg(
 
 def huygens_mtf(
     oss: OpticStudioSystem,
-    pupilsampling: str | int = "32x32",
-    imagesampling: str | int = "32x32",
-    imagedelta: float = 0.0,
+    pupil_sampling: str | int = "32x32",
+    image_sampling: str | int = "32x32",
+    image_delta: float = 0.0,
     wavelength: str | int = "All",
     field: str | int = "All",
     mtftype: constants.Analysis.Settings.Mtf.HuygensMtfTypes | str = "Modulation",
@@ -260,13 +260,13 @@ def huygens_mtf(
     ----------
     oss: zospy.core.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    pupilsampling: str | int
+    pupil_sampling: str | int
         The pupil sampling, either string (e.g. '64x64') or int.
         The integer will be treated as a ZOSAPI Constants integer.
-    imagesampling: str | int
+    image_sampling: str | int
         The image sampling, either string (e.g., '64x64') or int.
         The integer will be treated as a ZOSAPI Constants integer.
-    imagedelta: float
+    image_delta: float
         The Image Delta, defaults to 0.0.
     wavelength: str | int
         The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
@@ -299,12 +299,12 @@ def huygens_mtf(
 
     # Apply settings
     analysis.Settings.PupilSampleSize = getattr(
-        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(pupilsampling)
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(pupil_sampling)
     )
     analysis.Settings.ImageSampleSize = getattr(
-        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(imagesampling)
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(image_sampling)
     )
-    analysis.Settings.ImageDelta = imagedelta
+    analysis.Settings.ImageDelta = image_delta
     analysis.set_wavelength(wavelength)
     analysis.set_field(field)
     analysis.Settings.Type = constants.process_constant(constants.Analysis.Settings.Mtf.HuygensMtfTypes, mtftype)
