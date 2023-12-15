@@ -41,6 +41,21 @@ tests:
         image_delta: 0.0
         mtftype: Modulation
         maximum_frequency: 150.0
+      - pupil_sampling: 32x32
+        image_sampling: 64x64
+        image_delta: 1.0
+        mtftype: Modulation
+        maximum_frequency: 450.0
+      - pupil_sampling: 128x128
+        image_sampling: 128x128
+        image_delta: 0.0
+        mtftype: Modulation
+        maximum_frequency: 314.5
+      - pupil_sampling: 32x32
+        image_sampling: 32x32
+        image_delta: 0.0
+        mtftype: Modulation
+        maximum_frequency: 150.0
   - model: polarized_system
     analysis: polarization.polarization_pupil_map
     file: test_polarization.py
