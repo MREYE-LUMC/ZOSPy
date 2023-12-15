@@ -105,7 +105,12 @@ class TestHuygensMTF:
 
     @pytest.mark.parametrize(
         "pupil_sampling,image_sampling,image_delta,mtftype,maximum_frequency",
-        [("64x64", "64x64", 0.0, "Modulation", 150.0), ("32x32", "64x64", 1.0, "Modulation", 450.0), ("128x128", "128x128", 0.0, "Modulation", 314.5), ("32x32", "32x32", 0.0, "Modulation", 150.0)],
+        [
+            ("64x64", "64x64", 0.0, "Modulation", 150.0),
+            ("32x32", "64x64", 1.0, "Modulation", 450.0),
+            ("128x128", "128x128", 0.0, "Modulation", 314.5),
+            ("32x32", "32x32", 0.0, "Modulation", 150.0),
+        ],
     )
     def test_huygens_mtf_returns_correct_result(
         self, simple_system, pupil_sampling, image_sampling, image_delta, mtftype, maximum_frequency, expected_data
