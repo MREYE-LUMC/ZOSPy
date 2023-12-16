@@ -276,7 +276,7 @@ def huygens_mtf(
         The MTF type (e.g. `Modulation`) that is calculated.
     maximum_frequency : float
         The maximum frequency at which the MTF is calculated.
-        Units are either cycles/mm or cycles/mr, depending on system setting).
+        Units are either cycles/mm or cycles/mr, depending on system setting.
         Defaults to 150.0, which is more appropriate when units are set to cycles/mm.
     use_polarization : bool
         Use polarization. Defaults to False.
