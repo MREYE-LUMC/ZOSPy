@@ -94,7 +94,7 @@ class TestFFTThroughFocusMTF:
 
 
 class TestHuygensMTF:
-    def test_can_run_fft_through_focus_mtf(self, simple_system):
+    def test_can_run_huygens_mtf(self, simple_system):
         result = huygens_mtf(simple_system)
 
         assert result.Data is not None
