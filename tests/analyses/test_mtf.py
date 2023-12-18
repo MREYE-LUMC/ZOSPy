@@ -126,3 +126,26 @@ class TestHuygensMTF:
         )
 
         assert_frame_equal(result.Data.astype(float), expected_data.Data.astype(float))
+
+    @pytest.mark.parametrize(
+        "pupil_sampling,image_sampling,image_delta,mtftype,maximum_frequency",
+        [
+            ("64x64", "64x64", 0.0, "Modulation", 150.0),
+            ("32x32", "64x64", 1.0, "Modulation", 450.0),
+            ("128x128", "128x128", 0.0, "Modulation", 314.5),
+            ("32x32", "32x32", 0.0, "Modulation", 150.0),
+        ],
+    )
+    def test_huygens_mtf_matches_reference_data(
+        self, simple_system, pupil_sampling, image_sampling, image_delta, mtftype, maximum_frequency, reference_data
+    ):
+        result = huygens_mtf(
+            simple_system,
+            pupil_sampling=pupil_sampling,
+            image_sampling=image_sampling,
+            image_delta=image_delta,
+            mtftype=mtftype,
+            maximum_frequency=maximum_frequency,
+        )
+
+        assert_frame_equal(result.Data.astype(float), reference_data.Data.astype(float))
