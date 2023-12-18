@@ -132,6 +132,10 @@ tests:
     analysis: psf.huygens_psf
     file: test_psf.py
     test: test_huygens_psf_returns_correct_result
+  - model: decentered_system
+    analysis: psf.huygens_psf
+    file: test_psf.py
+    test: test_huygens_psf_asymmetric_returns_correct_result
   - model: simple_system
     analysis: raysandspots.single_ray_trace
     file: test_raysandspots.py

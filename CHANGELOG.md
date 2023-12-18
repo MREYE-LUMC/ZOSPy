@@ -13,6 +13,20 @@ ZOS-API can also be added in patch releases.
 
 - MTF analysis: `huygens_mtf` (#55)
 
+### Fixed
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+## [[1.1.2]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.1.2) - 2023-12-13
+
+### Fixed
+
+- Reversed row index of datagrids in `zospy.utils.zputils.unpack_datagrid` (!42)
+
 ## [[1.1.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.1.1) - 2023-09-25
 
 ### Added
@@ -24,8 +38,6 @@ ZOS-API can also be added in patch releases.
 ### Fixed
 
 - Erroneous parsing of analyses results when textfile encoding was not set to `Unicode` by implementing `zospy.zpcore.ZOS.get_txt_file_encoding` (!36)
-
-
 - Bug that did not allow users to change the LensUpdateMode directly through `OpticStudioSystem.LensUpdateMode` (#40)
 
 ### Changed
@@ -37,8 +49,6 @@ ZOS-API can also be added in patch releases.
 ### Deprecated
 
 - Separate calls to `ZOS.wakeup` are now redundant. This method will be removed in a later release (#26)
-
-### Removed
 
 ## [[1.1.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.1.0) - 2023-07-03
 

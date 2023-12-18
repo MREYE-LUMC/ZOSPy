@@ -58,3 +58,13 @@ def polarized_system(oss: zp.zpcore.OpticStudioSystem) -> zp.zpcore.OpticStudioS
     lens_front.GetCellAt(18).DoubleValue = 0  # D real
 
     return oss
+
+
+def decentered_system(oss: zp.zpcore.OpticStudioSystem) -> zp.zpcore.OpticStudioSystem:
+    oss = simple_system(oss)
+
+    field = oss.SystemData.Fields.GetField(1)
+    field.X = 10
+    field.Y = 20
+
+    return oss
