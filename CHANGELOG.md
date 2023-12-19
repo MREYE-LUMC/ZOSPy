@@ -11,6 +11,8 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- MTF analysis: `huygens_mtf` (#55)
+
 ### Fixed
 
 ### Changed
