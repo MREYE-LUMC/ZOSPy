@@ -1,0 +1,81 @@
+name: Bug Report
+description: Report an issue with ZOSPy
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        If you have a feature request, please [open a discussion](https://github.com/MREYE-LUMC/ZOSPy/discussions/categories/ideas) instead.
+        If you have a question about the ZOS-API and not about the additional funcitonality offered by ZOSPy, please ask it on the 
+        [Zemax community forum](https://community.zemax.com/zos-api-12).
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Problem
+      description: >-
+        Describe the issue you are experiencing here. Explain what you were trying to do and what happened.
+  - type: markdown
+    attributes:
+      value: |
+        ## System information
+  - type: input
+    id: zospy_version
+    validations:
+      required: true
+    attributes:
+      label: What version of ZOSPy are you running?
+      description: >
+        The version can be found by running `pip show zospy`. Alternatively, you can get the version
+        from `zospy.__version__`.
+  - type: input
+    id: opticstudio_version
+    validations:
+      required: true
+    attributes:
+      label: What version of OpticStudio are you running?
+      description: >
+        The version can be found in [Help ⇒ About]. Please report the full version, including the year.
+  - type: input
+    id: operating_system
+    validations:
+      required: true
+    attributes:
+      label: Which operating system do you use?
+      description: >
+        The operating system can be found in [Help ⇒ System Diagnostic] under the `--Operating System Info--` header.
+  - type: checkboxes
+    id: development_environment
+    attributes:
+      label: In which environment do you use ZOSPy?
+      description: Check all that apply.
+      options:
+        - label: Plain Pythons scripts (not in Spyder)
+        - label: Jupyter notebooks
+        - label: Spyder
+  - type: checkboxes
+    id: connection_mode
+    attributes:
+      label: In which connection modes does the problem occur?
+      description: Try to reproduce your problem in both connection modes and check all that apply.
+      options:
+        - label: Extension mode
+        - label: Standalone mode
+  - type: textarea
+    attributes:
+      label: Example code
+      description: |
+        If applicable, please provide example code that can help reproduce this problem.
+      render: Python
+  - type: textarea
+    attributes:
+      label: Output
+      description: |
+        If applicable, include all relevant output (error messages, warnings) here.
+      render: Python
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        Use this field if you want to share additional information.

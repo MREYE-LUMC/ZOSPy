@@ -237,3 +237,123 @@ def fft_through_focus_mtf_fromcfg(
     )
 
     return analysis.complete(oncomplete, result)
+
+
+def huygens_mtf(
+    oss: OpticStudioSystem,
+    pupil_sampling: str | int = "32x32",
+    image_sampling: str | int = "32x32",
+    image_delta: float = 0.0,
+    wavelength: str | int = "All",
+    field: str | int = "All",
+    mtftype: constants.Analysis.Settings.Mtf.HuygensMtfTypes | str = "Modulation",
+    maximum_frequency: float = 150.0,
+    use_polarization: bool = False,
+    use_dashes: bool = False,
+    oncomplete: OnComplete | str = OnComplete.Close,
+) -> AnalysisResult:
+    """Wrapper around the OpticStudio Huygens MTF.
+
+    For an in depth explanation of the parameters, see the Zemax OpticStudio user manual
+
+    Parameters
+    ----------
+    oss : zospy.core.OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance. Should be sequential.
+    pupil_sampling : str | int
+        The pupil sampling, either string (e.g. '64x64') or int.
+        The integer will be treated as a ZOSAPI Constants integer.
+    image_sampling : str | int
+        The image sampling, either string (e.g., '64x64') or int.
+        The integer will be treated as a ZOSAPI Constants integer.
+    image_delta : float
+        The Image Delta, defaults to 0.0.
+    wavelength : str | int
+        The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
+    field : str | int
+        The field to use in the MTF. Either 'All' or an integer specifying the field number.
+    mtftype : zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
+        The MTF type (e.g. `Modulation`) that is calculated.
+    maximum_frequency : float
+        The maximum frequency at which the MTF is calculated.
+        Units are either cycles/mm or cycles/mr, depending on system setting.
+        Defaults to 150.0, which is more appropriate when units are set to cycles/mm.
+    use_polarization : bool
+        Use polarization. Defaults to False.
+    use_dashes : bool
+        Use dashes. Defaults to False.
+    oncomplete : OnComplete | str
+        Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
+        the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
+        the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
+        with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
+        instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
+
+    Returns
+    -------
+    AnalysisResult
+        A HuygensMTF analysis result
+    """
+    analysis_type = constants.Analysis.AnalysisIDM.HuygensMtf
+
+    # Create analysis
+    analysis = new_analysis(oss, analysis_type)
+
+    # Apply settings
+    analysis.Settings.PupilSampleSize = getattr(
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(pupil_sampling)
+    )
+    analysis.Settings.ImageSampleSize = getattr(
+        constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(image_sampling)
+    )
+    analysis.Settings.ImageDelta = image_delta
+    analysis.set_wavelength(wavelength)
+    analysis.set_field(field)
+    analysis.Settings.Type = constants.process_constant(constants.Analysis.Settings.Mtf.HuygensMtfTypes, mtftype)
+    analysis.Settings.UsePolarization = use_polarization
+    analysis.Settings.UseDashes = use_dashes
+    analysis.Settings.MaximumFrequency = maximum_frequency
+
+    # Calculate
+    analysis.ApplyAndWaitForCompletion()
+
+    # Get headerdata, metadata and messages
+    headerdata = analysis.get_header_data()
+    metadata = analysis.get_metadata()
+    messages = analysis.get_messages()
+
+    # Get settings
+    settings = pd.Series(name="Settings", dtype=object)
+
+    settings.loc["PupilSampling"] = str(analysis.Settings.PupilSampleSize)
+    settings.loc["ImageSampling"] = str(analysis.Settings.ImageSampleSize)
+    settings.loc["ImageDelta"] = analysis.Settings.ImageDelta
+    settings.loc["Wavelength"] = analysis.get_wavelength()
+    settings.loc["Field"] = analysis.get_field()
+    settings.loc["Type"] = str(analysis.Settings.Type)
+    settings.loc["UsePolarization"] = analysis.Settings.UsePolarization
+    settings.loc["UseDashes"] = analysis.Settings.UseDashes
+    settings.loc["MaximumFrequency"] = analysis.Settings.MaximumFrequency
+
+    # Get data and unpack
+    data = []
+    for ii in range(analysis.Results.NumberOfDataSeries):
+        data.append(utils.zputils.unpack_dataseries(analysis.Results.DataSeries[ii]))
+
+    if not len(data):
+        data = pd.DataFrame()
+    elif len(data) == 1:
+        data = data[0]
+    else:
+        data = pd.concat(data, axis=1)
+
+    result = AnalysisResult(
+        analysistype=str(analysis_type),
+        data=data,
+        settings=settings,
+        metadata=metadata,
+        headerdata=headerdata,
+        messages=messages,
+    )
+
+    return analysis.complete(oncomplete, result)

@@ -1,7 +1,12 @@
 import numpy as np
 import pytest
+from pandas.testing import assert_frame_equal
 
-from zospy.analyses.mtf import fft_through_focus_mtf, fft_through_focus_mtf_fromcfg
+from zospy.analyses.mtf import (
+    fft_through_focus_mtf,
+    fft_through_focus_mtf_fromcfg,
+    huygens_mtf,
+)
 
 _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN = {
     # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf
@@ -86,3 +91,61 @@ class TestFFTThroughFocusMTF:
         )
 
         assert result.Settings["Type"] == _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN[mtftype]
+
+
+class TestHuygensMTF:
+    def test_can_run_huygens_mtf(self, simple_system):
+        result = huygens_mtf(simple_system)
+
+        assert result.Data is not None
+
+    def test_to_json(self, simple_system):
+        result = huygens_mtf(simple_system)
+
+        assert result.from_json(result.to_json())
+
+    @pytest.mark.parametrize(
+        "pupil_sampling,image_sampling,image_delta,mtftype,maximum_frequency",
+        [
+            ("64x64", "64x64", 0.0, "Modulation", 150.0),
+            ("32x32", "64x64", 1.0, "Modulation", 450.0),
+            ("128x128", "128x128", 0.0, "Modulation", 314.5),
+            ("32x32", "32x32", 0.0, "Modulation", 150.0),
+        ],
+    )
+    def test_huygens_mtf_returns_correct_result(
+        self, simple_system, pupil_sampling, image_sampling, image_delta, mtftype, maximum_frequency, expected_data
+    ):
+        result = huygens_mtf(
+            simple_system,
+            pupil_sampling=pupil_sampling,
+            image_sampling=image_sampling,
+            image_delta=image_delta,
+            mtftype=mtftype,
+            maximum_frequency=maximum_frequency,
+        )
+
+        assert_frame_equal(result.Data.astype(float), expected_data.Data.astype(float))
+
+    @pytest.mark.parametrize(
+        "pupil_sampling,image_sampling,image_delta,mtftype,maximum_frequency",
+        [
+            ("64x64", "64x64", 0.0, "Modulation", 150.0),
+            ("32x32", "64x64", 1.0, "Modulation", 450.0),
+            ("128x128", "128x128", 0.0, "Modulation", 314.5),
+            ("32x32", "32x32", 0.0, "Modulation", 150.0),
+        ],
+    )
+    def test_huygens_mtf_matches_reference_data(
+        self, simple_system, pupil_sampling, image_sampling, image_delta, mtftype, maximum_frequency, reference_data
+    ):
+        result = huygens_mtf(
+            simple_system,
+            pupil_sampling=pupil_sampling,
+            image_sampling=image_sampling,
+            image_delta=image_delta,
+            mtftype=mtftype,
+            maximum_frequency=maximum_frequency,
+        )
+
+        assert_frame_equal(result.Data.astype(float), reference_data.Data.astype(float))
