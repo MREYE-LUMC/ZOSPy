@@ -17,6 +17,8 @@ ZOS-API can also be added in patch releases.
 
 ### Changed
 
+- Changed license to MIT (#57, #58) - 2023-12-22
+
 ### Deprecated
 
 ### Removed
