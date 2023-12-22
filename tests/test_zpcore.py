@@ -80,8 +80,10 @@ def test_create_simple_system(simple_system):
 
 
 @pytest.fixture()
-@pytest.mark.require_mode("standalone")
 def oss_with_modifiable_config(zos: zp.ZOS, connection_mode, tmp_path) -> zp.zpcore.OpticStudioSystem:
+    if connection_mode != "standalone":
+        pytest.skip(f"Test is only applicable in standalone mode.")
+
     config_file = tmp_path / "opticstudio_config_file.CFG"
     zos.Connection.PreferencesFile = str(config_file)
     connected = zos.create_new_application()
