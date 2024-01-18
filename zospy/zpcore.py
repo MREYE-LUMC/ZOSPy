@@ -258,10 +258,10 @@ class OpticStudioSystem:
 
         if self._OpenFile is None:
             warnings.warn(
-                "The file name has not been explicitly set for the current system, and the system has been saved under"
-                "the file name used by OpticStudio. Use 'save_as' if you want to save the file at a different location."
+                "The optical system has not been saved because no file name has been defined for the current system."
+                "Please use the 'save_as' function before using 'save'."
             )
-            self._OpenFile = self._System.SystemFile
+            logger.critical("Could not save file because the path has not been set using save_as")
 
         self._System.Save()
         logger.info("File saved")
