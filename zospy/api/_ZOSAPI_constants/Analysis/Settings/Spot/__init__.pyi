@@ -1,31 +1,30 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("ColorRaysBy", "Patterns", "Reference", "ShowScales")
 
-class ColorRaysBy(Enum):
-    Fields = 0
-    Waves = 1
-    Config = 2
-    Wavelength = 3
+class ColorRaysBy:
+    Fields: ColorRaysBy = None
+    Waves: ColorRaysBy = None
+    Config: ColorRaysBy = None
+    Wavelength: ColorRaysBy = None
 
-class Patterns(Enum):
-    Square = 0
-    Hexapolar = 1
-    Dithered = 2
+class Patterns:
+    Square: Patterns = None
+    Hexapolar: Patterns = None
+    Dithered: Patterns = None
 
-class Reference(Enum):
-    ChiefRay = 0
-    Centroid = 1
-    Middle = 2
-    Vertex = 3
+class Reference:
+    ChiefRay: Reference = None
+    Centroid: Reference = None
+    Middle: Reference = None
+    Vertex: Reference = None
 
-class ShowScales(Enum):
-    ScaleBar = 0
-    Box = 1
-    Cross = 2
-    Circle = 3
+class ShowScales:
+    ScaleBar: ShowScales = None
+    Box: ShowScales = None
+    Cross: ShowScales = None
+    Circle: ShowScales = None

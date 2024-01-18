@@ -2,7 +2,6 @@ import numpy as np
 import pytest
 
 from zospy.analyses.raysandspots import ray_fan, single_ray_trace
-from zospy.api.config import DECIMAL_POINT
 
 
 class TestSingleRayTrace:
@@ -112,12 +111,12 @@ class TestRayFan:
         )
 
         assert np.allclose(
-            result.Data[f"Tangential fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
+            result.Data["Tangential fan, field number 1 = 0,0000 (deg)"],
             expected_data.Data["Tangential fan, field number 1 = 0,0000 (deg)"],
         )
         assert np.allclose(
-            result.Data[f"Sagittal fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
-            expected_data.Data["Sagittal fan, field number 1 = 0,0000 (deg)"],
+            result.Data["Sagittal fan, field number 1 = 0,0000 (deg)"],
+            expected_data.Data["Sagittal fan, " "field number 1 = 0," "0000 (deg)"],
         )
 
     @pytest.mark.parametrize(
@@ -140,10 +139,10 @@ class TestRayFan:
         )
 
         assert np.allclose(
-            result.Data[f"Tangential fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
+            result.Data["Tangential fan, field number 1 = 0,0000 (deg)"],
             reference_data.Data["Tangential fan, field number 1 = 0,0000 (deg)"],
         )
         assert np.allclose(
-            result.Data[f"Sagittal fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
+            result.Data["Sagittal fan, field number 1 = 0,0000 (deg)"],
             reference_data.Data["Sagittal fan, field number 1 = 0,0000 (deg)"],
         )

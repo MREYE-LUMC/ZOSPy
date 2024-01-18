@@ -27,7 +27,7 @@ def curvature(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     sampling: str | int
         The size of the used grid, either string (e.g. '65x65') or int. The integer will be treated as if obtained from

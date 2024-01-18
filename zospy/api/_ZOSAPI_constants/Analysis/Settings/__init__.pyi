@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 from . import (
     RMS,
@@ -44,82 +43,82 @@ __all__ = (
     "STAREffectsOptions",
 )
 
-class AxisType(Enum):
-    X = 0
-    Y = 1
-    Z = 2
+class AxisType:
+    X: AxisType = None
+    Y: AxisType = None
+    Z: AxisType = None
 
-class DetectorViewerScaleTypes(Enum):
-    Linear = 0
-    Log_Minus_5 = 1
-    Normalized = 1
-    Log_Minus_10 = 2
-    Log_Minus_15 = 3
+class DetectorViewerScaleTypes:
+    Linear: DetectorViewerScaleTypes = None
+    Log_Minus_5: DetectorViewerScaleTypes = None
+    Normalized: DetectorViewerScaleTypes = None
+    Log_Minus_10: DetectorViewerScaleTypes = None
+    Log_Minus_15: DetectorViewerScaleTypes = None
 
-class DisplayOption(Enum):
-    AllRays = 0
-    FailedRays = 1
-    PassedRays = 2
+class DisplayOption:
+    AllRays: DisplayOption = None
+    FailedRays: DisplayOption = None
+    PassedRays: DisplayOption = None
 
-class HuygensPsfTypes(Enum):
-    Linear = 0
-    Log_Minus_1 = 1
-    Log_Minus_2 = 2
-    Log_Minus_3 = 3
-    Log_Minus_4 = 4
-    Log_Minus_5 = 5
-    Real = 6
-    Imaginary = 7
-    Phase = 8
+class HuygensPsfTypes:
+    Linear: HuygensPsfTypes = None
+    Log_Minus_1: HuygensPsfTypes = None
+    Log_Minus_2: HuygensPsfTypes = None
+    Log_Minus_3: HuygensPsfTypes = None
+    Log_Minus_4: HuygensPsfTypes = None
+    Log_Minus_5: HuygensPsfTypes = None
+    Real: HuygensPsfTypes = None
+    Imaginary: HuygensPsfTypes = None
+    Phase: HuygensPsfTypes = None
 
-class Parity(Enum):
-    Even = 0
-    Odd = 1
+class Parity:
+    Even: Parity = None
+    Odd: Parity = None
 
-class Polarizations(Enum):
-    None_ = 0
-    Ex = 1
-    Ey = 2
-    Ez = 3
+class Polarizations:
+    None_: Polarizations = None
+    Ex: Polarizations = None
+    Ey: Polarizations = None
+    Ez: Polarizations = None
 
-class PsfSpread(Enum):
-    Line = 0
-    Edge = 1
+class PsfSpread:
+    Line: PsfSpread = None
+    Edge: PsfSpread = None
 
-class PsfTypes(Enum):
-    X_Linear = 0
-    Y_Linear = 1
-    X_Logarithmic = 2
-    Y_Logarithmic = 3
-    X_Phase = 4
-    Y_Phase = 5
-    X_RealPart = 6
-    Y_RealPart = 7
-    X_ImaginaryPart = 8
-    Y_ImaginaryPart = 9
+class PsfTypes:
+    X_Linear: PsfTypes = None
+    Y_Linear: PsfTypes = None
+    X_Logarithmic: PsfTypes = None
+    Y_Logarithmic: PsfTypes = None
+    X_Phase: PsfTypes = None
+    Y_Phase: PsfTypes = None
+    X_RealPart: PsfTypes = None
+    Y_RealPart: PsfTypes = None
+    X_ImaginaryPart: PsfTypes = None
+    Y_ImaginaryPart: PsfTypes = None
 
-class ReferenceGia(Enum):
-    ChiefRay = 0
-    Vertex = 1
-    PrimaryChief = 2
-    Centroid = 3
+class ReferenceGia:
+    ChiefRay: ReferenceGia = None
+    Vertex: ReferenceGia = None
+    PrimaryChief: ReferenceGia = None
+    Centroid: ReferenceGia = None
 
-class Rotations(Enum):
-    Rotate_0 = 0
-    Rotate_90 = 1
-    Rotate_180 = 2
-    Rotate_270 = 3
+class Rotations:
+    Rotate_0: Rotations = None
+    Rotate_90: Rotations = None
+    Rotate_180: Rotations = None
+    Rotate_270: Rotations = None
 
-class ScanTypes(Enum):
-    Plus_Y = 0
-    Plus_X = 1
-    Minus_Y = 2
-    Minus_X = 3
+class ScanTypes:
+    Plus_Y: ScanTypes = None
+    Plus_X: ScanTypes = None
+    Minus_Y: ScanTypes = None
+    Minus_X: ScanTypes = None
 
-class SourceGia(Enum):
-    Uniform = 0
-    Lambertian = 1
+class SourceGia:
+    Uniform: SourceGia = None
+    Lambertian: SourceGia = None
 
-class STAREffectsOptions(Enum):
-    On = 0
-    Difference = 1
+class STAREffectsOptions:
+    On: STAREffectsOptions = None
+    Difference: STAREffectsOptions = None

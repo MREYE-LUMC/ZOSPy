@@ -24,9 +24,7 @@ cols = ["b", "g", "r"]
 ## Connect to OpticStudio
 print("Connecting to Zemax API ...")
 zos = zp.ZOS()
-zos.wakeup()
-zos.create_new_application()
-oss = zos.get_primary_system()
+oss = zos.connect(mode="standalone")
 
 # Load example file
 file = "Double Gauss 28 degree field.zmx"

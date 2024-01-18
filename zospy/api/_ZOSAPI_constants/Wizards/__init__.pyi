@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = (
     "CriterionTypes",
@@ -17,53 +16,53 @@ __all__ = (
     "WizardType",
 )
 
-class CriterionTypes(Enum):
-    Wavefront = 0
-    Contrast = 1
-    Spot = 2
-    Angular = 3
+class CriterionTypes:
+    Wavefront: CriterionTypes = None
+    Contrast: CriterionTypes = None
+    Spot: CriterionTypes = None
+    Angular: CriterionTypes = None
 
-class DefaultAndDegrees(Enum):
-    Default = 0
-    Degrees = 1
+class DefaultAndDegrees:
+    Default: DefaultAndDegrees = None
+    Degrees: DefaultAndDegrees = None
 
-class DefaultAndFringes(Enum):
-    Default = 0
-    Fringes = 1
-    Percent = 2
+class DefaultAndFringes:
+    Default: DefaultAndFringes = None
+    Fringes: DefaultAndFringes = None
+    Percent: DefaultAndFringes = None
 
-class OptimizationTypes(Enum):
-    RMS = 0
-    PTV = 1
+class OptimizationTypes:
+    RMS: OptimizationTypes = None
+    PTV: OptimizationTypes = None
 
-class PupilArmsCount(Enum):
-    Arms_6 = 0
-    Arms_8 = 1
-    Arms_10 = 2
-    Arms_12 = 3
+class PupilArmsCount:
+    Arms_6: PupilArmsCount = None
+    Arms_8: PupilArmsCount = None
+    Arms_10: PupilArmsCount = None
+    Arms_12: PupilArmsCount = None
 
-class ReferenceTypes(Enum):
-    Centroid = 0
-    ChiefRay = 1
-    Unreferenced = 2
+class ReferenceTypes:
+    Centroid: ReferenceTypes = None
+    ChiefRay: ReferenceTypes = None
+    Unreferenced: ReferenceTypes = None
 
-class ToleranceGrade(Enum):
-    Commercial = 0
-    Precision = 1
-    HighPrecision = 2
-    CellPhoneLens = 3
+class ToleranceGrade:
+    Commercial: ToleranceGrade = None
+    Precision: ToleranceGrade = None
+    HighPrecision: ToleranceGrade = None
+    CellPhoneLens: ToleranceGrade = None
 
-class ToleranceVendor(Enum):
-    Asphericon = 0
-    EdmundOptics = 1
-    Generic = 2
-    LaCroix = 3
-    Optimax = 4
+class ToleranceVendor:
+    Asphericon: ToleranceVendor = None
+    EdmundOptics: ToleranceVendor = None
+    Generic: ToleranceVendor = None
+    LaCroix: ToleranceVendor = None
+    Optimax: ToleranceVendor = None
 
-class WizardType(Enum):
-    NSCOptimization = 0
-    NSCBitmap = 1
-    NSCRoadwayLighting = 2
-    SEQOptimization = 3
-    NSCTolerance = 4
-    SEQTolerance = 5
+class WizardType:
+    NSCOptimization: WizardType = None
+    NSCBitmap: WizardType = None
+    NSCRoadwayLighting: WizardType = None
+    SEQOptimization: WizardType = None
+    NSCTolerance: WizardType = None
+    SEQTolerance: WizardType = None

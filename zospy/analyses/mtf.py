@@ -21,7 +21,7 @@ def _correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype) -> None:
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     analysis: Analysis
         An FFT Through Focus MTF analysis.
@@ -64,7 +64,7 @@ def fft_through_focus_mtf(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     sampling: str | int
         The sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants integer.
@@ -168,7 +168,7 @@ def fft_through_focus_mtf_fromcfg(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     cfgfile: str
         Full filepath (including extension) to a configuration file.
@@ -258,7 +258,7 @@ def huygens_mtf(
 
     Parameters
     ----------
-    oss : zospy.core.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     pupil_sampling : str | int
         The pupil sampling, either string (e.g. '64x64') or int.

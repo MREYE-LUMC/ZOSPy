@@ -1,5 +1,6 @@
 import locale
 import os
+from pathlib import Path
 from tempfile import mkstemp
 
 import pytest
@@ -8,7 +9,47 @@ import zospy.api.config as _config
 from zospy import constants
 from zospy.analyses.base import new_analysis
 from zospy.analyses.polarization import _get_number_field
-from zospy.utils.pyutils import atox, xtoa
+from zospy.utils.pyutils import abspath, atox, xtoa
+
+
+@pytest.mark.parametrize("input_type", [str, Path])
+class TestAbsPath:
+    def test_abspath_returns_absolute_path(self, tmp_path, input_type, monkeypatch):
+        filename = "test.txt"
+
+        # Make sure path exists
+        tmp_path.joinpath(filename).touch()
+
+        # Change working directory to temporary directory
+        monkeypatch.chdir(tmp_path)
+
+        assert abspath(input_type(filename)) == str(tmp_path / filename)
+
+    def test_abspath_raises_file_not_found_error(self, tmp_path, input_type, monkeypatch):
+        filename = "test.txt"
+
+        # Change working directory to temporary directory
+        monkeypatch.chdir(tmp_path)
+
+        with pytest.raises(FileNotFoundError):
+            abspath(input_type(filename))
+
+    def test_abspath_check_directory_only_does_not_raise_file_not_found_error(self, tmp_path, input_type, monkeypatch):
+        filename = "test.txt"
+
+        # Change working directory to temporary directory
+        monkeypatch.chdir(tmp_path)
+
+        assert abspath(input_type(filename), check_directory_only=True) == str(tmp_path / filename)
+
+    def test_abspath_check_directory_only_raises_file_not_found_error(self, tmp_path, input_type, monkeypatch):
+        filename = "non_existing_directory/test.txt"
+
+        # Change working directory to temporary directory
+        monkeypatch.chdir(tmp_path)
+
+        with pytest.raises(FileNotFoundError):
+            abspath(input_type(filename), check_directory_only=True)
 
 
 class TestNumberToStringConversion:

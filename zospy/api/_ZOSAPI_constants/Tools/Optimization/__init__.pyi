@@ -1,32 +1,31 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("OptimizationAlgorithm", "OptimizationCycles", "OptimizationSaveCount")
 
-class OptimizationAlgorithm(Enum):
-    DampedLeastSquares = 0
-    OrthogonalDescent = 1
+class OptimizationAlgorithm:
+    DampedLeastSquares: OptimizationAlgorithm = None
+    OrthogonalDescent: OptimizationAlgorithm = None
 
-class OptimizationCycles(Enum):
-    Automatic = 0
-    Fixed_1_Cycle = 1
-    Fixed_5_Cycles = 2
-    Fixed_10_Cycles = 3
-    Fixed_50_Cycles = 4
-    Infinite = 5
+class OptimizationCycles:
+    Automatic: OptimizationCycles = None
+    Fixed_1_Cycle: OptimizationCycles = None
+    Fixed_5_Cycles: OptimizationCycles = None
+    Fixed_10_Cycles: OptimizationCycles = None
+    Fixed_50_Cycles: OptimizationCycles = None
+    Infinite: OptimizationCycles = None
 
-class OptimizationSaveCount(Enum):
-    Save_10 = 0
-    Save_20 = 1
-    Save_30 = 2
-    Save_40 = 3
-    Save_50 = 4
-    Save_60 = 5
-    Save_70 = 6
-    Save_80 = 7
-    Save_90 = 8
-    Save_100 = 9
+class OptimizationSaveCount:
+    Save_10: OptimizationSaveCount = None
+    Save_20: OptimizationSaveCount = None
+    Save_30: OptimizationSaveCount = None
+    Save_40: OptimizationSaveCount = None
+    Save_50: OptimizationSaveCount = None
+    Save_60: OptimizationSaveCount = None
+    Save_70: OptimizationSaveCount = None
+    Save_80: OptimizationSaveCount = None
+    Save_90: OptimizationSaveCount = None
+    Save_100: OptimizationSaveCount = None

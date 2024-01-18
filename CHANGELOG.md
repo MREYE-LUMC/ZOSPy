@@ -12,14 +12,42 @@ ZOS-API can also be added in patch releases.
 ### Added
 
 - MTF analysis: `huygens_mtf` (#55)
+- `pickup_chief_ray` solver (!38)
+- New connection method `ZOS.connect`. This method replaces the existing connection methods
+  `ZOS.connect_as_extension`, `ZOS.create_new_application` and `ZOS.connect_as_standalone`.
+  The connection mode is passed as an argument and the primary system is always returned (!47) 
+- The OpticStudio installation directory can be manually specified using the `opticstudio_directory` 
+  parameter of the `ZOS` class. This is particularly useful if multiple OpticStudio versions are installed
+  on the same system and you want to use a specific version (!47)
+  - **Note:** when this parameter is used, the `ZOSAPI_NetHelper` is not loaded and `ZOS.ZOSAPI_NetHelper` 
+    remains unset.
+- `ZOS.disconnect` to disconnect from OpticStudio (!47)
+- `zospy.api.codecs` for customized conversions between ZOS-API types and Python types (!48)
+- `zospy.api.codecs.OpticStudioInterfaceEncoder` for automatic downcasting of certain generic interfaces
+    to their implementation (!48)
+- Support for OpticStudio 2024 R1 (!51)
+- Support for Python 3.12 (!54)
 
 ### Fixed
 
 ### Changed
 
 - Changed license to MIT (#57, #58) - 2023-12-22
+- Deleting a `zospy.zpcore.ZOS` object now automatically calls `ZOS.disconnect` (!47)
+- When connecting in extension mode, it is not necessary anymore to save the primary system with 
+  `OpticStudioSystem.save_as` before it can be saved with `OpticStudioSystem.save` (!47, #41)
+- `zospy.analyses.base.Analysis` now uses `zospy.api.codecs.OpticStudioInterfaceEncoder` to downcast
+    analysis interfaces to their implementation (!48)
+- Accept relative paths and check if the path exists in `OpticStudioSystem.load` and `OpticStudioSystem.save_as` (!50)
+- Use `zospy.constants.process_constant` for parsing the `from_column` argument of `zospy.solvers.surface_pickup`.
+  This column can now be specified as either a value from `zospy.constants` or a string (!53)
 
 ### Deprecated
+
+- `ZOS.connect_as_extension`, `ZOS.create_new_application` and `ZOS.connect_as_standalone`.
+  They have been replaced with `ZOS.connect` (!47)
+- `zospy.functions.nce.get_object_data` is deprecated because its task is now performed by
+    `zospy.api.codecs.OpticStudioInterfaceEncoder` (!48)
 
 ### Removed
 

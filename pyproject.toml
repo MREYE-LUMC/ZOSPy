@@ -18,12 +18,12 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Typing :: Typed"
 ]
-requires-python = ">=3.9,<3.12"
+requires-python = ">=3.9,<3.13"
 dependencies = [
-    "pythonnet ~= 3.0.1",
+    "pythonnet >=3.0.0,<4",
     "pandas",
     "numpy",
-    "semver ~= 3.0.0"
+    "semver >= 3.0.0,<4"
 ]
 dynamic = ["version"]
 
@@ -54,14 +54,15 @@ dev = [
     "zospy[test]",
     "black[jupyter] == 23.3.0",
     "isort",
-    "pydantic",
+    "pydantic ~= 2.0.0",
     "ruff",
 ]
 
 [tool.pytest.ini_options]
 markers = [
     "must_pass: test must pass, otherwise all other tests will be skipped",
-    "require_mode: requires the specified connection mode, otherwise the test will be skipped"
+    "require_mode: requires the specified connection mode, otherwise the test will be skipped",
+    "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions"
 ]
 
 [tool.mypy]

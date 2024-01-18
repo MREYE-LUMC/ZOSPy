@@ -1,25 +1,24 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("NSCSagRemoveOptions", "NSCSagShowAs")
 
-class NSCSagRemoveOptions(Enum):
-    None_ = 0
-    BaseROC = 1
-    BestFitSphere = 2
-    AverageSag = 3
-    MinimumSag = 4
+class NSCSagRemoveOptions:
+    None_: NSCSagRemoveOptions = None
+    BaseROC: NSCSagRemoveOptions = None
+    BestFitSphere: NSCSagRemoveOptions = None
+    AverageSag: NSCSagRemoveOptions = None
+    MinimumSag: NSCSagRemoveOptions = None
 
-class NSCSagShowAs(Enum):
-    Surface = 0
-    Contour = 1
-    GreyScale = 2
-    InverseGreyScale = 3
-    FalseColor = 4
-    InverseFalseColor = 5
-    X_CrossSection = 6
-    Y_CrossSection = 7
+class NSCSagShowAs:
+    Surface: NSCSagShowAs = None
+    Contour: NSCSagShowAs = None
+    GreyScale: NSCSagShowAs = None
+    InverseGreyScale: NSCSagShowAs = None
+    FalseColor: NSCSagShowAs = None
+    InverseFalseColor: NSCSagShowAs = None
+    X_CrossSection: NSCSagShowAs = None
+    Y_CrossSection: NSCSagShowAs = None

@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 from . import RMSField, RMSFieldMap
 
@@ -19,114 +18,114 @@ __all__ = (
     "WaveDensities",
 )
 
-class FieldDensities(Enum):
-    FieldDens_5 = 1
-    FieldDens_10 = 2
-    FieldDens_15 = 3
-    FieldDens_20 = 4
-    FieldDens_25 = 5
-    FieldDens_30 = 6
-    FieldDens_35 = 7
-    FieldDens_40 = 8
-    FieldDens_45 = 9
-    FieldDens_50 = 10
-    FieldDens_55 = 11
-    FieldDens_60 = 12
-    FieldDens_65 = 13
-    FieldDens_70 = 14
-    FieldDens_75 = 15
-    FieldDens_80 = 16
-    FieldDens_85 = 17
-    FieldDens_90 = 18
-    FieldDens_95 = 19
-    FieldDens_100 = 20
+class FieldDensities:
+    FieldDens_5: FieldDensities = None
+    FieldDens_10: FieldDensities = None
+    FieldDens_15: FieldDensities = None
+    FieldDens_20: FieldDensities = None
+    FieldDens_25: FieldDensities = None
+    FieldDens_30: FieldDensities = None
+    FieldDens_35: FieldDensities = None
+    FieldDens_40: FieldDensities = None
+    FieldDens_45: FieldDensities = None
+    FieldDens_50: FieldDensities = None
+    FieldDens_55: FieldDensities = None
+    FieldDens_60: FieldDensities = None
+    FieldDens_65: FieldDensities = None
+    FieldDens_70: FieldDensities = None
+    FieldDens_75: FieldDensities = None
+    FieldDens_80: FieldDensities = None
+    FieldDens_85: FieldDensities = None
+    FieldDens_90: FieldDensities = None
+    FieldDens_95: FieldDensities = None
+    FieldDens_100: FieldDensities = None
 
-class FocusDensities(Enum):
-    FocusDens_5 = 1
-    FocusDens_10 = 2
-    FocusDens_15 = 3
-    FocusDens_20 = 4
-    FocusDens_25 = 5
-    FocusDens_30 = 6
-    FocusDens_35 = 7
-    FocusDens_40 = 8
-    FocusDens_45 = 9
-    FocusDens_50 = 10
-    FocusDens_55 = 11
-    FocusDens_60 = 12
-    FocusDens_65 = 13
-    FocusDens_70 = 14
-    FocusDens_75 = 15
-    FocusDens_80 = 16
-    FocusDens_85 = 17
-    FocusDens_90 = 18
-    FocusDens_95 = 19
-    FocusDens_100 = 20
+class FocusDensities:
+    FocusDens_5: FocusDensities = None
+    FocusDens_10: FocusDensities = None
+    FocusDens_15: FocusDensities = None
+    FocusDens_20: FocusDensities = None
+    FocusDens_25: FocusDensities = None
+    FocusDens_30: FocusDensities = None
+    FocusDens_35: FocusDensities = None
+    FocusDens_40: FocusDensities = None
+    FocusDens_45: FocusDensities = None
+    FocusDens_50: FocusDensities = None
+    FocusDens_55: FocusDensities = None
+    FocusDens_60: FocusDensities = None
+    FocusDens_65: FocusDensities = None
+    FocusDens_70: FocusDensities = None
+    FocusDens_75: FocusDensities = None
+    FocusDens_80: FocusDensities = None
+    FocusDens_85: FocusDensities = None
+    FocusDens_90: FocusDensities = None
+    FocusDens_95: FocusDensities = None
+    FocusDens_100: FocusDensities = None
 
-class Method(Enum):
-    GaussQuad = 0
-    RectArray = 1
+class Method:
+    GaussQuad: Method = None
+    RectArray: Method = None
 
-class Orientations(Enum):
-    Plus_Y = 0
-    Minus_Y = 1
-    Plus_X = 2
-    Minus_X = 3
+class Orientations:
+    Plus_Y: Orientations = None
+    Minus_Y: Orientations = None
+    Plus_X: Orientations = None
+    Minus_X: Orientations = None
 
-class RayDensities(Enum):
-    RayDens_1 = 1
-    RayDens_32x32 = 1
-    RayDens_64x64 = 2
-    RayDens_2 = 2
-    RayDens_128x128 = 3
-    RayDens_3 = 3
-    RayDens_256x256 = 4
-    RayDens_4 = 4
-    RayDens_5 = 5
-    RayDens_512x512 = 5
-    RayDens_1024x1024 = 6
-    RayDens_6 = 6
-    RayDens_2048x2048 = 7
-    RayDens_7 = 7
-    RayDens_4096x4096 = 8
-    RayDens_8 = 8
-    RayDens_8192x8192 = 9
-    RayDens_9 = 9
-    RayDens_10 = 10
-    RayDens_16384x16384 = 10
-    RayDens_11 = 11
-    RayDens_12 = 12
-    RayDens_13 = 13
-    RayDens_14 = 14
-    RayDens_15 = 15
-    RayDens_16 = 16
-    RayDens_17 = 17
-    RayDens_18 = 18
-    RayDens_19 = 19
-    RayDens_20 = 20
+class RayDensities:
+    RayDens_1: RayDensities = None
+    RayDens_32x32: RayDensities = None
+    RayDens_64x64: RayDensities = None
+    RayDens_2: RayDensities = None
+    RayDens_128x128: RayDensities = None
+    RayDens_3: RayDensities = None
+    RayDens_256x256: RayDensities = None
+    RayDens_4: RayDensities = None
+    RayDens_5: RayDensities = None
+    RayDens_512x512: RayDensities = None
+    RayDens_1024x1024: RayDensities = None
+    RayDens_6: RayDensities = None
+    RayDens_2048x2048: RayDensities = None
+    RayDens_7: RayDensities = None
+    RayDens_4096x4096: RayDensities = None
+    RayDens_8: RayDensities = None
+    RayDens_8192x8192: RayDensities = None
+    RayDens_9: RayDensities = None
+    RayDens_10: RayDensities = None
+    RayDens_16384x16384: RayDensities = None
+    RayDens_11: RayDensities = None
+    RayDens_12: RayDensities = None
+    RayDens_13: RayDensities = None
+    RayDens_14: RayDensities = None
+    RayDens_15: RayDensities = None
+    RayDens_16: RayDensities = None
+    RayDens_17: RayDensities = None
+    RayDens_18: RayDensities = None
+    RayDens_19: RayDensities = None
+    RayDens_20: RayDensities = None
 
-class ReferTo(Enum):
-    ChiefRay = 0
-    Centroid = 1
+class ReferTo:
+    ChiefRay: ReferTo = None
+    Centroid: ReferTo = None
 
-class WaveDensities(Enum):
-    WaveDens_5 = 1
-    WaveDens_10 = 2
-    WaveDens_15 = 3
-    WaveDens_20 = 4
-    WaveDens_25 = 5
-    WaveDens_30 = 6
-    WaveDens_35 = 7
-    WaveDens_40 = 8
-    WaveDens_45 = 9
-    WaveDens_50 = 10
-    WaveDens_55 = 11
-    WaveDens_60 = 12
-    WaveDens_65 = 13
-    WaveDens_70 = 14
-    WaveDens_75 = 15
-    WaveDens_80 = 16
-    WaveDens_85 = 17
-    WaveDens_90 = 18
-    WaveDens_95 = 19
-    WaveDens_100 = 20
+class WaveDensities:
+    WaveDens_5: WaveDensities = None
+    WaveDens_10: WaveDensities = None
+    WaveDens_15: WaveDensities = None
+    WaveDens_20: WaveDensities = None
+    WaveDens_25: WaveDensities = None
+    WaveDens_30: WaveDensities = None
+    WaveDens_35: WaveDensities = None
+    WaveDens_40: WaveDensities = None
+    WaveDens_45: WaveDensities = None
+    WaveDens_50: WaveDensities = None
+    WaveDens_55: WaveDensities = None
+    WaveDens_60: WaveDensities = None
+    WaveDens_65: WaveDensities = None
+    WaveDens_70: WaveDensities = None
+    WaveDens_75: WaveDensities = None
+    WaveDens_80: WaveDensities = None
+    WaveDens_85: WaveDensities = None
+    WaveDens_90: WaveDensities = None
+    WaveDens_95: WaveDensities = None
+    WaveDens_100: WaveDensities = None

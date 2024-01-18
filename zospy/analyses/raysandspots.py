@@ -99,7 +99,7 @@ def single_ray_trace(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     hx: float
         Normalized X Field Coord. Defaults to 0.
@@ -223,7 +223,7 @@ def ray_fan(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     plot_scale: int | float
         Sets the maximum vertical scale for the plots. When 0, automatic scaling is used. Defaults to 0.

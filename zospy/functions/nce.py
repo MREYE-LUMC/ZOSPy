@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from warnings import warn
+
 from zospy.api import _ZOSAPI, constants
 
 
@@ -106,6 +108,10 @@ def find_object_by_comment(
 def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IObject:
     """Returns the object-specific data.
 
+    .. deprecated:: 1.2.0
+            `get_object_data` will be removed in ZOSPy 2.0.0, as this conversion is now implemented in
+            `zospy.api.codecs`.
+
     Parameters
     ----------
     obj: ZOSAPI.Editors.NCE.INCERow
@@ -129,4 +135,6 @@ def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IOb
     >>> detector_data = zp.functions.nce.get_object_data(detector_object)
     >>> number_of_x_pixels = detector_data.NumberXPixels
     """
-    return obj.ObjectData.__implementation__
+    warn("'get_object_data' is deprecated and will be removed in ZOSPy 2.0.0.", DeprecationWarning, stacklevel=1)
+
+    return obj.ObjectData

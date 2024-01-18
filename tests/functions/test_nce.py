@@ -28,6 +28,7 @@ def test_can_find_object_by_comment(nsc_simple_system, comment, case_sensitive, 
 
 
 def test_get_object_data(nsc_simple_system):
-    object_data = get_object_data(nsc_simple_system.NCE.GetObjectAt(2))
+    with pytest.warns(DeprecationWarning):
+        object_data = get_object_data(nsc_simple_system.NCE.GetObjectAt(2))
 
     assert object_data.Radius1 == 20

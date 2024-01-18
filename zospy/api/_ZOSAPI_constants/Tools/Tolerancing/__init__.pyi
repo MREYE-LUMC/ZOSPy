@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = (
     "CriterionComps",
@@ -20,178 +19,178 @@ __all__ = (
     "TolerancingParameterName",
 )
 
-class CriterionComps(Enum):
-    OptimizeAll_DLS = 0
-    NONSEQOptimizeAll = 0
-    ParaxialFocus = 1
-    NONSEQNone = 1
-    NONSEQOptimizeAll_OD = 2
-    None_ = 2
-    OptimizeAll_OD = 3
+class CriterionComps:
+    OptimizeAll_DLS: CriterionComps = None
+    NONSEQOptimizeAll: CriterionComps = None
+    ParaxialFocus: CriterionComps = None
+    NONSEQNone: CriterionComps = None
+    NONSEQOptimizeAll_OD: CriterionComps = None
+    None_: CriterionComps = None
+    OptimizeAll_OD: CriterionComps = None
 
-class CriterionFields(Enum):
-    NONSEQUserDefined = 0
-    Y_Symmetric = 0
-    XY_Symmetric = 1
-    UserDefined = 2
+class CriterionFields:
+    NONSEQUserDefined: CriterionFields = None
+    Y_Symmetric: CriterionFields = None
+    XY_Symmetric: CriterionFields = None
+    UserDefined: CriterionFields = None
 
-class Criterions(Enum):
-    NONSEQMeritFunction = 0
-    RMSSpotRadius = 0
-    RMSSpotX = 1
-    NONSEQUserScript = 1
-    RMSSpotY = 2
-    RMSWavefront = 3
-    MeritFunction = 4
-    GeometricMTFAverage = 5
-    GeometricMTFTan = 6
-    GeometricMTFSag = 7
-    DiffMTFAverage = 8
-    DiffMTFTan = 9
-    DiffMTFSag = 10
-    BoresightError = 11
-    RMSAngularRadius = 12
-    RMSAngularX = 13
-    RMSAngularY = 14
-    UserScript = 15
+class Criterions:
+    NONSEQMeritFunction: Criterions = None
+    RMSSpotRadius: Criterions = None
+    RMSSpotX: Criterions = None
+    NONSEQUserScript: Criterions = None
+    RMSSpotY: Criterions = None
+    RMSWavefront: Criterions = None
+    MeritFunction: Criterions = None
+    GeometricMTFAverage: Criterions = None
+    GeometricMTFTan: Criterions = None
+    GeometricMTFSag: Criterions = None
+    DiffMTFAverage: Criterions = None
+    DiffMTFTan: Criterions = None
+    DiffMTFSag: Criterions = None
+    BoresightError: Criterions = None
+    RMSAngularRadius: Criterions = None
+    RMSAngularX: Criterions = None
+    RMSAngularY: Criterions = None
+    UserScript: Criterions = None
 
-class MonteCarloStatistics(Enum):
-    Normal = 0
-    Uniform = 1
-    Parabolic = 2
+class MonteCarloStatistics:
+    Normal: MonteCarloStatistics = None
+    Uniform: MonteCarloStatistics = None
+    Parabolic: MonteCarloStatistics = None
 
-class QSCriterions(Enum):
-    RMSSpotRadius = 0
-    RMSSpotX = 1
-    RMSSpotY = 2
-    RMSWavefront = 3
-    BoresightError = 4
-    RMSAngularRadius = 5
-    RMSAngularX = 6
-    RMSAngularY = 7
+class QSCriterions:
+    RMSSpotRadius: QSCriterions = None
+    RMSSpotX: QSCriterions = None
+    RMSSpotY: QSCriterions = None
+    RMSWavefront: QSCriterions = None
+    BoresightError: QSCriterions = None
+    RMSAngularRadius: QSCriterions = None
+    RMSAngularX: QSCriterions = None
+    RMSAngularY: QSCriterions = None
 
-class SetupCaches(Enum):
-    RecomputeAll = 0
-    RecomputeChanged = 1
-    UsePolynomial = 2
+class SetupCaches:
+    RecomputeAll: SetupCaches = None
+    RecomputeChanged: SetupCaches = None
+    UsePolynomial: SetupCaches = None
 
-class SetupChanges(Enum):
-    LinearDifference = 0
-    RSSDifference = 1
+class SetupChanges:
+    LinearDifference: SetupChanges = None
+    RSSDifference: SetupChanges = None
 
-class SetupModes(Enum):
-    Sensitivity = 0
-    InverseLimit = 1
-    InverseIncrement = 2
-    SkipSensitivity = 3
+class SetupModes:
+    Sensitivity: SetupModes = None
+    InverseLimit: SetupModes = None
+    InverseIncrement: SetupModes = None
+    SkipSensitivity: SetupModes = None
 
-class SetupPolynomials(Enum):
-    None_ = 0
-    ThreeMinusTerm = 1
-    FiveMinusTerm = 2
+class SetupPolynomials:
+    None_: SetupPolynomials = None
+    ThreeMinusTerm: SetupPolynomials = None
+    FiveMinusTerm: SetupPolynomials = None
 
-class TolerancingColumnName(Enum):
-    UserMeritFunction = 11959
-    UserScript = 11960
-    RmsSpotRadius = 11961
-    RmsSpotX = 11962
-    RmsSpotY = 11963
-    RmsWavefrontError = 11964
-    MtfGeometricAverage = 11965
-    MtfGeometricTangential = 11966
-    MtfGeometricSaggital = 11967
-    MtfDiffractionAverage = 11968
-    MtfDiffractionTangential = 11969
-    MtfDiffractionSagittal = 11970
-    BoresightError = 11971
-    RmsAngularRadius = 11972
-    RmsAngularX = 11973
-    RmsAngularY = 11974
-    BackFocusChange = 75417
-    Unknown = -1
+class TolerancingColumnName:
+    UserMeritFunction: TolerancingColumnName = None
+    UserScript: TolerancingColumnName = None
+    RmsSpotRadius: TolerancingColumnName = None
+    RmsSpotX: TolerancingColumnName = None
+    RmsSpotY: TolerancingColumnName = None
+    RmsWavefrontError: TolerancingColumnName = None
+    MtfGeometricAverage: TolerancingColumnName = None
+    MtfGeometricTangential: TolerancingColumnName = None
+    MtfGeometricSaggital: TolerancingColumnName = None
+    MtfDiffractionAverage: TolerancingColumnName = None
+    MtfDiffractionTangential: TolerancingColumnName = None
+    MtfDiffractionSagittal: TolerancingColumnName = None
+    BoresightError: TolerancingColumnName = None
+    RmsAngularRadius: TolerancingColumnName = None
+    RmsAngularX: TolerancingColumnName = None
+    RmsAngularY: TolerancingColumnName = None
+    BackFocusChange: TolerancingColumnName = None
+    Unknown: TolerancingColumnName = None
 
-class TolerancingOperand(Enum):
-    NULL = 0
-    TRAD = 1
-    TCUR = 2
-    TFRN = 3
-    TTHI = 4
-    TCON = 5
-    TSDI = 6
-    TSDX = 7
-    TSDY = 8
-    TSTX = 9
-    TSTY = 10
-    TIRX = 11
-    TIRY = 12
-    TIRR = 13
-    TPAR = 14
-    TEDV = 15
-    TEDX = 16
-    TEDY = 17
-    TETX = 18
-    TETY = 19
-    TETZ = 20
-    TUDX = 21
-    TUDY = 22
-    TUTX = 23
-    TUTY = 24
-    TUTZ = 25
-    TIND = 26
-    TABB = 27
-    TEXI = 28
-    SAVE = 29
-    COMP = 30
-    CPAR = 31
-    CEDV = 32
-    CMCO = 33
-    STAT = 34
-    TWAV = 35
-    TNPS = 36
-    TNPA = 37
-    TMCO = 38
-    TEZI = 39
-    TCMU = 40
-    SEED = 41
-    COMM = 42
-    TPAI = 43
-    TCIO = 44
-    TCEO = 45
-    TNMA = 46
-    CNPA = 47
-    CNPS = 48
-    TRLX = 49
-    TRLY = 50
-    TRLR = 51
-    TARX = 52
-    TARY = 53
-    TARR = 54
-    TEDR = 55
-    TSDR = 56
-    Unknown = -1
+class TolerancingOperand:
+    NULL: TolerancingOperand = None
+    TRAD: TolerancingOperand = None
+    TCUR: TolerancingOperand = None
+    TFRN: TolerancingOperand = None
+    TTHI: TolerancingOperand = None
+    TCON: TolerancingOperand = None
+    TSDI: TolerancingOperand = None
+    TSDX: TolerancingOperand = None
+    TSDY: TolerancingOperand = None
+    TSTX: TolerancingOperand = None
+    TSTY: TolerancingOperand = None
+    TIRX: TolerancingOperand = None
+    TIRY: TolerancingOperand = None
+    TIRR: TolerancingOperand = None
+    TPAR: TolerancingOperand = None
+    TEDV: TolerancingOperand = None
+    TEDX: TolerancingOperand = None
+    TEDY: TolerancingOperand = None
+    TETX: TolerancingOperand = None
+    TETY: TolerancingOperand = None
+    TETZ: TolerancingOperand = None
+    TUDX: TolerancingOperand = None
+    TUDY: TolerancingOperand = None
+    TUTX: TolerancingOperand = None
+    TUTY: TolerancingOperand = None
+    TUTZ: TolerancingOperand = None
+    TIND: TolerancingOperand = None
+    TABB: TolerancingOperand = None
+    TEXI: TolerancingOperand = None
+    SAVE: TolerancingOperand = None
+    COMP: TolerancingOperand = None
+    CPAR: TolerancingOperand = None
+    CEDV: TolerancingOperand = None
+    CMCO: TolerancingOperand = None
+    STAT: TolerancingOperand = None
+    TWAV: TolerancingOperand = None
+    TNPS: TolerancingOperand = None
+    TNPA: TolerancingOperand = None
+    TMCO: TolerancingOperand = None
+    TEZI: TolerancingOperand = None
+    TCMU: TolerancingOperand = None
+    SEED: TolerancingOperand = None
+    COMM: TolerancingOperand = None
+    TPAI: TolerancingOperand = None
+    TCIO: TolerancingOperand = None
+    TCEO: TolerancingOperand = None
+    TNMA: TolerancingOperand = None
+    CNPA: TolerancingOperand = None
+    CNPS: TolerancingOperand = None
+    TRLX: TolerancingOperand = None
+    TRLY: TolerancingOperand = None
+    TRLR: TolerancingOperand = None
+    TARX: TolerancingOperand = None
+    TARY: TolerancingOperand = None
+    TARR: TolerancingOperand = None
+    TEDR: TolerancingOperand = None
+    TSDR: TolerancingOperand = None
+    Unknown: TolerancingOperand = None
 
-class TolerancingParameterName(Enum):
-    CompensatorSetting = 11400
-    ConfigurationNumber = 16304
-    CommentField = 20004
-    NominalValue = 20566
-    Surface = 20567
-    MinimumValue = 20568
-    MaximumValue = 20569
-    Surface1 = 20570
-    Surface2 = 20571
-    AdjustSurface = 20572
-    ParameterNumber = 20573
-    Layer = 20574
-    MaximumNumber = 20576
-    MinimumNumber = 20577
-    Code = 20578
-    RowNumber = 20579
-    ConfigurationParameter = 20580
-    Object = 20585
-    Data = 20586
-    FieldNumber = 20683
-    SamplingSetting = 20694
-    FieldSetting = 50027
-    TdeRowNumber = 75418
-    Undefined = -1
+class TolerancingParameterName:
+    CompensatorSetting: TolerancingParameterName = None
+    ConfigurationNumber: TolerancingParameterName = None
+    CommentField: TolerancingParameterName = None
+    NominalValue: TolerancingParameterName = None
+    Surface: TolerancingParameterName = None
+    MinimumValue: TolerancingParameterName = None
+    MaximumValue: TolerancingParameterName = None
+    Surface1: TolerancingParameterName = None
+    Surface2: TolerancingParameterName = None
+    AdjustSurface: TolerancingParameterName = None
+    ParameterNumber: TolerancingParameterName = None
+    Layer: TolerancingParameterName = None
+    MaximumNumber: TolerancingParameterName = None
+    MinimumNumber: TolerancingParameterName = None
+    Code: TolerancingParameterName = None
+    RowNumber: TolerancingParameterName = None
+    ConfigurationParameter: TolerancingParameterName = None
+    Object: TolerancingParameterName = None
+    Data: TolerancingParameterName = None
+    FieldNumber: TolerancingParameterName = None
+    SamplingSetting: TolerancingParameterName = None
+    FieldSetting: TolerancingParameterName = None
+    TdeRowNumber: TolerancingParameterName = None
+    Undefined: TolerancingParameterName = None

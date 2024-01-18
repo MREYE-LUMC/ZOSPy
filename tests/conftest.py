@@ -1,15 +1,14 @@
 from pathlib import Path
+from typing import Literal
 
 import pytest
+from semver.version import Version
 
 import zospy as zp
 
 
 def pytest_addoption(parser):
     parser.addoption("--extension", action="store_true", help="Connect to Zemax OpticStudio as extension")
-
-    parser.addoption("--legacy-connection-setup", action="store_true", help="Use legacy method to setup connection")
-
     parser.addoption("--output-directory", type=Path)
 
 
@@ -20,7 +19,7 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture(scope="session")
-def connection_mode(request):
+def connection_mode(request) -> Literal["extension", "standalone"]:
     return "extension" if request.config.getoption("--extension") else "standalone"
 
 
@@ -32,9 +31,17 @@ def skip_by_connection_mode(request, connection_mode):
             pytest.skip(f"Test is only applicable in {required_mode} mode.")
 
 
-@pytest.fixture(scope="session")
-def legacy_connection_setup(request):
-    return request.config.getoption("--legacy-connection-setup")
+@pytest.fixture(autouse=True)
+def xfail_for_opticstudio_versions(request, optic_studio_version):
+    if request.node.get_closest_marker("xfail_for_opticstudio_versions"):
+        conditions, reason = request.node.get_closest_marker("xfail_for_opticstudio_versions").args[:2]
+
+        if isinstance(conditions, str):
+            conditions = [conditions]
+
+        for condition in conditions:
+            if optic_studio_version.match(condition):
+                request.node.add_marker(pytest.mark.xfail(True, reason=reason, raises=AssertionError))
 
 
 @pytest.fixture(scope="session")
@@ -49,62 +56,31 @@ def system_save_file(request):
 
 
 @pytest.fixture(scope="session")
-def zos(legacy_connection_setup) -> zp.ZOS:
-    if not legacy_connection_setup:
-        zos = zp.ZOS()
-    else:
-        zos = zp.ZOS()
-        zos.wakeup()
+def zos() -> zp.ZOS:
+    zos = zp.ZOS()
 
     return zos
 
 
-def _oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
-    if connection_mode == "extension":
-        oss = zos.connect_as_extension(return_primary_system=True)
-    else:
-        oss = zos.create_new_application(return_primary_system=True)
+@pytest.fixture
+def oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
+    oss = zos.connect(connection_mode)
 
     yield oss
 
     # Close the system
     if zos.Connection.IsAlive:
         zos.Application.CloseApplication()
-
-
-def _oss_legacy(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
-    if connection_mode == "extension":
-        connected = zos.connect_as_extension()
-    else:
-        connected = zos.create_new_application()
-
-    oss = zos.get_primary_system()
-
-    yield oss
-
-    # Close the system
-    if connected:
-        zos.Application.CloseApplication()
-
-
-@pytest.fixture
-def oss(zos: zp.ZOS, connection_mode, legacy_connection_setup) -> zp.zpcore.OpticStudioSystem:
-    if not legacy_connection_setup:
-        yield from _oss(zos=zos, connection_mode=connection_mode)
-    else:
-        yield from _oss_legacy(zos=zos, connection_mode=connection_mode)
+        zos.Application = None
 
 
 @pytest.fixture(scope="session")
-def optic_studio_version(zos, connection_mode) -> str:
-    if connection_mode == "extension":
-        zos.connect_as_extension()
-    else:
-        zos.create_new_application()
+def optic_studio_version(zos, connection_mode) -> Version:
+    zos.connect(connection_mode)
 
-    application = zos.Application
-
-    version = f"{application.ZOSMajorVersion}.{application.ZOSMinorVersion}.{application.ZOSSPVersion}"
+    version = Version(
+        major=zos.Application.ZOSMajorVersion, minor=zos.Application.ZOSMinorVersion, patch=zos.Application.ZOSSPVersion
+    )
 
     zos.Application.CloseApplication()
 
@@ -167,8 +143,20 @@ def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
+def coordinate_break_system(simple_system: zp.zpcore.OpticStudioSystem) -> zp.zpcore.OpticStudioSystem:
+    """Simple system with a coordinate break behind the lens."""
+    oss = simple_system
+
+    coordinate_break = oss.LDE.InsertNewSurfaceAt(4)
+    zp.functions.lde.surface_change_type(coordinate_break, zp.constants.Editors.LDE.SurfaceType.CoordinateBreak)
+    coordinate_break.SurfaceData.Decenter_X = 2
+
+    return oss
+
+
+@pytest.fixture
 def decentered_system(simple_system) -> zp.zpcore.OpticStudioSystem:
-    """Simple system with incoming rays at a non-zero angle"""
+    """Simple system with incoming rays at a non-zero angle."""
     oss = simple_system
 
     field = oss.SystemData.Fields.GetField(1)

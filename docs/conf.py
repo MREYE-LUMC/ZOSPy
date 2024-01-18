@@ -53,7 +53,7 @@ autodoc_class_signature = "separated"
 autodoc_typehints_format = "short"
 
 # Mock imports that may be unavailable in the build environment (e.g. readthedocs)
-autodoc_mock_imports = ["winreg", "clr", "System"]
+autodoc_mock_imports = ["winreg", "clr", "System", "Python"]
 
 numpydoc_class_members_toctree = False
 

@@ -1,37 +1,36 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("HuygensMtfTypes", "MtfDataTypes", "MtfTypes", "ShowAsTypes", "SurfaceMtfTypes")
 
-class HuygensMtfTypes(Enum):
-    Modulation = 0
+class HuygensMtfTypes:
+    Modulation: HuygensMtfTypes = None
 
-class MtfDataTypes(Enum):
-    Average = 0
-    Tangential = 1
-    Sagittal = 2
+class MtfDataTypes:
+    Average: MtfDataTypes = None
+    Tangential: MtfDataTypes = None
+    Sagittal: MtfDataTypes = None
 
-class MtfTypes(Enum):
-    Modulation = 0
-    Real = 1
-    Imaginary = 2
-    Phase = 3
-    SquareWave = 4
+class MtfTypes:
+    Modulation: MtfTypes = None
+    Real: MtfTypes = None
+    Imaginary: MtfTypes = None
+    Phase: MtfTypes = None
+    SquareWave: MtfTypes = None
 
-class ShowAsTypes(Enum):
-    GreyScale = 0
-    GreyScaleInverted = 1
-    FalseColor = 2
-    FalseColorInverted = 3
+class ShowAsTypes:
+    GreyScale: ShowAsTypes = None
+    GreyScaleInverted: ShowAsTypes = None
+    FalseColor: ShowAsTypes = None
+    FalseColorInverted: ShowAsTypes = None
 
-class SurfaceMtfTypes(Enum):
-    MTF_Incoherent = 0
-    Real_Incoherent = 1
-    Imaginary_Incoherent = 2
-    MTF_Coherent = 3
-    Real_Coherent = 4
-    Imaginary_Coherent = 5
+class SurfaceMtfTypes:
+    MTF_Incoherent: SurfaceMtfTypes = None
+    Real_Incoherent: SurfaceMtfTypes = None
+    Imaginary_Incoherent: SurfaceMtfTypes = None
+    MTF_Coherent: SurfaceMtfTypes = None
+    Real_Coherent: SurfaceMtfTypes = None
+    Imaginary_Coherent: SurfaceMtfTypes = None

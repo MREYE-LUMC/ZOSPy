@@ -10,6 +10,7 @@
 faq
 compatibility
 examples
+advanced
 api
 contributing
 changelog

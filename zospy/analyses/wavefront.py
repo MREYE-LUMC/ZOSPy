@@ -101,7 +101,7 @@ def zernike_standard_coefficients(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     sampling: str | int
         The sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants integer.

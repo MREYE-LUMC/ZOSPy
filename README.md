@@ -51,11 +51,11 @@ these versions.
 
 ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudio:
 
-| Zemax       | 20.3.2 | 23.0.1 | 23.2.1 |
-|-------------|--------|--------|--------|
-| Python 3.9  | ⚠      | ✔      | ✔      |
-| Python 3.10 | ⚠      | ✔      | ✔      |
-| Python 3.11 | ⚠      | ✔      | ✔      |
+| Zemax       | 20.3.2 | 23.1.0 | 23.2.1 | 24.1.0 |
+|-------------|--------|--------|--------|--------|
+| Python 3.9  | ⚠      | ✔      | ✔      | ✔      |
+| Python 3.10 | ⚠      | ✔      | ✔      | ✔      |
+| Python 3.11 | ⚠      | ✔      | ✔      | ✔      |
 
 ✔: This version works without problems.
 ⚠: This version works, but the output of analyses can differ slightly from the used reference version (currently **OpticStudio 23 R1.01**).
@@ -85,17 +85,14 @@ The connection as extension to running software OpticStudio is initiated as:
 import zospy as zp
 
 zos = zp.ZOS()
-zos.wakeup()
-zos.connect_as_extension()
-oss = zos.get_primary_system()
+oss = zos.connect("extension")
 ```
 
 Make sure that the OpticStudio software is set up to be connected to as extension through the API. Alternatively, a
 standalone OpticStudio application can be launched by changing the last two lines to:
 
 ```python
-zos.create_new_application()
-oss = zos.get_primary_system()
+oss = zos.connect("standalone")
 ```
 
 ### Using solvers

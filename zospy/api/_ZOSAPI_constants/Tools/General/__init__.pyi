@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = (
     "ACISExportVersion",
@@ -24,128 +23,128 @@ __all__ = (
     "ZemaxFileTypes",
 )
 
-class ACISExportVersion(Enum):
-    Current = 0
-    V25 = 1
-    V26 = 2
-    V27 = 3
-    V28 = 4
-    V29 = 5
-    V30 = 6
+class ACISExportVersion:
+    Current: ACISExportVersion = None
+    V25: ACISExportVersion = None
+    V26: ACISExportVersion = None
+    V27: ACISExportVersion = None
+    V28: ACISExportVersion = None
+    V29: ACISExportVersion = None
+    V30: ACISExportVersion = None
 
-class ArchiveFileStatus(Enum):
-    Okay = 0
-    InvalidVersion = -3
-    InvalidFile = -2
-    UnableToOpen = -1
+class ArchiveFileStatus:
+    Okay: ArchiveFileStatus = None
+    InvalidVersion: ArchiveFileStatus = None
+    InvalidFile: ArchiveFileStatus = None
+    UnableToOpen: ArchiveFileStatus = None
 
-class CADAngularToleranceType(Enum):
-    Low = 0
-    Medium = 1
-    High = 2
-    Presentation = 3
+class CADAngularToleranceType:
+    Low: CADAngularToleranceType = None
+    Medium: CADAngularToleranceType = None
+    High: CADAngularToleranceType = None
+    Presentation: CADAngularToleranceType = None
 
-class CADFileType(Enum):
-    IGES = 0
-    STEP = 1
-    SAT = 2
-    STL = 3
-    SAB = 4
-    ASAT = 5
-    ASAB = 6
-    MODEL = 7
-    CATPART = 8
-    CATPRODUCT = 9
-    XCGM = 10
+class CADFileType:
+    IGES: CADFileType = None
+    STEP: CADFileType = None
+    SAT: CADFileType = None
+    STL: CADFileType = None
+    SAB: CADFileType = None
+    ASAT: CADFileType = None
+    ASAB: CADFileType = None
+    MODEL: CADFileType = None
+    CATPART: CADFileType = None
+    CATPRODUCT: CADFileType = None
+    XCGM: CADFileType = None
 
-class CADToleranceType(Enum):
-    N_TenEMinus4 = 0
-    N_TenEMinus5 = 1
-    N_TenEMinus6 = 2
-    N_TenEMinus7 = 3
+class CADToleranceType:
+    N_TenEMinus4: CADToleranceType = None
+    N_TenEMinus5: CADToleranceType = None
+    N_TenEMinus6: CADToleranceType = None
+    N_TenEMinus7: CADToleranceType = None
 
-class DataTypes(Enum):
-    NotSet = 0
-    Boolean = 1
-    Integer = 2
-    IntegerArray = 3
-    IntegerMatrix = 4
-    Float = 5
-    FloatArray = 6
-    FloatMatrix = 7
-    Double = 8
-    DoubleArray = 9
-    DoubleMatrix = 10
-    String = 11
-    StringArray = 12
-    StringMatrix = 13
-    ByteArray = 14
-    Dictionary = 15
-    Serializable = 16
-    File = 17
+class DataTypes:
+    NotSet: DataTypes = None
+    Boolean: DataTypes = None
+    Integer: DataTypes = None
+    IntegerArray: DataTypes = None
+    IntegerMatrix: DataTypes = None
+    Float: DataTypes = None
+    FloatArray: DataTypes = None
+    FloatMatrix: DataTypes = None
+    Double: DataTypes = None
+    DoubleArray: DataTypes = None
+    DoubleMatrix: DataTypes = None
+    String: DataTypes = None
+    StringArray: DataTypes = None
+    StringMatrix: DataTypes = None
+    ByteArray: DataTypes = None
+    Dictionary: DataTypes = None
+    Serializable: DataTypes = None
+    File: DataTypes = None
 
-class EntryCompressionModes(Enum):
-    Auto = 0
-    On = 1
-    Off = 2
+class EntryCompressionModes:
+    Auto: EntryCompressionModes = None
+    On: EntryCompressionModes = None
+    Off: EntryCompressionModes = None
 
-class LensShape(Enum):
-    Unknown = 0
-    Equi = 1
-    Bi = 2
-    Plano = 3
-    Meniscus = 4
+class LensShape:
+    Unknown: LensShape = None
+    Equi: LensShape = None
+    Bi: LensShape = None
+    Plano: LensShape = None
+    Meniscus: LensShape = None
 
-class LensType(Enum):
-    Other = 0
-    Spherical = 1
-    GRIN = 2
-    Aspheric = 3
-    Toroidal = 4
+class LensType:
+    Other: LensType = None
+    Spherical: LensType = None
+    GRIN: LensType = None
+    Aspheric: LensType = None
+    Toroidal: LensType = None
 
-class QuickAdjustCriterion(Enum):
-    SpotSizeRadial = 0
-    SpotSizeXOnly = 1
-    SpotSizeYOnly = 2
-    AngularRadial = 3
-    AngularXOnly = 4
-    AngularYOnly = 5
+class QuickAdjustCriterion:
+    SpotSizeRadial: QuickAdjustCriterion = None
+    SpotSizeXOnly: QuickAdjustCriterion = None
+    SpotSizeYOnly: QuickAdjustCriterion = None
+    AngularRadial: QuickAdjustCriterion = None
+    AngularXOnly: QuickAdjustCriterion = None
+    AngularYOnly: QuickAdjustCriterion = None
 
-class QuickAdjustType(Enum):
-    Radius = 0
-    Thickness = 1
+class QuickAdjustType:
+    Radius: QuickAdjustType = None
+    Thickness: QuickAdjustType = None
 
-class QuickFocusCriterion(Enum):
-    SpotSizeRadial = 0
-    SpotSizeXOnly = 1
-    SpotSizeYOnly = 2
-    RMSWavefront = 3
+class QuickFocusCriterion:
+    SpotSizeRadial: QuickFocusCriterion = None
+    SpotSizeXOnly: QuickFocusCriterion = None
+    SpotSizeYOnly: QuickFocusCriterion = None
+    RMSWavefront: QuickFocusCriterion = None
 
-class RayPatternType(Enum):
-    XYFan = 0
-    XFan = 1
-    YFan = 2
-    Ring = 3
-    List = 4
-    Random = 5
-    Grid = 6
-    SolidRing = 7
+class RayPatternType:
+    XYFan: RayPatternType = None
+    XFan: RayPatternType = None
+    YFan: RayPatternType = None
+    Ring: RayPatternType = None
+    List: RayPatternType = None
+    Random: RayPatternType = None
+    Grid: RayPatternType = None
+    SolidRing: RayPatternType = None
 
-class ScaleToUnits(Enum):
-    Millimeters = 0
-    Centimeters = 1
-    Inches = 2
-    Meters = 3
+class ScaleToUnits:
+    Millimeters: ScaleToUnits = None
+    Centimeters: ScaleToUnits = None
+    Inches: ScaleToUnits = None
+    Meters: ScaleToUnits = None
 
-class SplineSegmentsType(Enum):
-    N_016 = 0
-    N_032 = 1
-    N_064 = 2
-    N_128 = 3
-    N_256 = 4
-    N_512 = 5
+class SplineSegmentsType:
+    N_016: SplineSegmentsType = None
+    N_032: SplineSegmentsType = None
+    N_064: SplineSegmentsType = None
+    N_128: SplineSegmentsType = None
+    N_256: SplineSegmentsType = None
+    N_512: SplineSegmentsType = None
 
-class ZemaxFileTypes(Enum):
-    Unknown = 0
-    LMX = 1
-    User = 2
+class ZemaxFileTypes:
+    Unknown: ZemaxFileTypes = None
+    LMX: ZemaxFileTypes = None
+    User: ZemaxFileTypes = None

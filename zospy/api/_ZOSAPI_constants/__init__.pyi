@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 from . import Analysis, Common, Editors, Preferences, SystemData, Tools, Wizards
 
@@ -24,52 +23,52 @@ __all__ = (
     "ZOSAPI_Mode",
 )
 
-class LensUpdateMode(Enum):
-    None_ = 0
-    EditorsOnly = 1
-    AllWindows = 2
+class LensUpdateMode:
+    None_: LensUpdateMode = None
+    EditorsOnly: LensUpdateMode = None
+    AllWindows: LensUpdateMode = None
 
-class LicenseStatusType(Enum):
-    Unknown = 0
-    KeyNotWorking = 1
-    NewLicenseNeeded = 2
-    StandardEdition = 3
-    ProfessionalEdition = 4
-    PremiumEdition = 5
-    TooManyInstances = 6
-    NotAuthorized = 7
-    KeyNotFound = 8
-    KeyExpired = 9
-    Timeout = 10
-    InstanceConflict = 11
-    OpticsViewer = 12
-    OpticStudioHPCEdition = 13
-    EnterpriseEdition = 14
+class LicenseStatusType:
+    Unknown: LicenseStatusType = None
+    KeyNotWorking: LicenseStatusType = None
+    NewLicenseNeeded: LicenseStatusType = None
+    StandardEdition: LicenseStatusType = None
+    ProfessionalEdition: LicenseStatusType = None
+    PremiumEdition: LicenseStatusType = None
+    TooManyInstances: LicenseStatusType = None
+    NotAuthorized: LicenseStatusType = None
+    KeyNotFound: LicenseStatusType = None
+    KeyExpired: LicenseStatusType = None
+    Timeout: LicenseStatusType = None
+    InstanceConflict: LicenseStatusType = None
+    OpticsViewer: LicenseStatusType = None
+    OpticStudioHPCEdition: LicenseStatusType = None
+    EnterpriseEdition: LicenseStatusType = None
 
-class SessionModes(Enum):
-    FromPreferences = 0
-    SessionOn = 1
-    SessionOff = 2
+class SessionModes:
+    FromPreferences: SessionModes = None
+    SessionOn: SessionModes = None
+    SessionOff: SessionModes = None
 
-class STARUpdateMode(Enum):
-    Normal = 0
-    Suspended = 1
+class STARUpdateMode:
+    Normal: STARUpdateMode = None
+    Suspended: STARUpdateMode = None
 
-class SystemType(Enum):
-    Sequential = 0
-    NonSequential = 1
+class SystemType:
+    Sequential: SystemType = None
+    NonSequential: SystemType = None
 
-class UpdateStatus(Enum):
-    NotChecked = 0
-    UpToDate = 1
-    AvailableEligible = 2
-    AvailableIneligible = 3
-    CheckFailed = -2
-    NotSupported = -1
+class UpdateStatus:
+    NotChecked: UpdateStatus = None
+    UpToDate: UpdateStatus = None
+    AvailableEligible: UpdateStatus = None
+    AvailableIneligible: UpdateStatus = None
+    CheckFailed: UpdateStatus = None
+    NotSupported: UpdateStatus = None
 
-class ZOSAPI_Mode(Enum):
-    Server = 0
-    Operand = 1
-    Plugin = 2
-    UserAnalysis = 3
-    UserAnalysisSettings = 4
+class ZOSAPI_Mode:
+    Server: ZOSAPI_Mode = None
+    Operand: ZOSAPI_Mode = None
+    Plugin: ZOSAPI_Mode = None
+    UserAnalysis: ZOSAPI_Mode = None
+    UserAnalysisSettings: ZOSAPI_Mode = None
