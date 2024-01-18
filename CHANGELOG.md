@@ -30,6 +30,10 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- `OpticStudioSystem.load` fails silently when path is incorrect or relative (#34)
+- Saving after connecting in extension mode fails because `OpticStudioSystem._OpenFile` is not set.
+  When connecting in extension mode, `_OpenFile` is now set with the path to the opened system to prevent this (#41)
+
 ### Changed
 
 - Changed license to MIT (#57, #58) - 2023-12-22
