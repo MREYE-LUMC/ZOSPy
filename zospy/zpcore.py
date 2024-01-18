@@ -5,7 +5,6 @@ import logging
 import warnings
 import weakref
 from os import PathLike
-from pathlib import Path
 from typing import Literal
 
 from semver.version import Version
@@ -228,12 +227,12 @@ class OpticStudioSystem:
 
         logger.info("Opened new file")
 
-    def save_as(self, filepath: str | Path):
+    def save_as(self, filepath: str | PathLike):
         """Save the current session under a specified name.
 
         Parameters
         ----------
-        filepath: str | Path
+        filepath: str | PathLike
             The filepath where the system should be saved. Note that a partial path or relative path does not work.
         """
         filepath = abspath(filepath, check_directory_only=True)

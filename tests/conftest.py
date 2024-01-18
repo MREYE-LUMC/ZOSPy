@@ -83,6 +83,7 @@ def optic_studio_version(zos, connection_mode) -> Version:
     )
 
     zos.Application.CloseApplication()
+    zos.Application = None
 
     return version
 

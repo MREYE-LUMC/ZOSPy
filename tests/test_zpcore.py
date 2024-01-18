@@ -151,7 +151,6 @@ def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode
 
 
 @pytest.fixture()
-@pytest.mark.require_mode("standalone")
 def oss_with_modifiable_config(zos: zp.ZOS, connection_mode, tmp_path) -> zp.zpcore.OpticStudioSystem:
     config_file = tmp_path / "opticstudio_config_file.CFG"
     zos.Connection.PreferencesFile = str(config_file)
