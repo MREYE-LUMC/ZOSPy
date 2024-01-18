@@ -31,14 +31,15 @@ pip install zospy
 
 ## Dependencies
 
-ZOSPy officially supports Python 3.9 - 3.11. It may work with older Python versions, but support is not provided for
+ZOSPy officially supports Python 3.9 - 3.12. It may work with older Python versions, but support is not provided for
 these versions.
 
 ### Python packages
 
-- [Python for .NET](http://pythonnet.github.io/) 3.0.1
+- [Python for .NET](http://pythonnet.github.io/) 3.0.3
 - [pandas](https://pandas.pydata.org/)
 - [NumPy](https://numpy.org/)
+- [SemVer](https://python-semver.readthedocs.io/en/latest/index.html) 3.0.2
 
 ### Software
 
@@ -56,6 +57,7 @@ ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudi
 | Python 3.9  | ⚠      | ✔      | ✔      | ✔      |
 | Python 3.10 | ⚠      | ✔      | ✔      | ✔      |
 | Python 3.11 | ⚠      | ✔      | ✔      | ✔      |
+| Python 3.12 | ⚠      |        |        | ✔      |
 
 ✔: This version works without problems.
 ⚠: This version works, but the output of analyses can differ slightly from the used reference version (currently **OpticStudio 23 R1.01**).
