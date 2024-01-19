@@ -11,6 +11,18 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+## [[1.2.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.2.0) - 2024-01-19
+
+### Added
+
 - New, unified, connection method `ZOS.connect`. This method replaces the existing connection methods
   `ZOS.connect_as_extension`, `ZOS.create_new_application` and `ZOS.connect_as_standalone`.
   The connection mode is passed as an argument and the primary system is always returned (!47) 
