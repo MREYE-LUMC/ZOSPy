@@ -6,6 +6,7 @@ import winreg
 import clr  # noqa
 
 import zospy.api.constants
+from zospy.api.codecs import register_codecs
 from zospy.utils import clrutils
 
 logger = logging.getLogger(__name__)
@@ -109,12 +110,10 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, preload=False):
     FileNotFoundError:
         If one of ZOSAPI_Interfaces.dll or ZOSAPI.dll cannot be found.
     """
-    if not any((zosapi_nethelper, zemaxdirectory)):
+    if zosapi_nethelper is None and zemaxdirectory is None:
         raise ValueError("Either the zosapi_nethelper or the zemaxdirectory should be specified.")
-    elif all((zosapi_nethelper, zemaxdirectory)):
+    elif zosapi_nethelper is not None and zemaxdirectory is not None:
         raise ValueError("Only one of zosapi_nethelper and zemaxdirectory should be specified.")
-    else:
-        pass
 
     # Get the Zemax OpticStudio directory and add it to the path
     if zosapi_nethelper:
@@ -126,6 +125,9 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, preload=False):
         logger.info("Zemax Directory specified by user ({})".format(zemaxdirectory))
         zos_dir = zemaxdirectory
     sys.path.append(zos_dir)
+
+    # Register custom Python.NET codecs
+    register_codecs()
 
     logger.info("Searching and registering ZOSAPI DLLs")
     for dll in ["ZOSAPI_Interfaces", "ZOSAPI"]:

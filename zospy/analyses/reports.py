@@ -158,7 +158,7 @@ def surface_data(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     surface: int
         The surface number that is to be analyzed
@@ -268,7 +268,7 @@ def surface_data_fromcfg(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     cfgfile: str
         The configuration file that is to be used. Should be a full system path with '.CFG' as extension.
@@ -570,7 +570,7 @@ def system_data(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
@@ -759,7 +759,7 @@ def cardinal_points(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     surface_1: int
         The surface number corresponding to the first surface of the analyzed system
@@ -873,7 +873,7 @@ def cardinal_points_fromcfg(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     cfgfile: str
         The configuration file that is to be used. Should be a full system path with '.CFG' as extension.

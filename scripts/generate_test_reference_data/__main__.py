@@ -5,10 +5,10 @@ import re
 import traceback
 from operator import attrgetter
 from pathlib import Path
-from typing import Any, Callable, Literal
+from typing import Annotated, Any, Callable, Literal
 
 import yaml
-from pydantic import BaseModel, root_validator, validator
+from pydantic import BaseModel, BeforeValidator, field_validator, model_validator
 
 import zospy as zp
 from scripts.generate_test_reference_data import systems
@@ -24,32 +24,37 @@ class TestConfiguration(BaseModel):
     parameters: list[dict[str, Any]] = [{}]
     parametrized: tuple[str, ...] | None = None
 
-    @validator("analysis", pre=True)
+    @field_validator("analysis", mode="before")
+    @classmethod
     def validate_analysis(cls, v: str):
         return attrgetter(v)(zp.analyses)
 
-    @validator("model", pre=True)
+    @field_validator("model", mode="before")
+    @classmethod
     def validate_model(cls, v: str):
         return getattr(systems, v)
 
-    @validator("file")
+    @field_validator("file")
+    @classmethod
     def validate_filename(cls, v: str):
         assert v.startswith("test") and v.endswith(".py"), "file should start with 'test_' and have extension '.py'"
 
         return v
 
-    @validator("test")
+    @field_validator("test")
+    @classmethod
     def validate_testname(cls, v: str):
         assert v.startswith("test"), "test name should start with 'test_'"
 
         return v
 
-    @root_validator
-    def validate_parametrized(cls, values):
-        if len(parameters := values.get("parameters")) > 1:
-            parametrized = values.get("parametrized")
+    @model_validator(mode="after")
+    @classmethod
+    def validate_parametrized(cls, values: TestConfiguration):
+        if len(parameters := values.parameters) > 1:
+            parametrized = values.parametrized
             assert parametrized is not None, "Multiple sets of parameters are only allowed if parametrized is specified"
-            assert all(p in parameters[0].keys() for p in parametrized), "Invalid values encountered in parametrized"
+            assert all(p in parameters[0] for p in parametrized), "Invalid values encountered in parametrized"
 
         return values
 
@@ -57,11 +62,11 @@ class TestConfiguration(BaseModel):
 class Configuration(BaseModel):
     connection_mode: Literal["standalone", "extension"]
     output_directory: Path
-    redact_patterns: list[re.Pattern] = []
+    redact_patterns: list[Annotated[re.Pattern, BeforeValidator(Configuration.validate_redact_patterns)]] = []
     tests: list[TestConfiguration]
 
-    @validator("redact_patterns", pre=True, each_item=True)
-    def validate_redact_patterns(cls, v):
+    @staticmethod
+    def validate_redact_patterns(v):
         regex = re.compile(v, re.MULTILINE | re.IGNORECASE)
 
         assert regex.groups == 0, (
@@ -136,7 +141,7 @@ def process_test(oss: zp.zpcore.OpticStudioSystem, test: TestConfiguration, conf
 os.chdir(Path(__file__).parent)
 
 with open(CONFIG_FILE, "r") as f:
-    config: Configuration = Configuration.parse_obj(yaml.safe_load(f.read()))
+    config: Configuration = Configuration.model_validate(yaml.safe_load(f.read()))
 
 zos = zp.ZOS()
 zos.wakeup()

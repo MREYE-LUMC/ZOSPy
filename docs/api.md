@@ -11,6 +11,7 @@
    zospy.zpcore
    zospy.analyses
    zospy.api.constants
+   zospy.api.codecs
    zospy.functions
    zospy.solvers
 ```

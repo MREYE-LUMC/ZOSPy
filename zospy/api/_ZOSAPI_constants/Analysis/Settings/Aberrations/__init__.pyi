@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = (
     "DisplayAsTypes",
@@ -18,54 +17,54 @@ __all__ = (
     "ZernikeCoefficientTypes",
 )
 
-class DisplayAsTypes(Enum):
-    Percent = 0
-    Absolute = 1
+class DisplayAsTypes:
+    Percent: DisplayAsTypes = None
+    Absolute: DisplayAsTypes = None
 
-class Distortions(Enum):
-    F_TanTheta = 0
-    F_Theta = 1
-    Cal_F_Theta = 2
-    Cal_F_TanTheta = 3
-    SMIA_TV = 4
+class Distortions:
+    F_TanTheta: Distortions = None
+    F_Theta: Distortions = None
+    Cal_F_Theta: Distortions = None
+    Cal_F_TanTheta: Distortions = None
+    SMIA_TV: Distortions = None
 
-class FFA_AberrationTypes(Enum):
-    Defocus = 0
-    PrimaryAstigmatism = 1
-    PrimaryComa = 2
-    SpecifiedTerm = 3
+class FFA_AberrationTypes:
+    Defocus: FFA_AberrationTypes = None
+    PrimaryAstigmatism: FFA_AberrationTypes = None
+    PrimaryComa: FFA_AberrationTypes = None
+    SpecifiedTerm: FFA_AberrationTypes = None
 
-class FFA_DecompositionTypes(Enum):
-    ZernikeTerms = 0
+class FFA_DecompositionTypes:
+    ZernikeTerms: FFA_DecompositionTypes = None
 
-class FFA_DisplayTypes(Enum):
-    Absolute = 0
-    Relative = 1
-    Average = 2
+class FFA_DisplayTypes:
+    Absolute: FFA_DisplayTypes = None
+    Relative: FFA_DisplayTypes = None
+    Average: FFA_DisplayTypes = None
 
-class FFA_FieldShapes(Enum):
-    Rectangular = 0
-    Elliptical = 1
+class FFA_FieldShapes:
+    Rectangular: FFA_FieldShapes = None
+    Elliptical: FFA_FieldShapes = None
 
-class FFA_ShowAsTypes(Enum):
-    GreyScale = 0
-    GreyScaleInverted = 1
-    FalseColor = 2
-    FalseColorInverted = 3
-    Icons = 4
+class FFA_ShowAsTypes:
+    GreyScale: FFA_ShowAsTypes = None
+    GreyScaleInverted: FFA_ShowAsTypes = None
+    FalseColor: FFA_ShowAsTypes = None
+    FalseColorInverted: FFA_ShowAsTypes = None
+    Icons: FFA_ShowAsTypes = None
 
-class FieldScanDirections(Enum):
-    Plus_Y = 0
-    Plus_X = 1
-    Minus_Y = 2
-    Minus_X = 3
+class FieldScanDirections:
+    Plus_Y: FieldScanDirections = None
+    Plus_X: FieldScanDirections = None
+    Minus_Y: FieldScanDirections = None
+    Minus_X: FieldScanDirections = None
 
-class RayTraceType(Enum):
-    DirectionCosines = 0
-    TangentAngle = 1
-    YmUmYcUc = 2
+class RayTraceType:
+    DirectionCosines: RayTraceType = None
+    TangentAngle: RayTraceType = None
+    YmUmYcUc: RayTraceType = None
 
-class ZernikeCoefficientTypes(Enum):
-    Fringe = 0
-    Standard = 1
-    Annular = 2
+class ZernikeCoefficientTypes:
+    Fringe: ZernikeCoefficientTypes = None
+    Standard: ZernikeCoefficientTypes = None
+    Annular: ZernikeCoefficientTypes = None

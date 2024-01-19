@@ -1,4 +1,5 @@
 import locale
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -23,50 +24,16 @@ def patch_zos(zos: zp.ZOS, monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(zos, "Connection", patch_connection)
 
 
-@pytest.mark.require_mode("extension")
-def test_connect_as_extension_without_valid_license_raises_exception(zos, monkeypatch):
+def test_connect_without_valid_license_raises_exception(zos, connection_mode, monkeypatch):
     patch_zos(zos, monkeypatch)
 
     with pytest.raises(ConnectionRefusedError):
-        zos.connect_as_extension(return_primary_system=True)
+        zos.connect(connection_mode)
 
 
-@pytest.mark.require_mode("extension")
-def test_connect_as_extension_without_valid_license_returns_false(zos, monkeypatch):
-    patch_zos(zos, monkeypatch)
-
-    assert zos.connect_as_extension() is False
-
-
-@pytest.mark.require_mode("extension")
-def test_connect_as_extension_with_valid_license_returns_true(zos, monkeypatch):
-    assert zos.connect_as_extension() is True
-
-    # Close the connection
-    zos.Application.CloseApplication()
-
-
-@pytest.mark.require_mode("standalone")
-def test_create_new_application_without_valid_license_raises_exception(zos, monkeypatch):
-    patch_zos(zos, monkeypatch)
-
-    with pytest.raises(ConnectionRefusedError):
-        zos.create_new_application(return_primary_system=True)
-
-
-@pytest.mark.require_mode("standalone")
-def test_create_new_application_without_valid_license_returns_false(zos, monkeypatch):
-    patch_zos(zos, monkeypatch)
-
-    assert zos.create_new_application() is False
-
-
-@pytest.mark.require_mode("standalone")
-def test_create_new_application_with_valid_license_returns_false(zos, monkeypatch):
-    assert zos.create_new_application() is True
-
-    # Close the connection
-    zos.Application.CloseApplication()
+def test_load_zos_dlls_with_nethelper_and_opticstudio_directory_raises_valueerror(zos):
+    with pytest.raises(ValueError):
+        zos._load_zos_dlls(zosapi_nethelper="dummy/path", opticstudio_directory="dummy/path")
 
 
 @pytest.mark.must_pass
@@ -74,27 +41,22 @@ def test_can_connect(oss):
     assert oss._System is not None
 
 
+def test_can_disconnect(zos, oss):
+    assert zos.Application is not None  # The Application object should be available
+
+    zos.disconnect()
+
+    assert zos.Application is None
+
+
+@pytest.mark.require_mode("extension")
+def test_get_primary_system_populates_openfile(zos, oss):
+    assert oss._OpenFile == oss.SystemFile
+
+
 @pytest.mark.must_pass
 def test_create_simple_system(simple_system):
     assert simple_system.LDE.NumberOfSurfaces == 5
-
-
-@pytest.fixture()
-def oss_with_modifiable_config(zos: zp.ZOS, connection_mode, tmp_path) -> zp.zpcore.OpticStudioSystem:
-    if connection_mode != "standalone":
-        pytest.skip(f"Test is only applicable in standalone mode.")
-
-    config_file = tmp_path / "opticstudio_config_file.CFG"
-    zos.Connection.PreferencesFile = str(config_file)
-    connected = zos.create_new_application()
-
-    oss = zos.get_primary_system()
-
-    yield oss
-
-    # Close the system
-    if connected:
-        zos.Application.CloseApplication()
 
 
 def test_version(optic_studio_version):
@@ -108,15 +70,69 @@ def test_new(simple_system):
     assert simple_system.LDE.NumberOfSurfaces == 3
 
 
-def test_save_as(simple_system, tmp_path):
-    save_path = tmp_path / "TEST.ZOS"
+XFAIL_ZOS_REASON = "The .zos file format is only supported by OpticStudio 21.3 and higher"
 
-    simple_system.save_as(str(save_path.absolute()))
 
-    assert save_path.exists()
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "simple_system.zmx",
+        pytest.param(
+            "simple_system.zos", marks=pytest.mark.xfail_for_opticstudio_versions(["<21.3.0"], XFAIL_ZOS_REASON)
+        ),
+    ],
+)
+class TestLoad:
+    @pytest.fixture
+    def demo_systems_folder(self, request) -> Path:
+        return request.config.rootpath / "tests/data/optical_systems"
+
+    def test_load(self, oss, demo_systems_folder, filename):
+        path = (demo_systems_folder / filename).resolve()
+
+        oss.load(path)
+
+        assert oss.LDE.NumberOfSurfaces == 5
+        assert oss.LDE.GetSurfaceAt(2).Radius == 20.0
+
+    def test_load_relative(self, oss, demo_systems_folder, filename, monkeypatch):
+        monkeypatch.chdir(demo_systems_folder)
+
+        oss.load(filename)
+
+        assert oss.LDE.NumberOfSurfaces == 5
+        assert oss.LDE.GetSurfaceAt(2).Radius == 20.0
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "TEST.ZMX",
+        pytest.param("TEST.ZOS", marks=pytest.mark.xfail_for_opticstudio_versions(["<21.3.0"], XFAIL_ZOS_REASON)),
+    ],
+)
+class TestSaveAs:
+    def test_save_as(self, simple_system, tmp_path, filename):
+        save_path = tmp_path / filename
+
+        simple_system.save_as(save_path.resolve())
+
+        assert save_path.exists()
+
+    def test_save_as_relative_path(self, simple_system, tmp_path, filename, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+
+        save_path = tmp_path / filename
+
+        simple_system.save_as(filename)
+
+        assert save_path.exists()
 
 
 def test_get_system(zos, oss, connection_mode):
+    if connection_mode == "extension":
+        pytest.xfail(reason="GetSystem does not work correctly in extension mode due to a bug in the ZOS-API.")
+
     system = zos.get_system(0)
 
     assert system._System is not None
@@ -137,6 +153,21 @@ def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode
         zos.create_new_system()
 
 
+@pytest.fixture()
+def oss_with_modifiable_config(zos: zp.ZOS, connection_mode, tmp_path) -> zp.zpcore.OpticStudioSystem:
+    config_file = tmp_path / "opticstudio_config_file.CFG"
+    zos.Connection.PreferencesFile = str(config_file)
+
+    oss = zos.connect(connection_mode)
+
+    yield oss
+
+    # Close the system
+    if oss is not None:
+        zos.Application.CloseApplication()
+
+
+@pytest.mark.require_mode("standalone")
 class TestTxtFileEncoding:
     @pytest.mark.parametrize(
         "txtfile_encoding,expected_encoding", [("Unicode", "UTF-16-le"), ("ANSI", "LocalePreferredEncoding")]

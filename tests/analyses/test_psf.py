@@ -1,4 +1,3 @@
-import pytest
 from pandas.testing import assert_frame_equal
 
 from zospy.analyses.psf import huygens_psf

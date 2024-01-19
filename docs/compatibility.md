@@ -3,13 +3,18 @@
 ```{include} compatibility_table.md
 ```
 
+(compatibility/24-1-0)=
+## OpticStudio 24.1.0
+
+No known problems.
+
 (compatibility/23-2-1)=
 ## OpticStudio 23.2.1
 
 No known problems.
 
-(compatibility/23-0-1)=
-## OpticStudio 23.0.1
+(compatibility/23-1-0)=
+## OpticStudio 23.1.0
 
 No known problems.
 

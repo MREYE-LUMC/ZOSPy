@@ -1,33 +1,32 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("ISAberrationTypes", "ISFlipTypes", "ISSamplings", "ISShowAsTypes")
 
-class ISAberrationTypes(Enum):
-    None_ = 0
-    Geometric = 1
-    Diffraction = 2
+class ISAberrationTypes:
+    None_: ISAberrationTypes = None
+    Geometric: ISAberrationTypes = None
+    Diffraction: ISAberrationTypes = None
 
-class ISFlipTypes(Enum):
-    None_ = 0
-    TopBottom = 1
-    LeftRight = 2
-    TopBottomLeftRight = 3
+class ISFlipTypes:
+    None_: ISFlipTypes = None
+    TopBottom: ISFlipTypes = None
+    LeftRight: ISFlipTypes = None
+    TopBottomLeftRight: ISFlipTypes = None
 
-class ISSamplings(Enum):
-    None_ = 0
-    X2 = 1
-    X4 = 2
-    X8 = 3
-    X16 = 4
-    X32 = 5
-    X64 = 6
+class ISSamplings:
+    None_: ISSamplings = None
+    X2: ISSamplings = None
+    X4: ISSamplings = None
+    X8: ISSamplings = None
+    X16: ISSamplings = None
+    X32: ISSamplings = None
+    X64: ISSamplings = None
 
-class ISShowAsTypes(Enum):
-    SimulatedImage = 0
-    SourceBitmap = 1
-    PSFGrid = 2
+class ISShowAsTypes:
+    SimulatedImage: ISShowAsTypes = None
+    SourceBitmap: ISShowAsTypes = None
+    PSFGrid: ISShowAsTypes = None

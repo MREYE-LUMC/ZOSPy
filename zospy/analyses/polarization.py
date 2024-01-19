@@ -65,7 +65,7 @@ def polarization_pupil_map(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     jx: float
         Jones x electric field. Defaults to 1.
@@ -275,7 +275,7 @@ def transmission(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     sampling: str or int
         The size of the used grid, either string (e.g. '128x128') or int. The integer will be treated as if obtained

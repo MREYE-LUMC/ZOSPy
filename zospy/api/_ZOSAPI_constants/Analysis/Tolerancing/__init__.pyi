@@ -1,26 +1,25 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 from . import QuickYield
 
 __all__ = ("QuickYield", "QYCompensations", "QYCompensatorStrategy", "QYPrecisions")
 
-class QYCompensations(Enum):
-    Standard = 0
-    High = 1
-    VeryHigh = 2
+class QYCompensations:
+    Standard: QYCompensations = None
+    High: QYCompensations = None
+    VeryHigh: QYCompensations = None
 
-class QYCompensatorStrategy(Enum):
-    OptimizeAllDampedLeastSquares = 0
-    ParaxialFocus = 1
-    Ignore = 2
-    OptimizeAllOrthogonalDescent = 3
+class QYCompensatorStrategy:
+    OptimizeAllDampedLeastSquares: QYCompensatorStrategy = None
+    ParaxialFocus: QYCompensatorStrategy = None
+    Ignore: QYCompensatorStrategy = None
+    OptimizeAllOrthogonalDescent: QYCompensatorStrategy = None
 
-class QYPrecisions(Enum):
-    Standard = 0
-    High = 1
-    VeryHigh = 2
+class QYPrecisions:
+    Standard: QYPrecisions = None
+    High: QYPrecisions = None
+    VeryHigh: QYPrecisions = None

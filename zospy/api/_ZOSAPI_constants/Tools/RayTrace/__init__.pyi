@@ -1,64 +1,63 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("LTEdgeSasmpling", "LTRaySampling", "NSCTraceOptions", "OPDMode", "RayStatus", "RaysType", "ZRDFormatType")
 
-class LTEdgeSasmpling(Enum):
-    S_1X_Low = 0
-    S_4X = 1
-    S_16X = 2
-    S_64X = 3
-    S_256X = 4
+class LTEdgeSasmpling:
+    S_1X_Low: LTEdgeSasmpling = None
+    S_4X: LTEdgeSasmpling = None
+    S_16X: LTEdgeSasmpling = None
+    S_64X: LTEdgeSasmpling = None
+    S_256X: LTEdgeSasmpling = None
 
-class LTRaySampling(Enum):
-    S_1X_Low = 0
-    S_4X = 1
-    S_16X = 2
-    S_64X = 3
-    S_256X = 4
-    S_1024X = 5
+class LTRaySampling:
+    S_1X_Low: LTRaySampling = None
+    S_4X: LTRaySampling = None
+    S_16X: LTRaySampling = None
+    S_64X: LTRaySampling = None
+    S_256X: LTRaySampling = None
+    S_1024X: LTRaySampling = None
 
-class NSCTraceOptions(Enum):
-    None_ = 0
-    UsePolarization = 1
-    UseSplitting = 2
-    UsePolarizationSplitting = 3
-    UseScattering = 4
-    UsePolarizationScattering = 5
-    UseSplittingScattering = 6
-    UsePolarizationSplittingScattering = 7
+class NSCTraceOptions:
+    None_: NSCTraceOptions = None
+    UsePolarization: NSCTraceOptions = None
+    UseSplitting: NSCTraceOptions = None
+    UsePolarizationSplitting: NSCTraceOptions = None
+    UseScattering: NSCTraceOptions = None
+    UsePolarizationScattering: NSCTraceOptions = None
+    UseSplittingScattering: NSCTraceOptions = None
+    UsePolarizationSplittingScattering: NSCTraceOptions = None
 
-class OPDMode(Enum):
-    None_ = 0
-    Current = 1
-    CurrentAndChief = 2
+class OPDMode:
+    None_: OPDMode = None
+    Current: OPDMode = None
+    CurrentAndChief: OPDMode = None
 
-class RayStatus(Enum):
-    Parent = 0
-    Terminated = 1
-    Reflected = 2
-    Transmitted = 4
-    Scattered = 8
-    Diffracted = 16
-    GhostedFrom = 32
-    DiffractedFrom = 64
-    ScatteredFrom = 128
-    RayError = 256
-    BulkScattered = 512
-    WaveShifted = 1024
-    OrdinaryRay = 65536
-    ExtraordinaryRay = 131072
-    WaveShiftPL = 262144
+class RayStatus:
+    Parent: RayStatus = None
+    Terminated: RayStatus = None
+    Reflected: RayStatus = None
+    Transmitted: RayStatus = None
+    Scattered: RayStatus = None
+    Diffracted: RayStatus = None
+    GhostedFrom: RayStatus = None
+    DiffractedFrom: RayStatus = None
+    ScatteredFrom: RayStatus = None
+    RayError: RayStatus = None
+    BulkScattered: RayStatus = None
+    WaveShifted: RayStatus = None
+    OrdinaryRay: RayStatus = None
+    ExtraordinaryRay: RayStatus = None
+    WaveShiftPL: RayStatus = None
 
-class RaysType(Enum):
-    Real = 0
-    Paraxial = 1
+class RaysType:
+    Real: RaysType = None
+    Paraxial: RaysType = None
 
-class ZRDFormatType(Enum):
-    UncompressedFullData = 0
-    CompressedBasicData = 1
-    CompressedFullData = 2
+class ZRDFormatType:
+    UncompressedFullData: ZRDFormatType = None
+    CompressedBasicData: ZRDFormatType = None
+    CompressedFullData: ZRDFormatType = None

@@ -2,8 +2,49 @@ from __future__ import annotations
 
 import functools
 from collections.abc import Callable
+from os import PathLike
+from pathlib import Path
+from sys import version_info
 
 import zospy.api.config as _config
+
+
+def _check_path(path: Path, *, directory_only: bool = False) -> bool:
+    if directory_only and not path.is_dir():
+        return _check_path(path.parent)
+
+    return path.exists()
+
+
+def abspath(path: PathLike | str, *, check_directory_only: bool = False) -> str:
+    """Convert a path to an absolute path and check if it exists.
+
+    Parameters
+    ----------
+    path : Path | str
+        The path to be made absolute.
+    check_directory_only : bool
+        Whether to check only if directories exist. If set to `True`, parent directories are verified to exist, but
+        files are not.
+
+    Returns
+    -------
+    str
+        The absolute path, converted to a string.
+
+    Raises
+    ------
+    FileNotFoundError
+        If `check_directory_only` is False and the path does not exist, or if `check_directory_only` is True and the
+        parent directory does not exist.
+    """
+    # Behaviour of Path.resolve when the file does not exist is incorrect prior to Python 3.10
+    absolute_path = Path(path).absolute() if version_info <= (3, 10) else Path(path).resolve()
+
+    if _check_path(absolute_path, directory_only=check_directory_only):
+        return str(absolute_path)
+    else:
+        raise FileNotFoundError(absolute_path)
 
 
 def rsetattr(obj, attr, val):

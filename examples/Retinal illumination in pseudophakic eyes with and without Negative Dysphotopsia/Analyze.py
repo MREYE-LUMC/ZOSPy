@@ -71,12 +71,8 @@ def set_axes_equal_3d(ax):
 
 
 zos = zp.ZOS()
-zos.wakeup()
-
 # Make sure that Zemax OpticStudio in `Interactive Extension` mode (Programming > Interactive Extension)
-zos.connect_as_extension()
-
-oss = zos.get_primary_system()
+oss = zos.connect(mode="extension")
 
 pachy = 0.55
 cornea_irisdist = 3.12

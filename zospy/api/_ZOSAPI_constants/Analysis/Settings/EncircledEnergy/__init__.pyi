@@ -1,32 +1,31 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("EncircledEnergyTypes", "ExtendedSourceTypes", "GeometricLineEdgeSpreadTypes", "ReferToTypes")
 
-class EncircledEnergyTypes(Enum):
-    Encircled = 1
-    X_Only = 2
-    Y_Only = 3
-    Ensquared = 4
+class EncircledEnergyTypes:
+    Encircled: EncircledEnergyTypes = None
+    X_Only: EncircledEnergyTypes = None
+    Y_Only: EncircledEnergyTypes = None
+    Ensquared: EncircledEnergyTypes = None
 
-class ExtendedSourceTypes(Enum):
-    Encircled = 1
-    X_Only = 2
-    Y_Only = 3
-    Ensquared = 4
-    X_Distrib = 5
-    Y_Distrib = 6
+class ExtendedSourceTypes:
+    Encircled: ExtendedSourceTypes = None
+    X_Only: ExtendedSourceTypes = None
+    Y_Only: ExtendedSourceTypes = None
+    Ensquared: ExtendedSourceTypes = None
+    X_Distrib: ExtendedSourceTypes = None
+    Y_Distrib: ExtendedSourceTypes = None
 
-class GeometricLineEdgeSpreadTypes(Enum):
-    LineEdge = 1
-    Line = 2
-    Edge = 3
+class GeometricLineEdgeSpreadTypes:
+    LineEdge: GeometricLineEdgeSpreadTypes = None
+    Line: GeometricLineEdgeSpreadTypes = None
+    Edge: GeometricLineEdgeSpreadTypes = None
 
-class ReferToTypes(Enum):
-    ChiefRay = 0
-    Centroid = 1
-    Vertex = 2
+class ReferToTypes:
+    ChiefRay: ReferToTypes = None
+    Centroid: ReferToTypes = None
+    Vertex: ReferToTypes = None

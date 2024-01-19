@@ -1,9 +1,8 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = (
     "POPBeamTypes",
@@ -16,67 +15,67 @@ __all__ = (
     "POPZoomTypes",
 )
 
-class POPBeamTypes(Enum):
-    GaussianWaist = 0
-    GaussianAngle = 1
-    GaussianSizeAngle = 2
-    TopHat = 3
-    File = 4
-    DLL = 5
-    Multimode = 6
-    AstigmaticGaussian = 7
+class POPBeamTypes:
+    GaussianWaist: POPBeamTypes = None
+    GaussianAngle: POPBeamTypes = None
+    GaussianSizeAngle: POPBeamTypes = None
+    TopHat: POPBeamTypes = None
+    File: POPBeamTypes = None
+    DLL: POPBeamTypes = None
+    Multimode: POPBeamTypes = None
+    AstigmaticGaussian: POPBeamTypes = None
 
-class POPDataTypes(Enum):
-    Irradiance = 0
-    EXIrradiance = 1
-    EYIrradiance = 2
-    Phase = 3
-    EXPhase = 4
-    EYPhase = 5
-    TransferMagnitude = 6
-    TransferPhase = 7
+class POPDataTypes:
+    Irradiance: POPDataTypes = None
+    EXIrradiance: POPDataTypes = None
+    EYIrradiance: POPDataTypes = None
+    Phase: POPDataTypes = None
+    EXPhase: POPDataTypes = None
+    EYPhase: POPDataTypes = None
+    TransferMagnitude: POPDataTypes = None
+    TransferPhase: POPDataTypes = None
 
-class POPFiberPositions(Enum):
-    ChiefRay = 0
-    SurfaceVertex = 1
+class POPFiberPositions:
+    ChiefRay: POPFiberPositions = None
+    SurfaceVertex: POPFiberPositions = None
 
-class POPFiberTypes(Enum):
-    GaussianWaist = 0
-    GaussianAngle = 1
-    GaussianSizeAngle = 2
-    TopHat = 3
-    File = 4
-    DLL = 5
-    AstigmaticGaussian = 6
+class POPFiberTypes:
+    GaussianWaist: POPFiberTypes = None
+    GaussianAngle: POPFiberTypes = None
+    GaussianSizeAngle: POPFiberTypes = None
+    TopHat: POPFiberTypes = None
+    File: POPFiberTypes = None
+    DLL: POPFiberTypes = None
+    AstigmaticGaussian: POPFiberTypes = None
 
-class POPProjectionTypes(Enum):
-    AlongBeam = 0
-    AlongNormal = 1
-    AlongLocalZ = 2
+class POPProjectionTypes:
+    AlongBeam: POPProjectionTypes = None
+    AlongNormal: POPProjectionTypes = None
+    AlongLocalZ: POPProjectionTypes = None
 
-class POPScaleTypes(Enum):
-    Linear = 0
-    Log_Minus_5 = 1
-    Log_Minus_10 = 2
-    Log_Minus_15 = 3
+class POPScaleTypes:
+    Linear: POPScaleTypes = None
+    Log_Minus_5: POPScaleTypes = None
+    Log_Minus_10: POPScaleTypes = None
+    Log_Minus_15: POPScaleTypes = None
 
-class POPShowAsTypes(Enum):
-    Surface = 0
-    Contour = 1
-    GrayScale = 2
-    InverseGrayScale = 3
-    FalseColor = 4
-    InverseFalseColor = 5
-    CrossX = 6
-    CrossY = 7
-    Encircled = 8
-    Ensquared = 9
-    EnslittedX = 10
-    EnslittedY = 11
+class POPShowAsTypes:
+    Surface: POPShowAsTypes = None
+    Contour: POPShowAsTypes = None
+    GrayScale: POPShowAsTypes = None
+    InverseGrayScale: POPShowAsTypes = None
+    FalseColor: POPShowAsTypes = None
+    InverseFalseColor: POPShowAsTypes = None
+    CrossX: POPShowAsTypes = None
+    CrossY: POPShowAsTypes = None
+    Encircled: POPShowAsTypes = None
+    Ensquared: POPShowAsTypes = None
+    EnslittedX: POPShowAsTypes = None
+    EnslittedY: POPShowAsTypes = None
 
-class POPZoomTypes(Enum):
-    NoZoom = 0
-    X2 = 1
-    X4 = 2
-    X8 = 3
-    X16 = 4
+class POPZoomTypes:
+    NoZoom: POPZoomTypes = None
+    X2: POPZoomTypes = None
+    X4: POPZoomTypes = None
+    X8: POPZoomTypes = None
+    X16: POPZoomTypes = None

@@ -1,15 +1,13 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
-from . import General, LMx, Optimization, RayTrace, Tolerancing
+from . import General, Optimization, RayTrace, Tolerancing
 
 __all__ = (
     "General",
-    "LMx",
     "Optimization",
     "RayTrace",
     "Tolerancing",
@@ -24,77 +22,77 @@ __all__ = (
     "VertexOrder",
 )
 
-class CriticalRayType(Enum):
-    Chief = 0
-    Marginal = 1
-    Grid = 2
-    Ring = 3
-    Y_Fan = 4
-    X_Fan = 5
-    XY_Fan = 6
-    List = 7
+class CriticalRayType:
+    Chief: CriticalRayType = None
+    Marginal: CriticalRayType = None
+    Grid: CriticalRayType = None
+    Ring: CriticalRayType = None
+    Y_Fan: CriticalRayType = None
+    X_Fan: CriticalRayType = None
+    XY_Fan: CriticalRayType = None
+    List: CriticalRayType = None
 
-class HPCEnvironments(Enum):
-    OnPremise = 0
-    AWSKubernetes = 1
-    AzureKubernetes = 2
+class HPCEnvironments:
+    OnPremise: HPCEnvironments = None
+    AWSKubernetes: HPCEnvironments = None
+    AzureKubernetes: HPCEnvironments = None
 
-class HPCNodeSize(Enum):
-    Default = 0
-    Tiny = 1
-    Small = 2
-    Medium = 3
-    Large = 4
-    XLarge = 5
+class HPCNodeSize:
+    Default: HPCNodeSize = None
+    Tiny: HPCNodeSize = None
+    Small: HPCNodeSize = None
+    Medium: HPCNodeSize = None
+    Large: HPCNodeSize = None
+    XLarge: HPCNodeSize = None
 
-class HPCRunState(Enum):
-    NotRunning = 0
-    Initializing = 1
-    ClusterAllocating = 2
-    UploadingData = 3
-    Queued = 4
-    RunStarting = 5
-    WaitingForResults = 6
-    Complete = 7
+class HPCRunState:
+    NotRunning: HPCRunState = None
+    Initializing: HPCRunState = None
+    ClusterAllocating: HPCRunState = None
+    UploadingData: HPCRunState = None
+    Queued: HPCRunState = None
+    RunStarting: HPCRunState = None
+    WaitingForResults: HPCRunState = None
+    Complete: HPCRunState = None
 
-class MaterialFormulas(Enum):
-    Schott = 1
-    Sellmeier1 = 2
-    Herzberger = 3
-    Sellmeier2 = 4
-    Conrady = 5
-    Sellmeier3 = 6
-    Handbook1 = 7
-    Handbook2 = 8
-    Sellmeier4 = 9
-    Extended = 10
-    Sellmeier5 = 11
-    Extended2 = 12
-    Extended3 = 13
+class MaterialFormulas:
+    Schott: MaterialFormulas = None
+    Sellmeier1: MaterialFormulas = None
+    Herzberger: MaterialFormulas = None
+    Sellmeier2: MaterialFormulas = None
+    Conrady: MaterialFormulas = None
+    Sellmeier3: MaterialFormulas = None
+    Handbook1: MaterialFormulas = None
+    Handbook2: MaterialFormulas = None
+    Sellmeier4: MaterialFormulas = None
+    Extended: MaterialFormulas = None
+    Sellmeier5: MaterialFormulas = None
+    Extended2: MaterialFormulas = None
+    Extended3: MaterialFormulas = None
 
-class MaterialStatuses(Enum):
-    Standard = 0
-    Preferred = 1
-    Obsolete = 2
-    Special = 3
-    Melt = 4
+class MaterialStatuses:
+    Standard: MaterialStatuses = None
+    Preferred: MaterialStatuses = None
+    Obsolete: MaterialStatuses = None
+    Special: MaterialStatuses = None
+    Melt: MaterialStatuses = None
 
-class RayPatternOption(Enum):
-    XyFan = 0
-    XFan = 1
-    YFan = 2
-    ChiefAndRing = 3
-    List = 4
-    Grid = 6
-    ChiefAndMarginals = 8
+class RayPatternOption:
+    XyFan: RayPatternOption = None
+    XFan: RayPatternOption = None
+    YFan: RayPatternOption = None
+    ChiefAndRing: RayPatternOption = None
+    List: RayPatternOption = None
+    Grid: RayPatternOption = None
+    ChiefAndMarginals: RayPatternOption = None
 
-class RunStatus(Enum):
-    Completed = 0
-    FailedToStart = 1
-    TimedOut = 2
-    InvalidTimeout = 3
+class RunStatus:
+    Completed: RunStatus = None
+    FailedToStart: RunStatus = None
+    TimedOut: RunStatus = None
+    InvalidTimeout: RunStatus = None
 
-class VertexOrder(Enum):
-    First = 0
-    Second = 1
-    Third = 2
+class VertexOrder:
+    First: VertexOrder = None
+    Second: VertexOrder = None
+    Third: VertexOrder = None

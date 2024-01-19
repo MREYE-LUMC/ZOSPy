@@ -110,46 +110,30 @@ def material_model(
     return solve_data
 
 
-def surface_pickup(
-    cell: _ZOSAPI.Editors.IEditorCell,
-    from_surface: _ZOSAPI.Editors.IEditorRow | int,
-    from_column: _ZOSAPI.Editors.LDE.SurfaceColumn = None,
-    scale: float = 1,
-    offset: float = 0,
-) -> _ZOSAPI.Editors.ISolveSurfacePickup:
-    """Picks up the value of `cell` from another surface.
+def pickup_chief_ray(
+    cell: _ZOSAPI.Editors.IEditorCell, field: int = 1, wavelength: int = 0
+) -> _ZOSAPI.Editors.ISolvePickupChiefRay:
+    """Chief Ray solver.
+
+    Adjusts the value of `cell` so the chief ray passes through the center of the surface.
 
     Parameters
     ----------
-    cell: ZOSAPI.Editors.IEditorCell
-        Cell for which the value should be set
-    from_surface: ZOSAPI.Editors.IEditorRow
-        Index of the surface or surface from which the value is picked up
-    from_column: float
-        Column from which the value is picked up
-    scale: float
-        Factor by which the picked up value is scaled. This value is only set if the cell supports a scale
-        factor. Defaults to 1.
-    offset: float
-        Offset which is added to the picked up value. This value is only set if the cell supports an offset.
-        Defaults to 0.
+    cell : ZOSAPI.Editors.IEditorCell
+    field : int, optional
+        Field index to take the chief ray from, defaults to 1.
+    wavelength : int, optional
+        Wavelength index of the chief ray, defaults to 0.
 
     Returns
     -------
-        The SolveData object for the surface pickup.
+    ZOSAPI.Editors.ISolvePickupChiefRay
+        The solve data for the chief ray pickup
     """
-    solve_data = cell.CreateSolveType(constants.Editors.SolveType.SurfacePickup)._S_SurfacePickup
+    solve_data = cell.CreateSolveType(constants.Editors.SolveType.PickupChiefRay)._S_PickupChiefRay
 
-    solve_data.Surface = _get_surface_index(from_surface)
-
-    if solve_data.SupportsScale:
-        solve_data.ScaleFactor = scale
-
-    if solve_data.SupportsOffset:
-        solve_data.Offset = offset
-
-    if from_column is not None:
-        solve_data.Column = from_column
+    solve_data.Field = field
+    solve_data.Wavelength = wavelength
 
     cell.SetSolveData(solve_data)
 
@@ -190,6 +174,52 @@ def position(
     solve_data.Length = length
 
     thickness_cell.SetSolveData(solve_data)
+
+    return solve_data
+
+
+def surface_pickup(
+    cell: _ZOSAPI.Editors.IEditorCell,
+    from_surface: _ZOSAPI.Editors.IEditorRow | int,
+    from_column: constants.Editors.LDE.SurfaceColumn | str = None,
+    scale: float = 1,
+    offset: float = 0,
+) -> _ZOSAPI.Editors.ISolveSurfacePickup:
+    """Picks up the value of `cell` from another surface.
+
+    Parameters
+    ----------
+    cell: ZOSAPI.Editors.IEditorCell
+        Cell for which the value should be set
+    from_surface: ZOSAPI.Editors.IEditorRow
+        Index of the surface or surface from which the value is picked up
+    from_column: float
+        Column from which the value is picked up
+    scale: float
+        Factor by which the picked up value is scaled. This value is only set if the cell supports a scale
+        factor. Defaults to 1.
+    offset: float
+        Offset which is added to the picked up value. This value is only set if the cell supports an offset.
+        Defaults to 0.
+
+    Returns
+    -------
+        The SolveData object for the surface pickup.
+    """
+    solve_data = cell.CreateSolveType(constants.Editors.SolveType.SurfacePickup)._S_SurfacePickup
+
+    solve_data.Surface = _get_surface_index(from_surface)
+
+    if solve_data.SupportsScale:
+        solve_data.ScaleFactor = scale
+
+    if solve_data.SupportsOffset:
+        solve_data.Offset = offset
+
+    if from_column is not None:
+        solve_data.Column = constants.process_constant(constants.Editors.LDE.SurfaceColumn, from_column)
+
+    cell.SetSolveData(solve_data)
 
     return solve_data
 

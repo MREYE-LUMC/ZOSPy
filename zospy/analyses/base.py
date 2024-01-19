@@ -403,17 +403,17 @@ class Analysis:
         analysis: ZOSAPI.Analysis.IA_
             analysis object
         """
-        self._analysis = analysis.__implementation__
+        self._analysis = analysis
 
     @property
     def Settings(self) -> _ZOSAPI.Analysis.Settings.IAS_:
         """Analysis-specific settings."""
-        return self._analysis.GetSettings().__implementation__
+        return self._analysis.GetSettings()
 
     @property
     def Results(self) -> _ZOSAPI.Analysis.Data.IAR_:
         """Analysis results."""
-        return self._analysis.GetResults().__implementation__
+        return self._analysis.GetResults()
 
     def complete(self, oncomplete: OnComplete | str, result: AnalysisResult) -> AnalysisResult:
         """Completes the analysis by either closing, releasing or sustaining it.

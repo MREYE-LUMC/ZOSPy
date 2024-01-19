@@ -113,11 +113,11 @@ class TestRayFan:
 
         assert np.allclose(
             result.Data[f"Tangential fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
-            expected_data.Data["Tangential fan, field number 1 = 0,0000 (deg)"],
+            expected_data.Data[f"Tangential fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
         )
         assert np.allclose(
             result.Data[f"Sagittal fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
-            expected_data.Data["Sagittal fan, field number 1 = 0,0000 (deg)"],
+            expected_data.Data[f"Sagittal fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
         )
 
     @pytest.mark.parametrize(
@@ -141,9 +141,9 @@ class TestRayFan:
 
         assert np.allclose(
             result.Data[f"Tangential fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
-            reference_data.Data["Tangential fan, field number 1 = 0,0000 (deg)"],
+            reference_data.Data[f"Tangential fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
         )
         assert np.allclose(
             result.Data[f"Sagittal fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
-            reference_data.Data["Sagittal fan, field number 1 = 0,0000 (deg)"],
+            reference_data.Data[f"Sagittal fan, field number 1 = 0{DECIMAL_POINT}0000 (deg)"],
         )

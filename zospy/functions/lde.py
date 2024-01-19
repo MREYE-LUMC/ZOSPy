@@ -23,7 +23,7 @@ def get_pupil(oss: OpticStudioSystem):
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance.
 
     Returns

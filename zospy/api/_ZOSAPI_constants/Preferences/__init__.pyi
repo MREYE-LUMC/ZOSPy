@@ -1,27 +1,26 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("DateTimeType", "EncodingType", "LanguageType", "ShowLineAsType")
 
-class DateTimeType(Enum):
-    None_ = 0
-    Date = 1
-    DateTime = 2
+class DateTimeType:
+    None_: DateTimeType = None
+    Date: DateTimeType = None
+    DateTime: DateTimeType = None
 
-class EncodingType(Enum):
-    ANSI = 0
-    Unicode = 1
+class EncodingType:
+    ANSI: EncodingType = None
+    Unicode: EncodingType = None
 
-class LanguageType(Enum):
-    Chinese = 0
-    English = 1
-    Japanese = 4
+class LanguageType:
+    Chinese: LanguageType = None
+    English: LanguageType = None
+    Japanese: LanguageType = None
 
-class ShowLineAsType(Enum):
-    TextAbove = 0
-    FileName = 1
-    ConfigurationNumber = 2
+class ShowLineAsType:
+    TextAbove: ShowLineAsType = None
+    FileName: ShowLineAsType = None
+    ConfigurationNumber: ShowLineAsType = None

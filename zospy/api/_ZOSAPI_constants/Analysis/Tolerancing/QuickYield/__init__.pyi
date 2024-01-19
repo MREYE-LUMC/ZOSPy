@@ -1,28 +1,27 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("XYSymmetricField", "YSymmetricField")
 
-class XYSymmetricField(Enum):
-    All = 0
-    Zero = 1
-    YPositive70Percent = 2
-    YNegative70Percent = 3
-    YPositive100Percent = 4
-    YNegative100Percent = 5
-    XPositive70Percent = 6
-    XNegative70Percent = 7
-    XPositive100Percent = 8
-    XNegative100Percent = 9
+class XYSymmetricField:
+    All: XYSymmetricField = None
+    Zero: XYSymmetricField = None
+    YPositive70Percent: XYSymmetricField = None
+    YNegative70Percent: XYSymmetricField = None
+    YPositive100Percent: XYSymmetricField = None
+    YNegative100Percent: XYSymmetricField = None
+    XPositive70Percent: XYSymmetricField = None
+    XNegative70Percent: XYSymmetricField = None
+    XPositive100Percent: XYSymmetricField = None
+    XNegative100Percent: XYSymmetricField = None
 
-class YSymmetricField(Enum):
-    All = 0
-    Zero = 1
-    Positive70Percent = 2
-    Negative70Percent = 3
-    Positive100Percent = 4
-    Negative100Percent = 5
+class YSymmetricField:
+    All: YSymmetricField = None
+    Zero: YSymmetricField = None
+    Positive70Percent: YSymmetricField = None
+    Negative70Percent: YSymmetricField = None
+    Positive100Percent: YSymmetricField = None
+    Negative100Percent: YSymmetricField = None

@@ -1,5 +1,8 @@
 # ZOSPy
 
+[![PyPI - Version](https://img.shields.io/pypi/v/ZOSPy)](https://pypi.org/project/zospy)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FMREYE-LUMC%2FZOSPy%2Fmain%2Fpyproject.toml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/ZOSPy/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/zospy/badge/?version=latest)](https://zospy.readthedocs.io/en/latest/?badge=latest)
 
 ## About
@@ -14,12 +17,13 @@ In addition to full access to all the OpticStudio fucntions through the ZOS-API,
 - Wrapper functions for several OpticStudio analyses in `zospy.analyses`;
 - Easy access to solvers in `zospy.solvers`;
 - Easy access to all API constants in `zospy.constants`;
-- Autocomplete for all ZOS-API endpoints and constants.
+- Autocomplete for all ZOS-API endpoints and constants;
+- Solves common problems related to Python.NET 3 and interaction with the ZOS-API. 
 
 ## Waranty and liability
 
 The code is provided as is, without any warranty. It is solely intended for research purposes. No warranty is given and
-no rights can be derived from it, as is also stated in the [GNU General Public License Version 3](LICENSE.txt).
+no rights can be derived from it, as is also stated in the [MIT license](LICENSE.txt).
 
 ## Installing
 
@@ -31,14 +35,15 @@ pip install zospy
 
 ## Dependencies
 
-ZOSPy officially supports Python 3.9 - 3.11. It may work with older Python versions, but support is not provided for
+ZOSPy officially supports Python 3.9 - 3.12. It may work with older Python versions, but support is not provided for
 these versions.
 
 ### Python packages
 
-- [Python for .NET](http://pythonnet.github.io/) 3.0.1
+- [Python for .NET](http://pythonnet.github.io/) 3.0.3
 - [pandas](https://pandas.pydata.org/)
 - [NumPy](https://numpy.org/)
+- [SemVer](https://python-semver.readthedocs.io/en/latest/index.html) 3.0.2
 
 ### Software
 
@@ -46,16 +51,14 @@ these versions.
 
 ### Compatibility
 
-> :warning: Version 1.0.0 introduced some breaking changes. See
-> the [release notes](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.0.0) for more information.
-
 ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudio:
 
-| Zemax       | 20.3.2 | 23.0.1 | 23.2.1 |
-|-------------|--------|--------|--------|
-| Python 3.9  | ⚠      | ✔      | ✔      |
-| Python 3.10 | ⚠      | ✔      | ✔      |
-| Python 3.11 | ⚠      | ✔      | ✔      |
+| Zemax       | 20.3.2 | 23.1.0 | 23.2.1 | 24.1.0 |
+|-------------|--------|--------|--------|--------|
+| Python 3.9  | ⚠      | ✔      | ✔      | ✔      |
+| Python 3.10 | ⚠      | ✔      | ✔      | ✔      |
+| Python 3.11 | ⚠      | ✔      | ✔      | ✔      |
+| Python 3.12 | ⚠      |        |        | ✔      |
 
 ✔: This version works without problems.
 ⚠: This version works, but the output of analyses can differ slightly from the used reference version (currently **OpticStudio 23 R1.01**).
@@ -85,17 +88,14 @@ The connection as extension to running software OpticStudio is initiated as:
 import zospy as zp
 
 zos = zp.ZOS()
-zos.wakeup()
-zos.connect_as_extension()
-oss = zos.get_primary_system()
+oss = zos.connect("extension")
 ```
 
 Make sure that the OpticStudio software is set up to be connected to as extension through the API. Alternatively, a
-standalone OpticStudio application can be launched by changing the last two lines to:
+standalone OpticStudio application can be launched by changing the last line to:
 
 ```python
-zos.create_new_application()
-oss = zos.get_primary_system()
+oss = zos.connect("standalone")
 ```
 
 ### Using solvers
@@ -212,6 +212,6 @@ following implementation examples assume that `import logging` has been executed
 
 Feel free to contact us for any inquiries:
 
-- L. van Vught ([email](mailto:l.van_vught@lumc.nl))
-- J.W.M. Beenakker ([email](mailto:j.w.m.beenakker@lumc.nl))
 - C. Haasjes ([email](mailto:c.haasjes@lumc.nl))
+- J.W.M. Beenakker ([email](mailto:j.w.m.beenakker@lumc.nl))
+- L. van Vught ([email](mailto:l.van_vught@lumc.nl))

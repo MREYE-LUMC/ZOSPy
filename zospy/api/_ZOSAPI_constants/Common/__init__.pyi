@@ -1,57 +1,56 @@
-"""
-This file provides autocompletions for the ZOS-API and was automatically generated.
+"""This file provides autocompletions for the ZOS-API and was automatically generated.
 It should not be edited manually.
 """
 
-from enum import Enum
+from __future__ import annotations
 
 __all__ = ("SettingsDataType", "ZemaxColor", "ZemaxOpacity")
 
-class SettingsDataType(Enum):
-    None_ = 0
-    Integer = 1
-    Double = 2
-    Float = 3
-    String = 4
-    Byte = 5
-    Boolean = 6
+class SettingsDataType:
+    None_: SettingsDataType = None
+    Integer: SettingsDataType = None
+    Double: SettingsDataType = None
+    Float: SettingsDataType = None
+    String: SettingsDataType = None
+    Byte: SettingsDataType = None
+    Boolean: SettingsDataType = None
 
-class ZemaxColor(Enum):
-    Default = 0
-    Color1 = 1
-    Color2 = 2
-    Color3 = 3
-    Color4 = 4
-    Color5 = 5
-    Color6 = 6
-    Color7 = 7
-    Color8 = 8
-    Color9 = 9
-    Color10 = 10
-    Color11 = 11
-    Color12 = 12
-    Color13 = 13
-    Color14 = 14
-    Color15 = 15
-    Color16 = 16
-    Color17 = 17
-    Color18 = 18
-    Color19 = 19
-    Color20 = 20
-    Color21 = 21
-    Color22 = 22
-    Color23 = 23
-    Color24 = 24
+class ZemaxColor:
+    Default: ZemaxColor = None
+    Color1: ZemaxColor = None
+    Color2: ZemaxColor = None
+    Color3: ZemaxColor = None
+    Color4: ZemaxColor = None
+    Color5: ZemaxColor = None
+    Color6: ZemaxColor = None
+    Color7: ZemaxColor = None
+    Color8: ZemaxColor = None
+    Color9: ZemaxColor = None
+    Color10: ZemaxColor = None
+    Color11: ZemaxColor = None
+    Color12: ZemaxColor = None
+    Color13: ZemaxColor = None
+    Color14: ZemaxColor = None
+    Color15: ZemaxColor = None
+    Color16: ZemaxColor = None
+    Color17: ZemaxColor = None
+    Color18: ZemaxColor = None
+    Color19: ZemaxColor = None
+    Color20: ZemaxColor = None
+    Color21: ZemaxColor = None
+    Color22: ZemaxColor = None
+    Color23: ZemaxColor = None
+    Color24: ZemaxColor = None
 
-class ZemaxOpacity(Enum):
-    P100 = 0
-    P90 = 1
-    P80 = 2
-    P70 = 3
-    P60 = 4
-    P50 = 5
-    P40 = 6
-    P30 = 7
-    P20 = 8
-    P10 = 9
-    P00 = 10
+class ZemaxOpacity:
+    P100: ZemaxOpacity = None
+    P90: ZemaxOpacity = None
+    P80: ZemaxOpacity = None
+    P70: ZemaxOpacity = None
+    P60: ZemaxOpacity = None
+    P50: ZemaxOpacity = None
+    P40: ZemaxOpacity = None
+    P30: ZemaxOpacity = None
+    P20: ZemaxOpacity = None
+    P10: ZemaxOpacity = None
+    P00: ZemaxOpacity = None

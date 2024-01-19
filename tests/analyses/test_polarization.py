@@ -8,6 +8,8 @@ from zospy.analyses.polarization import (
     transmission,
 )
 
+XFAIL_REASON = "Intentionally skipped for this OpticStudio version. See https://zospy.readthedocs.io/compatibility."
+
 _signs = ["", "+", "-"]
 _int_numbers = ["1", "123"]
 _float_numbers = [".1", ".123", "1.", "1.2", "1.23", "12.3"]
@@ -65,10 +67,26 @@ class TestPolarizationPupilMap:
     @pytest.mark.parametrize(
         "jx,jy,x_phase,y_phase,surface,sampling",
         [
-            (1, 0, 0, 0, "Image", "11x11"),
+            pytest.param(
+                1,
+                0,
+                0,
+                0,
+                "Image",
+                "11x11",
+                marks=pytest.mark.xfail_for_opticstudio_versions(["20.3.2"], XFAIL_REASON),
+            ),
             (1, 1, 0, 0, 2, "11x11"),
             (0, 1, 0, 0, "Image", "11x11"),
-            (1, 1, 45, 90, "Image", "17x17"),
+            pytest.param(
+                1,
+                1,
+                45,
+                90,
+                "Image",
+                "17x17",
+                marks=pytest.mark.xfail_for_opticstudio_versions(["20.3.2"], XFAIL_REASON),
+            ),
         ],
     )
     def test_polarization_pupil_map_matches_reference_data(

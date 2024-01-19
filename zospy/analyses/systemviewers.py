@@ -15,7 +15,7 @@ def cross_section(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
@@ -61,7 +61,7 @@ def viewer_3d(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
@@ -107,7 +107,7 @@ def shaded_model(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
@@ -153,7 +153,7 @@ def nsc_3d_layout(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be non-sequential.
     oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
@@ -199,7 +199,7 @@ def nsc_shaded_model(
 
     Parameters
     ----------
-    oss: zospy.core.OpticStudioSystem
+    oss: zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be non-sequential.
     oncomplete: OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
