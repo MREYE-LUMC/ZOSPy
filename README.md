@@ -14,13 +14,13 @@ In addition to full access to all the OpticStudio fucntions through the ZOS-API,
 - Wrapper functions for several OpticStudio analyses in `zospy.analyses`;
 - Easy access to solvers in `zospy.solvers`;
 - Easy access to all API constants in `zospy.constants`;
-- Autocomplete for all ZOS-API endpoints and constants
+- Autocomplete for all ZOS-API endpoints and constants;
 - Automatic downcasting of common ZOS-API interfaces to their implementation .
 
 ## Waranty and liability
 
 The code is provided as is, without any warranty. It is solely intended for research purposes. No warranty is given and
-no rights can be derived from it, as is also stated in the [GNU General Public License Version 3](LICENSE.txt).
+no rights can be derived from it, as is also stated in the [MIT license](LICENSE.txt).
 
 ## Installing
 
