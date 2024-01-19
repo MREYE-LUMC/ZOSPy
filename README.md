@@ -1,5 +1,8 @@
 # ZOSPy
 
+[![PyPI - Version](https://img.shields.io/pypi/v/ZOSPy)](https://pypi.org/project/zospy)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FMREYE-LUMC%2FZOSPy%2Fmain%2Fpyproject.toml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/ZOSPy/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/zospy/badge/?version=latest)](https://zospy.readthedocs.io/en/latest/?badge=latest)
 
 ## About
@@ -15,7 +18,7 @@ In addition to full access to all the OpticStudio fucntions through the ZOS-API,
 - Easy access to solvers in `zospy.solvers`;
 - Easy access to all API constants in `zospy.constants`;
 - Autocomplete for all ZOS-API endpoints and constants;
-- Automatic downcasting of common ZOS-API interfaces to their implementation.
+- Solves common problems related to Python.NET 3 and interaction with the ZOS-API. 
 
 ## Waranty and liability
 
