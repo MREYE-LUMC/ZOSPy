@@ -21,7 +21,7 @@ ZOS-API can also be added in patch releases.
     remains unset.
 - `zospy.api.codecs` for customized conversions between ZOS-API types and Python types (!48)
 - `zospy.api.codecs.OpticStudioInterfaceEncoder` for automatic downcasting of certain common generic interfaces
-    to their implementation (e.g. the use of `__implementation__` is no longer needed)(!48)
+    to their implementation (e.g. the use of `__implementation__` is no longer needed) (!48)
 - MTF analysis: `huygens_mtf` (#55)
 - `pickup_chief_ray` solver (!38)
 - `ZOS.disconnect` to disconnect from OpticStudio (!47)

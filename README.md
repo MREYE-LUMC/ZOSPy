@@ -15,7 +15,7 @@ In addition to full access to all the OpticStudio fucntions through the ZOS-API,
 - Easy access to solvers in `zospy.solvers`;
 - Easy access to all API constants in `zospy.constants`;
 - Autocomplete for all ZOS-API endpoints and constants;
-- Automatic downcasting of common ZOS-API interfaces to their implementation .
+- Automatic downcasting of common ZOS-API interfaces to their implementation.
 
 ## Waranty and liability
 
