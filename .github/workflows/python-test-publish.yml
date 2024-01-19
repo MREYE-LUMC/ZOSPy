@@ -40,10 +40,14 @@ jobs:
         name: zospy_dist
         path: "dist/"
     
-  publish_to_testpypi:      
+  publish_to_testpypi:
+    name: Publish to TestPyPI
     runs-on: ubuntu-latest
     needs: build
     environment: TestPyPI
+
+    permissions:
+      id-token: write
 
     steps:
     - name: Download dist

@@ -42,9 +42,12 @@ jobs:
         
   publish_to_pypi:
     name: Publish to PyPI
-
+    needs: build
     runs-on: ubuntu-latest
     environment: PyPI
+
+    permissions:
+      id-token: write
 
     steps:
     - name: Download dist
