@@ -3,19 +3,19 @@
 (faq/disconnect)=
 ## How do I disconnect from OpticStudio?
 
-You can disconnect from OpticStudio using `zos.Application.CloseApplication`:
+You can disconnect from OpticStudio using `zos.disconnect`:
 
 {emphasize-lines="8,9"}
 ```python
 import zospy as zp
 
 zos = zp.ZOS()
-oss = zos.connect_as_extension()
+oss = zos.connect("extension")
 
 # Do work ...
 
 # Disconnect
-zos.Application.CloseApplication()
+zos.disconnect()
 ```
 
 If you connect in extension mode, this will close the connection, but keep OpticStudio open.
@@ -36,17 +36,17 @@ For example, this will not work:
 import zospy as zp
 
 zos = zp.ZOS()
-oss = zos.connect_as_extension()
+oss = zos.connect("extension")
 
 # Do work ...
 
 # Disconnect
-zos.Application.CloseApplication()
+zos.disconnect()
 
 # Try to create a second connection to the ZOS-API
 zos = zp.ZOS()  # ValueError: Cannot have more than one active ZOS instance
 
-oss = zos.connect_as_extension()
+oss = zos.connect("extension")
 ```
 
 But this does work:
@@ -56,15 +56,15 @@ But this does work:
 import zospy as zp
 
 zos = zp.ZOS()
-oss = zos.connect_as_extension()
+oss = zos.connect("extension")
 
 # Do work ...
 
 # Disconnect
-zos.Application.CloseApplication()
+zos.disconnect()
 
 # Create a new connection
-oss = zos.connect_as_extension()
+oss = zos.connect("extension")
 ```
 
 (faq/single-zos-instance)=
