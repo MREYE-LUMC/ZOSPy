@@ -11,9 +11,7 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
-- MTF analysis: `huygens_mtf` (#55)
-- `pickup_chief_ray` solver (!38)
-- New connection method `ZOS.connect`. This method replaces the existing connection methods
+- New, unified, connection method `ZOS.connect`. This method replaces the existing connection methods
   `ZOS.connect_as_extension`, `ZOS.create_new_application` and `ZOS.connect_as_standalone`.
   The connection mode is passed as an argument and the primary system is always returned (!47) 
 - The OpticStudio installation directory can be manually specified using the `opticstudio_directory` 
@@ -21,10 +19,12 @@ ZOS-API can also be added in patch releases.
   on the same system and you want to use a specific version (!47)
   - **Note:** when this parameter is used, the `ZOSAPI_NetHelper` is not loaded and `ZOS.ZOSAPI_NetHelper` 
     remains unset.
-- `ZOS.disconnect` to disconnect from OpticStudio (!47)
 - `zospy.api.codecs` for customized conversions between ZOS-API types and Python types (!48)
-- `zospy.api.codecs.OpticStudioInterfaceEncoder` for automatic downcasting of certain generic interfaces
-    to their implementation (!48)
+- `zospy.api.codecs.OpticStudioInterfaceEncoder` for automatic downcasting of certain common generic interfaces
+    to their implementation (e.g. the use of `__implementation__` is no longer needed)(!48)
+- MTF analysis: `huygens_mtf` (#55)
+- `pickup_chief_ray` solver (!38)
+- `ZOS.disconnect` to disconnect from OpticStudio (!47)
 - Support for OpticStudio 2024 R1 (!51)
 - Support for Python 3.12 (!54)
 

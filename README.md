@@ -14,7 +14,8 @@ In addition to full access to all the OpticStudio fucntions through the ZOS-API,
 - Wrapper functions for several OpticStudio analyses in `zospy.analyses`;
 - Easy access to solvers in `zospy.solvers`;
 - Easy access to all API constants in `zospy.constants`;
-- Autocomplete for all ZOS-API endpoints and constants.
+- Autocomplete for all ZOS-API endpoints and constants
+- Automatic downcasting of common ZOS-API interfaces to their implementation .
 
 ## Waranty and liability
 
@@ -46,9 +47,6 @@ these versions.
 - [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio)
 
 ### Compatibility
-
-> :warning: Version 1.0.0 introduced some breaking changes. See
-> the [release notes](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.0.0) for more information.
 
 ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudio:
 
@@ -91,7 +89,7 @@ oss = zos.connect("extension")
 ```
 
 Make sure that the OpticStudio software is set up to be connected to as extension through the API. Alternatively, a
-standalone OpticStudio application can be launched by changing the last two lines to:
+standalone OpticStudio application can be launched by changing the last line to:
 
 ```python
 oss = zos.connect("standalone")
@@ -211,6 +209,6 @@ following implementation examples assume that `import logging` has been executed
 
 Feel free to contact us for any inquiries:
 
-- L. van Vught ([email](mailto:l.van_vught@lumc.nl))
-- J.W.M. Beenakker ([email](mailto:j.w.m.beenakker@lumc.nl))
 - C. Haasjes ([email](mailto:c.haasjes@lumc.nl))
+- J.W.M. Beenakker ([email](mailto:j.w.m.beenakker@lumc.nl))
+- L. van Vught ([email](mailto:l.van_vught@lumc.nl))
