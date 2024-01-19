@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
   
   release:
-    types: [created, edited, prereleased]
+    types: [prereleased]
 
 jobs:
   build:
@@ -55,7 +55,6 @@ jobs:
       uses: pypa/gh-action-pypi-publish@v1.8.11
       with:
         user: __token__
-        password: ${{ secrets.TESTPYPI_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
         # If the release is already present, overwrite it
         skip_existing: true
