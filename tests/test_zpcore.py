@@ -130,6 +130,9 @@ class TestSaveAs:
 
 
 def test_get_system(zos, oss, connection_mode):
+    if connection_mode == "extension":
+        pytest.xfail(reason="GetSystem does not work correctly in extension mode due to a bug in the ZOS-API.")
+
     system = zos.get_system(0)
 
     assert system._System is not None
