@@ -48,10 +48,10 @@ Finally, `ZOSPy` offers a set of unit tests to assure that the software provides
 
 
 # Use cases
-Multiple examples, from modelling the effect of a coated prism on the polarization of light to assessing the optical characteristics of the human eye have been contributed to `ZOSPy`. These examples provide new users with an easy start with `ZOSPy`. Part of a [simple example](https://zospy.readthedocs.io/en/latest/examples/thick_lens.html) of using `ZOSPy` to create and evaluate a thick lens is shown below, and the corresponding results are shown in \autoref{fig:1}. 
+Multiple examples, from modelling the effect of a coated prism on the polarization of light to assessing the optical characteristics of the human eye have been contributed to `ZOSPy`. These examples provide new users with an easy start with `ZOSPy`. Part of a [simple example](https://zospy.readthedocs.io/simple-example) of using `ZOSPy` to create and evaluate a thick lens is shown below, and the corresponding results are shown in \autoref{fig:1}. 
 
 ```python
-#...
+# ...
 
 # Make a 10 mm thick lens with a radius of curvature of 30 mm 
 # and material type BK10 
@@ -66,7 +66,7 @@ back_surface.Radius = -30
 back_surface.Thickness = 29
 back_surface.SemiDiameter = 15
 
-#...
+# ...
 
 # Render the model
 draw3d = zp.analyses.systemviewers.viewer_3d(oss)
