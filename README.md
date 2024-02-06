@@ -3,7 +3,6 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/ZOSPy)](https://pypi.org/project/zospy)
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FMREYE-LUMC%2FZOSPy%2Fmain%2Fpyproject.toml)
 [![Conda Version](https://img.shields.io/conda/v/conda-forge/zospy)](https://anaconda.org/conda-forge/zospy)
-![Conda Platform](https://img.shields.io/conda/p/conda-forge/zospy?style=flat)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/ZOSPy/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/zospy/badge/?version=latest)](https://zospy.readthedocs.io/en/latest/?badge=latest)
 
