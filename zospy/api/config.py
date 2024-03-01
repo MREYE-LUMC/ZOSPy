@@ -1,4 +1,5 @@
 import locale
+import logger
 
 DECIMAL_POINT = locale.localeconv()["decimal_point"]
 THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
@@ -27,4 +28,9 @@ def set_decimal_point_and_thousands_separator() -> None:
     locale.setlocale(locale.LC_ALL, "")
     DECIMAL_POINT = locale.localeconv()["decimal_point"]
     THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-    locale.setlocale(locale.LC_ALL, loc)  # restore saved locale
+    try:
+        locale.setlocale(locale.LC_ALL, loc)  # restore saved locale
+    except Exception as err:
+        # if setlocale fails here there is no sane action to resolve this
+        # leave the system with locale.setlocale(locale.LC_ALL, "")
+        logger.warning('cannot set locale to "{}" leaving interpreter at LC_ALL'.format(str(loc)))
