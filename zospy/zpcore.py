@@ -15,6 +15,8 @@ from zospy.utils.pyutils import abspath
 
 logger = logging.getLogger(__name__)
 
+# for regex match of LDE-surface names and attaching methods at runtime
+import re, types
 
 class OpticStudioSystem:
     """Wrapper for OpticStudio System instances."""
@@ -103,8 +105,15 @@ class OpticStudioSystem:
 
     @property
     def LDE(self) -> _ZOSAPI.Editors.LDE.ILensDataEditor:
-        """Lens Data Editor."""
-        return self._System.LDE
+        """Lens Data Editor, slightly enhanced"""
+
+        # inheriting would be preferred. The LDEs contructor is inside the API and cannot
+        # be dirctly accessed. Haven't figured how to inherit from there
+        zos_lde = self._System.LDE 
+        zos_lde.SurfaceByComment = types.MethodType(lde_enhancer_surf_by_comment, zos_lde)
+        zos_lde.SurfaceByRegex = types.MethodType(lde_enhancer_surf_by_regex, zos_lde)
+        return(zos_lde)
+        #return self._System.LDE
 
     @property
     def NCE(self) -> _ZOSAPI.Editors.NCE.INonSeqEditor:
@@ -130,6 +139,15 @@ class OpticStudioSystem:
     def Analyses(self) -> _ZOSAPI.Analysis.I_Analyses:
         """Analyses for the current system."""
         return self._System.Analyses
+
+    @property
+    def opened_analyses(self) -> list:
+        """list of analyses(-windows) already open
+        item[0] always None"""
+        open_analyses_list = [None]
+        for i in range (1, self.Analyses.NumberOfAnalyses+1):
+            open_analyses_list.append(self.Analyses.Get_AnalysisAtIndex(i))
+        return(open_analyses_list)
 
     @property
     def Tools(self) -> _ZOSAPI.Tools.IOpticalSystemTools:
@@ -164,6 +182,25 @@ class OpticStudioSystem:
     @SessionModes.setter
     def SessionModes(self, value: constants.SessionModes | str):
         self._System.SessionMode = constants.process_constant(constants.SessionModes, value)
+
+    def get_analyses_of_type(self, analysis_type: constants.Analysis.AnalysisIDM) -> list:
+        """Get a list of Analysis objects of the specified type.
+        Possibly an empty list
+        
+        Parameters
+        ----------
+        analysis_type : constants.Analysis.AnalysisIDM
+
+        Returns
+        -------
+        list : list of _ZOSAPI.Analysis.IA_
+        """
+        #ana_list = []
+        #for ana in self.opened_analyses[1:]:
+        #    if ana.AnalysisType == analysis_type:
+        #        ana_list.append(ana)
+        #return(ana_list)
+        return([ana for ana in self.opened_analyses[1:] if ana.AnalysisType == analysis_type])
 
     def get_current_status(self) -> str:
         """Get the last status of the optical system. If null or the length is 0, then the system has no errors.
@@ -793,3 +830,45 @@ class ZOS:
             minor=self.Application.ZOSMinorVersion,
             patch=self.Application.ZOSSPVersion,
         )
+
+    def lde_enhancer_surf_by_comment (self: ZOSAPI.Editors.LDE.ILensDataEditor, comment: str, ignore_case = True):
+    """return the first surface with comment. 
+    ! checks strings for equality
+    Not intedend to be called 
+    
+    Parameters
+        ----------
+        comment: str
+            exact content of ZOSAPI.Editors.LDE.ILDERow.Comment
+        Returns
+        -------
+        surface : ZOSAPI.Editors.LDE.ILDERow.Comment or None
+    """
+    for i in range(self.NumberOfSurfaces):
+        surf = self.GetSurfaceAt(i)
+        if ignore_case:
+            match = ( str.lower(surf.Comment) == str.lower(comment) )
+        else:
+            match = ( surf.Comment == comment )
+        if match:
+            return (surf)
+    return (None)
+
+def lde_enhancer_surf_by_regex (self: ZOSAPI.Editors.LDE.ILensDataEditor, regex: str, flags : re.RegexFlag = 0):
+    """return the first surface with comment matching regex. 
+    Parameters
+        ----------
+        regex: str
+        flags: re.RegexFlag
+
+        Returns
+        -------
+        surface : ZOSAPI.Editors.LDE.ILDERow.Comment or None
+    """
+    for i in range(self.NumberOfSurfaces):
+        surf = self.GetSurfaceAt(i)
+        match = re.match(regex, surf.Comment)
+        if match:
+            return (surf)
+    return (None)
+
