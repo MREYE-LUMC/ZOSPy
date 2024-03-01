@@ -27,6 +27,7 @@ from . import (
     surface,
     systemviewers,
     wavefront,
+    mtfclasses, 
 )
 from .base import OnComplete, new_analysis
 
@@ -41,4 +42,5 @@ __all__ = (
     "wavefront",
     "new_analysis",
     "OnComplete",
+    "mtfclasses",
 )
