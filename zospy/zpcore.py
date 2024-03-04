@@ -831,7 +831,7 @@ class ZOS:
             patch=self.Application.ZOSSPVersion,
         )
 
-    def lde_enhancer_surf_by_comment (self: ZOSAPI.Editors.LDE.ILensDataEditor, comment: str, ignore_case = True):
+def lde_enhancer_surf_by_comment (self: ZOSAPI.Editors.LDE.ILensDataEditor, comment: str, ignore_case = True):
     """return the first surface with comment. 
     ! checks strings for equality
     Not intedend to be called 

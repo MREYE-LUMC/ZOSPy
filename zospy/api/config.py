@@ -1,5 +1,5 @@
 import locale
-import logger
+import logging
 
 DECIMAL_POINT = locale.localeconv()["decimal_point"]
 THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
@@ -24,6 +24,7 @@ def set_decimal_point_and_thousands_separator() -> None:
     global DECIMAL_POINT
     global THOUSANDS_SEPARATOR
 
+    logger = logging.getLogger(__name__)
     loc = locale.getlocale()  # get and save current locale
     locale.setlocale(locale.LC_ALL, "")
     DECIMAL_POINT = locale.localeconv()["decimal_point"]
