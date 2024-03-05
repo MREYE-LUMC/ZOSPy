@@ -28,3 +28,8 @@ __pycache__/
 scripts/**/*.pickle
 scripts/**/*.zos
 scripts/**/*.ZDA
+/.vs/ZOSPy/v16/.suo
+/.vs/ProjectSettings.json
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
+/.vs/PythonSettings.json

@@ -8,6 +8,9 @@
 
 ## About
 
+Fork for impelemnting a few new features:
+- OpticStudioSystem.LDE (Lens Data Editor) has methods .SurfaceByComment() and zos_lde.SurfaceByRegex() (see ZPL's SURC()).
+- Objects wrapping around Optic Studios Analysis windows FFT-MTF and FFT-MTF-Map with some properties to be used by pyplot 
 Wrapper around the [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API that provides a more pythonic and
 intuitive way to interact with the [ZOS-API](https://www.zemax.com/blogs/free-tutorials/getting-started-with-zos-api)
 through python using a .NET connection. It thereby allows you to do more
@@ -28,17 +31,9 @@ no rights can be derived from it, as is also stated in the [MIT license](LICENSE
 
 ## Installing
 
-ZOSPy is available on PyPi
-
-```
-pip install zospy
-```
-
-And through conda:
-
-```
-conda install conda-forge::zospy
-```
+availible through github https://github.com/laser-axel/ZOSPy.git
+Easiest way to make use of the example(s) is to add a user-variable named "zospydevpath" pointing to your checkout of this fork.
+You can also change the zospydevpath assignment.
 
 ## Dependencies
 
@@ -55,8 +50,6 @@ these versions.
 ### Software
 
 - [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio)
-
-### Compatibility
 
 ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudio:
 
