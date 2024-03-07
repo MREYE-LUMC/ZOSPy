@@ -52,7 +52,9 @@ def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tup
                 unit = ""
                 general_data.loc[ind] = [val, unit]
             elif len(dat) == 1:
-                if valuepat_start.search(dat[0].replace(",", ".")):  # value is number
+                if ind == "Date":
+                    val = dat[0]
+                elif valuepat_start.search(dat[0].replace(",", ".")):  # value is number
                     val = float(dat[0].replace(",", "."))
                 else:
                     val = dat[0]
