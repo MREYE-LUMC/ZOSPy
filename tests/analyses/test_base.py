@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+import zospy.api.constants as constants
 from zospy.analyses.base import (
     AnalysisMessage,
     AnalysisMetadata,
@@ -14,7 +15,6 @@ from zospy.analyses.base import (
     _AnalysisResultJSONEncoder,
     new_analysis,
 )
-import zospy.api.constants as constants
 
 
 def test_oncomplete():
