@@ -769,7 +769,7 @@ class ZOS:
         if str(self.Application.Preferences.General.TXTFileEncoding) == "Unicode":
             return "UTF-16-le"
         elif str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
-            return locale.getpreferredencoding(do_setlocale=False)
+            return locale.getencoding()
         else:
             raise NotImplementedError(
                 f"ZOSPy cannot handle encoding {str(self.Application.Preferences.General.TXTFileEncoding)}"
