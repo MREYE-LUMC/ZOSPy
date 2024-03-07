@@ -13,6 +13,8 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- Unsupported locale setting on import (#66)
+
 ### Changed
 
 ### Deprecated
