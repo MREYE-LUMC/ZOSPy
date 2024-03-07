@@ -94,16 +94,15 @@ class TestNumberToStringConversion:
         # get new locale
         loc = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, new_locale)
-        _config.THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-        _config.DECIMAL_POINT = locale.localeconv()["decimal_point"]
+
+        monkeypatch.setattr(_config, "THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
+        monkeypatch.setattr(_config, "DECIMAL_POINT", locale.localeconv()["decimal_point"])
 
         # convert
         result = xtoa(number)
 
         # restore saved locale
         locale.setlocale(locale.LC_NUMERIC, loc)
-        _config.THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-        _config.DECIMAL_POINT = locale.localeconv()["decimal_point"]
 
         assert result == expected_output
 
