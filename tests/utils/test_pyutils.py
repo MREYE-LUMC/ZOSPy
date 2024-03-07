@@ -85,23 +85,24 @@ class TestNumberToStringConversion:
             ("zh_CN", 1234.5, "1,234.5"),
         ],
     )
-    def test_xtoa_converts_number_correctly_for_different_locale_categories(self, new_locale, number, expected_output):
+    def test_xtoa_converts_number_correctly_for_different_locale_categories(
+        self, new_locale, number, expected_output, monkeypatch
+    ):
         if new_locale not in locale.windows_locale.values():
             pytest.skip(f"Locale '{new_locale}' not available.")
 
         # get new locale
-        loc = locale.getlocale()
+        loc = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, new_locale)
-        _config.THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-        _config.DECIMAL_POINT = locale.localeconv()["decimal_point"]
+
+        monkeypatch.setattr(_config, "THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
+        monkeypatch.setattr(_config, "DECIMAL_POINT", locale.localeconv()["decimal_point"])
 
         # convert
         result = xtoa(number)
 
         # restore saved locale
         locale.setlocale(locale.LC_NUMERIC, loc)
-        _config.THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-        _config.DECIMAL_POINT = locale.localeconv()["decimal_point"]
 
         assert result == expected_output
 
@@ -183,24 +184,23 @@ class TestStringToNumberConversion:
         ],
     )
     def test_xtoa_converts_string_correctly_for_different_locale_categories(
-        self, locale_cat, string, dtype, expected_output
+        self, locale_cat, string, dtype, expected_output, monkeypatch
     ):
         if locale_cat not in locale.windows_locale.values():
             pytest.skip(f"Locale '{locale_cat}' not available.")
 
         # get new locale
-        loc = locale.getlocale()
+        loc = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, locale_cat)
-        _config.THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-        _config.DECIMAL_POINT = locale.localeconv()["decimal_point"]
+
+        monkeypatch.setattr(_config, "THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
+        monkeypatch.setattr(_config, "DECIMAL_POINT", locale.localeconv()["decimal_point"])
 
         # convert
         result = atox(string, dtype=dtype)
 
         # restore saved locale
         locale.setlocale(locale.LC_NUMERIC, loc)
-        _config.THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-        _config.DECIMAL_POINT = locale.localeconv()["decimal_point"]
 
         assert result == expected_output
 

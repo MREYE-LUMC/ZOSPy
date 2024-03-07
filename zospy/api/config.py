@@ -1,4 +1,7 @@
 import locale
+import logging
+
+logger = logging.getLogger(__name__)
 
 DECIMAL_POINT = locale.localeconv()["decimal_point"]
 THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
@@ -23,8 +26,14 @@ def set_decimal_point_and_thousands_separator() -> None:
     global DECIMAL_POINT
     global THOUSANDS_SEPARATOR
 
-    loc = locale.getlocale()  # get and save current locale
-    locale.setlocale(locale.LC_ALL, "")
-    DECIMAL_POINT = locale.localeconv()["decimal_point"]
-    THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
-    locale.setlocale(locale.LC_ALL, loc)  # restore saved locale
+    old_locale = locale.setlocale(locale.LC_NUMERIC)  # get and save current numeric locale
+
+    try:
+        locale.setlocale(locale.LC_NUMERIC, "")
+
+        DECIMAL_POINT = locale.localeconv()["decimal_point"]
+        THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
+    except locale.Error:
+        logger.error("Failed to determine decimal point and thousands separator", exc_info=True)
+    finally:
+        locale.setlocale(locale.LC_NUMERIC, old_locale)  # restore saved locale
