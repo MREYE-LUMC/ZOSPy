@@ -13,7 +13,7 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- Unsupported locale setting on import (#66)
+- Unsupported locale setting on import (#66, #69)
 
 ### Changed
 
