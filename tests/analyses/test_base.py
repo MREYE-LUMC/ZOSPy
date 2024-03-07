@@ -12,7 +12,9 @@ from zospy.analyses.base import (
     OnComplete,
     _AnalysisResultJSONDecoder,
     _AnalysisResultJSONEncoder,
+    new_analysis,
 )
+import zospy.api.constants as constants
 
 
 def test_oncomplete():
@@ -110,3 +112,24 @@ class TestToJSON:
 
         assert isinstance(restored_datetime, datetime)
         assert restored_datetime == test_datetime
+
+
+def test_analysis_wrapper_dir(oss):
+    opticstudio_analysis_attributes = [
+        "GetSettings",
+        "GetResults",
+        "IsRunning",
+        "Apply",
+        "ApplyAndWaitForCompletion",
+        "Terminate",
+        "WaitForCompletion",
+        "Close",
+        "Release",
+        "ToFile",
+    ]
+
+    analysis = new_analysis(oss, analysis_type=constants.Analysis.AnalysisIDM.RayFan)
+
+    # Assert for each attribute separately, but in a single test so `oss` does not need to be recreated for every case.
+    for attribute in opticstudio_analysis_attributes:
+        assert attribute in dir(analysis)
