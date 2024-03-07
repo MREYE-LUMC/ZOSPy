@@ -17,6 +17,9 @@ ZOS-API can also be added in patch releases.
 
 ### Changed
 
+- Custom `__dir__` method for `zospy.analyses.base.Analysis`. 
+  `dir` now shows both the wrapper members and the OpticStudio analysis members (!56)  
+
 ### Deprecated
 
 ### Removed
