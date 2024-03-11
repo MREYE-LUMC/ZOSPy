@@ -1,5 +1,6 @@
 import locale
 from pathlib import Path
+from sys import version_info
 from types import SimpleNamespace
 
 import pytest
@@ -175,10 +176,13 @@ class TestTxtFileEncoding:
     def test_get_txtfile_encoding_returns_correct_result(
         self, oss_with_modifiable_config, txtfile_encoding, expected_encoding, monkeypatch: pytest.MonkeyPatch
     ):
-        def getencoding(**kwargs):
+        def getencoding(*args, **kwargs):
             return "LocalePreferredEncoding"
 
-        monkeypatch.setattr(locale, "getencoding", getencoding)
+        if version_info < (3, 11):
+            monkeypatch.setattr(locale, "getpreferredencoding", getencoding)
+        else:
+            monkeypatch.setattr(locale, "getencoding", getencoding)
 
         oss_with_modifiable_config._ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding
