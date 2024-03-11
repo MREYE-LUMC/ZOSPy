@@ -13,6 +13,18 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+## [[1.2.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.2.1) - 2024-03-11
+
+### Added
+
+### Fixed
+
 - Unsupported locale setting on import (#66, #69)
 - Zernike Standard Coefficients analysis parses dates as floats under German locale (#70)
 
