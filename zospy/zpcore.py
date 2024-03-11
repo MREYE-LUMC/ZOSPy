@@ -6,6 +6,7 @@ import warnings
 import weakref
 from os import PathLike
 from typing import Literal
+from sys import version_info
 
 from semver.version import Version
 
@@ -769,6 +770,11 @@ class ZOS:
         if str(self.Application.Preferences.General.TXTFileEncoding) == "Unicode":
             return "UTF-16-le"
         elif str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
+            if version_info < (3, 11):
+                return locale.getpreferredencoding(False)
+
+            # Python 3.11 introduced locale.getencoding, which returns the system preferred encoding also if Python's
+            # UTF-8 mode is enabled
             return locale.getencoding()
         else:
             raise NotImplementedError(
