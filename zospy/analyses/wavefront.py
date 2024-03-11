@@ -9,9 +9,11 @@ from tempfile import mkstemp
 import numpy as np
 import pandas as pd
 
-from zospy import utils
+import zospy.api.config as _config
 from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
+from zospy.utils.pyutils import atox
+from zospy.utils.zputils import standardize_sampling
 from zospy.zpcore import OpticStudioSystem
 
 
@@ -29,8 +31,8 @@ def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tup
         Two dataframes, respectively the general results and the coefficients
     """
     zlinepat = re.compile(r"^Z\s+\d+")
-    valuepat_start = re.compile(r"^((-)?\d+\.\d+)")
-    valuepat_any = re.compile(r"((-)?\d+(\.\d+)?)")
+    valuepat_start = re.compile(r"^((-)?\d+\{}\d+)".format(_config.DECIMAL_POINT))
+    valuepat_any = re.compile(r"((-)?\d+(\{}\d+)?)".format(_config.DECIMAL_POINT))
 
     zernike_lines = [line for line in line_list if (zlinepat.search(line) is not None)]
 
@@ -45,7 +47,7 @@ def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tup
             general_data.loc[ind] = ["", ""]
         else:
             ind = "".join([item.title() for item in spl[0].split()])
-            nvals = len(valuepat_any.findall(spl[1].replace(",", ".")))
+            nvals = len(valuepat_any.findall(spl[1]))
             dat = spl[1].strip().split(maxsplit=nvals)
             if len(dat) == 0:
                 val = ""
@@ -54,31 +56,29 @@ def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tup
             elif len(dat) == 1:
                 if ind == "Date":
                     val = dat[0]
-                elif valuepat_start.search(dat[0].replace(",", ".")):  # value is number
-                    val = float(dat[0].replace(",", "."))
+                elif valuepat_start.search(dat[0]):  # value is number
+                    val = atox(dat[0], float)
                 else:
                     val = dat[0]
                 unit = ""
                 general_data.loc[ind] = [val, unit]
             elif len(dat) == 2:
-                if valuepat_start.search(dat[0].replace(",", ".")):  # value is number
-                    val = float(dat[0].replace(",", "."))
+                if valuepat_start.search(dat[0]):  # value is number
+                    val = atox(dat[0], float)
                 else:
                     val = dat[0]
                 unit = dat[1]
                 general_data.loc[ind] = [val, unit]
             else:
                 for ii in range(len(dat) - 1):
-                    if valuepat_start.search(dat[ii].replace(",", ".")):  # value is number
-                        val = float(valuepat_start.search(dat[ii].replace(",", ".")).group())
+                    if valuepat_start.search(dat[ii]):  # value is number
+                        val = atox(valuepat_start.search(dat[ii]).group(), float)
                     else:
                         val = dat[ii]
                     unit = dat[-1]
                     general_data.loc["{}_{}".format(ind, ii)] = [val, unit]
     zernike_data = pd.DataFrame(index=zernike_arr[:, 0].copy(), columns=["Value", "Unit", "Function"])
-    zernike_data.loc[zernike_arr[:, 0], "Value"] = list(
-        map(lambda s: float(s.replace(",", ".")), zernike_arr[:, 1].copy())
-    )
+    zernike_data.loc[zernike_arr[:, 0], "Value"] = list(map(lambda s: atox(s, float), zernike_arr[:, 1].copy()))
     zernike_data.loc[zernike_arr[:, 0], "Unit"] = "waves"
     zernike_data.loc[zernike_arr[:, 0], "Function"] = zernike_arr[:, 3].copy()
 
@@ -155,7 +155,7 @@ def zernike_standard_coefficients(
     analysis = new_analysis(oss, analysis_type)
 
     # Apply settings
-    analysis.Settings.SampleSize = getattr(constants.Analysis.SampleSizes, utils.zputils.standardize_sampling(sampling))
+    analysis.Settings.SampleSize = getattr(constants.Analysis.SampleSizes, standardize_sampling(sampling))
     analysis.Settings.MaximumNumberOfTerms = maximum_term
     analysis.set_wavelength(wavelength)
     analysis.set_field(field)
