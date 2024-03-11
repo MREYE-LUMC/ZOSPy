@@ -5,8 +5,8 @@ import logging
 import warnings
 import weakref
 from os import PathLike
-from typing import Literal
 from sys import version_info
+from typing import Literal
 
 from semver.version import Version
 
