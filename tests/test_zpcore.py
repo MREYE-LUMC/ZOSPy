@@ -175,10 +175,10 @@ class TestTxtFileEncoding:
     def test_get_txtfile_encoding_returns_correct_result(
         self, oss_with_modifiable_config, txtfile_encoding, expected_encoding, monkeypatch: pytest.MonkeyPatch
     ):
-        def getpreferredencoding(**kwargs):
+        def getencoding(**kwargs):
             return "LocalePreferredEncoding"
 
-        monkeypatch.setattr(locale, "getpreferredencoding", getpreferredencoding)
+        monkeypatch.setattr(locale, "getencoding", getencoding)
 
         oss_with_modifiable_config._ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding

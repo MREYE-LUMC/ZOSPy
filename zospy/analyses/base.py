@@ -602,6 +602,9 @@ class Analysis:
     def __getattr__(self, item):
         return getattr(self._analysis, item)
 
+    def __dir__(self):
+        return sorted(set(super().__dir__()).union(dir(self._analysis)))
+
 
 def new_analysis(
     oss: OpticStudioSystem, analysis_type: constants.Analysis.AnalysisIDM, settings_first: bool = True

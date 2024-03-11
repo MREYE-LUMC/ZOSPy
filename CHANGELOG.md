@@ -13,7 +13,12 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- Unsupported locale setting on import (#66, #69)
+
 ### Changed
+
+- Custom `__dir__` method for `zospy.analyses.base.Analysis`. 
+  `dir` now shows both the wrapper members and the OpticStudio analysis members (!56)  
 
 ### Deprecated
 
