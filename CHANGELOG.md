@@ -14,7 +14,7 @@ ZOS-API can also be added in patch releases.
 ### Fixed
 
 - Unsupported locale setting on import (#66, #69)
-- Zernike Standard Coefficients analysis parses dates as floats under German locale (#67)
+- Zernike Standard Coefficients analysis parses dates as floats under German locale (#70)
 
 ### Changed
 
