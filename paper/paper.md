@@ -74,7 +74,7 @@ draw3d = zp.analyses.systemviewers.viewer_3d(oss)
 # Analyze the system by calculating the Modulation Transfer Function (MTF) 
 # and the Point Spread Function (PSF)
 mtf = zp.analyses.mtf.fft_through_focus_mtf(
-    oss, sampling="512x512", deltafocus=2.5, numberofsteps=51)
+    oss, sampling="512x512", deltafocus=2.5, frequency=3, numberofsteps=51)
 
 huygens_psf = zp.analyses.psf.huygens_psf(
     oss, pupil_sampling="512x512", image_sampling="512x512", normalize=True)
