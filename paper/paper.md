@@ -71,16 +71,17 @@ back_surface.SemiDiameter = 15
 # Render the model
 draw3d = zp.analyses.systemviewers.viewer_3d(oss)
 
-# Analyze the system by calculating the Modulation Transfer Function (MTF) 
-# and the Point Spread Function (PSF)
-mtf = zp.analyses.mtf.fft_through_focus_mtf(
-    oss, sampling="512x512", deltafocus=2.5, frequency=3, numberofsteps=51)
+# Calculate the Point Spread function (PSF) of the system and subsequently
+# determine the Modulation Transfer Function (MTF) as a function of the location of the imaging plane.
 
 huygens_psf = zp.analyses.psf.huygens_psf(
     oss, pupil_sampling="512x512", image_sampling="512x512", normalize=True)
+    
+mtf = zp.analyses.mtf.fft_through_focus_mtf(
+    oss, sampling="512x512", deltafocus=2.5, frequency=3, numberofsteps=51)
 ```
 
-![**Results of the example code**. **A)** The created optical system results in a slightly out of focus image. **B)** The calculated Modulation Transfer Function (MTF) shows that the image plane needs a 1.9 mm shift towards the lens to be in focus. **C)** The Huygens Point Spread Function (PSF) shows the aberrations of the system.\label{fig:1}](Figure%201.png)
+![**Results of the example code**. **A)** The created optical system results in a slightly out of focus image. **B)** The Huygens Point Spread Function (PSF) shows the aberrations of the system **C)** The calculated Modulation Transfer Function (MTF) as a function of image plane location shows a maximum at -1.3 mm, indicating that the system will be in focus when the imaging plane is shifted by 1.3 mm towards the lens.\label{fig:1}](Figure%201.png)
 
 Furthermore, `ZOSPy` has been used in different ophthalmic studies. In one of these studies, `ZOSPy` was used to evaluate the relation of ocular anatomy to peripheral visual complaints [@vanVught2022]. In another study, `ZOSPy` showed that the extent of an intra-ocular tumor can be overestimated during surgery due to its shadow (\autoref{fig:2}) [@Jaarsma2023].
 
