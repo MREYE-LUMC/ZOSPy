@@ -82,7 +82,7 @@ mtf = zp.analyses.mtf.fft_through_focus_mtf(
     oss, sampling="512x512", deltafocus=2.5, frequency=3, numberofsteps=51)
 ```
 
-![**Results of the example code**. **A)** The created optical system results in a slightly out of focus image. **B)** The Huygens Point Spread Function (PSF) shows the aberrations of the system. **C)** The Modulation Transfer Function (MTF) as a function of image plane location shows a maximum at -1.3 mm, indicating that the system will be in focus when the imaging plane is shifted by 1.3 mm towards the lens.\label{fig:1}](Figure%201.png)
+![**Results of the example code**. **A)** The created optical system results in a slightly out of focus image. **B)** The Huygens Point Spread Function (PSF) shows the aberrations of the system. **C)** The Modulation Transfer Function (MTF) as a function of image plane location shows a maximum at -1.3&nbsp;mm, indicating that the system will be in focus when the imaging plane is shifted by 1.3 mm towards the lens.\label{fig:1}](Figure%201.png)
 
 Furthermore, `ZOSPy` has been used in different ophthalmic studies. In one of these studies, `ZOSPy` was used to evaluate the relation of ocular anatomy to peripheral visual complaints [@vanVught2022]. In another study, `ZOSPy` showed that the extent of an intra-ocular tumor can be overestimated during surgery due to its shadow (\autoref{fig:2}) [@Jaarsma2023].
 
