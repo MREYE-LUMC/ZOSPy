@@ -37,7 +37,7 @@ Ray tracing simulations are widely used to design, optimize and analyze optical 
 
 Although OpticStudio offers an API, the `ZOS-API`, using this API in Python is complex and time-consuming. It involves, for example, establishing a connection with the API through the .NET framework, casting between .NET and Python datatypes, identifying which constants need to be set in specific cases, and working around  non-uniform methods of parsing the output [@GettingStartedWithZOSAPI]. This leads to studies which, in practice, largely rely on user interaction. Although OpticStudio can perform Monte Carlo analyses, where a large number of random perturbations of the system are generated and analysed in an automated way, this type of automation is not suitable when large sets of specific, non-random, combinations of parameters need to be analysed. In vision science, for example, ray tracing is used to design artificial lenses for the eye [@Ellis2001; @Holladay1999], but their evaluation in a large set of patients is hindered as the anatomical parameters of each subject’s eye need to be entered manually. As a result, clinical studies typically describe vision-related complaints in cohorts of hundreds of eyes [@Alfonso2007], but the ray tracing studies aiming to link these outcomes to the subject’s ocular optics are limited to a small number of eyes [@Simpson2020; @vanVught2020].
 
-With ZOSPy, we provide an easy-to-use and accessible interface to the OpticStudio API, enabling the user to focus on optical modelling instead of complex coding. As a result, those who are not familiar with the intricacies of the `ZOS-API` interface will be able to read and comprehend scripts that use `ZOSPy`. Thereby, `ZOSPy`  provides greater accessibility to conducting analyses in OpticStudio through Python than directly using the `ZOS-API`.
+With ZOSPy, we provide an easy-to-use and accessible interface to the OpticStudio API, enabling the user to focus on optical modelling instead of complex coding. As a result, those who are not familiar with the intricacies of the `ZOS-API` interface will be able to read and comprehend scripts that use `ZOSPy`. Thereby, `ZOSPy`  provides greater accessibility to conducting analyses in OpticStudio through Python, than directly using the `ZOS-API`.
 
 # Functionality
 `ZOSPy` is, in its most basic form, a Python wrapper around the OpticStudio API. It facilitates the .NET connection required to connect to OpticStudio through its API, as well as all subsequent casting of variables between .NET and Python. Additionally, it provides object-oriented methods to define surfaces and their optical properties. Furthermore, it offers single-line, easy to understand, methods to perform analyses that return the analysis results in a uniform way. As a result, `ZOSPy` enables a straight-forward interaction with OpticStudio and improves code readability, which facilitates method sharing between scientists.
@@ -72,7 +72,8 @@ back_surface.SemiDiameter = 15
 draw3d = zp.analyses.systemviewers.viewer_3d(oss)
 
 # Calculate the Point Spread function (PSF) of the system and subsequently
-# determine the Modulation Transfer Function (MTF) as a function of the location of the imaging plane.
+# determine the Modulation Transfer Function (MTF) as a function of 
+# the location of the imaging plane.
 
 huygens_psf = zp.analyses.psf.huygens_psf(
     oss, pupil_sampling="512x512", image_sampling="512x512", normalize=True)
