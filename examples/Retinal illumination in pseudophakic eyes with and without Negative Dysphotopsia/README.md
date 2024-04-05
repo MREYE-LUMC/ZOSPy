@@ -10,7 +10,7 @@ This example shows how to determine the peripheral retinal illumination in model
 
 ## Citation
 
-Next to [citing ZOSPy](../../README.md#referencing), please also cite the following paper when using this example or the data provided with this example:
+Next to [citing ZOSPy](../../README.md#referencing), please also cite the following paper when using this example or the data provided within this example:
 
 > Vught, L. van, Que, I., Luyten, G.P.M. & Beenakker, J.W.M. (2022).
 > Effect of anatomical differences and intraocular lens design on Negative Dysphotopsia.
