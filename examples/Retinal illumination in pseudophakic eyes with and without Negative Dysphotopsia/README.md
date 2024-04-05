@@ -9,14 +9,16 @@ This example shows how to determine the peripheral retinal illumination in model
   - Reading out detector data from a `CAD Part:STL` surface.
 
 ## Citation
-Next to citing ZOSPy, please also cite the following paper when using this example or the data provided with this example:
 
-van Vught L, Que I, Luyten GPM and Beenakker JWM.
-_Effect of anatomical differences and intraocular lens design on Negative Dysphotopsia._
-JCRS: Sep 06, 2022.<br>
-[doi: [10.1097/j.jcrs.0000000000001054](https://doi.org/10.1097/j.jcrs.0000000000001054) ] [[JCRS](https://journals.lww.com/jcrs/Abstract/9900/Effect_of_anatomical_differences_and_intraocular.107.aspx)]
+Next to [citing ZOSPy](../../README.md#referencing), please also cite the following paper when using this example or the data provided within this example:
+
+> Vught, L. van, Que, I., Luyten, G.P.M. & Beenakker, J.W.M. (2022).
+> Effect of anatomical differences and intraocular lens design on Negative Dysphotopsia.
+> Journal of Cataract & Refractive Surgery, 48(12), 1446-1452
+> https://doi.org/10.1097/j.jcrs.0000000000001054
 
 ## Warranty and liability
+
 The presented code and data are made available for research purposes only. There is no warranty and rights can not be 
 derived from them, as is also stated in the general license of this repository.
 

@@ -1,31 +1,46 @@
-# This CITATION.cff file was generated with cffinit.
-# Visit https://bit.ly/cffinit to generate yours today!
-
-cff-version: 1.2.0
-title: ZOSPy
-message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
-type: software
+cff-version: "1.2.0"
 authors:
-  - affiliation: Leiden University Medical Center
+- family-names: Vught
+  given-names: Luc
+  name-particle: van
+  orcid: "https://orcid.org/0000-0001-8290-9071"
+- family-names: Haasjes
+  given-names: Corné
+  orcid: "https://orcid.org/0000-0003-0187-4116"
+- family-names: Beenakker
+  given-names: Jan-Willem M.
+  orcid: "https://orcid.org/0000-0003-0479-5587"
+contact:
+- family-names: Vught
+  given-names: Luc
+  name-particle: van
+  orcid: "https://orcid.org/0000-0001-8290-9071"
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Vught
     given-names: Luc
-    family-names: Vught
     name-particle: van
-    email: l.van_vught@lumc.nl
-    orcid: 'https://orcid.org/0000-0001-8290-9071'
-  - given-names: Jan-Willem
-    family-names: Beenakker
-    email: j.w.m.beenakker@lumc.nl
-    affiliation: Leiden University Medical Center
-    orcid: 'https://orcid.org/0000-0003-0479-5587'
-  - given-names: Corné
-    family-names: Haasjes
-    email: c.haasjes@lumc.nl
-    orcid: 'https://orcid.org/0000-0003-0187-4116'
-    affiliation: Leiden University Medical Center
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.7759530
+    orcid: "https://orcid.org/0000-0001-8290-9071"
+  - family-names: Haasjes
+    given-names: Corné
+    orcid: "https://orcid.org/0000-0003-0187-4116"
+  - family-names: Beenakker
+    given-names: Jan-Willem M.
+    orcid: "https://orcid.org/0000-0003-0479-5587"
+  date-published: 2024-04-04
+  doi: 10.21105/joss.05756
+  issn: 2475-9066
+  issue: 96
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 5756
+  title: "ZOSPy: optical ray tracing in Python through OpticStudio"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.05756"
+  volume: 9
+title: "ZOSPy: optical ray tracing in Python through OpticStudio"
 repository-code: 'https://github.com/MREYE-LUMC/ZOSPy'
-license: GPL-3.0
+license: MIT
