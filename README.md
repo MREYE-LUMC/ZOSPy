@@ -5,6 +5,7 @@
 [![Conda Version](https://img.shields.io/conda/v/conda-forge/zospy)](https://anaconda.org/conda-forge/zospy)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/ZOSPy/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/zospy/badge/?version=latest)](https://zospy.readthedocs.io/en/latest/?badge=latest)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05756/status.svg)](https://doi.org/10.21105/joss.05756)
 
 ## About
 
@@ -72,11 +73,13 @@ ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudi
 
 ## Referencing
 
-When publishing results obtained with this package, please cite the paper in which the package was first used:<br>
-van Vught L, Que I, Luyten GPM and Beenakker JWM.
-_Effect of anatomical differences and intraocular lens design on Negative Dysphotopsia._
-JCRS: Sep 06, 2022.
-[doi: [10.1097/j.jcrs.0000000000001054](https://doi.org/10.1097/j.jcrs.0000000000001054) ] [[JCRS](https://journals.lww.com/jcrs/Abstract/9900/Effect_of_anatomical_differences_and_intraocular.107.aspx)]
+When publishing results obtained with this package, please cite our paper in the Journal of Open Source Software:  
+
+> Vught, L. van, Haasjes, C., & Beenakker, J.-W. M. (2024). 
+> ZOSPy: Optical ray tracing in Python through OpticStudio. 
+> Journal of Open Source Software, 9(96), 5756. 
+> https://doi.org/10.21105/joss.05756
+
 
 If a direct reference of the package is also required, reference it using the following DOI:<br>
 [![DOI](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
