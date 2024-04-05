@@ -74,7 +74,7 @@ ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudi
 
 ## Referencing
 
-When publishing results obtained with this package, please cite our paper in the Journal of Open Source Software:  
+When publishing results obtained with this package, please cite [our paper](https://joss.theoj.org/papers/10.21105/joss.05756) in the Journal of Open Source Software:  
 
 > Vught, L. van, Haasjes, C. & Beenakker, J.W.M. (2024). 
 > ZOSPy: Optical ray tracing in Python through OpticStudio. 
