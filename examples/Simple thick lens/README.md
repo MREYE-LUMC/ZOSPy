@@ -1,6 +1,8 @@
 # Example: Simple thick lens
 
-This example shows how to create and analyze a simple thick lens as described in the paper [ZOSPy: optical ray tracing in Python through OpticStudio](../../Paper). The code resembles the example of the paper with the addition of plotting the analysis results.
+This example shows how to create and analyze a simple thick lens as described in the paper 
+[ZOSPy: optical ray tracing in Python through OpticStudio](https://joss.theoj.org/papers/10.21105/joss.05756). 
+The code resembles the example of the paper with the addition of plotting the analysis results.
 
 ## Included functionalities
 
@@ -11,4 +13,5 @@ This example shows how to create and analyze a simple thick lens as described in
 
 ## Warranty and liability
 
-The examples are provided 'as is'. There is no warranty and rights cannot be derived from them, as is also stated in the general license of this repository.
+The examples are provided 'as is'. There is no warranty and rights cannot be derived from them, as is also stated in the 
+general license of this repository.
