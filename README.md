@@ -5,7 +5,8 @@
 [![Conda Version](https://img.shields.io/conda/v/conda-forge/zospy)](https://anaconda.org/conda-forge/zospy)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/ZOSPy/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/zospy/badge/?version=latest)](https://zospy.readthedocs.io/en/latest/?badge=latest)
-[![DOI](https://joss.theoj.org/papers/10.21105/joss.05756/status.svg)](https://doi.org/10.21105/joss.05756)
+[![JOSS](https://joss.theoj.org/papers/10.21105/joss.05756/status.svg)](https://doi.org/10.21105/joss.05756)
+[![Zenodo](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
 
 ## About
 
@@ -75,13 +76,14 @@ ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudi
 
 When publishing results obtained with this package, please cite our paper in the Journal of Open Source Software:  
 
-> Vught, L. van, Haasjes, C., & Beenakker, J.-W. M. (2024). 
+> Vught, L. van, Haasjes, C. & Beenakker, J.W.M. (2024). 
 > ZOSPy: Optical ray tracing in Python through OpticStudio. 
 > Journal of Open Source Software, 9(96), 5756. 
 > https://doi.org/10.21105/joss.05756
 
 
-If a direct reference of the package is also required, reference it using the following DOI:<br>
+If a direct reference of the package is also required, reference it using the following DOI:  
+
 [![DOI](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
 
 ## Contributing

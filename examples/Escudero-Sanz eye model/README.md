@@ -11,11 +11,12 @@ This example shows how to create and analyze a wide-angle eye model described in
 
 ## Citation
 
-Next to citing ZOSPy, please also cite the following paper when using the data provided in this example:
+Next to [citing ZOSPy](../../README.md#referencing), please also cite the following paper when using the data provided in this example:
 
-> I. Escudero-Sanz and R. Navarro, "Off-axis aberrations of a wide-angle schematic eye model," 
-> J. Opt. Soc. Am. A  16, 1881-1891 (1999). 
-> doi: [10.1364/JOSAA.16.001881](https://doi.org/10.1364/JOSAA.16.001881).
+> Escudero-Sanz, I. & Navarro, R. (1999).
+> Off-axis aberrations of a wide-angle schematic eye model.
+> Journal of the Optical Society of America A, 16(8), 1881-1891. 
+> https://doi.org/10.1364/JOSAA.16.001881
 
 ## Warranty and liability
 
