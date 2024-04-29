@@ -223,6 +223,6 @@ Feel free to contact us for any inquiries:
 - J.W.M. Beenakker ([email](mailto:j.w.m.beenakker@lumc.nl))
 - L. van Vught ([email](mailto:l.van_vught@lumc.nl))
 
-Or visit [our website](https://www.mreye.nl).
+Or visit [our website](https://www.mreye.nl) to discover our research.
 
 [joss-paper]: https://joss.theoj.org/papers/10.21105/joss.05756
