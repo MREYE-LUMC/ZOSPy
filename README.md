@@ -5,7 +5,7 @@
 [![Conda Version](https://img.shields.io/conda/v/conda-forge/zospy)](https://anaconda.org/conda-forge/zospy)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/ZOSPy/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/zospy/badge/?version=latest)](https://zospy.readthedocs.io/en/latest/?badge=latest)
-[![JOSS](https://joss.theoj.org/papers/10.21105/joss.05756/status.svg)](https://doi.org/10.21105/joss.05756)
+[![JOSS](https://joss.theoj.org/papers/10.21105/joss.05756/status.svg)][joss-paper]
 [![Zenodo](https://zenodo.org/badge/403590410.svg)](https://zenodo.org/badge/latestdoi/403590410)
 
 ## About
@@ -217,10 +217,7 @@ following implementation examples assume that `import logging` has been executed
 
 ## Contact
 
-Feel free to contact us for any inquiries:
-
-- C. Haasjes ([email](mailto:c.haasjes@lumc.nl))
-- J.W.M. Beenakker ([email](mailto:j.w.m.beenakker@lumc.nl))
-- L. van Vught ([email](mailto:l.van_vught@lumc.nl))
+Feel free to contact us via e-mail at [zospy@mreye.nl](mailto:zospy@mreye.nl) for any inquiries,
+or visit [mreye.nl](https://mreye.nl) to discover our research.
 
 [joss-paper]: https://joss.theoj.org/papers/10.21105/joss.05756

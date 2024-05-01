@@ -5,10 +5,14 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "zospy"
 authors = [
-    {name = "Luc van Vught", email = "l.van_vught@lumc.nl"},
-    {name = "Jan-Willem Beenakker", email = "j.w.m.beenakker@lumc.nl"},
-    {name = "Corné Haasjes", email = "c.haasjes@lumc.nl" }
+    {name = "Luc van Vught"},
+    {name = "Jan-Willem Beenakker"},
+    {name = "Corné Haasjes"}
 ]
+maintainers = [
+    {name = "MReye research group", email = "zospy@mreye.nl"}
+]
+
 description = "A Python package used to communicate with Zemax OpticStudio through the API"
 readme = "README.md"
 license = {file = "LICENSE.txt"}
