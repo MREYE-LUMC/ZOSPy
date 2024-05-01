@@ -218,6 +218,6 @@ following implementation examples assume that `import logging` has been executed
 ## Contact
 
 Feel free to contact us via [e-mail](mailto:zospy@mreye.nl) for any inquiries,
-or visit [our website](https://www.mreye.nl) to discover our research.
+or visit [mreye.nl](https://mreye.nl) to discover our research.
 
 [joss-paper]: https://joss.theoj.org/papers/10.21105/joss.05756
