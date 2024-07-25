@@ -12,5 +12,5 @@ The example folder is copied to the documentation folder before building the doc
 examples/Simple thick lens/Simple thick lens
 examples/Escudero-Sanz eye model/Escudero-Sanz eye model
 examples/Polarization Prism/polarization_prism_example
+examples/Patient-specific mapping of fundus photographs to three-dimensional ocular imaging/README
 ```
-   
