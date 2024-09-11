@@ -11,6 +11,12 @@ The example folder is copied to the documentation folder before building the doc
 
 examples/Simple thick lens/Simple thick lens
 examples/Escudero-Sanz eye model/Escudero-Sanz eye model
+examples/Retinal illumination in pseudophakic eyes with and without Negative Dysphotopsia/retinal_illumination
+examples/Ray trace Double Gauss/raytrace_double_gauss
 examples/Polarization Prism/polarization_prism_example
 ```
+
+## Warranty and liability
+
+The examples are provided 'as is'. There is no warranty and rights cannot be derived from them, as is also stated in the general license of this repository.
    

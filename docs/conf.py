@@ -29,7 +29,7 @@ extensions = [
 myst_enable_extensions = ["colon_fence", "attrs_block"]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/.conda", "**/.ipynb_checkpoints"]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -84,10 +84,10 @@ nbsphinx_prolog = rf"""
 .. raw:: html
 
     <div class="admonition note">
-      This page was generated from a Jupyter notebook. 
+      This page was generated from a Jupyter notebook.
       <a href="https://github.com/MREYE-LUMC/ZOSPy/tree/v{zp_version}/examples/{{{{ env.docname.split('/')[-2] | e }}}}"
       class="reference external" download>Check the source code</a>
-      or <a href="{{{{ env.docname.split('/') | last | e + '.ipynb' }}}}" 
+      or <a href="{{{{ env.docname.split('/') | last | e + '.ipynb' }}}}"
       class="reference download internal" download>download the notebook.</a>.
     </div>
 """
