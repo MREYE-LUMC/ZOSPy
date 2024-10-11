@@ -1,25 +1,15 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import cast
 
 from pydantic import AliasChoices, Field
 from pydantic.dataclasses import dataclass
 
-from zospy.analyses.new.base import (
-    AnalysisSettings,
-    AnalysisWrapper,
-)
-from zospy.analyses.new.parsers import load_grammar, parse
+from zospy.analyses.new.base import AnalysisSettings, AnalysisWrapper
 from zospy.analyses.new.parsers.transformers import SimpleField, ZospyTransformer
 from zospy.zpcore import OpticStudioSystem
 
-__all__ = ("surface_data", "SurfaceData")
-
-
-@dataclass
-class SurfaceDataSettings:
-    surface: int
+__all__ = ("SurfaceData", "SurfaceDataSettings")
 
 
 class SurfaceDataTransformer(ZospyTransformer):

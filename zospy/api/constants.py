@@ -17,7 +17,7 @@ from __future__ import annotations
 import itertools as _itertools
 import logging as _logging
 from types import SimpleNamespace as _SimpleNamespace
-from typing import Iterable, TypeVar
+from typing import TypeVar
 
 from zospy.api._ZOSAPI_constants import *  # noqa
 from zospy.utils import clrutils as _clrutils

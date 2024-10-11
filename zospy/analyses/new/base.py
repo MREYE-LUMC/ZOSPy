@@ -8,7 +8,7 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from tempfile import mkstemp
-from typing import Generic, Literal, TYPE_CHECKING, TypeVar, cast
+from typing import TYPE_CHECKING, Generic, Literal, TypeVar, cast
 
 from zospy.analyses.new.parsers import load_grammar, parse
 from zospy.api import _ZOSAPI, constants

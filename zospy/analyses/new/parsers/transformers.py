@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from itertools import groupby
-from typing import Any, Generic, NamedTuple, TypeVar, TypedDict
-from zospy.utils.pyutils import atox
+from typing import Any, Generic, NamedTuple, TypedDict, TypeVar
 
 from lark import Discard, Transformer
+
+from zospy.utils.pyutils import atox
 
 FieldValue = TypeVar("FieldValue")
 

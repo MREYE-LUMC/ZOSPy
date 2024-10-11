@@ -1,8 +1,8 @@
 """Data types for analysis result objects."""
 
-from pydantic.dataclasses import dataclass
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
+from pydantic.dataclasses import dataclass
 
 __all__ = ("UnitField",)
 

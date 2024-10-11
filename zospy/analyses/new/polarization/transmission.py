@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import struct
-from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated
 
 import pandas as pd
 from pydantic import ConfigDict, Field
@@ -13,7 +12,6 @@ from zospy.analyses.new.parsers.transformers import SimpleField, ZospyTransforme
 from zospy.analyses.new.parsers.types import UnitField
 from zospy.api import constants
 from zospy.utils import zputils
-from zospy.utils.pyutils import xtoa
 from zospy.zpcore import OpticStudioSystem
 
 

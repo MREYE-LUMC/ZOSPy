@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal, dataclass_transform
+from typing import Literal
 from warnings import warn
 
 import pandas as pd
