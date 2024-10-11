@@ -1,0 +1,529 @@
+from __future__ import annotations
+
+import os
+import weakref
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from tempfile import mkstemp
+from typing import Generic, Literal, TYPE_CHECKING, TypeVar, cast
+
+from zospy.analyses.new.parsers import load_grammar, parse
+from zospy.api import _ZOSAPI, constants
+from zospy.utils.clrutils import system_datetime_to_datetime
+from zospy.zpcore import OpticStudioSystem
+
+if TYPE_CHECKING:
+    from lark import Transformer
+
+
+@dataclass(frozen=True)
+class AnalysisMessage:
+    """Zemax OpticStudio analysis message."""
+
+    ErrorCode: str
+    Message: str
+
+
+@dataclass(frozen=True)
+class AnalysisMetadata:
+    """Zemax OpticStudio analysis metadata."""
+
+    DateTime: datetime
+    FeatureDescription: str
+    LensFile: str
+    LensTitle: str
+
+
+AnalysisData = TypeVar("AnalysisData")
+AnalysisSettings = TypeVar("AnalysisSettings")
+
+
+@dataclass(frozen=True)
+class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
+    """Zemax OpticStudio analysis result."""
+
+    data: AnalysisData
+    settings: AnalysisSettings
+    metadata: AnalysisMetadata
+    header: list[str] | None = None
+    messages: list[AnalysisMessage] | None = None
+
+
+class OnComplete(str, Enum):
+    """
+    Action to perform after running an OpticStudio analysis.
+
+    This `Enum` can be passed to analysis methods in `zospy.analyses`.
+
+    Attributes
+    ----------
+    Close : str
+        Close the analysis.
+    Release : str
+        Keep the analysis open, but not active.
+    Sustain : str
+        Keep the analysis open and active.
+
+    Examples
+    --------
+    Run a System Data analysis and keep the analysis open:
+
+    >>> from zospy.analyses import OnComplete
+    >>> from zospy.analyses.reports import system_data
+    >>> result = system_data(oss, OnComplete.Sustain)
+    """
+
+    Close = "Close"
+    """Close the analysis."""
+
+    Release = "Release"
+    """Keep the analysis open, but not active."""
+
+    Sustain = "Sustain"
+    """Keep the analysis open and active."""
+
+
+class Analysis:
+    def __init__(self, analysis: _ZOSAPI.Analysis.IA_):
+        """
+        Zemax OpticStudio Analysis with full access to its Settings and Results attributes.
+
+        Parameters
+        ----------
+        analysis: ZOSAPI.Analysis.IA_
+            analysis object
+        """
+        self._analysis = analysis
+
+    @property
+    def Settings(self) -> _ZOSAPI.Analysis.Settings.IAS_:
+        """Analysis-specific settings."""
+        return self._analysis.GetSettings()
+
+    @property
+    def Results(self) -> _ZOSAPI.Analysis.Data.IAR_:
+        """Analysis results."""
+        return self._analysis.GetResults()
+
+    def complete(self, oncomplete: OnComplete | str, result: AnalysisResult) -> AnalysisResult:
+        """Completes the analysis by either closing, releasing or sustaining it.
+
+        Parameters
+        ----------
+        oncomplete: OnComplete | str
+            Action to perform on completion.
+        result: AnalysisResult
+            Result of the analysis.
+
+        Returns
+        -------
+        `result` if the analysis is closed or released, `result` extended with the `Analysis` object if the analysis
+        is sustained.
+        """
+        oncomplete = OnComplete(oncomplete)
+
+        if oncomplete == OnComplete.Close:
+            self._analysis.Close()
+            return result
+
+        if oncomplete == OnComplete.Release:
+            self._analysis.Release()
+            return result
+
+        if oncomplete == OnComplete.Sustain:
+            raise NotImplementedError("Sustaining an analysis still needs to be implemented.")
+            result.Analysis = self
+            return result
+
+        raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}")
+
+    @property
+    def field(self) -> int | str:
+        """Gets the wavelength value of the analysis.
+
+        Returns
+        -------
+        int | str
+            Either the field number, or 'All' if field was set to 'All'.
+        """
+        field_number = self.Settings.Field.GetFieldNumber()
+
+        return "All" if field_number == 0 else field_number
+
+    @field.setter
+    def field(self, value: int | str):
+        """Sets the field value for the analysis.
+
+        Parameters
+        ----------
+        value: int or str
+            The value to which the field should be set. Either int or str. Accepts only 'All' as string.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+            When 'value' is not integer or string. When it is a string, it also raises an error when the string
+            does not
+            equal 'All'.
+        """
+        if value == "All":
+            self.Settings.Field.UseAllFields()
+        elif isinstance(value, int):
+            self.Settings.Field.SetFieldNumber(value)
+        else:
+            raise ValueError(f'Field value should be "All" or an integer, got {value}')
+
+    @property
+    def header_data(self) -> list[str]:
+        """Obtains the header data from an OpticStudio analysis.
+
+        Returns
+        -------
+        list
+            The header data.
+        """
+        return list(self.Results.HeaderData.Lines)
+
+    @property
+    def messages(self) -> list[AnalysisMessage]:
+        """Obtains the messages from the analysis.
+
+        Returns
+        -------
+        list[AnalysisMessage]
+            A list of messages. Each item is a NamedTuple with names (ErrorCode, Message).
+        """
+        result = []
+
+        for i in range(self.Results.NumberOfMessages):
+            message = self.Results.GetMessageAt(i)
+            error_code = str(message.ErrorCode)
+
+            result.append(AnalysisMessage(error_code, message.Text))
+
+        return result
+
+    @property
+    def metadata(self) -> AnalysisMetadata:
+        """Obtains the metadata from the analysis.
+
+        Returns
+        -------
+        AnalysisMetadata
+            A named tuple containing the MetaData including 'DateTime', 'FeatureDescription', 'LensFile'
+            and 'LensTitle'.
+        """
+        result = AnalysisMetadata(
+            system_datetime_to_datetime(self.Results.MetaData.Date),
+            self.Results.MetaData.FeatureDescription,
+            self.Results.MetaData.LensFile,
+            self.Results.MetaData.LensTitle,
+        )
+
+        return result
+
+    @property
+    def wavelength(self) -> int | Literal["All"]:
+        """Gets the wavelength value of the analysis.
+
+        Returns
+        -------
+        int | str
+            Either the wavelength number, or 'All' if wavelength was set to 'All'.
+
+        """
+        wavelength = self.Settings.Wavelength.GetWavelengthNumber()
+
+        return "All" if wavelength == 0 else wavelength
+
+    @wavelength.setter
+    def wavelength(self, value: int | Literal["All"]):
+        """Sets the wavelength value for the analysis.
+
+        Parameters
+        ----------
+        value: int | Literal["All"]
+            The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+            When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
+            equal 'All'.
+
+        """
+        if value == "All":
+            self.Settings.Wavelength.UseAllWavelengths()
+        elif isinstance(value, int):
+            self.Settings.Wavelength.SetWavelengthNumber(value)
+        else:
+            raise ValueError('Wavelength value should be "All" or an integer')
+
+    def set_surface(self, value: int | str):
+        """Sets the surface value for the analysis.
+
+        Parameters
+        ----------
+        value: int or str
+            The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
+            string.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+            When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
+            equal 'Image' or 'Objective'.
+
+        """
+        if value == "Image":
+            self.Settings.Surface.UseImageSurface()
+        elif value == "Objective":
+            self.Settings.Surface.UseObjectiveSurface()
+        elif isinstance(value, int):
+            self.Settings.Surface.SetSurfaceNumber(value)
+        else:
+            raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
+
+    def get_text_output(self, txtoutfile: str, encoding: str):
+        self.Results.GetTextFile(txtoutfile)
+
+        with open(txtoutfile, "r", encoding=encoding) as f:
+            output = f.read()
+
+        return output
+
+    def __getattr__(self, item):
+        return getattr(self._analysis, item)
+
+    def __dir__(self):
+        return sorted(set(super().__dir__()).union(dir(self._analysis)))
+
+
+def new_analysis(
+    oss: OpticStudioSystem, analysis_type: constants.Analysis.AnalysisIDM, settings_first: bool = True
+) -> Analysis:
+    """
+    Creates a new analysis in Zemax.
+
+    Parameters
+    ----------
+    oss: OpticStudioSystem
+        The Zemax OpticStudio system
+    analysis_type: zospy.constants.Analysis.AnalysisIDM
+        Analysis type from `ZOSAPI.Analysis.AnalysisIDM`
+    settings_first: bool
+        Do not run the analysis immediately, which allows to adjust settings. Defaults to `True`.
+
+    Returns
+    -------
+    analysis: Analysis
+
+    Examples
+    --------
+    >>> import zospy as zp
+    >>> new_analysis(oss, zp.constants.Analysis.AnalysisIDM.ZernikeStandardCoefficients)
+    """
+    analysis = (
+        oss.Analyses.New_Analysis_SettingsFirst(analysis_type)
+        if settings_first
+        else oss.Analyses.New_Analysis(analysis_type)
+    )
+    return Analysis(analysis)
+
+
+def _create_tempfile(path: str | None, suffix: str) -> (str, bool):
+    if path is None:
+        fd, path = mkstemp(suffix=suffix, prefix="zospy_")
+        os.close(fd)
+        clean_file = True
+    else:
+        if not path.endswith(suffix):
+            raise ValueError(f"cfgfile should end with '{suffix}'")
+
+        clean_file = False
+
+    return path, clean_file
+
+
+def _handle_complete(self, analysis: Analysis, oncomplete: OnComplete | str) -> None:
+    """Completes the analysis by either closing, releasing or sustaining it.
+
+    Parameters
+    ----------
+    oncomplete: OnComplete | str
+        Action to perform on completion.
+    """
+    oncomplete = OnComplete(oncomplete)
+
+    if oncomplete == OnComplete.Close:
+        analysis.Close()
+    elif oncomplete == OnComplete.Release:
+        analysis.Release()
+    elif oncomplete == OnComplete.Sustain:
+        return
+    else:
+        raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}")
+
+
+class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
+    TYPE: str = None
+
+    def __init__(
+        self,
+        config_file: str | Path | None = None,
+        text_output_file: str | Path | None = None,
+        oncomplete: OnComplete | Literal["Close", "Release", "Sustain"] = "Close",
+    ):
+        self.config_file = None if config_file is None else Path(config_file)
+        self.text_output_file = None if text_output_file is None else Path(text_output_file)
+        self.oncomplete = oncomplete
+
+        self._oss = None
+        self._analysis = None
+        self._remove_config_file = False
+        self._remove_text_output_file = False
+
+    @property
+    @abstractmethod
+    def settings(self) -> AnalysisSettings:
+        pass
+
+    @property
+    def config_file(self) -> Path | None:
+        return self._config_file
+
+    @config_file.setter
+    def config_file(self, value: str | Path | None):
+        if isinstance(value, str):
+            value = Path(value)
+
+        self._config_file = value
+
+    @property
+    def text_output_file(self) -> Path | None:
+        return self._text_output_file
+
+    @text_output_file.setter
+    def text_output_file(self, value: str | Path | None):
+        if isinstance(value, str):
+            value = Path(value)
+
+        self._text_output_file = value
+
+    @property
+    def oncomplete(self) -> OnComplete:
+        return self._oncomplete
+
+    @oncomplete.setter
+    def oncomplete(self, value: OnComplete | Literal["Close", "Release", "Sustain"]):
+        self._oncomplete = OnComplete(value)
+
+    @property
+    def oss(self) -> OpticStudioSystem:
+        if self._oss is None:
+            raise ValueError("OpticStudioSystem has not been set.")
+
+        return self._oss
+
+    @property
+    def analysis(self) -> Analysis:
+        if self._analysis is None:
+            raise ValueError("Analysis has not been created.")
+
+        return self._analysis
+
+    def get_text_output(self) -> str:
+        self.analysis.Results.GetTextFile(str(self.text_output_file))
+
+        with open(self._text_output_file, "r", encoding=self.oss._ZOS.get_txtfile_encoding()) as f:
+            output = f.read()
+
+        return output
+
+    def _create_analysis(self):
+        analysis_type = constants.process_constant(constants.Analysis.AnalysisIDM, self.TYPE)
+        self._analysis = new_analysis(self.oss, analysis_type)
+
+    @abstractmethod
+    def run_analysis(self, *args, **kwargs) -> AnalysisData:
+        pass
+
+    @staticmethod
+    def _create_tempfile(path: Path | None, suffix: str) -> (Path, bool):
+        if path is None:
+            fd, path = mkstemp(suffix=suffix, prefix="zospy_")
+            os.close(fd)
+            clean_file = True
+        else:
+            if not path.suffix == suffix:
+                raise ValueError(f"cfgfile should end with '{suffix}'")
+
+            clean_file = False
+
+        return Path(path), clean_file
+
+    def _complete(self) -> None:
+        """Completes the analysis by either closing, releasing or sustaining it."""
+        if self.oncomplete == OnComplete.Close:
+            self.analysis.Close()
+            self._analysis = None
+        elif self.oncomplete == OnComplete.Release:
+            self.analysis.Release()
+            self._analysis = None
+        elif self.oncomplete == OnComplete.Sustain:
+            return
+        else:
+            raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {self.oncomplete}")
+
+    def run(self, oss: OpticStudioSystem, *args, **kwargs) -> AnalysisResult[AnalysisData, AnalysisSettings]:
+        self._oss = weakref.proxy(oss)
+        self._create_analysis()
+
+        self.config_file, self._remove_config_file = self._create_tempfile(self.config_file, ".CFG")
+        self.text_output_file, self._remove_text_output_file = self._create_tempfile(self._text_output_file, ".txt")
+
+        data = self.run_analysis(oss, *args, **kwargs)
+
+        result = AnalysisResult(
+            data,
+            settings=None,
+            metadata=self.analysis.metadata,
+            header=self.analysis.header_data,
+            messages=self.analysis.messages,
+        )
+
+        if self._remove_config_file:
+            os.remove(self._config_file)
+
+        if self._remove_text_output_file:
+            os.remove(self._text_output_file)
+
+        self._complete()
+
+        return result
+
+    def parse_output(
+        self, grammar: str, transformer: type[Transformer], result_type: type[AnalysisData]
+    ) -> AnalysisData:
+        parser = load_grammar(grammar)
+        parse_result = parse(self.get_text_output(), parser, transformer)
+
+        return cast(result_type, result_type(**parse_result))
+
+    def __call__(self, oss: OpticStudioSystem, *args, **kwargs):
+        return self.run(oss, *args, **kwargs)

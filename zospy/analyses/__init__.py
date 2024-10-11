@@ -29,6 +29,7 @@ from . import (
     wavefront,
 )
 from .base import OnComplete, new_analysis
+from zospy.analyses import new
 
 __all__ = (
     "mtf",
@@ -41,4 +42,5 @@ __all__ = (
     "wavefront",
     "new_analysis",
     "OnComplete",
+    "new",
 )

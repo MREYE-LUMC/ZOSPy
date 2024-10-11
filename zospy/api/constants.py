@@ -86,7 +86,7 @@ def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
 Constant = TypeVar("Constant")
 
 
-def process_constant(constant: Iterable[Constant], value: Constant | str | None) -> Constant:
+def process_constant(constant: type[Constant], value: Constant | str | None) -> Constant:
     if (value is None or value == "None") and hasattr(constant, "None_"):
         return getattr(constant, "None_")
     elif isinstance(value, str) and hasattr(constant, value):
