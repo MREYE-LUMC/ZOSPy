@@ -493,7 +493,7 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
             clean_file = True
         else:
             if not path.suffix == suffix:
-                raise ValueError(f"cfgfile should end with '{suffix}'")
+                raise ValueError(f"File path should end with '{suffix}'.")
 
             clean_file = False
 
