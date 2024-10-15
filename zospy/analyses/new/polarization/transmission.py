@@ -54,7 +54,7 @@ class PolarizationTransmissionResult:
     chief_ray_transmissions: list[ChiefRayTransmission] = Field(alias="Chief ray transmission")
 
 
-@dataclass
+@dataclass(config=ConfigDict(validate_assignment=True))
 class PolarizationTransmissionSettings:
     sampling: str | Annotated[int, Field(ge=0)] = Field(default="32x32", description="Sampling grid size")
     unpolarized: bool = Field(default=False, description="Use unpolarized light")
@@ -75,17 +75,9 @@ class PolarizationTransmission(AnalysisWrapper[PolarizationTransmissionResult, P
         jy: float = 0,
         x_phase: float = 0,
         y_phase: float = 0,
+        settings: PolarizationTransmissionSettings | None = None,
     ):
-        super().__init__()
-
-        self._settings = PolarizationTransmissionSettings(
-            sampling=sampling,
-            unpolarized=unpolarized,
-            jx=jx,
-            jy=jy,
-            x_phase=x_phase,
-            y_phase=y_phase,
-        )
+        super().__init__(settings or PolarizationTransmissionSettings(), locals())
 
     @property
     def settings(self) -> PolarizationTransmissionSettings:

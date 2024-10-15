@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from distutils.command.config import config
 from typing import Annotated, TypedDict
 
-from pydantic import Field
+from pydantic import Field, ConfigDict
 from pydantic.dataclasses import dataclass
 
 from zospy.analyses.new.base import AnalysisData, AnalysisWrapper
@@ -26,9 +27,6 @@ class ZernikeStandardCoefficientsTransformer(ZospyTransformer):
         index, value, formula = args
 
         return SimpleField(index, _ZernikeStandardCoefficient(value=value, formula=formula))
-
-    # def unit(self, args):
-    #     return " ".join(args)
 
 
 @dataclass
@@ -67,7 +65,7 @@ class ZernikeStandardCoefficientsResult:
     coefficients: dict[int, ZernikeStandardCoefficient] = Field(alias="Coefficients")
 
 
-@dataclass
+@dataclass(config=ConfigDict(validate_assignment=True))
 class ZernikeStandardCoefficientsSettings:
     sampling: str = Field(default="64x64", description="Sampling grid size")
     maximum_term: int = Field(default=37, ge=0, description="Maximum term")
@@ -96,24 +94,9 @@ class ZernikeStandardCoefficients(
         sx: float = 0.0,
         sy: float = 0.0,
         sr: float = 0.0,
+        settings: ZernikeStandardCoefficientsSettings | None = None,
     ):
-        super().__init__()
-
-        self._settings = ZernikeStandardCoefficientsSettings(
-            sampling=sampling,
-            maximum_term=maximum_term,
-            wavelength=wavelength,
-            field=field,
-            reference_opd_to_vertex=reference_opd_to_vertex,
-            surface=surface,
-            sx=sx,
-            sy=sy,
-            sr=sr,
-        )
-
-    @property
-    def settings(self) -> ZernikeStandardCoefficientsSettings:
-        return self._settings
+        super().__init__(settings or ZernikeStandardCoefficientsSettings(), locals())
 
     def run_analysis(self, *args, **kwargs) -> AnalysisData:
         self.analysis.Settings.SampleSize = getattr(

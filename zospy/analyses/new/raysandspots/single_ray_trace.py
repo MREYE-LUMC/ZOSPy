@@ -80,7 +80,7 @@ class SingleRayTraceResult:
         return self
 
 
-@dataclass
+@dataclass(config=ConfigDict(validate_assignment=True))
 class SingleRayTraceSettings:
     hx: float = Field(ge=-1, le=1, default=0, description="Normalized X field coordinate")
     hy: float = Field(ge=-1, le=1, default=0, description="Normalized Y field coordinate")
@@ -105,19 +105,9 @@ class SingleRayTrace(AnalysisWrapper[SingleRayTraceResult, SingleRayTraceSetting
         field: int = 1,
         raytrace_type: constants.Analysis.Settings.Aberrations.RayTraceType | str = "DirectionCosines",
         global_coordinates: bool = False,
+        settings: SingleRayTraceSettings | None = None,
     ):
-        super().__init__()
-
-        self._settings = SingleRayTraceSettings(
-            hx=hx,
-            hy=hy,
-            px=px,
-            py=py,
-            wavelength=wavelength,
-            field=field,
-            raytrace_type=raytrace_type,
-            global_coordinates=global_coordinates,
-        )
+        super().__init__(settings or SingleRayTraceSettings(), locals())
 
     @property
     def settings(self) -> SingleRayTraceSettings:

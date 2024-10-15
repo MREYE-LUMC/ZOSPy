@@ -8,7 +8,7 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from tempfile import mkstemp
-from typing import TYPE_CHECKING, Generic, Literal, TypeVar, cast
+from typing import Generic, Literal, TYPE_CHECKING, TypeVar, cast
 
 from zospy.analyses.new.parsers import load_grammar, parse
 from zospy.api import _ZOSAPI, constants
@@ -383,25 +383,31 @@ def _handle_complete(self, analysis: Analysis, oncomplete: OnComplete | str) -> 
 class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     TYPE: str = None
 
-    def __init__(
-        self,
-        config_file: str | Path | None = None,
+    def __init__(self, settings: AnalysisSettings, settings_arguments: dict[str, any]):
+        self._init_settings(settings, settings_arguments)
+
         self._config_file = None
         self._text_output_file = None
-    ):
-        self.config_file = None if config_file is None else Path(config_file)
-        self.text_output_file = None if text_output_file is None else Path(text_output_file)
-        self.oncomplete = oncomplete
 
         self._oss = None
         self._analysis = None
         self._remove_config_file = False
         self._remove_text_output_file = False
 
+    def _init_settings(self, settings: AnalysisSettings, parameters: dict[str, any]):
+        parameters.pop("self", None)  # Remove self from parameters if it exists
+
+        self._settings = settings
+
+        for key, value in parameters.items():
+            if not hasattr(self.settings, key):
+                raise ValueError(f"Invalid setting: {key}")
+
+            setattr(self.settings, key, value)
+
     @property
-    @abstractmethod
     def settings(self) -> AnalysisSettings:
-        pass
+        return self._settings
 
     @property
     def config_file(self) -> Path | None:
@@ -489,7 +495,7 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         self._config_file, self._remove_config_file = self._create_tempfile(config_file, ".CFG")
         self._text_output_file, self._remove_text_output_file = self._create_tempfile(text_output_file, ".txt")
 
-        data = self.run_analysis(oss, *args, **kwargs)
+        data = self.run_analysis(oss)
 
         result = AnalysisResult(
             data,

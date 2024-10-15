@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from pydantic import AliasChoices, Field
+from pydantic import AliasChoices, ConfigDict, Field
 from pydantic.dataclasses import dataclass
 
 from zospy.analyses.new.base import AnalysisSettings, AnalysisWrapper
@@ -84,7 +84,7 @@ class SurfaceDataResult:
     shape_factor: float | None = Field(alias="Shape Factor", default=None)
 
 
-@dataclass
+@dataclass(config=ConfigDict(validate_assignment=True))
 class SurfaceDataSettings:
     surface: int = Field(default=1, ge=0, description="Surface number to analyze.")
 
@@ -92,13 +92,8 @@ class SurfaceDataSettings:
 class SurfaceData(AnalysisWrapper[SurfaceDataResult, SurfaceDataSettings]):
     TYPE = "SurfaceDataSettings"
 
-    def __init__(
-        self,
-        surface: int = 1,
-    ):
-        super().__init__()
-
-        self._settings = SurfaceDataSettings(surface=surface)
+    def __init__(self, surface: int = 1, settings: SurfaceDataSettings | None = None):
+        super().__init__(settings or SurfaceDataSettings(), locals())
 
     @property
     def settings(self) -> AnalysisSettings:
