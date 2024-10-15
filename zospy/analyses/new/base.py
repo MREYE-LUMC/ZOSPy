@@ -386,8 +386,8 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     def __init__(
         self,
         config_file: str | Path | None = None,
-        text_output_file: str | Path | None = None,
-        oncomplete: OnComplete | Literal["Close", "Release", "Sustain"] = "Close",
+        self._config_file = None
+        self._text_output_file = None
     ):
         self.config_file = None if config_file is None else Path(config_file)
         self.text_output_file = None if text_output_file is None else Path(text_output_file)
@@ -405,33 +405,19 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
     @property
     def config_file(self) -> Path | None:
+        """Path to the temporary configuration file.
+
+        This file is used to store the settings of the analysis and can only be set from the `run` method.
+        """
         return self._config_file
-
-    @config_file.setter
-    def config_file(self, value: str | Path | None):
-        if isinstance(value, str):
-            value = Path(value)
-
-        self._config_file = value
 
     @property
     def text_output_file(self) -> Path | None:
+        """Path to the temporary text output file.
+
+        This file is used to store the text output of the analysis and can only be set from the `run` method.
+        """
         return self._text_output_file
-
-    @text_output_file.setter
-    def text_output_file(self, value: str | Path | None):
-        if isinstance(value, str):
-            value = Path(value)
-
-        self._text_output_file = value
-
-    @property
-    def oncomplete(self) -> OnComplete:
-        return self._oncomplete
-
-    @oncomplete.setter
-    def oncomplete(self, value: OnComplete | Literal["Close", "Release", "Sustain"]):
-        self._oncomplete = OnComplete(value)
 
     @property
     def oss(self) -> OpticStudioSystem:
@@ -477,25 +463,31 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
         return Path(path), clean_file
 
-    def _complete(self) -> None:
+    def _complete(self, oncomplete: OnComplete = OnComplete.Close) -> None:
         """Completes the analysis by either closing, releasing or sustaining it."""
-        if self.oncomplete == OnComplete.Close:
+        if oncomplete == OnComplete.Close:
             self.analysis.Close()
             self._analysis = None
-        elif self.oncomplete == OnComplete.Release:
+        elif oncomplete == OnComplete.Release:
             self.analysis.Release()
             self._analysis = None
-        elif self.oncomplete == OnComplete.Sustain:
+        elif oncomplete == OnComplete.Sustain:
             return
         else:
-            raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {self.oncomplete}")
+            raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}")
 
-    def run(self, oss: OpticStudioSystem, *args, **kwargs) -> AnalysisResult[AnalysisData, AnalysisSettings]:
+    def run(
+        self,
+        oss: OpticStudioSystem,
+        config_file: str | Path | None = None,
+        text_output_file: str | Path | None = None,
+        oncomplete: OnComplete | Literal["Close", "Release", "Sustain"] = "Close",
+    ) -> AnalysisResult[AnalysisData, AnalysisSettings]:
         self._oss = weakref.proxy(oss)
         self._create_analysis()
 
-        self.config_file, self._remove_config_file = self._create_tempfile(self.config_file, ".CFG")
-        self.text_output_file, self._remove_text_output_file = self._create_tempfile(self._text_output_file, ".txt")
+        self._config_file, self._remove_config_file = self._create_tempfile(config_file, ".CFG")
+        self._text_output_file, self._remove_text_output_file = self._create_tempfile(text_output_file, ".txt")
 
         data = self.run_analysis(oss, *args, **kwargs)
 
@@ -513,7 +505,7 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         if self._remove_text_output_file:
             os.remove(self._text_output_file)
 
-        self._complete()
+        self._complete(OnComplete(oncomplete))
 
         return result
 
