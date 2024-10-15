@@ -92,6 +92,9 @@ class SurfaceDataSettings:
 class SurfaceData(AnalysisWrapper[SurfaceDataResult, SurfaceDataSettings]):
     TYPE = "SurfaceDataSettings"
 
+    _needs_config_file = True
+    _needs_text_output_file = True
+
     def __init__(self, surface: int = 1, settings: SurfaceDataSettings | None = None):
         super().__init__(settings or SurfaceDataSettings(), locals())
 

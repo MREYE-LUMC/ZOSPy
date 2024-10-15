@@ -83,6 +83,8 @@ class ZernikeStandardCoefficients(
 ):
     TYPE = "ZernikeStandardCoefficients"
 
+    _needs_text_output_file = True
+
     def __init__(
         self,
         sampling: str = "64x64",

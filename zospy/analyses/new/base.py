@@ -383,6 +383,10 @@ def _handle_complete(self, analysis: Analysis, oncomplete: OnComplete | str) -> 
 class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     TYPE: str = None
 
+    # Flags to indicate if the analysis needs a configuration file or text output file
+    _needs_config_file: bool = False
+    _needs_text_output_file: bool = False
+
     def __init__(self, settings: AnalysisSettings, settings_arguments: dict[str, any]):
         self._init_settings(settings, settings_arguments)
 
@@ -414,7 +418,20 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         """Path to the temporary configuration file.
 
         This file is used to store the settings of the analysis and can only be set from the `run` method.
+
+        Returns
+        -------
+        Path | None
+            Path to the temporary configuration file.
+
+        Raises
+        ------
+        ValueError
+            If the analysis does not require a configuration file.
         """
+        if not self._needs_config_file:
+            raise ValueError("This analysis does not require a configuration file.")
+
         return self._config_file
 
     @property
@@ -422,7 +439,20 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         """Path to the temporary text output file.
 
         This file is used to store the text output of the analysis and can only be set from the `run` method.
+
+        Returns
+        -------
+        Path | None
+            Path to the temporary text output file.
+
+        Raises
+        ------
+        ValueError
+            If the analysis does not require a text output file.
         """
+        if not self._needs_text_output_file:
+            raise ValueError("This analysis does not require a text output file.")
+
         return self._text_output_file
 
     @property
@@ -492,8 +522,11 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         self._oss = weakref.proxy(oss)
         self._create_analysis()
 
-        self._config_file, self._remove_config_file = self._create_tempfile(config_file, ".CFG")
-        self._text_output_file, self._remove_text_output_file = self._create_tempfile(text_output_file, ".txt")
+        if self._needs_config_file:
+            self._config_file, self._remove_config_file = self._create_tempfile(config_file, ".CFG")
+
+        if self._needs_text_output_file:
+            self._text_output_file, self._remove_text_output_file = self._create_tempfile(text_output_file, ".txt")
 
         data = self.run_analysis(oss)
 

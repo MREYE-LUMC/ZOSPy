@@ -67,6 +67,9 @@ class PolarizationTransmissionSettings:
 class PolarizationTransmission(AnalysisWrapper[PolarizationTransmissionResult, PolarizationTransmissionSettings]):
     TYPE = "Transmission"
 
+    _needs_config_file = True
+    _needs_text_output_file = True
+
     def __init__(
         self,
         sampling: str | int = "32x32",

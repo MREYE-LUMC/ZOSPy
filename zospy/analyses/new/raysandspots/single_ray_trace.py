@@ -95,6 +95,8 @@ class SingleRayTraceSettings:
 class SingleRayTrace(AnalysisWrapper[SingleRayTraceResult, SingleRayTraceSettings]):
     TYPE = "RayTrace"
 
+    _needs_text_output_file = True
+
     def __init__(
         self,
         hx: float = 0,
