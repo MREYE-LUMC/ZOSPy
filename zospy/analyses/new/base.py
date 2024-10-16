@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import weakref
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, is_dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -399,18 +399,18 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         self._remove_text_output_file = False
 
     def _init_settings(self, settings: AnalysisSettings, parameters: dict[str, any]):
-        parameters.pop("self", None)  # Remove self from parameters if it exists
-
         self._settings = settings
 
-        for key, value in parameters.items():
-            if not hasattr(self.settings, key):
-                raise ValueError(f"Invalid setting: {key}")
+        if not is_dataclass(settings):
+            raise ValueError("settings should be a dataclass.")
 
-            setattr(self.settings, key, value)
+        for field in fields(settings):
+            if field.name in parameters:
+                setattr(self.settings, field.name, parameters[field.name])
 
     @property
     def settings(self) -> AnalysisSettings:
+        """Settings of the analysis."""
         return self._settings
 
     @property
@@ -464,9 +464,6 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
     @property
     def analysis(self) -> Analysis | None:
-        if self._analysis is None:
-            raise ValueError("Analysis has not been created.")
-
         return self._analysis
 
     def get_text_output(self) -> str:
