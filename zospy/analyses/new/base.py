@@ -463,7 +463,7 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         return self._oss
 
     @property
-    def analysis(self) -> Analysis:
+    def analysis(self) -> Analysis | None:
         if self._analysis is None:
             raise ValueError("Analysis has not been created.")
 
@@ -478,6 +478,9 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         return output
 
     def _create_analysis(self):
+        if self.analysis is not None and self.analysis.TypeName == self.TYPE:
+            return
+
         analysis_type = constants.process_constant(constants.Analysis.AnalysisIDM, self.TYPE)
         self._analysis = new_analysis(self.oss, analysis_type)
 
