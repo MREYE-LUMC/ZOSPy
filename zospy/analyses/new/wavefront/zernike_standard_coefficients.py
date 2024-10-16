@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from distutils.command.config import config
 from typing import Annotated, TypedDict
 
-from pydantic import Field, ConfigDict
+from pydantic import ConfigDict, Field
 from pydantic.dataclasses import dataclass
 
 from zospy.analyses.new.base import AnalysisData, AnalysisWrapper
