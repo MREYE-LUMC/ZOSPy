@@ -24,8 +24,10 @@ classifiers = [
 ]
 requires-python = ">=3.9,<3.13"
 dependencies = [
+    "lark ~= 1.2.0",
     "pythonnet >=3.0.0,<4",
     "pandas",
+    "pydantic >= 2.0.0",
     "numpy",
     "semver >= 3.0.0,<4"
 ]

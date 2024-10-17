@@ -1,0 +1,36 @@
+start: "\ufeff"? _NEWLINE? _value+
+
+_value: _field
+    | surface_number
+    | _edge_thickness
+    | _refractive_index
+    | surface_powers
+    | refractive_index_table
+
+surface_number: "Surface" UINT "Data" "Summary" _NEWLINE
+
+_edge_thickness: field_group{et_name, et_fields}
+!et_name: "Edge" "Thickness" -> field_name // Process as field name
+et_fields: simple_field~2 -> dict
+
+_refractive_index: field_group{ri_name, ri_fields}
+!ri_name: "Index" "of" "Refraction" -> field_name // Process as field name
+ri_fields: (simple_field | _model_glass) simple_field? refractive_index_table -> dict
+
+_model_glass: field_group{mg_name, mg_fields}
+!mg_name: "Model" "glass" -> field_name // Process as field name
+mg_fields: simple_field~3 -> dict
+
+surface_powers: field_group{sp_name, sp_fields}~2
+sp_name: "Surface" "Powers" "(" WORD* ")" -> field_name // Process as field name
+sp_fields: (parametric_field | f_number)+ -> dict
+f_number: /F\/#/ field_parameters+ ":" field_value _NEWLINE -> parametric_field
+
+refractive_index_table: table{rit_header, rit_row}
+!rit_header: "#" "Wavelength" "Index" -> string_list
+rit_row: INT _number _number -> list
+
+%import .zospy (ALPHANUMERIC, _COLON, DATE, FLOAT, INT, NUMBER, STRING, UINT, _field, simple_field, parametric_field, field_name, field_value, field_parameters, field_group, table, _number)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE
