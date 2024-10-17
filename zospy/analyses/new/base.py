@@ -346,40 +346,6 @@ def new_analysis(
     return Analysis(analysis)
 
 
-def _create_tempfile(path: str | None, suffix: str) -> (str, bool):
-    if path is None:
-        fd, path = mkstemp(suffix=suffix, prefix="zospy_")
-        os.close(fd)
-        clean_file = True
-    else:
-        if not path.endswith(suffix):
-            raise ValueError(f"cfgfile should end with '{suffix}'")
-
-        clean_file = False
-
-    return path, clean_file
-
-
-def _handle_complete(self, analysis: Analysis, oncomplete: OnComplete | str) -> None:
-    """Completes the analysis by either closing, releasing or sustaining it.
-
-    Parameters
-    ----------
-    oncomplete: OnComplete | str
-        Action to perform on completion.
-    """
-    oncomplete = OnComplete(oncomplete)
-
-    if oncomplete == OnComplete.Close:
-        analysis.Close()
-    elif oncomplete == OnComplete.Release:
-        analysis.Release()
-    elif oncomplete == OnComplete.Sustain:
-        return
-    else:
-        raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}")
-
-
 class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     TYPE: str = None
 
@@ -532,7 +498,7 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
         result = AnalysisResult(
             data,
-            settings=None,
+            settings=self.settings,
             metadata=self.analysis.metadata,
             header=self.analysis.header_data,
             messages=self.analysis.messages,
