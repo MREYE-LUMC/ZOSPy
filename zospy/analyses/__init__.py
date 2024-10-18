@@ -18,6 +18,8 @@ Open an analysis for which a wrapper function is not yet available:
 >>> analysis = zp.analyses.new_analysis(oss, zp.constants.Analysis.AnalysisIDM.ImageSimulation)
 """
 
+from zospy.analyses import new
+
 from . import (
     mtf,
     polarization,
@@ -41,4 +43,5 @@ __all__ = (
     "wavefront",
     "new_analysis",
     "OnComplete",
+    "new",
 )

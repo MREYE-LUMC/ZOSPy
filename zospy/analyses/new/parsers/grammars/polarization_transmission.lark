@@ -1,0 +1,24 @@
+start: "\ufeff"? _NEWLINE? _value+ field_transmissions text chief_ray_transmissions
+
+_value: _field
+    | text
+
+field_transmissions: field_transmission+
+field_transmission.2: field_pos parametric_field+ simple_field -> dict
+
+chief_ray_transmissions: chief_ray_transmission+
+chief_ray_transmission.2: field_pos wavelength transmission_table -> dict
+
+wavelength.2: /Wavelength/ UINT ":" FLOAT unit _NEWLINE -> parametric_unit_field
+
+transmission_table: table{transmission_header, transmission_row}
+!transmission_header: "Surf" /Tot\.\s+Tran/ /Rel\.\s+Tran/ -> string_list
+transmission_row: INT FLOAT~2 -> list 
+    | "Chief" "ray" "does" "not" "trace" "or" "is" "vignetted." -> multi_string
+
+field_pos: /Field\s+Pos/ ":" FLOAT "(" unit ")" _NEWLINE -> unit_field
+
+%import .zospy (ALPHANUMERIC, _COLON, DATE, FLOAT, INT, LENS_UNIT, NUMBER, STRING, UINT, _field, simple_field, parametric_field, unit_field, unit, field_name, field_value, field_parameters, field_group, text, table, _number, multi_string)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE
