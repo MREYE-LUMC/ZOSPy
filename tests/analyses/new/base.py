@@ -68,6 +68,13 @@ class TestAnalysisWrapper:
         assert hasattr(constants.Analysis.AnalysisIDM, cls.TYPE)
 
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
+    def test_init_contains_all_settings(self, cls):
+        init_signature = inspect.signature(cls.__init__)
+        settings_fields = fields(cls().settings)
+
+        assert all(field.name in init_signature.parameters for field in settings_fields)
+
+    @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_analyses_default_values(self, cls):
         settings_defaults = self.get_settings_defaults(type(cls().settings))
         init_signature = inspect.signature(cls.__init__)
