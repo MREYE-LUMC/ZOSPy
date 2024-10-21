@@ -92,7 +92,7 @@ class TestAnalysisWrapper:
             ("config_file", None),
         ],
     )
-    def test_create_text_output_file(self, temp_file_type, filename, tmp_path, monkeypatch):
+    def test_create_temp_file(self, temp_file_type, filename, tmp_path, monkeypatch):
         analysis = MockAnalysis(block_remove_temp_files=True)
         monkeypatch.setattr(analysis, f"_needs_{temp_file_type}", True)
 
@@ -119,7 +119,7 @@ class TestAnalysisWrapper:
             ("config_file", "test.cfg"),
         ],
     )
-    def test_text_output_file_wrong_filename(self, temp_file_type, tmp_path, filename, monkeypatch):
+    def test_temp_file_wrong_filename(self, temp_file_type, tmp_path, filename, monkeypatch):
         analysis = MockAnalysis()
         monkeypatch.setattr(analysis, f"_needs_{temp_file_type}", True)
 
@@ -135,7 +135,7 @@ class TestAnalysisWrapper:
             ("config_file", None),
         ],
     )
-    def test_remove_text_output_file(self, temp_file_type, filename, tmp_path, monkeypatch):
+    def test_remove_temp_file(self, temp_file_type, filename, tmp_path, monkeypatch):
         analysis = MockAnalysis()
         monkeypatch.setattr(analysis, f"_needs_{temp_file_type}", True)
 
