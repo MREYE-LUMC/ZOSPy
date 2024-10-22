@@ -167,40 +167,43 @@ def cross_section(
 
     analysis = new_analysis(oss, analysis_type, settings_first=False)
 
-    _close_current_tool(oss)
+    if oss._ZOS.version >= (24, 1, 0):
+        _close_current_tool(oss)
 
-    layout_tool = oss.Tools.Layouts.OpenCrossSectionExport()
-    layout_tool.StartSurface = start_surface
-    layout_tool.EndSurface = end_surface
-    layout_tool.NumberOfRays = number_of_rays
-    layout_tool.YStretch = y_stretch
-    layout_tool.FletchRays = fletch_rays
-    layout_tool.Wavelength = wavelength
-    layout_tool.Field = field
-    layout_tool.ColorRaysBy = constants.process_constant(
-        constants.Tools.Layouts.ColorRaysByCrossSectionOptions, color_rays_by
-    )
-    layout_tool.UpperPupil = upper_pupil
-    layout_tool.LowerPupil = lower_pupil
-    layout_tool.DeleteVignetted = delete_vignetted
-    layout_tool.MarginalAndChiefOnly = marginal_and_chief_only
-    layout_tool.OutputPixelWidth, layout_tool.OutputPixelHeight = image_size
-    layout_tool.RaysLineThickness = constants.process_constant(
-        constants.Tools.Layouts.LineThicknessOptions, line_thickness
-    )
+        layout_tool = oss.Tools.Layouts.OpenCrossSectionExport()
+        layout_tool.StartSurface = start_surface
+        layout_tool.EndSurface = end_surface
+        layout_tool.NumberOfRays = number_of_rays
+        layout_tool.YStretch = y_stretch
+        layout_tool.FletchRays = fletch_rays
+        layout_tool.Wavelength = wavelength
+        layout_tool.Field = field
+        layout_tool.ColorRaysBy = constants.process_constant(
+            constants.Tools.Layouts.ColorRaysByCrossSectionOptions, color_rays_by
+        )
+        layout_tool.UpperPupil = upper_pupil
+        layout_tool.LowerPupil = lower_pupil
+        layout_tool.DeleteVignetted = delete_vignetted
+        layout_tool.MarginalAndChiefOnly = marginal_and_chief_only
+        layout_tool.OutputPixelWidth, layout_tool.OutputPixelHeight = image_size
+        layout_tool.RaysLineThickness = constants.process_constant(
+            constants.Tools.Layouts.LineThicknessOptions, line_thickness
+        )
 
-    if imgoutfile is not None:
-        layout_tool.SaveImageAsFile = True
-        layout_tool.OutputFileName = _validate_path(imgoutfile)
+        if imgoutfile is not None:
+            layout_tool.SaveImageAsFile = True
+            layout_tool.OutputFileName = _validate_path(imgoutfile)
+        else:
+            layout_tool.SaveImageAsFile = False
+
+        layout_tool.RunAndWaitForCompletion()
+
+        if not layout_tool.Succeeded:
+            raise RuntimeError("The cross-section export tool failed to run.")
+
+        image_data = _get_image_data(layout_tool.ImageExportData) if imgoutfile is None else None
     else:
-        layout_tool.SaveImageAsFile = False
-
-    layout_tool.RunAndWaitForCompletion()
-
-    if not layout_tool.Succeeded:
-        raise RuntimeError("The cross-section export tool failed to run.")
-
-    image_data = _get_image_data(layout_tool.ImageExportData) if imgoutfile is None else None
+        image_data = None
 
     # Get headerdata, metadata and messages
     headerdata = analysis.get_header_data()
@@ -352,58 +355,61 @@ def viewer_3d(
 
     analysis = new_analysis(oss, analysis_type, settings_first=False)
 
-    _close_current_tool(oss)
+    if oss._ZOS.version >= (24, 1, 0):
+        _close_current_tool(oss)
 
-    layout_tool = oss.Tools.Layouts.Open3DViewerExport()
+        layout_tool = oss.Tools.Layouts.Open3DViewerExport()
 
-    layout_tool.StartSurface = start_surface
-    layout_tool.EndSurface = end_surface
-    layout_tool.NumberOfRays = number_of_rays
-    layout_tool.Wavelength = _validate_wavelength(oss, wavelength)
-    layout_tool.Field = _validate_field(oss, field)
-    layout_tool.RayPattern = constants.process_constant(constants.Tools.General.RayPatternType, ray_pattern)
-    layout_tool.ColorRaysBy = constants.process_constant(constants.Tools.Layouts.ColorRaysByOptions, color_rays_by)
-    layout_tool.DeleteVignetted = delete_vignetted
-    layout_tool.HideLensFaces = hide_lens_faces
-    layout_tool.HideLensEdges = hide_lens_edges
-    layout_tool.HideXBars = hide_x_bars
-    layout_tool.DrawParaxialPupils = draw_paraxial_pupils
-    layout_tool.FletchRays = fletch_rays
-    layout_tool.SplitNSCRays = split_nsc_rays
-    layout_tool.ScatterNSCRays = scatter_nsc_rays
-    layout_tool.DrawRealEntrancePupils = constants.process_constant(
-        constants.Tools.Layouts.RealPupilOptions, draw_real_entrance_pupils
-    )
-    layout_tool.DrawRealExitPupils = constants.process_constant(
-        constants.Tools.Layouts.RealPupilOptions, draw_real_exit_pupils
-    )
-    layout_tool.SurfaceLineThickness = constants.process_constant(
-        constants.Tools.Layouts.LineThicknessOptions, surface_line_thickness
-    )
-    layout_tool.RaysLineThickness = constants.process_constant(
-        constants.Tools.Layouts.LineThicknessOptions, ray_line_thickness
-    )
-    layout_tool.ConfigurationAll = configuration_all
-    layout_tool.ConfigurationCurrent = configuration_current
-    layout_tool.ConfigurationOffsetX = configuration_offset_x
-    layout_tool.ConfigurationOffsetY = configuration_offset_y
-    layout_tool.ConfigurationOffsetZ = configuration_offset_z
-    layout_tool.CameraViewpointAngleX = camera_viewpoint_angle_x
-    layout_tool.CameraViewpointAngleY = camera_viewpoint_angle_y
-    layout_tool.CameraViewpointAngleZ = camera_viewpoint_angle_z
+        layout_tool.StartSurface = start_surface
+        layout_tool.EndSurface = end_surface
+        layout_tool.NumberOfRays = number_of_rays
+        layout_tool.Wavelength = _validate_wavelength(oss, wavelength)
+        layout_tool.Field = _validate_field(oss, field)
+        layout_tool.RayPattern = constants.process_constant(constants.Tools.General.RayPatternType, ray_pattern)
+        layout_tool.ColorRaysBy = constants.process_constant(constants.Tools.Layouts.ColorRaysByOptions, color_rays_by)
+        layout_tool.DeleteVignetted = delete_vignetted
+        layout_tool.HideLensFaces = hide_lens_faces
+        layout_tool.HideLensEdges = hide_lens_edges
+        layout_tool.HideXBars = hide_x_bars
+        layout_tool.DrawParaxialPupils = draw_paraxial_pupils
+        layout_tool.FletchRays = fletch_rays
+        layout_tool.SplitNSCRays = split_nsc_rays
+        layout_tool.ScatterNSCRays = scatter_nsc_rays
+        layout_tool.DrawRealEntrancePupils = constants.process_constant(
+            constants.Tools.Layouts.RealPupilOptions, draw_real_entrance_pupils
+        )
+        layout_tool.DrawRealExitPupils = constants.process_constant(
+            constants.Tools.Layouts.RealPupilOptions, draw_real_exit_pupils
+        )
+        layout_tool.SurfaceLineThickness = constants.process_constant(
+            constants.Tools.Layouts.LineThicknessOptions, surface_line_thickness
+        )
+        layout_tool.RaysLineThickness = constants.process_constant(
+            constants.Tools.Layouts.LineThicknessOptions, ray_line_thickness
+        )
+        layout_tool.ConfigurationAll = configuration_all
+        layout_tool.ConfigurationCurrent = configuration_current
+        layout_tool.ConfigurationOffsetX = configuration_offset_x
+        layout_tool.ConfigurationOffsetY = configuration_offset_y
+        layout_tool.ConfigurationOffsetZ = configuration_offset_z
+        layout_tool.CameraViewpointAngleX = camera_viewpoint_angle_x
+        layout_tool.CameraViewpointAngleY = camera_viewpoint_angle_y
+        layout_tool.CameraViewpointAngleZ = camera_viewpoint_angle_z
 
-    if imgoutfile is not None:
-        layout_tool.SaveImageAsFile = True
-        layout_tool.OutputFileName = _validate_path(imgoutfile)
+        if imgoutfile is not None:
+            layout_tool.SaveImageAsFile = True
+            layout_tool.OutputFileName = _validate_path(imgoutfile)
+        else:
+            layout_tool.SaveImageAsFile = False
+
+        layout_tool.RunAndWaitForCompletion()
+
+        if not layout_tool.Succeeded:
+            raise RuntimeError("The 3D viewer export tool failed to run.")
+
+        image_data = _get_image_data(layout_tool.ImageExportData) if imgoutfile is None else None
     else:
-        layout_tool.SaveImageAsFile = False
-
-    layout_tool.RunAndWaitForCompletion()
-
-    if not layout_tool.Succeeded:
-        raise RuntimeError("The 3D viewer export tool failed to run.")
-
-    image_data = _get_image_data(layout_tool.ImageExportData) if imgoutfile is None else None
+        image_data = None
 
     # Get headerdata, metadata and messages
     headerdata = analysis.get_header_data()
