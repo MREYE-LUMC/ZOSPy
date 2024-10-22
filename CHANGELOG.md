@@ -11,7 +11,7 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
-- Experimental new interface for analyses in `zospy.analyses.new` (#78 and #15).
+- Experimental new interface for analyses in `zospy.analyses.new` (#78, #15)
 
 ### Fixed
 
