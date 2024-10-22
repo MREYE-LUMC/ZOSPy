@@ -31,13 +31,16 @@ package can be properly installed.
   ZOSPy in extension mode and standalone mode simultaneously. Specifying the command line flag `--extension` instructs
   PyTest to connect to Zemax OpticStudio in extension mode. Make sure the interactive extension mode has been activated
   and `Auto Close on Disconnect` is unchecked.
-- **`--output-directory=<OUTPUT_DIRECTORY>`**: If specified, all created OpticStudio systems are saved to this
+- **`--output-directory <OUTPUT_DIRECTORY>`**: If specified, all created OpticStudio systems are saved to this
   directory.
+- **`--opticstudio-directory <OPTICSTUDIO_DIRECTORY>`**: If specified, the path to the OpticStudio installation directory
+  is set to this value. This is particularly useful if multiple OpticStudio versions are installed on the same system,
+  and you want to use a specific version.
 
 These arguments can also be passed to tox, e.g. (note the double dashes `--` after the tox arguments):
 
 ```shell
-tox run -e py311-standalone -- --output-directory="zospy/is/cool" 
+tox run -e py311-standalone -- --output-directory "zospy/is/cool" 
 ```
 
 ## Generating test reference data
