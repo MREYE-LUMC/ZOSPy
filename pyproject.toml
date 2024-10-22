@@ -60,7 +60,6 @@ dev = [
     "zospy[test]",
     "black[jupyter] == 23.3.0",
     "isort",
-    "pydantic ~= 2.0.0",
     "ruff",
 ]
 
