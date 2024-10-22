@@ -9,6 +9,7 @@ __all__ = (
     "ConversionOrder",
     "CoordinateConversionResult",
     "CoordinateReturnType",
+    "IndexDataType",
     "InterpolationMethod",
     "NodesDataType",
     "PilotRadiusMode",
@@ -50,6 +51,12 @@ class CoordinateReturnType:
     OrientationOnly: CoordinateReturnType = None
     OrientationXY: CoordinateReturnType = None
     OrientationXYZ: CoordinateReturnType = None
+
+class IndexDataType:
+    None_: IndexDataType = None
+    PhysicsBasedIndex: IndexDataType = None
+    DirectRefractiveIndex: IndexDataType = None
+    Unknown: IndexDataType = None
 
 class InterpolationMethod:
     BicubicSpline: InterpolationMethod = None
