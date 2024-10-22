@@ -161,6 +161,12 @@ zp.functions.lde.surface_change_type(newsurf, 'Standard')
 This example creates a simple optical system consisting of a single lens.
 
 ```python
+import matplotlib.pyplot as plt
+import zospy as zp
+
+zos = zp.ZOS()
+oss = zos.connect()
+
 # Create a new, empty system
 oss.new()
 
@@ -172,22 +178,36 @@ oss.SystemData.Wavelengths.GetWavelength(1).Wavelength = 0.543  # in μm
 surface_object = oss.LDE.GetSurfaceAt(0)
 surface_object.Thickness = float("inf")
 
-# Use a very small stop size, so the system is approximately paraxial
-surface_stop = oss.LDE.GetSurfaceAt(1)
-surface_stop.SemiDiameter = 0.1
+# Add a dummy surface for visualization purposes
+input_beam = oss.LDE.InsertNewSurfaceAt(1)
+input_beam.Comment = "input beam"
+input_beam.Thickness = 10
+
+# Use a stop diameter of 4 mm
+surface_stop = oss.LDE.GetSurfaceAt(2)
+surface_stop.SemiDiameter = 2
 
 # Add a lens with n = 1.5
-lens_front = oss.LDE.InsertNewSurfaceAt(2)
+lens_front = oss.LDE.InsertNewSurfaceAt(3)
 lens_front.Comment = "lens front"
 lens_front.Radius = 20
 lens_front.Thickness = 1
 zp.solvers.material_model(lens_front.MaterialCell, refractive_index=1.5)
 
-lens_back = oss.LDE.InsertNewSurfaceAt(3)
+lens_back = oss.LDE.InsertNewSurfaceAt(4)
 lens_back.Comment = "lens back"
 lens_back.Radius = -20
 lens_back.Thickness = 19.792  # System is in focus
+
+# Show the system in the 3D viewer
+draw_3d = zp.analyses.systemviewers.viewer_3d(oss, surface_line_thickness="Thick", ray_line_thickness="Thick")
+
+plt.imshow(draw_3d.Data)
+plt.axis("off")
+plt.show()
 ```
+
+![Full example system](.github/assets/readme_full_example.png)
 
 ### Logging
 
