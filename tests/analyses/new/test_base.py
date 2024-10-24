@@ -176,7 +176,7 @@ class TestAnalysisResultJSONConversion:
             (np.ndarray, np.array([1, 2, 3]), {"data_type": "ndarray"}),
         ],
     )
-    def test_result_to_json(self, result_type, result_value, type_info):
+    def test_data_to_json(self, result_type, result_value, type_info):
         result = AnalysisResult[result_type, MockAnalysisSettings](
             data=result_value,
             settings=MockAnalysisSettings(),
@@ -190,6 +190,25 @@ class TestAnalysisResultJSONConversion:
 
         assert "__analysis_data__" in result_dict
         assert result_dict["__analysis_data__"] == type_info
+
+    def test_settings_to_json(self):
+        result = AnalysisResult[ValidatedDataFrame, MockAnalysisSettings](
+            data=DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]}),
+            settings=MockAnalysisSettings(),
+            metadata=AnalysisMetadata(datetime.now(), "", "", ""),
+            header=None,
+            messages=None,
+        )
+
+        result_json = result.to_json()
+        result_dict = json.loads(result_json)
+
+        assert "__analysis_settings__" in result_dict
+        assert result_dict["__analysis_settings__"] == {
+            "data_type": "dataclass",
+            "name": "MockAnalysisSettings",
+            "module": "tests.analyses.new.test_base",
+        }
 
     @pytest.mark.parametrize(
         "result_type,result_value",
