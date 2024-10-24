@@ -15,15 +15,16 @@ import numpy as np
 import pandas as pd
 import pydantic
 from pydantic import (
-    ConfigDict,
     RootModel,
     TypeAdapter,
+    field_serializer,
     model_serializer,
     model_validator,
 )
 from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
 from zospy.analyses.new.parsers import load_grammar, parse
+from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.api import _ZOSAPI, constants
 from zospy.utils.clrutils import system_datetime_to_datetime
 from zospy.zpcore import OpticStudioSystem
@@ -102,7 +103,7 @@ def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> Analys
     raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
 
 
-@pydantic.dataclasses.dataclass(frozen=True, config=ConfigDict(populate_by_name=True))
+@pydantic.dataclasses.dataclass(frozen=True)
 class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     """Zemax OpticStudio analysis result."""
 
@@ -118,6 +119,16 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     @classmethod
     def from_json(cls, data: str):
         return TypeAdapter(cls).validate_json(data)
+
+    @field_serializer("data", mode="wrap", when_used="json")
+    def _serialize_data(self, value: AnalysisData, nxt: SerializerFunctionWrapHandler, info):
+        if isinstance(value, pd.DataFrame):
+            return TypeAdapter(ValidatedDataFrame).dump_python(value, mode="json")
+
+        if isinstance(value, np.ndarray):
+            return value.tolist()
+
+        return nxt(value)
 
     @model_serializer(mode="wrap", when_used="json")
     def _serialize_types(self, nxt: SerializerFunctionWrapHandler):

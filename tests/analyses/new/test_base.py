@@ -1,13 +1,24 @@
 import inspect
+import json
 from dataclasses import fields
+from datetime import datetime
 from types import SimpleNamespace
 
+import numpy as np
 import pytest
+from pandas import DataFrame
 from pydantic.dataclasses import dataclass
 from pydantic.fields import FieldInfo
 
 from zospy import constants
-from zospy.analyses.new.base import AnalysisData, AnalysisWrapper
+from zospy.analyses.new.base import (
+    AnalysisData,
+    AnalysisMetadata,
+    AnalysisResult,
+    AnalysisWrapper,
+)
+from zospy.analyses.new.parsers.types import ValidatedDataFrame
+from zospy.analyses.new.reports.surface_data import SurfaceDataSettings
 
 analysis_wrapper_classes = AnalysisWrapper.__subclasses__()
 
@@ -151,3 +162,56 @@ class TestAnalysisWrapper:
             assert path.exists()
         else:
             assert not getattr(analysis, temp_file_type).exists()
+
+
+class TestAnalysisResultJSONConversion:
+    settings = SurfaceDataSettings()
+
+    # Only test for non-dataclass results, because dataclass results are tested separately in the corresponding
+    # analysis' tests.
+    @pytest.mark.parametrize(
+        "result_type,result_value,type_info",
+        [
+            (DataFrame, DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]}), {"data_type": "dataframe"}),
+            (np.ndarray, np.array([1, 2, 3]), {"data_type": "ndarray"}),
+        ],
+    )
+    def test_result_to_json(self, result_type, result_value, type_info):
+        result = AnalysisResult[result_type, MockAnalysisSettings](
+            data=result_value,
+            settings=MockAnalysisSettings(),
+            metadata=AnalysisMetadata(datetime.now(), "", "", ""),
+            header=None,
+            messages=None,
+        )
+
+        result_json = result.to_json()
+        result_dict = json.loads(result_json)
+
+        assert "__analysis_data__" in result_dict
+        assert result_dict["__analysis_data__"] == type_info
+
+    @pytest.mark.parametrize(
+        "result_type,result_value",
+        [
+            (ValidatedDataFrame, DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})),
+            (np.ndarray, np.array([1, 2, 3])),
+        ],
+    )
+    def test_roundtrip(self, result_type, result_value):
+        result = AnalysisResult[result_type, MockAnalysisSettings](
+            data=result_value,
+            settings=self.settings,
+            metadata=AnalysisMetadata(datetime.now(), "", "", ""),
+            header=None,
+            messages=None,
+        )
+
+        result_json = result.to_json()
+
+        result_roundtrip = AnalysisResult.from_json(result_json)
+        assert all(result_roundtrip.data == result.data)
+        assert result_roundtrip.settings == result.settings
+        assert result_roundtrip.metadata == result.metadata
+        assert result_roundtrip.header == result.header
+        assert result_roundtrip.messages == result.messages
