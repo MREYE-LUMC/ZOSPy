@@ -8,7 +8,7 @@ from pandas import DataFrame
 from pydantic import GetCoreSchemaHandler
 from pydantic.dataclasses import dataclass
 
-__all__ = ("UnitField", "ValidatedDataFrame")
+__all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray")
 
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
@@ -28,8 +28,9 @@ class ValidatedDataFrameAnnotation:
     def _validate_dataframe(value: dict | DataFrame) -> DataFrame:
         if isinstance(value, dict):
             try:
-                return DataFrame.from_dict(value, orient="columns")
-            except ValueError as e:
+                return DataFrame.from_dict(value, orient="tight")
+            # Pandas can raise a KeyError if the dictionary was created with a different `orient`
+            except (KeyError, ValueError) as e:
                 raise PydanticCustomError(
                     "invalid_dataframe",
                     "Cannot convert dictionary to DataFrame: {value}",
@@ -40,7 +41,7 @@ class ValidatedDataFrameAnnotation:
 
     @staticmethod
     def _serialize_dataframe(value: DataFrame) -> dict:
-        return value.to_dict(orient="dict")
+        return value.to_dict(orient="tight")
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source_type: any, handler: GetCoreSchemaHandler) -> CoreSchema:
@@ -75,7 +76,14 @@ class ValidatedNDArrayAnnotation:
     @staticmethod
     def _validate_ndarray(value: list | ndarray) -> ndarray:
         if isinstance(value, list):
-            return array(value)
+            try:
+                return array(value)
+            except ValueError as e:
+                raise PydanticCustomError(
+                    "invalid_ndarray",
+                    "Cannot convert list to ndarray: {value}",
+                    {"value": value},
+                ) from e
 
         return value
 

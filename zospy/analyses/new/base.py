@@ -91,7 +91,7 @@ def _deserialize_dataclass(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
 
 def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> AnalysisData:
     if typeinfo["data_type"] == "dataframe":
-        return pd.DataFrame.from_dict(data, orient="columns")
+        return pd.DataFrame.from_dict(data, orient="tight")
 
     if typeinfo["data_type"] == "ndarray":
         return np.array(data)
