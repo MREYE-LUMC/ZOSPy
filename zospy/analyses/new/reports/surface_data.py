@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from pydantic import AliasChoices, ConfigDict, Field
-from pydantic.dataclasses import dataclass
+from pydantic import AliasChoices, Field
 
 from zospy.analyses.new.base import AnalysisSettings, AnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings

@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from email.quoprimime import header_length
 from typing import Literal
 from warnings import warn
 
 import pandas as pd
 from lark import Discard
-from pydantic import ConfigDict, Field, model_validator
-from pydantic.dataclasses import dataclass
+from pydantic import Field, model_validator
 
 from zospy.analyses.new.base import AnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
@@ -25,11 +23,9 @@ class SingleRayTraceTransformer(ZospyTransformer):
 
     def ray_trace_data_table(self, args):
         header, rows = args[0]
-
-        empty_column_counts = [len(header) - len(row) for row in rows]
-
         header_length = len(header)
 
+        # Fill empty columns with NaN
         for row in rows:
             if (row_length := len(row)) < header_length:
                 # Warning is only raised once for the full loop

@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import Annotated, TypedDict
 
-from pydantic import ConfigDict, Field
-from pydantic.dataclasses import dataclass
+from pydantic import Field
 
 from zospy.analyses.new.base import AnalysisData, AnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings

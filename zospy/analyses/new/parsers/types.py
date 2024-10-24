@@ -5,7 +5,7 @@ from typing import Annotated, Generic, TypeVar
 
 from numpy import array, ndarray
 from pandas import DataFrame
-from pydantic import BeforeValidator, GetCoreSchemaHandler, PlainSerializer
+from pydantic import GetCoreSchemaHandler
 from pydantic.dataclasses import dataclass
 
 __all__ = ("UnitField", "ValidatedDataFrame")
@@ -34,7 +34,7 @@ class ValidatedDataFrameAnnotation:
                     "invalid_dataframe",
                     "Cannot convert dictionary to DataFrame: {value}",
                     {"value": value},
-                )
+                ) from e
 
         return value
 

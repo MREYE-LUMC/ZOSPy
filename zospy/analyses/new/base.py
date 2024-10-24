@@ -9,12 +9,18 @@ from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from typing import Generic, Literal, TYPE_CHECKING, TypeVar, TypedDict, cast
+from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast
 
 import numpy as np
 import pandas as pd
 import pydantic
-from pydantic import ConfigDict, RootModel, TypeAdapter, model_serializer, model_validator
+from pydantic import (
+    ConfigDict,
+    RootModel,
+    TypeAdapter,
+    model_serializer,
+    model_validator,
+)
 from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
 from zospy.analyses.new.parsers import load_grammar, parse
