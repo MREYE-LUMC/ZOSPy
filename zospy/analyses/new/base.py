@@ -6,9 +6,16 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, fields, is_dataclass
 from datetime import datetime
 from enum import Enum
+from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from typing import TYPE_CHECKING, Generic, Literal, TypeVar, cast
+from typing import Generic, Literal, TYPE_CHECKING, TypeVar, TypedDict, cast
+
+import numpy as np
+import pandas as pd
+import pydantic
+from pydantic import ConfigDict, RootModel, TypeAdapter, model_serializer, model_validator
+from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
 from zospy.analyses.new.parsers import load_grammar, parse
 from zospy.api import _ZOSAPI, constants
@@ -17,6 +24,9 @@ from zospy.zpcore import OpticStudioSystem
 
 if TYPE_CHECKING:
     from lark import Transformer
+
+
+__all__ = ("Analysis", "AnalysisResult", "AnalysisWrapper", "OnComplete", "new_analysis")
 
 
 @dataclass(frozen=True)
@@ -41,7 +51,52 @@ AnalysisData = TypeVar("AnalysisData")
 AnalysisSettings = TypeVar("AnalysisSettings")
 
 
-@dataclass(frozen=True)
+class _TypeInfo(TypedDict):
+    data_type: Literal["dataframe", "ndarray", "dataclass"]
+    name: str | None = None
+    module: str | None = None
+
+
+def _serialize_analysis_data_type(data: AnalysisData) -> _TypeInfo:
+    if isinstance(data, pd.DataFrame):
+        return {"data_type": "dataframe"}
+
+    if isinstance(data, np.ndarray):
+        return {"data_type": "ndarray"}
+
+    if is_dataclass(data):
+        return {"data_type": "dataclass", "name": type(data).__name__, "module": type(data).__module__}
+
+    raise ValueError(f"Cannot serialize data type: {type(data)}")
+
+
+def _deserialize_dataclass(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
+    if typeinfo["module"].startswith("zospy.analyses"):
+        try:
+            m = import_module(typeinfo["module"])
+            t = getattr(m, typeinfo["name"])
+
+            return TypeAdapter(t).validate_python(data)
+        except (ModuleNotFoundError, AttributeError):
+            return data
+
+    return data
+
+
+def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> AnalysisData:
+    if typeinfo["data_type"] == "dataframe":
+        return pd.DataFrame.from_dict(data, orient="columns")
+
+    if typeinfo["data_type"] == "ndarray":
+        return np.array(data)
+
+    if typeinfo["data_type"] == "dataclass":
+        return _deserialize_dataclass(data, typeinfo)
+
+    raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
+
+
+@pydantic.dataclasses.dataclass(frozen=True, config=ConfigDict(populate_by_name=True))
 class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     """Zemax OpticStudio analysis result."""
 
@@ -50,6 +105,36 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     metadata: AnalysisMetadata
     header: list[str] | None = None
     messages: list[AnalysisMessage] | None = None
+
+    def to_json(self):
+        return RootModel(self).model_dump_json(indent=4)
+
+    @classmethod
+    def from_json(cls, data: str):
+        return TypeAdapter(cls).validate_json(data)
+
+    @model_serializer(mode="wrap", when_used="json")
+    def _serialize_types(self, nxt: SerializerFunctionWrapHandler):
+        data = nxt(self)
+        data["__analysis_data__"] = _serialize_analysis_data_type(self.data)
+        data["__analysis_settings__"] = {
+            "data_type": "dataclass",
+            "name": type(self.settings).__name__,
+            "module": type(self.settings).__module__,
+        }
+
+        return data
+
+    @model_validator(mode="wrap")
+    @classmethod
+    def _deserialize_types(cls, data: any, handler):
+        if isinstance(data, dict):
+            if "__analysis_data__" in data:
+                data["data"] = _deserialize_analysis_data(data["data"], data.pop("__analysis_data__"))
+            if "__analysis_settings__" in data:
+                data["settings"] = _deserialize_dataclass(data["settings"], data.pop("__analysis_settings__"))
+
+        return handler(data)
 
 
 class OnComplete(str, Enum):

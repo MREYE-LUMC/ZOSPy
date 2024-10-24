@@ -6,6 +6,7 @@ from pydantic import ConfigDict, Field
 from pydantic.dataclasses import dataclass
 
 from zospy.analyses.new.base import AnalysisData, AnalysisWrapper
+from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers import ZospyTransformer
 from zospy.analyses.new.parsers.transformers import SimpleField
 from zospy.analyses.new.parsers.types import UnitField
@@ -28,13 +29,13 @@ class ZernikeStandardCoefficientsTransformer(ZospyTransformer):
         return SimpleField(index, _ZernikeStandardCoefficient(value=value, formula=formula))
 
 
-@dataclass
+@analysis_result
 class ZernikeStandardCoefficient:
     value: float
     formula: str
 
 
-@dataclass
+@analysis_result
 class IntegrationData:
     rms_to_chief: UnitField = Field(alias="RMS (to chief)")
     rms_to_centroid: UnitField = Field(alias="RMS (to centroid)")
@@ -42,7 +43,7 @@ class IntegrationData:
     strehl_ratio: float = Field(alias="Strehl Ratio (Est)")
 
 
-@dataclass
+@analysis_result
 class ZernikeStandardCoefficientsResult:
     subaperture_decenter_sx: float | None = Field(alias="Subaperture decenter Sx", default=None)
     subaperture_decenter_sy: float | None = Field(alias="Subaperture decenter Sy", default=None)
@@ -64,7 +65,7 @@ class ZernikeStandardCoefficientsResult:
     coefficients: dict[int, ZernikeStandardCoefficient] = Field(alias="Coefficients")
 
 
-@dataclass(config=ConfigDict(validate_assignment=True))
+@analysis_settings
 class ZernikeStandardCoefficientsSettings:
     sampling: str = Field(default="64x64", description="Sampling grid size")
     maximum_term: int = Field(default=37, ge=0, description="Maximum term")

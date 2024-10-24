@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from email.quoprimime import header_length
 from typing import Literal
 from warnings import warn
 
@@ -9,8 +10,9 @@ from pydantic import ConfigDict, Field, model_validator
 from pydantic.dataclasses import dataclass
 
 from zospy.analyses.new.base import AnalysisWrapper
+from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import ZospyTransformer
-from zospy.analyses.new.parsers.types import UnitField
+from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame
 from zospy.api import constants
 
 
@@ -24,25 +26,26 @@ class SingleRayTraceTransformer(ZospyTransformer):
     def ray_trace_data_table(self, args):
         header, rows = args[0]
 
-        empty_column_count = len(header) - len(rows[0])
+        empty_column_counts = [len(header) - len(row) for row in rows]
 
-        if empty_column_count > 0:
-            warn("Header and row length mismatch. Empty columns will be filled with NaN.")
+        header_length = len(header)
 
-            # Check if the last row value is a comment
-            if isinstance(rows[0][-1], str):
-                for row in rows:
-                    # Insert empty columns before the comment column
-                    row[-2:-2] = [float("nan")] * empty_column_count
-            else:
-                for row in rows:
+        for row in rows:
+            if (row_length := len(row)) < header_length:
+                # Warning is only raised once for the full loop
+                warn("Header and row length mismatch. Empty columns will be filled with NaN.")
+
+                # Check if the last row value is a comment
+                if isinstance(row[-1], str):
+                    row[-2:-2] = [float("nan")] * (header_length - row_length)
+                else:
                     # Insert empty columns at the end of the row
-                    row.extend([float("nan")] * empty_column_count)
+                    row.extend([float("nan")] * (header_length - row_length))
 
         return pd.DataFrame(rows, columns=header)
 
 
-@dataclass(config=ConfigDict(arbitrary_types_allowed=True))
+@analysis_result
 class SingleRayTraceResult:
     units: str = Field(alias="Units")
     coordinates: str = Field(alias="Coordinates")
@@ -53,9 +56,9 @@ class SingleRayTraceResult:
     normalized_x_pupil_coord: float | None = Field(alias="Normalized X Pupil Coord (Px)", default=None)
     normalized_y_pupil_coord: float | None = Field(alias="Normalized Y Pupil Coord (Py)", default=None)
 
-    real_ray_trace_data: pd.DataFrame | None = Field(alias="Real Ray Trace Data", default=None)
-    paraxial_ray_trace_data: pd.DataFrame | None = Field(alias="Paraxial Ray Trace Data", default=None)
-    ym_um_yc_uc_ray_trace_data: pd.DataFrame | None = Field(
+    real_ray_trace_data: ValidatedDataFrame | None = Field(alias="Real Ray Trace Data", default=None)
+    paraxial_ray_trace_data: ValidatedDataFrame | None = Field(alias="Paraxial Ray Trace Data", default=None)
+    ym_um_yc_uc_ray_trace_data: ValidatedDataFrame | None = Field(
         alias="Trace of Paraxial Y marginal, U marginal, Y chief, U chief only.",
         default=None,
     )
@@ -80,7 +83,7 @@ class SingleRayTraceResult:
         return self
 
 
-@dataclass(config=ConfigDict(validate_assignment=True))
+@analysis_settings
 class SingleRayTraceSettings:
     hx: float = Field(ge=-1, le=1, default=0, description="Normalized X field coordinate")
     hy: float = Field(ge=-1, le=1, default=0, description="Normalized Y field coordinate")

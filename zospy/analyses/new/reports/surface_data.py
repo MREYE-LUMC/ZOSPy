@@ -6,6 +6,7 @@ from pydantic import AliasChoices, ConfigDict, Field
 from pydantic.dataclasses import dataclass
 
 from zospy.analyses.new.base import AnalysisSettings, AnalysisWrapper
+from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import SimpleField, ZospyTransformer
 from zospy.zpcore import OpticStudioSystem
 
@@ -29,34 +30,34 @@ class SurfaceDataTransformer(ZospyTransformer):
         return SimpleField("Surface Powers", dict(args))
 
 
-@dataclass
+@analysis_result
 class EdgeThickness:
     y: float = Field(alias="Y Edge Thick")
     x: float = Field(alias="X Edge Thick")
 
 
-@dataclass
+@analysis_result
 class ModelGlass:
     nd: float = Field(alias="nd")
     abbe: float = Field(alias="Abbe")
     dpgf: float = Field(alias="dPgF")
 
 
-@dataclass
+@analysis_result
 class RefractiveIndex:
     number: int = Field(alias="#")
     wavelength: float = Field(alias="Wavelength")
     index: float = Field(alias="Index")
 
 
-@dataclass
+@analysis_result
 class MaterialData:
     indices: list[RefractiveIndex] = Field(alias="Refractive Indices")
     best_fit_glass: str | None = Field(alias="Best Fit Glass", default=None)
     glass: str | ModelGlass | None = Field(alias=AliasChoices("Model glass", "Glass"), default=None)
 
 
-@dataclass
+@analysis_result
 class SurfacePower:
     surf: dict[int, float] = Field(alias="Surf")
     power: dict[tuple[float, float], float] | None = Field(alias="Power", default=None)
@@ -64,13 +65,13 @@ class SurfacePower:
     f_number: dict[tuple[float, float], float] | None = Field(alias="F/#", default=None)
 
 
-@dataclass
+@analysis_result
 class SurfacePowers:
     as_situated: SurfacePower = Field(alias="as situated")
     in_air: SurfacePower = Field(alias="in air")
 
 
-@dataclass
+@analysis_result
 class SurfaceDataResult:
     comment: str | None = Field(alias="Comment", default=None)
     date: str = Field(alias="Date")
@@ -84,7 +85,7 @@ class SurfaceDataResult:
     shape_factor: float | None = Field(alias="Shape Factor", default=None)
 
 
-@dataclass(config=ConfigDict(validate_assignment=True))
+@analysis_settings
 class SurfaceDataSettings:
     surface: int = Field(default=1, ge=0, description="Surface number to analyze.")
 

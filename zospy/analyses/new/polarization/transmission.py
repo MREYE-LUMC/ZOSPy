@@ -4,12 +4,12 @@ import struct
 from typing import Annotated
 
 import pandas as pd
-from pydantic import ConfigDict, Field
-from pydantic.dataclasses import dataclass
+from pydantic import Field
 
 from zospy.analyses.new.base import AnalysisWrapper
+from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import SimpleField, ZospyTransformer
-from zospy.analyses.new.parsers.types import UnitField
+from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame
 from zospy.api import constants
 from zospy.utils import zputils
 from zospy.zpcore import OpticStudioSystem
@@ -27,21 +27,21 @@ class PolarizationTransmissionTransformer(ZospyTransformer):
         return SimpleField("Transmissions", pd.DataFrame(columns=header, data=rows))
 
 
-@dataclass
+@analysis_result
 class FieldTransmission:
     field_pos: UnitField = Field(alias="Field Pos")
     total_transmission: float = Field(alias="Total Transmission")
     transmissions: dict[float, float] = Field(alias="Transmission at")
 
 
-@dataclass(config=ConfigDict(arbitrary_types_allowed=True))
+@analysis_result
 class ChiefRayTransmission:
     field_pos: UnitField = Field(alias="Field Pos")
     wavelength: dict[int, UnitField] = Field(alias="Wavelength")
-    transmissions: pd.DataFrame = Field(alias="Transmissions")
+    transmissions: ValidatedDataFrame = Field(alias="Transmissions")
 
 
-@dataclass
+@analysis_result
 class PolarizationTransmissionResult:
     x_field: float = Field(alias="X-Field")
     y_field: float = Field(alias="Y-Field")
@@ -54,7 +54,7 @@ class PolarizationTransmissionResult:
     chief_ray_transmissions: list[ChiefRayTransmission] = Field(alias="Chief ray transmission")
 
 
-@dataclass(config=ConfigDict(validate_assignment=True))
+@analysis_settings
 class PolarizationTransmissionSettings:
     sampling: str | Annotated[int, Field(ge=0)] = Field(default="32x32", description="Sampling grid size")
     unpolarized: bool = Field(default=False, description="Use unpolarized light")
