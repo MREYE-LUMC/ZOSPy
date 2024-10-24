@@ -32,6 +32,8 @@ __all__ = (
     "SurfaceCurvatureCrossData",
     "SurfaceCurvatureData",
     "SurfacePhaseData",
+    "SurfacePhaseSlopeCrossData",
+    "SurfacePhaseSlopeData",
     "SurfaceSagData",
     "SurfaceSlopeCrossData",
     "SurfaceSlopeData",
@@ -192,6 +194,8 @@ class AnalysisIDM:
     NSCSurfaceSag: AnalysisIDM = None
     NSCSingleRayTrace: AnalysisIDM = None
     NSCGeometricMtf: AnalysisIDM = None
+    SurfacePhaseSlope: AnalysisIDM = None
+    SurfacePhaseSlopeCross: AnalysisIDM = None
     XXXTemplateXXX: AnalysisIDM = None
 
 class Beam:
@@ -284,6 +288,8 @@ class ErrorType:
     NonSequentialOnly: ErrorType = None
     SingleNSCRayTraceSupported: ErrorType = None
     HPCNotAvailable: ErrorType = None
+    FeatureNotSupported: ErrorType = None
+    NotAvailableInLegacy: ErrorType = None
 
 class GiaShowAsTypes:
     Surface: GiaShowAsTypes = None
@@ -373,6 +379,7 @@ class RemoveOptions:
     BaseROC: RemoveOptions = None
     BestFitSphere: RemoveOptions = None
     BaseSag: RemoveOptions = None
+    CompositeSag: RemoveOptions = None
 
 class SampleSizes:
     S_32x32: SampleSizes = None
@@ -475,6 +482,20 @@ class SurfaceCurvatureData:
 
 class SurfacePhaseData:
     SurfacePhase: SurfacePhaseData = None
+
+class SurfacePhaseSlopeCrossData:
+    PhaseSlopeTangential: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeSaggital: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeX: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeY: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeTangentialAndSaggital: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeX_and_Y: SurfacePhaseSlopeCrossData = None
+
+class SurfacePhaseSlopeData:
+    PhaseSlopeTangential: SurfacePhaseSlopeData = None
+    PhaseSlopeSaggital: SurfacePhaseSlopeData = None
+    PhaseSlopeX: SurfacePhaseSlopeData = None
+    PhaseSlopeY: SurfacePhaseSlopeData = None
 
 class SurfaceSagData:
     SurfaceSag: SurfaceSagData = None

@@ -11,6 +11,9 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- Add support for system viewer exports in `zospy.analyses.systemviewers.viewer_3d` and
+  `zospy.analyses.systemviewers.cross_section` (#80).
+
 ### Fixed
 
 ### Changed
