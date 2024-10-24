@@ -1,0 +1,42 @@
+start: "\ufeff"? _NEWLINE? _value+
+
+_value: _field
+    | text
+    | wavelength
+    | field_coord
+    | real_ray_trace_data
+    | paraxial_ray_trace_data
+    | marginal_ray_trace_data
+
+// header: "Ray" "Trace" "Data" _NEWLINE
+wavelength: /Wavelength/ ":" FLOAT "µm" _NEWLINE -> simple_field
+
+field_coord: field_coord_name ":" FLOAT _NEWLINE -> simple_field
+field_coord_name: WORD* /\(\w+\)/ -> field_name
+
+real_ray_trace_data: real_ray_trace_data_name ":" _NEWLINE ray_trace_data_table -> simple_field
+!real_ray_trace_data_name: "Real" "Ray" "Trace" "Data" -> field_name 
+
+paraxial_ray_trace_data: paraxial_ray_trace_data_name ":" _NEWLINE ray_trace_data_table -> simple_field
+!paraxial_ray_trace_data_name: "Paraxial" "Ray" "Trace" "Data" -> field_name
+
+marginal_ray_trace_data: marginal_ray_trace_data_name _NEWLINE ray_trace_data_table -> simple_field
+!marginal_ray_trace_data_name: "Trace of Paraxial Y marginal, U marginal, Y chief, U chief only." -> field_name
+
+ray_trace_data_table: table{_ray_trace_data_header, ray_trace_data_row}
+
+_ray_trace_data_header: ray_trace_data_header_direction_cosines
+    | ray_trace_data_header_tangent_angle
+    | ray_trace_data_header_ym_um_yc_uc
+!ray_trace_data_header_ym_um_yc_uc: "Surf" /Y\s+marginal/ /U\s+marginal/ /Y\s+chief/ /U\s+chief/ "Comment" -> string_list
+!ray_trace_data_header_tangent_angle: "Surf" "X-coordinate" "Y-coordinate" "Z-coordinate" "X-tangent" "Y-tangent" "Comment" -> string_list
+!ray_trace_data_header_direction_cosines: "Surf" "X-coordinate" "Y-coordinate" "Z-coordinate" "X-cosine" "Y-cosine" "Z-cosine" "X-normal" "Y-normal" "Z-normal" /Angle\s+in/ /Path\s+length/ "Comment" -> string_list 
+
+ray_trace_data_row: (WORD | INT) (FLOAT | NAN)+ multi_string? -> list
+
+NAN: "-"
+
+%import .zospy (ALPHANUMERIC, _COLON, DATE, FLOAT, INT, LENS_UNIT, NUMBER, STRING, UINT, _field, simple_field, parametric_field, field_name, field_value, field_parameters, field_group, text, table, _number, multi_string)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE

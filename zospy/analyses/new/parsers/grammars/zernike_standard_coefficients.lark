@@ -1,0 +1,24 @@
+start: "\ufeff"? _NEWLINE? _value+ coefficients
+
+_value: _field
+    | text
+    | _integration_rays
+    | _integration_fitted_coefficients
+
+_integration_rays: field_group{ir_name, ir_fields}
+!ir_name: "From" "integration" "of" "the" "rays" -> field_name // Process as field name
+ir_fields: (unit_field | simple_field)~4 -> dict
+
+_integration_fitted_coefficients: field_group{ifc_name, ifc_fields}
+!ifc_name: "From" "integration" "of" "the" "fitted" "coefficients" -> field_name // Process as field name
+ifc_fields: (unit_field | simple_field)~4 -> dict
+
+coefficients: zernike_coefficient+
+
+// Zernike coefficients can be parsed as a parametric field, so they need a higher priority
+zernike_coefficient.2: "Z" INT FLOAT ":" multi_string _NEWLINE
+
+%import .zospy (ALPHANUMERIC, _COLON, DATE, FLOAT, INT, LENS_UNIT, NUMBER, STRING, UINT, _field, simple_field, parametric_field, unit_field, field_name, field_value, field_parameters, field_group, text, table, _number, multi_string)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE

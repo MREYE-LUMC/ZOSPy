@@ -5,6 +5,7 @@ from collections.abc import Callable
 from os import PathLike
 from pathlib import Path
 from sys import version_info
+from typing import TypeVar
 
 import zospy.api.config as _config
 
@@ -134,12 +135,15 @@ def _delocalize(
     return string
 
 
+Number = TypeVar("Number", int, float)
+
+
 def atox(
     string: str,
-    dtype: Callable[[str], int | float] = float,
+    dtype: Callable[[str], Number] = float,
     decimal_point: str = ...,
     thousands_separator: str | None = ...,
-) -> int | float:
+) -> Number:
     """Parses a string as a number format.
 
     By default, the locale settings stored in zospy.api.config are used to delocalize the string.
