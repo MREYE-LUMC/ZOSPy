@@ -18,7 +18,7 @@ from zospy.zpcore import OpticStudioSystem
 
 def _warn_specified_parameters(
     oss: OpticStudioSystem,
-    values: dict,
+    variables: dict,
     function: Callable[[Any], Any],
     ignore: tuple[str, ...] = ("oss", "oncomplete"),
 ) -> None:
@@ -26,17 +26,33 @@ def _warn_specified_parameters(
 
     For OpticStudio versions below 24R1, compare the values of a dictionary with the default values of a function,
     and warn if any are different.
+
+    Parameters
+    ----------
+    oss: zospy.zpcore.OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance.
+    variables: dict
+        A dictionary of variables to compare with the default values of the function. Can be obtained using `locals()`.
+    function: Callable[[Any], Any]
+        The function to compare the variables with.
+    ignore: tuple[str], optional
+        A tuple of parameter names to ignore. Defaults to ("oss", "oncomplete").
+
+    Examples
+    --------
+    >>> def test_func(a=1, b=2, c=3):
+    ...     _warn_specified_parameters(oss, locals(), test_func)
     """
     if oss._ZOS.version >= (24, 1, 0):
         return
 
     changed_parameters = []
 
-    for key, value in values.items():
-        if key in ignore or key not in signature(function).parameters:
+    for key, value in signature(function).parameters.items():
+        if key in ignore:
             continue
 
-        if signature(function).parameters[key].default != value:
+        if variables[key] != value.default:
             changed_parameters.append(key)
 
     if len(changed_parameters) > 0:
