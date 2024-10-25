@@ -17,10 +17,16 @@ from zospy.zpcore import OpticStudioSystem
 
 
 def _warn_specified_parameters(
-    oss: OpticStudioSystem, values: dict, function: Callable[[...], Any], ignore: tuple[str] = ("oss", "oncomplete")
+    oss: OpticStudioSystem,
+    values: dict,
+    function: Callable[[Any], Any],
+    ignore: tuple[str, ...] = ("oss", "oncomplete"),
 ) -> None:
-    """For OpticStudio versions below 24R1, compare the values of a dictionary with the default values of a function,
-    and warn if any are different."""
+    """Check if unsupported parameters are specified and warn the user.
+
+    For OpticStudio versions below 24R1, compare the values of a dictionary with the default values of a function,
+    and warn if any are different.
+    """
     if oss._ZOS.version >= (24, 1, 0):
         return
 
@@ -35,8 +41,8 @@ def _warn_specified_parameters(
 
     if len(changed_parameters) > 0:
         warn(
-            f"Some parameters were specified but ignored, because viewer exports are only supported from OpticStudio 24R1:"
-            f" {', '.join(changed_parameters)}"
+            f"Some parameters were specified but ignored, because viewer exports are only supported from OpticStudio"
+            f"24R1: {', '.join(changed_parameters)}"
         )
 
 
