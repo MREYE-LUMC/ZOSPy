@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from inspect import signature
 from os import PathLike
+from typing import Any, Callable
+from warnings import warn
 
 import numpy as np
 from System import Array
@@ -11,6 +14,30 @@ from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import _ZOSAPI, constants
 from zospy.utils.pyutils import abspath
 from zospy.zpcore import OpticStudioSystem
+
+
+def _warn_specified_parameters(
+    oss: OpticStudioSystem, values: dict, function: Callable[[...], Any], ignore: tuple[str] = ("oss", "oncomplete")
+) -> None:
+    """For OpticStudio versions below 24R1, compare the values of a dictionary with the default values of a function,
+    and warn if any are different."""
+    if oss._ZOS.version >= (24, 1, 0):
+        return
+
+    changed_parameters = []
+
+    for key, value in values.items():
+        if key in ignore or key not in signature(function).parameters:
+            continue
+
+        if signature(function).parameters[key].default != value:
+            changed_parameters.append(key)
+
+    if len(changed_parameters) > 0:
+        warn(
+            f"Some parameters were specified but ignored, because viewer exports are only supported from OpticStudio 24R1:"
+            f" {', '.join(changed_parameters)}"
+        )
 
 
 def _close_current_tool(oss: OpticStudioSystem) -> None:
@@ -143,6 +170,8 @@ def cross_section(
         A Cross-Section analysis result. If `imgoutfile` is `None`, the result will contain the image data as a numpy
         array. If `imgoutfile` is not `None`, the results `Data` attribute will be empty.
     """
+    _warn_specified_parameters(oss, locals(), cross_section)
+
     if start_surface < -1:
         raise ValueError("start_surface must be greater than or equal to -1.")
 
@@ -337,6 +366,8 @@ def viewer_3d(
         A Viewer 3D analysis result. As the viewers do not return data, the AnalysisResult can mainly be used to
         further control the analysis when oncomplete is set to `Sustain`.
     """
+    _warn_specified_parameters(oss, locals(), viewer_3d)
+
     if start_surface < -1:
         raise ValueError("start_surface must be greater than or equal to -1.")
 
