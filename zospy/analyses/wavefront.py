@@ -177,8 +177,8 @@ def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tup
         Two dataframes, respectively the general results and the coefficients
     """
     zlinepat = re.compile(r"^Z\s+\d+")
-    valuepat_start = re.compile(r"^((-)?\d+\{}\d+)".format(_config.DECIMAL_POINT))
-    valuepat_any = re.compile(r"((-)?\d+(\{}\d+)?)".format(_config.DECIMAL_POINT))
+    valuepat_start = re.compile(rf"^((-)?\d+\{_config.DECIMAL_POINT}\d+)")
+    valuepat_any = re.compile(rf"((-)?\d+(\{_config.DECIMAL_POINT}\d+)?)")
 
     zernike_lines = [line for line in line_list if (zlinepat.search(line) is not None)]
 
@@ -222,7 +222,7 @@ def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tup
                     else:
                         val = dat[ii]
                     unit = dat[-1]
-                    general_data.loc["{}_{}".format(ind, ii)] = [val, unit]
+                    general_data.loc[f"{ind}_{ii}"] = [val, unit]
     zernike_data = pd.DataFrame(index=zernike_arr[:, 0].copy(), columns=["Value", "Unit", "Function"])
     zernike_data.loc[zernike_arr[:, 0], "Value"] = list(map(lambda s: atox(s, float), zernike_arr[:, 1].copy()))
     zernike_data.loc[zernike_arr[:, 0], "Unit"] = "waves"
@@ -305,7 +305,7 @@ def zernike_standard_coefficients(
     analysis.Settings.MaximumNumberOfTerms = maximum_term
     analysis.set_wavelength(wavelength)
     analysis.set_field(field)
-    analysis.Settings.ReferenceOBDToVertex = reference_opd_to_vertex  # ToDo: Monitor name with zemax updates
+    analysis.Settings.ReferenceOBDToVertex = reference_opd_to_vertex  # TODO: Monitor name with zemax updates
     analysis.set_surface(surface)
     analysis.Settings.Sx = sx
     analysis.Settings.Sy = sy
@@ -316,7 +316,7 @@ def zernike_standard_coefficients(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
+    line_list = [line for line in open(txtoutfile, encoding=oss._ZOS.get_txtfile_encoding())]
 
     general_data, zernike_data = _structure_zernike_standard_coefficients_result(line_list)
     data = AttrDict(GeneralData=general_data, Coefficients=zernike_data)
@@ -331,12 +331,12 @@ def zernike_standard_coefficients(
 
     settings.loc["SampleSize"] = str(analysis.Settings.SampleSize)
     settings.loc["MaximumNumberOfTerms"] = analysis.Settings.MaximumNumberOfTerms
-    settings.loc["Wavelength"] = analysis.Settings.Wavelength.GetWavelengthNumber()  # Todo Evaluate with 'all'
-    settings.loc["Field"] = analysis.Settings.Field.GetFieldNumber()  # Todo Evaluate with 'all'
+    settings.loc["Wavelength"] = analysis.Settings.Wavelength.GetWavelengthNumber()  # TODO Evaluate with 'all'
+    settings.loc["Field"] = analysis.Settings.Field.GetFieldNumber()  # TODO Evaluate with 'all'
     settings.loc["ReferenceOBDToVertex"] = analysis.Settings.ReferenceOBDToVertex
-    settings.loc["Wavelength"] = analysis.Settings.Wavelength.GetWavelengthNumber()  # Todo Evaluate with 'all'
-    settings.loc["Field"] = analysis.Settings.Field.GetFieldNumber()  # Todo Evaluate with 'all'
-    settings.loc["ReferenceOBDToVertex"] = analysis.Settings.Surface.GetSurfaceNumber()  # Todo Evaluate with 'all'
+    settings.loc["Wavelength"] = analysis.Settings.Wavelength.GetWavelengthNumber()  # TODO Evaluate with 'all'
+    settings.loc["Field"] = analysis.Settings.Field.GetFieldNumber()  # TODO Evaluate with 'all'
+    settings.loc["ReferenceOBDToVertex"] = analysis.Settings.Surface.GetSurfaceNumber()  # TODO Evaluate with 'all'
     settings.loc["Sx"] = sx
     settings.loc["Sy"] = sy
     settings.loc["Sr"] = sr

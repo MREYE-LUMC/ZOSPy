@@ -1,6 +1,6 @@
 import pytest
 
-import zospy.api.constants as constants
+from zospy.api import constants
 
 
 class TestProcessConstant:

@@ -38,7 +38,9 @@ class VersionDependentParameters(BaseModel):
 
 class TestConfiguration(BaseModel):
     model: Callable[[zp.zpcore.OpticStudioSystem], zp.zpcore.OpticStudioSystem]
-    analysis: Callable[[zp.zpcore.OpticStudioSystem, ...], zp.analyses.base.AnalysisResult]
+    analysis: Callable[
+        [zp.zpcore.OpticStudioSystem, ...], zp.analyses.base.AnalysisResult
+    ]
     file: str
     test: str
     parameters: list[VersionDependentParameters | TestParameters] = [{}]
@@ -57,7 +59,9 @@ class TestConfiguration(BaseModel):
     @field_validator("file")
     @classmethod
     def validate_filename(cls, v: str):
-        assert v.startswith("test") and v.endswith(".py"), "file should start with 'test_' and have extension '.py'"
+        assert v.startswith("test") and v.endswith(
+            ".py"
+        ), "file should start with 'test_' and have extension '.py'"
 
         return v
 
@@ -99,10 +103,11 @@ class Configuration(BaseModel):
     def validate_redact_patterns(v):
         regex = re.compile(v, re.MULTILINE | re.IGNORECASE)
 
-        assert regex.groups == 0, (
-            "Redaction patterns are not allowed to contain capturing groups. Use non-capturing "
-            "groups (?:<characters>) instead."
-        )
+        if regex.groups > 0:
+            raise ValueError(
+                "Redaction patterns are not allowed to contain capturing groups. Use non-capturing "
+                "groups (?:<characters>) instead."
+            )
 
         return regex
 
@@ -115,7 +120,6 @@ class CommandLineArguments(BaseModel):
     connection_mode: Literal["standalone", "extension"]
     opticstudio_directory: AbsolutePath | None
     output_directory: Path
-
 
 def _redact_json(json_string: str, patterns: list[re.Pattern]) -> tuple[str, list[str]]:
     matches = []
@@ -205,7 +209,9 @@ def process_test(
 
         try:
             result_json = result.to_json()
-            result_json, redacted_strings = _redact_json(result_json, config.redact_patterns)
+            result_json, redacted_strings = _redact_json(
+                result_json, config.redact_patterns
+            )
 
             if redacted_strings:
                 logger.warning("\tRedacted strings: %s", "\n\t".join(redacted_strings))

@@ -5,8 +5,10 @@ from warnings import warn
 from zospy.api import _ZOSAPI, constants
 
 
-def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Editors.NCE.ObjectType | str):
-    """Simple function to change the object type in the NCE.
+def object_change_type(
+    obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Editors.NCE.ObjectType | str
+):
+    """Change the object type in the NCE.
 
     Parameters
     ----------
@@ -40,7 +42,7 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
 def find_object_by_comment(
     nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool = True
 ) -> list[_ZOSAPI.Editors.NCE.INCERow]:
-    """Returns a list of objects from the NCE that have the supplied string as Comment.
+    """Get a list of objects from the NCE that have the supplied string as Comment.
 
     In case of multiple matches, the objects are returned in ascending order.
 
@@ -106,7 +108,7 @@ def find_object_by_comment(
 
 
 def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IObject:
-    """Returns the object-specific data.
+    """Get the object-specific data.
 
     .. deprecated:: 1.2.0
             `get_object_data` will be removed in ZOSPy 2.0.0, as this conversion is now implemented in
@@ -135,6 +137,10 @@ def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IOb
     >>> detector_data = zp.functions.nce.get_object_data(detector_object)
     >>> number_of_x_pixels = detector_data.NumberXPixels
     """
-    warn("'get_object_data' is deprecated and will be removed in ZOSPy 2.0.0.", DeprecationWarning, stacklevel=1)
+    warn(
+        "'get_object_data' is deprecated and will be removed in ZOSPy 2.0.0.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
 
     return obj.ObjectData

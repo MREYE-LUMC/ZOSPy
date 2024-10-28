@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import MutableMapping
-from typing import TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -60,8 +60,7 @@ def flatten_dlltreedict(dlltreedict):
         A list with the items of the nested dictionaries.
     """
     flatdict = flatten_dict(dlltreedict, parent_key="", sep=".", keep_unflattend=True)
-    flatlist = list(flatdict.keys())
-    return flatlist
+    return list(flatdict.keys())
 
 
 def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.DataFrame:
@@ -82,7 +81,7 @@ def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.Da
     )
     index = np.array(list(dataseries.XData.Data))
     data = np.array(list(dataseries.YData.Data)).reshape(dataseries.YData.Rows, dataseries.YData.Cols)
-    df = pd.DataFrame(columns=columns, index=index, data=data)  # ToDo evaluate
+    df = pd.DataFrame(columns=columns, index=index, data=data)  # TODO evaluate
     df.index.name = dataseries.XLabel
 
     return df
@@ -139,14 +138,11 @@ def standardize_sampling(sampling: SamplingType) -> SamplingType:
     """
     if isinstance(sampling, int):
         return sampling
-    elif isinstance(sampling, str):
+
+    if isinstance(sampling, str):
         res = re.search(r"\d+x\d+", sampling)
         if res:
-            return "S_{}".format(res.group())
-        else:
-            raise ValueError('Cannot interpret sampling pattern "{}"'.format(sampling))
-    else:
-        raise TypeError("sampling should be int or string")
+            return f"S_{res.group()}"
 
 
 # TODO: Remove in ZOSPy 2.0.0

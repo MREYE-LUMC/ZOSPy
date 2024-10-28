@@ -3,7 +3,7 @@ import os
 import sys
 import winreg
 
-import clr  # noqa
+import clr
 
 import zospy.api.constants
 from zospy.api.codecs import register_codecs
@@ -32,16 +32,16 @@ def get_zos_root():
     try:
         regkey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Zemax")
     except FileNotFoundError as e:
-        logger.exception("Zemax cannot be found in the registry, " "the following error is raised:\n{}".format(e))
+        logger.exception("Zemax cannot be found in the registry, " f"the following error is raised:\n{e}")
         raise e
 
     # Obtain the Zemax OpticStudio root path from the registry
     try:
         zemaxfolder, _ = winreg.QueryValueEx(regkey, "ZemaxRoot")
-        logger.info("Found ZemaxFolder at {}".format(zemaxfolder))
+        logger.info(f"Found ZemaxFolder at {zemaxfolder}")
     except FileNotFoundError as e:
         logger.exception(
-            "The Zemax Root folder cannot be found in the registry key, " "the following error is raised:\n{}".format(e)
+            "The Zemax Root folder cannot be found in the registry key, " f"the following error is raised:\n{e}"
         )
         raise e
     finally:  # Clean up
@@ -73,7 +73,7 @@ def load_zosapi_nethelper(filepath=None, preload=False):
     else:
         znh_filepath = filepath
 
-    logger.debug("Adding reference {} to clr".format(znh_filepath))
+    logger.debug(f"Adding reference {znh_filepath} to clr")
     sys.path.append(os.path.basename(znh_filepath))
     clr.AddReference(znh_filepath)
 
@@ -120,9 +120,9 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, preload=False):
         logger.info("Obtaining Zemax Directory from ZOSAPI_NetHelper")
         zosapi_nethelper.ZOSAPI_Initializer.Initialize()
         zos_dir = zosapi_nethelper.ZOSAPI_Initializer.GetZemaxDirectory()
-        logger.info("Zemax OpticStudio found at {}".format(zos_dir))
+        logger.info(f"Zemax OpticStudio found at {zos_dir}")
     else:
-        logger.info("Zemax Directory specified by user ({})".format(zemaxdirectory))
+        logger.info(f"Zemax Directory specified by user ({zemaxdirectory})")
         zos_dir = zemaxdirectory
     sys.path.append(zos_dir)
 
@@ -132,12 +132,12 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, preload=False):
     logger.info("Searching and registering ZOSAPI DLLs")
     for dll in ["ZOSAPI_Interfaces", "ZOSAPI"]:
         if clr.FindAssembly(dll):
-            logger.debug("{}.dll found".format(dll))
+            logger.debug(f"{dll}.dll found")
             clr.AddReference(dll)
-            logger.info("{} imported to clr".format(dll))
+            logger.info(f"{dll} imported to clr")
         else:
-            logger.critical("Cannot locate {}.dll".format(dll))
-            raise FileNotFoundError("Cannot locate {}.dll in {}".format(dll, zos_dir))
+            logger.critical(f"Cannot locate {dll}.dll")
+            raise FileNotFoundError(f"Cannot locate {dll}.dll in {zos_dir}")
 
     logger.debug("Checking content of ZOSAPI_Interfaces.dll")
     content = clrutils.reflect_dll_content(os.path.join(zos_dir, "ZOSAPI_Interfaces.dll"))
@@ -151,7 +151,7 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, preload=False):
         if nsp == "ZOSAPI":
             continue
         __import__(nsp, globals(), locals(), [], 0)
-        logger.debug("Nested namespace {} preloaded".format(nsp))
+        logger.debug(f"Nested namespace {nsp} preloaded")
 
     zospy.api.constants._construct_from_zosapi_and_enumkeys(zosapi, content["enums"])  # noqa
 

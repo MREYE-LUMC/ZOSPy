@@ -24,13 +24,19 @@ from zospy.api import _ZOSAPI, constants
 def _get_surface_index(surface: _ZOSAPI.Editors.IEditorRow | int) -> int:
     if isinstance(surface, int):
         return surface
-    elif surface.GetType().BaseType.FullName == "ZemaxUI.ZOSAPI.Editors.ZOSAPI_EditorRowBase":
+
+    if (
+        surface.GetType().BaseType.FullName
+        == "ZemaxUI.ZOSAPI.Editors.ZOSAPI_EditorRowBase"
+    ):
         return surface.RowIndex
-    else:
-        raise ValueError(f"from_surface should be an int or a Surface, got {surface}")
+
+    raise ValueError(f"from_surface should be an int or a Surface, got {surface}")
 
 
-def element_power(radius_cell: _ZOSAPI.Editors.IEditorCell, power: float) -> _ZOSAPI.Editors.ISolveElementPower:
+def element_power(
+    radius_cell: _ZOSAPI.Editors.IEditorCell, power: float
+) -> _ZOSAPI.Editors.ISolveElementPower:
     """Solver for element power.
 
     Adjusts the value of `radius_cell` to create an element with the specified `power`. This solver should be set on
@@ -48,7 +54,9 @@ def element_power(radius_cell: _ZOSAPI.Editors.IEditorCell, power: float) -> _ZO
     solve_data : ZOSAPI.Editors.ISolveElementPower
         The solve data for the element power
     """
-    solve_data = radius_cell.CreateSolveType(constants.Editors.SolveType.ElementPower)._S_ElementPower
+    solve_data = radius_cell.CreateSolveType(  # noqa: SLF001
+        constants.Editors.SolveType.ElementPower
+    )._S_ElementPower
 
     # The ZOS-API accepts powers in diopters instead of diopters / 1000
     solve_data.Power = power
@@ -59,7 +67,7 @@ def element_power(radius_cell: _ZOSAPI.Editors.IEditorCell, power: float) -> _ZO
 
 
 def fixed(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveFixed:
-    """Sets the cell solve type to Fixed.
+    """Set the cell solve type to Fixed.
 
     Parameters
     ----------
@@ -69,7 +77,9 @@ def fixed(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveFixed:
     -------
     The solve data object for `cell`.
     """
-    solve_data = cell.CreateSolveType(constants.Editors.SolveType.Fixed)._S_Fixed
+    solve_data = cell.CreateSolveType(  # noqa: SLF001
+        constants.Editors.SolveType.Fixed
+    )._S_Fixed
     cell.SetSolveData(solve_data)
 
     return solve_data
@@ -100,7 +110,9 @@ def material_model(
     -------
     The SolveData object for the material model.
     """
-    solve_data = material_cell.CreateSolveType(constants.Editors.SolveType.MaterialModel)._S_MaterialModel
+    solve_data = material_cell.CreateSolveType(  # noqa: SLF001
+        constants.Editors.SolveType.MaterialModel
+    )._S_MaterialModel
     solve_data.IndexNd = refractive_index
     solve_data.AbbeVd = abbe_number
     solve_data.dPgF = partial_dispersion
@@ -130,7 +142,9 @@ def pickup_chief_ray(
     ZOSAPI.Editors.ISolvePickupChiefRay
         The solve data for the chief ray pickup
     """
-    solve_data = cell.CreateSolveType(constants.Editors.SolveType.PickupChiefRay)._S_PickupChiefRay
+    solve_data = cell.CreateSolveType(  # noqa: SLF001
+        constants.Editors.SolveType.PickupChiefRay
+    )._S_PickupChiefRay
 
     solve_data.Field = field
     solve_data.Wavelength = wavelength
@@ -162,14 +176,18 @@ def position(
     -------
         The SolveData object for the position.
     """
-    solve_data = thickness_cell.CreateSolveType(constants.Editors.SolveType.Position)._S_Position
+    solve_data = thickness_cell.CreateSolveType(  # noqa: SLF001
+        constants.Editors.SolveType.Position
+    )._S_Position
 
     if isinstance(from_surface, int):
         solve_data.FromSurface = from_surface
     elif type(from_surface).__name__ in ("ILDERow", "INCERow"):
         solve_data.FromSurface = from_surface.RowIndex
     else:
-        raise ValueError(f"from_surface should be an int or a Surface, got {from_surface}")
+        raise ValueError(
+            f"from_surface should be an int or a Surface, got {from_surface}"
+        )
 
     solve_data.Length = length
 
@@ -185,7 +203,7 @@ def surface_pickup(
     scale: float = 1,
     offset: float = 0,
 ) -> _ZOSAPI.Editors.ISolveSurfacePickup:
-    """Picks up the value of `cell` from another surface.
+    """Configure `cell` to pick up the value from another surface.
 
     Parameters
     ----------
@@ -206,7 +224,9 @@ def surface_pickup(
     -------
         The SolveData object for the surface pickup.
     """
-    solve_data = cell.CreateSolveType(constants.Editors.SolveType.SurfacePickup)._S_SurfacePickup
+    solve_data = cell.CreateSolveType(  # noqa: SLF001
+        constants.Editors.SolveType.SurfacePickup
+    )._S_SurfacePickup
 
     solve_data.Surface = _get_surface_index(from_surface)
 
@@ -217,7 +237,9 @@ def surface_pickup(
         solve_data.Offset = offset
 
     if from_column is not None:
-        solve_data.Column = constants.process_constant(constants.Editors.LDE.SurfaceColumn, from_column)
+        solve_data.Column = constants.process_constant(
+            constants.Editors.LDE.SurfaceColumn, from_column
+        )
 
     cell.SetSolveData(solve_data)
 
@@ -225,7 +247,7 @@ def surface_pickup(
 
 
 def variable(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveVariable:
-    """Sets the cell solve type to Variable.
+    """Set the cell solve type to Variable.
 
     Parameters
     ----------
@@ -235,7 +257,9 @@ def variable(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveVariabl
     -------
     The solve data object for `cell`.
     """
-    solve_data = cell.CreateSolveType(constants.Editors.SolveType.Variable)._S_Variable
+    solve_data = cell.CreateSolveType(  # noqa: SLF001
+        constants.Editors.SolveType.Variable
+    )._S_Variable
     cell.SetSolveData(solve_data)
 
     return solve_data

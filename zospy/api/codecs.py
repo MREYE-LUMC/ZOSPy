@@ -13,7 +13,7 @@ import logging
 from typing import Type
 
 import clr  # noqa
-import Python.Runtime  # noqa
+import Python.Runtime
 import Python.Runtime.Codecs as Codecs  # noqa
 
 logger = logging.getLogger(__name__)

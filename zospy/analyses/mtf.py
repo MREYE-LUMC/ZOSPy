@@ -208,8 +208,8 @@ def fft_through_focus_mtf_fromcfg(
     settings.loc["DeltaFocus"] = analysis.Settings.DeltaFocus
     settings.loc["Frequency"] = analysis.Settings.Frequency
     settings.loc["NumberOfSteps"] = analysis.Settings.NumberOfSteps
-    settings.loc["Wavelength"] = analysis.Settings.Wavelength.GetWavelengthNumber()  # Todo Evaluate
-    settings.loc["Field"] = analysis.Settings.Field.GetFieldNumber()  # Todo Evaluate
+    settings.loc["Wavelength"] = analysis.Settings.Wavelength.GetWavelengthNumber()  # TODO Evaluate
+    settings.loc["Field"] = analysis.Settings.Field.GetFieldNumber()  # TODO Evaluate
     settings.loc["Type"] = str(analysis.Settings.Type)
     settings.loc["UsePolarization"] = analysis.Settings.UsePolarization
     settings.loc["UseDashes"] = analysis.Settings.UseDashes

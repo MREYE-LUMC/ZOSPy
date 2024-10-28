@@ -1,6 +1,6 @@
 import clr
 import pytest
-from System.Reflection import Assembly  # noqa
+from System.Reflection import Assembly
 
 import zospy as zp
 from zospy.api.codecs import OpticStudioInterfaceEncoder
