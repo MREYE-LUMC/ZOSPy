@@ -140,6 +140,7 @@ config-path = "ruff_defaults.toml"
 [tool.ruff]
 extend = "ruff_defaults.toml"
 
+line-length = 120
 exclude = [
     "zospy/api/_ZOSAPI",
     "zospy/api/_ZOSAPI_constants"
@@ -153,8 +154,27 @@ extend-select = [
 extend-ignore = [
     "B028",
     "EM101",
+    "EM102",
+    "G004",
+    "TD004",
     "TRY003"
 ]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"**/tests/**" = [
+    "D", # pydocstyle
+]
+"scripts/**" = [
+    "D", # pydocstyle
+]
+"docs/conf.py" = [
+    "INP001", # Missing __init__.py
+    "D100", # Missing docstring in public module
+    "D103", # Missing docstring in public function
+]
+
+[tool.ruff.lint.flake8-pytest-style]
+parametrize-names-type = "csv"
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
@@ -183,41 +203,3 @@ module = [
     "zospy.api._ZOSAPI_constants"
 ]
 ignore_errors = "True"
-
-[tool.black]
-line-length = 120
-
-[tool.isort]
-profile = "black"
-
-#[tool.ruff]
-#line-length = 120
-#ignore-init-module-imports = true
-#
-#exclude = [
-#    "zospy/api/_ZOSAPI",
-#    "zospy/api/_ZOSAPI_constants"
-#]
-#
-## Rule sets for linting
-#select = [
-#    "F",    # pyflakes
-#    "E",    # pycodestyle error
-#    "W",    # pycodestyle warning
-#    "I",    # isort
-#    "D",    # pydocstyle
-#    "NPY",  # numpy-specific
-#]
-#
-#ignore = [
-#    "D100",
-#    "D101",
-#    "D102",
-#    "D103",
-#    "D104",
-#    "D105",
-#    "D401"
-#]
-#
-#[tool.ruff.pydocstyle]
-#convention = "numpy"
