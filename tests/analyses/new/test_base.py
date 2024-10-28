@@ -2,6 +2,7 @@ import inspect
 import json
 from dataclasses import fields
 from datetime import datetime
+from importlib.metadata import metadata
 from types import SimpleNamespace
 
 import numpy as np
@@ -47,7 +48,12 @@ class MockAnalysis(AnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
         self.block_remove_temp_files = block_remove_temp_files
 
     def _create_analysis(self):
-        self._analysis = SimpleNamespace(metadata=None, header_data=None, messages=[], Close=lambda: None)
+        self._analysis = SimpleNamespace(
+            metadata=AnalysisMetadata(DateTime=datetime.now(), LensFile="", LensTitle="", FeatureDescription=""),
+            header_data=None,
+            messages=[],
+            Close=lambda: None,
+        )
 
     def run_analysis(self, *args, **kwargs) -> AnalysisData:
         if self.block_remove_temp_files:
