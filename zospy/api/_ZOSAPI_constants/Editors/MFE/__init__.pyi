@@ -456,3 +456,6 @@ class MeritOperandType:
     DCRV: MeritOperandType = None
     EFLA: MeritOperandType = None
     CARD: MeritOperandType = None
+    TSAG: MeritOperandType = None
+    PSLP: MeritOperandType = None
+    QSLP: MeritOperandType = None

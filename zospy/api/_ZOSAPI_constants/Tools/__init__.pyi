@@ -4,11 +4,22 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from . import General, Optimization, RayTrace, Tolerancing
+from . import (
+    FileManager,
+    General,
+    Layouts,
+    Optimization,
+    OptimizationTools,
+    RayTrace,
+    Tolerancing,
+)
 
 __all__ = (
+    "FileManager",
     "General",
+    "Layouts",
     "Optimization",
+    "OptimizationTools",
     "RayTrace",
     "Tolerancing",
     "CriticalRayType",
