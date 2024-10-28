@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from warnings import warn
 
 from zospy.api import _ZOSAPI, constants
 from zospy.zpcore import OpticStudioSystem
@@ -42,7 +43,9 @@ def get_pupil(oss: OpticStudioSystem):
     return PupilData(*oss.LDE.GetPupil())
 
 
-def surface_change_type(surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constants.Editors.LDE.SurfaceType | str):
+def surface_change_type(
+    surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constants.Editors.LDE.SurfaceType | str, filename=None
+):
     """Simple function to change the type of a surface in the LDE.
 
     Parameters
@@ -70,6 +73,19 @@ def surface_change_type(surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constant
 
     # Apply
     new_surface_type_settings = surface.GetSurfaceTypeSettings(new_type)
+
+    if new_surface_type_settings.RequiresFile:
+        if filename is None:
+            raise ValueError(f"Surface type {str(new_type)} requires the specification of a filename.")
+        elif filename not in list(new_surface_type_settings.GetFileNames()):
+            raise ValueError(
+                f"Filename '{filename}' is not listed as valid filename for this surface type. The "
+                f"accepted names for this surface type are: "
+                f"{', '.join(list(new_surface_type_settings.GetFileNames()))}"
+            )
+        else:
+            new_surface_type_settings.Filename = filename
+
     surface.ChangeType(new_surface_type_settings)
 
 
@@ -135,3 +151,111 @@ def find_surface_by_comment(
 
     # Return list of matched inices
     return return_indices
+
+
+# Define constants for the aperture settings
+_APERTURE_FILE = "ApertureFile"
+_APERTURE_X_DECENTER = "ApertureXDecenter"
+_APERTURE_Y_DECENTER = "ApertureYDecenter"
+_MAXIMUM_RADIUS = "MaximumRadius"
+_MINIMUM_RADIUS = "MinimumRadius"
+_NUMBER_OF_ARMS = "NumberOfArms"
+_WIDTH_OF_ARMS = "WidthOfArms"
+_X_HALF_WIDTH = "XHalfWidth"
+_Y_HALF_WIDTH = "YHalfWidth"
+_UDA_SCALE = "UDAScale"
+
+# Define a dictionary with accepted constants
+_APERTURETYPE_USED_SETTINGS = {
+    "None": (),
+    "CircularAperture": (_APERTURE_X_DECENTER, _APERTURE_Y_DECENTER, _MAXIMUM_RADIUS, _MINIMUM_RADIUS),
+    "CircularObscuration": (_APERTURE_X_DECENTER, _APERTURE_Y_DECENTER, _MAXIMUM_RADIUS, _MINIMUM_RADIUS),
+    "Spider": (_NUMBER_OF_ARMS, _WIDTH_OF_ARMS, _MAXIMUM_RADIUS, _MINIMUM_RADIUS),
+    "RectangularAperture": (_X_HALF_WIDTH, _Y_HALF_WIDTH, _MAXIMUM_RADIUS, _MINIMUM_RADIUS),
+    "RectangularObscuration": (_X_HALF_WIDTH, _Y_HALF_WIDTH, _MAXIMUM_RADIUS, _MINIMUM_RADIUS),
+    "EllipticalAperture": (_X_HALF_WIDTH, _Y_HALF_WIDTH, _MAXIMUM_RADIUS, _MINIMUM_RADIUS),
+    "EllipticalObscuration": (_X_HALF_WIDTH, _Y_HALF_WIDTH, _MAXIMUM_RADIUS, _MINIMUM_RADIUS),
+    "UserAperture": (_APERTURE_FILE, _APERTURE_X_DECENTER, _APERTURE_Y_DECENTER, _UDA_SCALE),
+    "UserObscuration": (_APERTURE_FILE, _APERTURE_X_DECENTER, _APERTURE_Y_DECENTER, _UDA_SCALE),
+    "FloatingAperture": (),
+}
+
+
+def surface_change_aperturetype(
+    surface: _ZOSAPI.Editors.LDE.ILDERow,
+    new_type: constants.Editors.LDE.SurfaceApertureTypes | str,
+    aperture_file: str | None = None,
+    aperture_x_decenter: float | None = None,
+    aperture_y_decenter: float | None = None,
+    maximum_radius: float | None = None,
+    minimum_radius: float | None = None,
+    number_of_arms: int | None = None,
+    uda_scale: float | None = None,
+    width_of_arms: float | None = None,
+    x_half_width: float | None = None,
+    y_half_width: float | None = None,
+) -> None:
+    """Simple function to change the aperturetype of a surface in the LDE.
+
+    Be aware that while all aperture parameters can be specified, only the ones accepted by the new_type should be
+    given, any parameter that is not None but not accepted by the new type will result in a UserWarning and will not be
+    used. Keeping a parameter on None will result in the default values used by the local OpticStudio instance.
+
+    Parameters
+    ----------
+    surface: ZOSAPI.Editors.LDE.ILDERow
+        The Row/Surface for which the change is to be made.
+    new_type: zospy.constants.Editors.LDE.SurfaceApertureTypes | str
+        The new surface aperture type.
+    aperture_file: str | None
+        The aperture file. Defaults to None.
+    aperture_x_decenter: int | None
+        The x decenter of the aperture. Defaults to None.
+    aperture_y_decenter: int | None
+        The y decenter of the aperture. Defaults to None.
+    maximum_radius: float | None
+        The maximum radius. Defaults to None.
+    minimum_radius: float | None
+        The minimum radius. Defaults to None.
+    number_of_arms: int | None
+        The number of arms. Defaults to None.
+    uda_scale: float | None
+        The UDA scale. Defaults to None.
+    width_of_arms: float | None
+        The width of arms. Defaults to None.
+    x_half_width: float | None
+        The x half width. Defaults to None
+    y_half_width: float | None
+        The y half width. Defaults to None
+
+    Returns
+    -------
+    None
+    """
+    new_type = constants.process_constant(constants.Editors.LDE.SurfaceApertureTypes, new_type)
+
+    new_aperturetype_settings = surface.ApertureData.CreateApertureTypeSettings(new_type)
+
+    for param, attr_name in [
+        (aperture_file, _APERTURE_FILE),
+        (aperture_x_decenter, _APERTURE_X_DECENTER),
+        (aperture_y_decenter, _APERTURE_Y_DECENTER),
+        (maximum_radius, _MAXIMUM_RADIUS),
+        (minimum_radius, _MINIMUM_RADIUS),
+        (number_of_arms, _NUMBER_OF_ARMS),
+        (uda_scale, _UDA_SCALE),
+        (width_of_arms, _WIDTH_OF_ARMS),
+        (x_half_width, _X_HALF_WIDTH),
+        (y_half_width, _Y_HALF_WIDTH),
+    ]:
+        if param is not None:
+            if attr_name not in _APERTURETYPE_USED_SETTINGS[str(new_type)]:
+                warn(
+                    f"Aperture type {str(new_type)} does not support the specification of {attr_name}. See the "
+                    f"OpticStudio documentation for more information.",
+                    UserWarning,
+                )
+            else:
+                setattr(new_aperturetype_settings, attr_name, param)
+
+    surface.ApertureData.ChangeApertureTypeSettings(new_aperturetype_settings)

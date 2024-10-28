@@ -1,9 +1,22 @@
+import hashlib
+import json
 from pathlib import Path
 
 import pytest
 
 from tests.config import CONFIG_DATA_FOLDER, REFERENCE_DATA_FOLDER, REFERENCE_VERSION
 from zospy.analyses.base import AnalysisResult
+
+
+def pytest_make_parametrize_id(config, val, argname):
+    """
+    Custom hook to control the name of dictionaries in the description.
+    """
+    if isinstance(val, dict):
+        return hashlib.md5(json.dumps(val, sort_keys=True).encode("utf-8")).hexdigest()
+    else:
+        # Default ID for non-dictionary parameters
+        return None
 
 
 @pytest.fixture(scope="class")

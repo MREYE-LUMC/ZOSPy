@@ -41,7 +41,6 @@ class ZemaxColor:
     Color22: ZemaxColor = None
     Color23: ZemaxColor = None
     Color24: ZemaxColor = None
-    NoColor: ZemaxColor = None
 
 class ZemaxOpacity:
     P100: ZemaxOpacity = None

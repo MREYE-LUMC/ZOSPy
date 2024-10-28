@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 from typing import Literal
 
@@ -12,9 +10,7 @@ import zospy as zp
 def pytest_addoption(parser):
     parser.addoption("--extension", action="store_true", help="Connect to Zemax OpticStudio as extension")
     parser.addoption("--output-directory", type=Path)
-    parser.addoption(
-        "--opticstudio-directory", type=Path, default=None, help="Path to the OpticStudio installation directory"
-    )
+    parser.addoption("--update-ui", type=bool, default=False)
 
 
 def pytest_runtest_makereport(item, call):
@@ -61,28 +57,19 @@ def system_save_file(request):
 
 
 @pytest.fixture(scope="session")
-def opticstudio_directory(request) -> Path | None:
-    path = request.config.getoption("--opticstudio-directory")
-
-    if path is not None:
-        return path.resolve()
-
-    return None
-
-
-@pytest.fixture(scope="session")
-def zos(opticstudio_directory) -> zp.ZOS:
-    if opticstudio_directory is not None:
-        zos = zp.ZOS(opticstudio_directory=str(opticstudio_directory))
-    else:
-        zos = zp.ZOS()
+def zos() -> zp.ZOS:
+    zos = zp.ZOS()
 
     return zos
 
 
 @pytest.fixture
-def oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
+def oss(zos: zp.ZOS, connection_mode, request) -> zp.zpcore.OpticStudioSystem:
     oss = zos.connect(connection_mode)
+
+    if connection_mode == "extension":
+        # Disable UI updates using command line option, making the tests run faster
+        zos.Application.ShowChangesInUI = request.config.getoption("--update-ui")
 
     yield oss
 

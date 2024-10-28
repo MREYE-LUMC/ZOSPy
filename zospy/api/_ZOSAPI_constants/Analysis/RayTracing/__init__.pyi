@@ -12,5 +12,3 @@ class PathAnalysisSortType:
     NumberOfBranches: PathAnalysisSortType = None
     LastObjectStruck: PathAnalysisSortType = None
     NumberOfUniqueObjectsStruct: PathAnalysisSortType = None
-    AverageOpticalPathLength: PathAnalysisSortType = None
-    NumberOfDiffractionEvents: PathAnalysisSortType = None

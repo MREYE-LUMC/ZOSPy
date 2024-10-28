@@ -119,8 +119,3 @@ class MultiConfigOperandType:
     FCMM: MultiConfigOperandType = None
     CHZN: MultiConfigOperandType = None
     MCSD: MultiConfigOperandType = None
-    CSDX: MultiConfigOperandType = None
-    CSDY: MultiConfigOperandType = None
-    CSTX: MultiConfigOperandType = None
-    CSTY: MultiConfigOperandType = None
-    CSTZ: MultiConfigOperandType = None

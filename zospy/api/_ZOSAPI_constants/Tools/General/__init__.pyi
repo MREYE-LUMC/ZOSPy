@@ -56,15 +56,6 @@ class CADFileType:
     CATPART: CADFileType = None
     CATPRODUCT: CADFileType = None
     XCGM: CADFileType = None
-    ZMO: CADFileType = None
-    XT: CADFileType = None
-    XB: CADFileType = None
-    PRC: CADFileType = None
-    JT: CADFileType = None
-    N3MF: CADFileType = None
-    U3D: CADFileType = None
-    VRML: CADFileType = None
-    OBJ: CADFileType = None
 
 class CADToleranceType:
     N_TenEMinus4: CADToleranceType = None

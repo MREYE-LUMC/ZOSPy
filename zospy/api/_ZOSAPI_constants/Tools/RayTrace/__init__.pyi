@@ -49,7 +49,6 @@ class RayStatus:
     RayError: RayStatus = None
     BulkScattered: RayStatus = None
     WaveShifted: RayStatus = None
-    TIR: RayStatus = None
     OrdinaryRay: RayStatus = None
     ExtraordinaryRay: RayStatus = None
     WaveShiftPL: RayStatus = None

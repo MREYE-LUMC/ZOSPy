@@ -13,7 +13,6 @@ __all__ = (
     "NCE",
     "TDE",
     "CellDataType",
-    "DirectionOfRayTravel",
     "EditorType",
     "ReflectTransmitCode",
     "SampleSides",
@@ -26,10 +25,6 @@ class CellDataType:
     Integer: CellDataType = None
     Double: CellDataType = None
     String: CellDataType = None
-
-class DirectionOfRayTravel:
-    inward: DirectionOfRayTravel = None
-    outward: DirectionOfRayTravel = None
 
 class EditorType:
     LDE: EditorType = None

@@ -15,7 +15,6 @@ __all__ = (
     "PolarizationMethod",
     "QuadratureSteps",
     "RayAimingMethod",
-    "RayAimingType",
     "ReferenceOPDSetting",
     "WavelengthPreset",
     "ZemaxAfocalModeUnits",
@@ -90,10 +89,6 @@ class RayAimingMethod:
     Off: RayAimingMethod = None
     Paraxial: RayAimingMethod = None
     Real: RayAimingMethod = None
-
-class RayAimingType:
-    Heuristic: RayAimingType = None
-    Optimize: RayAimingType = None
 
 class ReferenceOPDSetting:
     Absolute: ReferenceOPDSetting = None
