@@ -207,22 +207,46 @@ tests:
         contourformat: ""
         bfs_criterion: MinimumVolume
         bfs_reversedirection: false
-      - sampling: 129x129
-        data: SagitalCurvature
-        remove: null
-        surface: 2
-        showas: Contour
-        contourformat: ""
-        bfs_criterion: MinimumVolume
-        bfs_reversedirection: false
-      - sampling: 129x129
-        data: SagitalCurvature
-        remove: BaseROC
-        surface: 2
-        showas: Contour
-        contourformat: "0.1"
-        bfs_criterion: MinimumVolume
-        bfs_reversedirection: false
+      - opticstudio: "<24.1.2"
+        parameters:
+          sampling: 129x129
+          data: SagitalCurvature
+          remove: null
+          surface: 2
+          showas: Contour
+          contourformat: ""
+          bfs_criterion: MinimumVolume
+          bfs_reversedirection: false
+      - opticstudio: "<24.1.2"
+        parameters:
+          sampling: 129x129
+          data: SagitalCurvature
+          remove: BaseROC
+          surface: 2
+          showas: Contour
+          contourformat: "0.1"
+          bfs_criterion: MinimumVolume
+          bfs_reversedirection: false
+      - opticstudio: ">=24.1.2"
+        parameters:
+          sampling: 129x129
+          data: SagittalCurvature
+          remove: null
+          surface: 2
+          showas: Contour
+          contourformat: ""
+          bfs_criterion: MinimumVolume
+          bfs_reversedirection: false
+      - opticstudio: ">=24.1.2"
+        parameters:
+          sampling: 129x129
+          data: SagittalCurvature
+          remove: BaseROC
+          surface: 2
+          showas: Contour
+          contourformat: "0.1"
+          bfs_criterion: MinimumVolume
+          bfs_reversedirection: false
       - sampling: 33x33
         data: X_Curvature
         remove: BestFitSphere
