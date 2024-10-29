@@ -149,6 +149,7 @@ def standardize_sampling(sampling: SamplingType) -> SamplingType:
         raise TypeError("sampling should be int or string")
 
 
+# TODO: Remove in ZOSPy 2.0.0
 def _get_number_field(name: str, text: str) -> str:
     return re.search(
         rf"{re.escape(name)}\s*:\s*([-+]?(\d+({re.escape(_config.DECIMAL_POINT)}\d*)?|{re.escape(_config.DECIMAL_POINT)}\d+)(?:[Ee][-+]?\d+)?)",
