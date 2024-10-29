@@ -1,19 +1,30 @@
 from __future__ import annotations
 
+import hashlib
+import json
+import logging
 import os
 import re
+import sys
 import traceback
+from argparse import ArgumentParser
 from operator import attrgetter
 from pathlib import Path
 from typing import Annotated, Any, Callable, Literal
 
+import systems
 import yaml
-from pydantic import BaseModel, BeforeValidator, field_validator, model_validator
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    BeforeValidator,
+    field_validator,
+    model_validator,
+)
 
 import zospy as zp
-from scripts.generate_test_reference_data import systems
 
-CONFIG_FILE = "tests.yaml"
+logger = logging.getLogger(__name__)
 
 
 class TestConfiguration(BaseModel):
@@ -60,8 +71,6 @@ class TestConfiguration(BaseModel):
 
 
 class Configuration(BaseModel):
-    connection_mode: Literal["standalone", "extension"]
-    output_directory: Path
     redact_patterns: list[Annotated[re.Pattern, BeforeValidator(Configuration.validate_redact_patterns)]] = []
     tests: list[TestConfiguration]
 
@@ -77,12 +86,14 @@ class Configuration(BaseModel):
         return regex
 
 
-def _optic_studio_version(zos: zp.zpcore.ZOS) -> str:
-    application = zos.Application
+AbsolutePath = Annotated[Path, AfterValidator(lambda p: p.resolve(strict=False))]
 
-    version = f"{application.ZOSMajorVersion}.{application.ZOSMinorVersion}.{application.ZOSSPVersion}"
 
-    return version
+class CommandLineArguments(BaseModel):
+    config: AbsolutePath
+    connection_mode: Literal["standalone", "extension"]
+    opticstudio_directory: AbsolutePath | None
+    output_directory: Path
 
 
 def _redact_json(json_string: str, patterns: list[re.Pattern]) -> tuple[str, list[str]]:
@@ -95,7 +106,38 @@ def _redact_json(json_string: str, patterns: list[re.Pattern]) -> tuple[str, lis
     return json_string, matches
 
 
-def process_test(oss: zp.zpcore.OpticStudioSystem, test: TestConfiguration, config: Configuration):
+def _map_parameter_names(parameters: dict):
+    """A function to create and apply a mapping for test parameters of the dict type to have consistent test naming.
+
+    Mappings will be saved in 'dictionary_parameter_mapping.json' within the output directory.
+    Parameters
+    ----------
+    parameters: dict
+        A dictionary containing the test parameters in the form {param_name: param_value}.
+
+    Returns
+    -------
+    dict
+        A mapped parameters dictionary
+    """
+    if any(isinstance(value, dict) for value in parameters.values()):
+        mapped_parameters = parameters.copy()
+
+        for param_name, param in mapped_parameters.items():
+            if isinstance(param, dict):
+                mapped_name = hashlib.md5(json.dumps(param, sort_keys=True).encode("utf-8")).hexdigest()
+
+                mapped_parameters[param_name] = mapped_name
+
+        return mapped_parameters
+
+    else:
+        return parameters
+
+
+def process_test(
+    oss: zp.zpcore.OpticStudioSystem, test: TestConfiguration, args: CommandLineArguments, config: Configuration
+):
     analysis = test.analysis
     test_file = test.file
     test_name = test.test
@@ -103,62 +145,113 @@ def process_test(oss: zp.zpcore.OpticStudioSystem, test: TestConfiguration, conf
     test_parameters = test.parameters
     parametrized = test.parametrized
 
+    optic_studio_version = str(oss._ZOS.version)
+
     for parameters in test_parameters:
-        result_file_name = f"{OPTIC_STUDIO_VERSION}-{test_file}-{test_name}"
+        result_file_name = f"{optic_studio_version}-{test_file}-{test_name}"
 
         if parametrized:
-            result_file_name += f"[{'-'.join(str(parameters[p]) for p in parametrized)}]"
+            mapped_parameters = _map_parameter_names(parameters=parameters)
+            result_file_name += f"[{'-'.join(str(mapped_parameters[p]) for p in parametrized)}]"
 
-        output_json = config.output_directory / f"{result_file_name}.json"
-        output_zos = config.output_directory / f"{result_file_name}.zmx"
+        output_json = args.output_directory / f"{result_file_name}.json"
+        output_zos = args.output_directory / f"{result_file_name}.zmx"
 
         if output_json.exists():
-            print(f"Skipping {result_file_name} because it already exists")
+            logger.info(f"Skipping {result_file_name} because it already exists")
             continue
 
-        print(f"Processing {result_file_name}")
+        logger.info(f"Processing {result_file_name}")
 
         # Build model
         test.model(oss)
 
-        result = analysis(oss, **parameters, oncomplete="Release")
+        try:
+            # Run analysis
+            result = analysis(oss, **parameters, oncomplete="Release")
+        except Exception as e:
+            logger.error(f"Failed to run analysis %s. Traceback: %s", analysis.__name__, traceback.format_exc())
+            continue
 
         try:
             result_json = result.to_json()
             result_json, redacted_strings = _redact_json(result_json, config.redact_patterns)
 
             if redacted_strings:
-                print("\tRedacted strings:", *redacted_strings, sep="\n\t\t")
+                logger.warning("\tRedacted strings: %s", "\n\t".join(redacted_strings))
 
             with open(output_json, "w") as f:
                 f.write(result_json)
+
+            oss.save_as(str(output_zos.absolute()))
         except TypeError as e:
-            print(f"Failed to serialize {result_file_name}", traceback.format_exc())
-
-        oss.save_as(str(output_zos.absolute()))
+            logger.error(f"Failed to serialize %s. Traceback: %s", result_file_name, traceback.format_exc())
 
 
-os.chdir(Path(__file__).parent)
+def main(args):
+    args = CommandLineArguments.model_validate(args, from_attributes=True)
 
-with open(CONFIG_FILE, "r") as f:
-    config: Configuration = Configuration.model_validate(yaml.safe_load(f.read()))
+    if not args.config.exists():
+        logger.fatal(
+            f"Configuration file {args.config} does not exist. When running with the default arguments, "
+            f"make sure you are running the script from the project root."
+        )
 
-zos = zp.ZOS()
-zos.wakeup()
+        return 1
 
-if config.connection_mode == "extension":
-    assert zos.connect_as_extension(), "Failed to connect to Zemax in extension mode"
-elif config.connection_mode == "standalone":
-    assert zos.create_new_application(), "Failed to connect to Zemax in standalone mode"
+    if not args.output_directory.exists():
+        logger.fatal(
+            f"Output directory {args.output_directory} does not exist. When running with the default "
+            f"arguments, make sure you are running the script from the project root."
+        )
 
-OPTIC_STUDIO_VERSION = _optic_studio_version(zos)
+        return 1
 
-oss = zos.get_primary_system()
+    with open(args.config, "r") as f:
+        config = Configuration.model_validate(yaml.safe_load(f.read()))
 
-for t in config.tests:
-    process_test(oss, t, config)
+    zos = zp.ZOS(opticstudio_directory=args.opticstudio_directory)
+    oss = zos.connect(mode=args.connection_mode)
 
-# Clean up Zemax workspace files
-print("Removing Zemax workspace (.ZDA) files...")
-for f in config.output_directory.glob("*.ZDA"):
-    f.unlink()
+    if args.connection_mode == "extension":
+        # Turn off UI updates for faster processing
+        zos.Application.ShowChangesInUI = False
+
+    logger.info(f"Generating test data files using OpticStudio {zos.version} and ZOSPy {zp.__version__}")
+
+    for t in config.tests:
+        process_test(oss, t, args, config)
+
+    # Clean up Zemax workspace files
+    logger.info("Removing Zemax workspace (.ZDA) files...")
+    for f in args.output_directory.glob("*.ZDA"):
+        f.unlink()
+
+
+argument_parser = ArgumentParser(description="Generate reference data files for ZOSPy unit tests.")
+argument_parser.add_argument(
+    "--config",
+    type=Path,
+    default=Path("scripts/generate_test_reference_data/tests.yaml"),
+    help="Path to the configuration file.",
+)
+argument_parser.add_argument(
+    "--connection-mode",
+    choices=["standalone", "extension"],
+    default="standalone",
+    help="Connection mode to use with OpticStudio.",
+)
+argument_parser.add_argument(
+    "--output-directory",
+    type=Path,
+    default=Path("tests/data/reference"),
+    help="Path to the directory where the reference data files will be saved.",
+)
+argument_parser.add_argument(
+    "--opticstudio-directory",
+    type=Path,
+    help="Path to the OpticStudio installation directory. This allows to choose a different version of OpticStudio.",
+    required=False,
+)
+
+sys.exit(main(argument_parser.parse_args()))

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.resources
+import sys
 from functools import lru_cache
 from typing import Any
 
@@ -10,7 +11,10 @@ from pydantic.dataclasses import dataclass
 
 from zospy.analyses.new.parsers.transformers import ZospyTransformer
 
-GRAMMARS = importlib.resources.files("zospy.analyses.new.parsers.grammars")
+if sys.version_info < (3, 10):
+    GRAMMARS = importlib.resources.files("zospy.analyses.new.parsers").joinpath("grammars")
+else:
+    GRAMMARS = importlib.resources.files("zospy.analyses.new.parsers.grammars")
 
 
 @lru_cache

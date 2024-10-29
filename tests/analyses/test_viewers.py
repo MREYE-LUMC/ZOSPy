@@ -1,7 +1,6 @@
 from types import SimpleNamespace
 
 import pytest
-from contourpy.util.data import simple
 from semver import Version
 
 from zospy.analyses.systemviewers import (
