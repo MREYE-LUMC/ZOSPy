@@ -53,12 +53,34 @@ class TestCurvature:
 
         assert_frame_equal(result.Data, expected_data.Data)
 
+    XFAIL_SAGITTAL_CURVATURE = "SagitalCurvature is renamed to SagittalCurvature in OpticStudio 24.1.2 and higher"
+
     @pytest.mark.parametrize(
         "sampling,data,remove,surface,showas,contourformat,bfs_criterion,bfs_reversedirection",
         [
             ("65x65", "TangentialCurvature", None, 2, "Surface", "", "MinimumVolume", False),
-            ("129x129", "SagitalCurvature", None, 2, "Contour", "", "MinimumVolume", False),
-            ("129x129", "SagitalCurvature", "BaseROC", 2, "Contour", "0.1", "MinimumVolume", False),
+            pytest.param(
+                "129x129",
+                "SagitalCurvature",
+                None,
+                2,
+                "Contour",
+                "",
+                "MinimumVolume",
+                False,
+                marks=pytest.mark.xfail_for_opticstudio_versions(">= 24.1.2", XFAIL_SAGITTAL_CURVATURE),
+            ),
+            pytest.param(
+                "129x129",
+                "SagitalCurvature",
+                "BaseROC",
+                2,
+                "Contour",
+                "0.1",
+                "MinimumVolume",
+                False,
+                marks=pytest.mark.xfail_for_opticstudio_versions(">= 24.1.2", XFAIL_SAGITTAL_CURVATURE),
+            ),
             ("33x33", "X_Curvature", "BestFitSphere", 3, "Contour", "", "MinimumRMS", False),
             ("33x33", "X_Curvature", "BestFitSphere", 3, "Contour", "", "MinimumVolume", False),
             ("33x33", "X_Curvature", "BestFitSphere", 3, "Contour", "0.2", "MinimumVolume", True),
