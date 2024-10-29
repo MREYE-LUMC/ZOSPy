@@ -11,13 +11,22 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- Wavefront analysis: `zospy.analyses.wavefront.wavefront_map` (!61)
+- Extended scene analysis: `zospy.analyses.extendedscene.geometric_image_analysis` (!61)
+- Physical optics analysis: `zospy.analyses.physicaloptics.physical_optics_propagation` (!61)
+  - Helper functions to generate specific parameter dicitonaries for these analyses: `zospy.analyses.physicaloptics.pop_create_beam_parameter_dict`, `zospy.analyses.physicaloptics.pop_create_fiber_parameter_dict`
+- Convenience function to change the aperturetype of a surface in sequential mode: `zospy.functions.lde.surface_change_aperturetype`
 - Experimental new interface for analyses in `zospy.analyses.new` (#78, #15)
 - Add support for system viewer exports in `zospy.analyses.systemviewers.viewer_3d` and
   `zospy.analyses.systemviewers.cross_section` (#80).
 
 ### Fixed
 
+- Added support for dictionary parameters in both `zospy.tests` and `zospy.scripts.generate_test_reference_data`. (!61)
+
 ### Changed
+
+- Updated `zospy.functions.lde.surface_change_type` to also support surfaces that require the specification of a file to load. (!61)
 
 ### Deprecated
 

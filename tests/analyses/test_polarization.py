@@ -2,11 +2,8 @@ import numpy as np
 import pytest
 
 import zospy.api.config as _config
-from zospy.analyses.polarization import (
-    _get_number_field,
-    polarization_pupil_map,
-    transmission,
-)
+from zospy.analyses.polarization import polarization_pupil_map, transmission
+from zospy.utils.zputils import _get_number_field
 
 XFAIL_REASON = "Intentionally skipped for this OpticStudio version. See https://zospy.readthedocs.io/compatibility."
 

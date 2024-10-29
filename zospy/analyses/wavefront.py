@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import re
 from tempfile import mkstemp
+from typing import Literal
 
 import numpy as np
 import pandas as pd
@@ -13,8 +14,153 @@ import zospy.api.config as _config
 from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.utils.pyutils import atox
-from zospy.utils.zputils import standardize_sampling
+from zospy.utils.zputils import standardize_sampling, unpack_datagrid
 from zospy.zpcore import OpticStudioSystem
+
+
+def wavefront_map(
+    oss: OpticStudioSystem,
+    field: int = 1,
+    surface: Literal["Image", "Object"] | int = "Image",
+    wavelength: int = 1,
+    show_as: constants.Analysis.ShowAs | str = "Surface",
+    rotation: constants.Analysis.Settings.Rotations | str = "Rotate_0",
+    sampling: constants.Analysis.SampleSizes | str = "64x64",
+    polarization: constants.Analysis.Settings.Polarizations | str | None = None,
+    reference_to_primary: bool = False,
+    use_exit_pupil: bool = True,
+    remove_tilt: bool = False,
+    scale: float = 1.0,
+    subaperture_x: float = 0.0,
+    subaperture_y: float = 0.0,
+    subaperture_r: float = 1.0,
+    contour_format: str = "",
+    oncomplete: OnComplete | str = OnComplete.Close,
+) -> AnalysisResult:
+    """Wavefront map analysis.
+
+    Parameters
+    ----------
+    oss : zospy.zpcore.OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance. Should be sequential.
+    field :
+        The field that is to be analyzed. Defaults to 1.
+    surface  str | int
+        The surface that is to be analyzed. Either 'Image', 'Object' or an integer. Defaults to 'Image'.
+    wavelength : int
+        The wavelength number to use for the analysis. Defaults to 1.
+    show_as : constants.Analysis.ShowAs | str
+        Defines the output plot format. Defaults to 'Surface'.
+    rotation : constants.Analysis.Settings.Rotations | str
+        The rotation or surface plots for viewing. Defaults to 'Rotate_0'.
+    sampling : constants.Analysis.SampleSizes | str
+        The sampling. Defaults to '64x64'.
+    polarization : constants.Analysis.Settings.Polarizations | str | None
+        The polarization that is accounted for. When set to None, polarization is ignored. Defaults to None.
+    reference_to_primary : bool
+        Defines whether the aberrations are referenced to the reference sphere for the used wavelength or for the
+        primary wavelength. If True, the reference sphere for the primary wavelength is used. Defaults to False.
+    use_exit_pupil : bool
+        Defines whether the exit pupil shape is used. Defaults to True.
+    remove_tilt : bool
+        Defines whether linear x- and y-tilt is removed from the data. Defaults to False.
+    scale : float
+        The scale factor for surface plots. Defaults to False.
+    subaperture_x : float
+        The subaperture x. Defaults to 0.0
+    subaperture_y : float
+        The subaperture t. Defaults to 0.0
+    subaperture_r : float
+        The subaperture r. Defaults to 1.0
+    contour_format : str
+        The contour format. Only used when show-As is set to 'Contour'. If set to an empty string, OpticStdio ignores
+        it. Defaults to ''.
+    oncomplete : OnComplete | str
+        Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
+        the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
+        the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
+        with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
+        instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
+
+    Returns
+    -------
+    AnalysisResult
+        A wavefront map analysis result.
+    """
+    analysis_type = constants.Analysis.AnalysisIDM.WavefrontMap
+
+    # Create analysis
+    analysis = new_analysis(oss, analysis_type)
+
+    # Adjust settings
+    analysis.set_field(field)
+    analysis.set_surface(surface)
+    analysis.set_wavelength(wavelength)
+    analysis.Settings.ShowAs = constants.process_constant(constants.Analysis.ShowAs, show_as)
+    analysis.Settings.Rotation = constants.process_constant(constants.Analysis.Settings.Rotations, rotation)
+    analysis.Settings.Sampling = constants.process_constant(
+        constants.Analysis.SampleSizes, standardize_sampling(sampling)
+    )
+    analysis.Settings.Polarization = constants.process_constant(constants.Analysis.Settings.Polarizations, polarization)
+    analysis.Settings.ReferenceToPrimary = reference_to_primary
+    analysis.Settings.UseExitPupil = use_exit_pupil
+    analysis.Settings.RemoveTilt = remove_tilt
+    analysis.Settings.Scale = scale
+    analysis.Settings.Subaperture_X = subaperture_x
+    analysis.Settings.Subaperture_Y = subaperture_y
+    analysis.Settings.Subaperture_R = subaperture_r
+    analysis.Settings.ContourFormat = contour_format
+
+    # Calculate
+    analysis.ApplyAndWaitForCompletion()
+
+    # Calculate
+    analysis.ApplyAndWaitForCompletion()
+
+    # Get headerdata, metadata and messages
+    headerdata = analysis.get_header_data()
+    metadata = analysis.get_metadata()
+    messages = analysis.get_messages()
+
+    # Get settings
+    settings = pd.Series(name="Settings", dtype=object)
+    settings.loc["Field"] = analysis.get_field()
+    settings.loc["Surface"] = analysis.Settings.Surface.GetSurfaceNumber()
+    settings.loc["Wavelength"] = analysis.get_wavelength()
+    settings.loc["ShowAs"] = str(analysis.Settings.ShowAs)
+    settings.loc["Rotation"] = str(analysis.Settings.Rotation)
+    settings.loc["Sampling"] = str(analysis.Settings.Sampling)
+    settings.loc["Polarization"] = str(analysis.Settings.Polarization)
+    settings.loc["ReferenceToPrimary"] = analysis.Settings.ReferenceToPrimary
+    settings.loc["UseExitPupil"] = analysis.Settings.UseExitPupil
+    settings.loc["RemoveTilt"] = analysis.Settings.RemoveTilt
+    settings.loc["Scale"] = analysis.Settings.Scale
+    settings.loc["Subaperture_X"] = analysis.Settings.Subaperture_X
+    settings.loc["Subaperture_Y"] = analysis.Settings.Subaperture_Y
+    settings.loc["Subaperture_R"] = analysis.Settings.Subaperture_R
+    settings.loc["ContourFormat"] = analysis.Settings.ContourFormat
+
+    data = []
+    for ii in range(analysis.Results.NumberOfDataGrids):
+        data.append(unpack_datagrid(analysis.Results.DataGrids[ii]))
+
+    if len(data) == 0:
+        data = pd.DataFrame()
+    elif len(data) == 1:
+        data = data[0]
+    else:
+        data = pd.concat(data, axis=1)
+
+    result = AnalysisResult(
+        analysistype=str(analysis_type),
+        data=data,
+        settings=settings,
+        metadata=metadata,
+        headerdata=headerdata,
+        messages=messages,
+    )
+
+    return analysis.complete(oncomplete, result)
 
 
 def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tuple[pd.DataFrame, pd.DataFrame]:

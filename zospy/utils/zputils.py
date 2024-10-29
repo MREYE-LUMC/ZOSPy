@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from zospy.api import _ZOSAPI
+from zospy.api import config as _config
 
 
 def flatten_dict(unflattend_dict, parent_key="", sep=".", keep_unflattend=False):
@@ -146,3 +147,10 @@ def standardize_sampling(sampling: SamplingType) -> SamplingType:
             raise ValueError('Cannot interpret sampling pattern "{}"'.format(sampling))
     else:
         raise TypeError("sampling should be int or string")
+
+
+def _get_number_field(name: str, text: str) -> str:
+    return re.search(
+        rf"{re.escape(name)}\s*:\s*([-+]?(\d+({re.escape(_config.DECIMAL_POINT)}\d*)?|{re.escape(_config.DECIMAL_POINT)}\d+)(?:[Ee][-+]?\d+)?)",
+        text,
+    ).group(1)

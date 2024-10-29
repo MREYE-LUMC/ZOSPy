@@ -12,6 +12,7 @@ import zospy as zp
 def pytest_addoption(parser):
     parser.addoption("--extension", action="store_true", help="Connect to Zemax OpticStudio as extension")
     parser.addoption("--output-directory", type=Path)
+    parser.addoption("--update-ui", type=bool, default=False)
     parser.addoption(
         "--opticstudio-directory", type=Path, default=None, help="Path to the OpticStudio installation directory"
     )
@@ -81,8 +82,12 @@ def zos(opticstudio_directory) -> zp.ZOS:
 
 
 @pytest.fixture
-def oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
+def oss(zos: zp.ZOS, connection_mode, request) -> zp.zpcore.OpticStudioSystem:
     oss = zos.connect(connection_mode)
+
+    if connection_mode == "extension":
+        # Disable UI updates using command line option, making the tests run faster
+        zos.Application.ShowChangesInUI = request.config.getoption("--update-ui")
 
     yield oss
 

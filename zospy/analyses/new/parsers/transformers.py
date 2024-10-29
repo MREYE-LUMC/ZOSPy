@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from itertools import groupby
-from typing import Any, Generic, NamedTuple, TypedDict, TypeVar
+from typing import Any, NamedTuple, TypedDict, TypeVar
 
 from lark import Discard, Transformer
 
@@ -10,12 +10,12 @@ from zospy.utils.pyutils import atox
 FieldValue = TypeVar("FieldValue")
 
 
-class SimpleField(NamedTuple, Generic[FieldValue]):
+class SimpleField(NamedTuple):
     name: str
     value: FieldValue
 
 
-class ParametricField(NamedTuple, Generic[FieldValue]):
+class ParametricField(NamedTuple):
     parameters: int | float | tuple[int | float, ...]
     value: FieldValue
 

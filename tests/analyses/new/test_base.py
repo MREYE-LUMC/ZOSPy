@@ -2,7 +2,6 @@ import inspect
 import json
 from dataclasses import fields
 from datetime import datetime
-from importlib.metadata import metadata
 from types import SimpleNamespace
 
 import numpy as np

@@ -29,7 +29,8 @@ dependencies = [
     "pandas",
     "pydantic >= 2.4.0",
     "numpy",
-    "semver >= 3.0.0,<4"
+    "semver >= 3.0.0,<4",
+    "eval_type_backport", # TODO: Remove when dropping support for Python 3.9
 ]
 dynamic = ["version"]
 
