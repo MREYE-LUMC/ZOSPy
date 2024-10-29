@@ -22,11 +22,10 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- Added support for dictionary parameters in both `zospy.tests` and `zospy.scripts.generate_test_reference_data`. (!61)
-
 ### Changed
 
 - Updated `zospy.functions.lde.surface_change_type` to also support surfaces that require the specification of a file to load. (!61)
+- Added support for dictionary parameters in both `zospy.tests` and `zospy.scripts.generate_test_reference_data`. (!61)
 
 ### Deprecated
 
