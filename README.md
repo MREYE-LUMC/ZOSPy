@@ -61,12 +61,12 @@ these versions.
 
 ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudio:
 
-| Zemax       | 20.3.2 | 23.1.0 | 23.2.1 | 24.1.0 |
-|-------------|--------|--------|--------|--------|
-| Python 3.9  | ⚠      | ✔      | ✔      | ✔      |
-| Python 3.10 | ⚠      | ✔      | ✔      | ✔      |
-| Python 3.11 | ⚠      | ✔      | ✔      | ✔      |
-| Python 3.12 | ⚠      |        |        | ✔      |
+| Zemax       | 20.3.2 | 23.1.0 | 23.2.1 | 24.1.0 | 24.1.3 |
+|-------------|--------|--------|--------|--------|--------|
+| Python 3.9  | ⚠      | ✔      | ✔      | ✔      | ⚠      |
+| Python 3.10 | ⚠      | ✔      | ✔      | ✔      | ⚠      |
+| Python 3.11 | ⚠      | ✔      | ✔      | ✔      | ⚠      |
+| Python 3.12 | ⚠      |        |        | ✔      | ⚠      |
 
 ✔: This version works without problems.
 ⚠: This version works, but the output of analyses can differ slightly from the used reference version (currently **OpticStudio 23 R1.01**).
