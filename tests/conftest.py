@@ -38,6 +38,19 @@ def skip_by_connection_mode(request, connection_mode):
 
 
 @pytest.fixture(autouse=True)
+def skip_for_opticstudio_versions(request, optic_studio_version):
+    if request.node.get_closest_marker("skip_for_opticstudio_versions"):
+        conditions, reason = request.node.get_closest_marker("skip_for_opticstudio_versions").args[:2]
+
+        if isinstance(conditions, str):
+            conditions = [conditions]
+
+        for condition in conditions:
+            if optic_studio_version.match(condition):
+                pytest.skip(reason=reason)
+
+
+@pytest.fixture(autouse=True)
 def xfail_for_opticstudio_versions(request, optic_studio_version):
     if request.node.get_closest_marker("xfail_for_opticstudio_versions"):
         conditions, reason = request.node.get_closest_marker("xfail_for_opticstudio_versions").args[:2]

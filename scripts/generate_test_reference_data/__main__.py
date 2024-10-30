@@ -3,7 +3,6 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-import os
 import re
 import sys
 import traceback
@@ -21,10 +20,20 @@ from pydantic import (
     field_validator,
     model_validator,
 )
+from pydantic_core import PydanticCustomError
 
 import zospy as zp
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("generate_test_reference_data")
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
+
+TestParameters = dict[str, Any]
+
+
+class VersionDependentParameters(BaseModel):
+    opticstudio: str
+    parameters: TestParameters = {}
 
 
 class TestConfiguration(BaseModel):
@@ -32,7 +41,7 @@ class TestConfiguration(BaseModel):
     analysis: Callable[[zp.zpcore.OpticStudioSystem, ...], zp.analyses.base.AnalysisResult]
     file: str
     test: str
-    parameters: list[dict[str, Any]] = [{}]
+    parameters: list[VersionDependentParameters | TestParameters] = [{}]
     parametrized: tuple[str, ...] | None = None
 
     @field_validator("analysis", mode="before")
@@ -65,7 +74,19 @@ class TestConfiguration(BaseModel):
         if len(parameters := values.parameters) > 1:
             parametrized = values.parametrized
             assert parametrized is not None, "Multiple sets of parameters are only allowed if parametrized is specified"
-            assert all(p in parameters[0] for p in parametrized), "Invalid values encountered in parametrized"
+
+            for params in parameters:
+                params = params.parameters if isinstance(params, VersionDependentParameters) else params
+
+                if not all(p in params for p in parametrized):
+                    raise PydanticCustomError(
+                        error_type="invalid_parameters",
+                        message_template=(
+                            "All sets of parameters should contain the same keys as parametrized. Allowed keys: "
+                            "{parametrized}, found keys: {params}"
+                        ),
+                        context={"parametrized": parametrized, "params": params.keys()},
+                    )
 
         return values
 
@@ -106,10 +127,11 @@ def _redact_json(json_string: str, patterns: list[re.Pattern]) -> tuple[str, lis
     return json_string, matches
 
 
-def _map_parameter_names(parameters: dict):
+def _map_parameter_names(parameters: TestParameters):
     """A function to create and apply a mapping for test parameters of the dict type to have consistent test naming.
 
     Mappings will be saved in 'dictionary_parameter_mapping.json' within the output directory.
+
     Parameters
     ----------
     parameters: dict
@@ -150,8 +172,16 @@ def process_test(
     for parameters in test_parameters:
         result_file_name = f"{optic_studio_version}-{test_file}-{test_name}"
 
+        if isinstance(parameters, VersionDependentParameters):
+            if not oss._ZOS.version.match(parameters.opticstudio):
+                logger.info(f"Skipping {result_file_name} because it requires OpticStudio {parameters.opticstudio}")
+                continue
+
+            parameters = parameters.parameters
+
         if parametrized:
             mapped_parameters = _map_parameter_names(parameters=parameters)
+
             result_file_name += f"[{'-'.join(str(mapped_parameters[p]) for p in parametrized)}]"
 
         output_json = args.output_directory / f"{result_file_name}.json"
@@ -169,8 +199,8 @@ def process_test(
         try:
             # Run analysis
             result = analysis(oss, **parameters, oncomplete="Release")
-        except Exception as e:
-            logger.error(f"Failed to run analysis %s. Traceback: %s", analysis.__name__, traceback.format_exc())
+        except Exception:
+            logger.error("Failed to run analysis %s. Traceback: %s", analysis.__name__, traceback.format_exc())
             continue
 
         try:
@@ -184,8 +214,8 @@ def process_test(
                 f.write(result_json)
 
             oss.save_as(str(output_zos.absolute()))
-        except TypeError as e:
-            logger.error(f"Failed to serialize %s. Traceback: %s", result_file_name, traceback.format_exc())
+        except TypeError:
+            logger.error("Failed to serialize %s. Traceback: %s", result_file_name, traceback.format_exc())
 
 
 def main(args):
