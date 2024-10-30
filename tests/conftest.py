@@ -47,8 +47,7 @@ def skip_for_opticstudio_versions(request, optic_studio_version):
 
         for condition in conditions:
             if optic_studio_version.match(condition):
-                # pytest.skip(reason=reason)
-                request.node.add_marker(pytest.mark.skip(reason=reason))
+                pytest.skip(reason=reason)
 
 
 @pytest.fixture(autouse=True)
