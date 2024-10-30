@@ -68,7 +68,8 @@ dev = [
 markers = [
     "must_pass: test must pass, otherwise all other tests will be skipped",
     "require_mode: requires the specified connection mode, otherwise the test will be skipped",
-    "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions"
+    "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions",
+    "skip_for_opticstudio_versions: test is skipped for specific OpticStudio versions"
 ]
 
 [tool.mypy]
