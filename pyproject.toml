@@ -69,6 +69,9 @@ docs = [
     "hatch run docs:build",
     "hatch run docs:serve"
 ]
+example = "{env:HATCH_UV:uv} run scripts/run_examples/run_single_example.py {args}"
+all-examples = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_all_examples.py {args:examples}"
+file-exists = "python -c \"from pathlib import Path; p = Path(r'{args}'); print(p); print(p.exists())\""
 
 # Generate reference data for unit tests
 generate_reference_data = "hatch run reference-data:generate"
