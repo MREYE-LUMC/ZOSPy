@@ -151,6 +151,7 @@ extend-ignore = [
 ]
 "scripts/**" = [
     "D", # pydocstyle
+    "S101", # Use of assert
 ]
 "docs/conf.py" = [
     "INP001", # Missing __init__.py
