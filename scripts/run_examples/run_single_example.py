@@ -1,125 +1,75 @@
-# /// script
-# dependencies = [
-#   "ipykernel",
-#   "nbconvert",
-#   "zospy",
-# ]
-# ///
+"""Script to run an examples and save the output.
 
-"""Run a single ZOSPy example.
-
-This script is used to run a single ZOSPy example. It is called by `run_all_examples.py`.
-The script reads a Jupyter notebook, changes the connection mode from extension to standalone
-(unless configured to do so), runs the notebook, and saves the output.
+This script runs the specified example using the `run_single_example.py` script and saves the output.
+`uv` is used to run the example in an isolated environment, with only the required dependencies.
 """
 
 from __future__ import annotations
 
 import argparse
-import re
 import sys
-import traceback
 from pathlib import Path
-from typing import Literal
 
-import nbformat
-from nbconvert.preprocessors import CellExecutionError, ExecutePreprocessor
-
-ConnectionMode = Literal["standalone", "extension"]
-
-
-def change_connection_mode(
-    notebook: nbformat.NotebookNode,
-    from_mode: ConnectionMode = "standalone",
-    to_mode: ConnectionMode = "extension",
-) -> str | None:
-    regex_mode = re.compile(rf'zos\.connect\(\s*(?:mode\s*=\s*)?"{from_mode}"\s*\)')
-
-    for cell in notebook.cells:
-        if cell.cell_type == "code" and regex_mode.search(cell.source):
-            mode = regex_mode.search(cell.source).group(0)
-            cell.source = regex_mode.sub(f'zos.connect("{to_mode}")', cell.source)
-            return mode
-
-    return None
-
-
-def process_notebook(
-    notebook_path: Path,
-    output_folder: Path | None = None,
-    *,
-    keep_extension_mode: bool = False,
-) -> bool:
-    nb = nbformat.read(notebook_path, as_version=4)
-
-    # Change the connection mode to 'standalone' to run the notebook
-    old_connection_mode = change_connection_mode(nb, "extension", "standalone") if not keep_extension_mode else False
-
-    # Run the notebook
-    ep = ExecutePreprocessor(timeout=600, kernel_name="python3")
-    try:
-        ep.preprocess(nb, {"metadata": {"path": notebook_path.parent}})
-    except CellExecutionError:
-        print(f"Error executing {notebook_path}: {traceback.format_exc()}")
-        return False
-
-    # Reverse the connection mode change
-    if old_connection_mode:
-        change_connection_mode(nb, "standalone", "extension")
-
-    # Save the output
-    output_path = notebook_path if output_folder is None else output_folder / notebook_path.name
-    print(f"Saving output to {output_path}")
-    nbformat.write(nb, output_path)
-
-    return True
+from _common import process_example
 
 
 def main(args: argparse.Namespace) -> int:
-    example_path: Path = Path(args.example).resolve(strict=False)
-    output_path: Path = args.output or example_path
+    example_directory: Path = args.example_directory.resolve()
+    zospy_location = args.zospy_location.resolve(strict=False) if args.zospy_location is not None else None
+    output_folder = args.output.resolve(strict=False) if args.output is not None else example_directory
+    keep_extension_mode = args.keep_extension_mode
 
-    if not example_path.exists():
-        print(f"Directory {example_path} does not exist")
-        return -1
+    if not example_directory.exists():
+        print(
+            f"Directory {example_directory} does not exist. Note: when run using Hatch, paths with backward slashes "
+            "may not be found. Replace backward slashes with forward slashes in the path."
+        )
+        return 1
 
-    if not example_path.is_dir():
-        print(f"Notebook {example_path} is not a directory. Please provide a directory.")
-        return -1
+    if not example_directory.is_dir():
+        print(f"{example_directory} is not a directory. Please provide a directory.")
+        return 1
 
-    if not output_path.exists():
-        print(f"Creating output directory at {args.output}")
-        try:
-            output_path.mkdir()
-        except FileNotFoundError:
-            print(f"Error creating output directory: {traceback.format_exc()}")
-            return -1
+    success = process_example(
+        example_directory,
+        output_folder,
+        editable_zospy_location=zospy_location,
+        keep_extension_mode=keep_extension_mode,
+    )
 
-    exitcode = 0
+    if success:
+        print(f"\n\nExample {example_directory} ran successfully.")
+        return 0
 
-    for notebook in example_path.glob("*.ipynb"):
-        print(f"Processing {notebook}...")
-        success = process_notebook(notebook, args.output, keep_extension_mode=args.keep_extension_mode)
-
-        if not success:
-            print(f"Failed to process {notebook}.")
-            exitcode += 1
-
-    return exitcode
+    print(f"\n\nExample {example_directory} failed to run.")
+    return 1
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser("Run a single example")
-    parser.add_argument("example", type=Path, help="Path to the example directory")
+    parser = argparse.ArgumentParser(description="Run an example and save the output.")
+    (
+        parser.add_argument(
+            "example_directory",
+            type=Path,
+            help="Path to the directory containing the example.",
+        ),
+    )
+    parser.add_argument(
+        "--zospy-location",
+        type=Path,
+        help="Path to the directory containing ZOSPy. If not provided, ZOSPy is installed from PyPI.",
+        default=None,
+    )
     parser.add_argument(
         "--output",
         type=Path,
         help="Path to save the output to. Defaults to the input example directory.",
+        default=None,
     )
     parser.add_argument(
         "--keep-extension-mode",
         action="store_true",
-        help="Keep the extension connection mode after running the notebook",
+        help="Do not change extension mode to standalone mode prior to running the notebook.",
     )
 
     args = parser.parse_args()
