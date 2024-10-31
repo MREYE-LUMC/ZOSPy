@@ -5,6 +5,8 @@ from System.Reflection import Assembly
 import zospy as zp
 from zospy.api.codecs import OpticStudioInterfaceEncoder
 
+# ruff: noqa: SLF001
+
 
 class TestOpticStudioInterfaceEncoder:
     """Test automatic downcasting of generic interfaces to specific interfaces using `OpticStudioInterfaceEncoder`.
@@ -13,7 +15,7 @@ class TestOpticStudioInterfaceEncoder:
     """
 
     @pytest.fixture(scope="module")
-    def zosapi_interfaces(self, zos):
+    def zosapi_interfaces(self, zos):  # noqa: ARG002
         return Assembly.LoadFile(clr.FindAssembly("ZOSAPI_Interfaces"))
 
     def test_types_exist(self, zosapi_interfaces):
