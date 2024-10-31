@@ -38,6 +38,17 @@ dynamic = ["version"]
 Source = "https://github.com/MREYE-LUMC/ZOSPy"
 Documentation = "https://mreye-lumc.github.io/ZOSPy"
 
+[project.optional-dependencies]
+docs = [
+    "ipython",
+    "myst-parser",
+    "nbsphinx",
+    "numpydoc",
+    "sphinx",
+    "sphinx-book-theme",
+    "sphinx-design",
+]
+
 ### Hatch configuration
 
 [tool.hatch.version]
@@ -77,15 +88,7 @@ python = ["3.13", "3.12", "3.11", "3.10", "3.9"]
 ## Documentation
 [tool.hatch.envs.docs]
 installer = "uv"
-dependencies = [
-    "ipython",
-    "myst-parser",
-    "nbsphinx",
-    "numpydoc",
-    "sphinx",
-    "sphinx-book-theme",
-    "sphinx-design",
-]
+features = ["docs"]
 
 [tool.hatch.envs.docs.scripts]
 # Build documentation; run as hatch run docs:build
