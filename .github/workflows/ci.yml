@@ -18,7 +18,7 @@ jobs:
     - name: Build package
       run: uv build --python ${{ matrix.python }}
     - name: Install package
-      run: uv pip install --python ${{ matrix.python }} --find-links ./dist/ zospy
+      run: uv venv --python ${{ matrix.python }} && uv pip install --find-links ./dist/ zospy
 
   lint:
     runs-on: ubuntu-latest
