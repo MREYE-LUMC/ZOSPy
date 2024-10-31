@@ -114,7 +114,20 @@ extend = "ruff_defaults.toml"
 line-length = 120
 exclude = [
     "zospy/api/_ZOSAPI",
-    "zospy/api/_ZOSAPI_constants"
+    "zospy/api/_ZOSAPI_constants",
+
+    # TODO: Change this when movind the old analyses to zospy.analyses.old
+    "zospy/analyses/base.py",
+    "zospy/analyses/extendedscene.py",
+    "zospy/analyses//mtf.py",
+    "zospy/analyses/physicaloptics.py",
+    "zospy/analyses/polarization.py",
+    "zospy/analyses/psf.py",
+    "zospy/analyses/raysandspots.py",
+    "zospy/analyses/reports.py",
+    "zospy/analyses/surface.py",
+    "zospy/analyses/systemviewers.py",
+    "zospy/analyses/wavefront.py",
 ]
 
 [tool.ruff.lint]
