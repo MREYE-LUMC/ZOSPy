@@ -54,7 +54,21 @@ hatch env create
 
 Add your contribution in a new feature branch. When contributing an analysis, please include unit tests.
 
-### 3. Test
+### 3. Format your code
+
+To format your code, run the following command in the project directory:
+
+```shell
+hatch fmt
+```
+
+To format the docstrings, run the following command:
+
+```shell
+hatch run format-docstrings 
+```
+
+### 4. Test
 
 Since automated testing using GitHub Actions is not possible due to the dependency on OpticStudio, we request you
 to run all unit tests prior to opening a Pull Request. Testing has been automated for multiple Python versions and
@@ -69,6 +83,6 @@ If you run the tests for a previously untested version of OpticStudio or added t
 do not forget to generate reference data for these tests.
 More information about this can be found in [the test documentation](tests/README.md#generating-test-reference-data).
 
-### 4. Open a Pull Request
+### 5. Open a Pull Request
 
 Open a Pull Request, wait for our suggestions, and get your contribution merged!
