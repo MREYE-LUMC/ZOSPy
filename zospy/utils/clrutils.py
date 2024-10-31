@@ -1,18 +1,16 @@
-"""Utilities for working with the Common Language Runtime (CLR) provided by Python.NET."""
-
 import os
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime as dt
 
 import clr
-from System import Double, Enum, Reflection
+from System import Double, Enum, Reflection  # noqa
 
 DUMMY_DOUBLE = Double(0.0)
 DUMMY_ENUM = 0
 
 
 def clr_get_available_assemblies(with_meta=True):
-    """Get all the avaialble assemblies from the Common Language Runtime.
+    """Gets all the avaialble assemblies from the Common Language Runtime.
 
     Parameters
     ----------
@@ -47,14 +45,14 @@ def reflect_dll_content(dllfilepath):
 
     content = list(Reflection.Assembly.LoadFile(dllfilepath).GetTypes())
 
-    namespaces = sorted(set([item.Namespace for item in content]))
+    namespaces = sorted(list(set([item.Namespace for item in content])))
     enums = sorted([item.FullName for item in content if item.IsEnum])
     ret = {"namespaces": namespaces, "enums": enums}
     return ret
 
 
 def system_get_enum_key_from_value(enum, value):
-    """Get the key corresponding to a certain value from a System.Enum instance.
+    """Gets the key corresponding to a certain value from a System.Enum instance.
 
     Parameters
     ----------
@@ -72,7 +70,7 @@ def system_get_enum_key_from_value(enum, value):
 
 
 def system_get_enum_names(enum):
-    """Get all names from a System.Enum instance.
+    """Gets all names from a System.Enum instance.
 
     Parameters
     ----------
@@ -88,7 +86,7 @@ def system_get_enum_names(enum):
 
 
 def system_get_enum_values(enum):
-    """Get all values from a System.Enum instance.
+    """Gets all values from a System.Enum instance.
 
     Parameters
     ----------
@@ -104,7 +102,7 @@ def system_get_enum_values(enum):
 
 
 def system_enum_to_namedtuple(enum):
-    """Convert a System.Enum into a namedtuple.
+    """Converts a System.Enum into a namedtuple.
 
     If the Enum contains a member with name `None`, its name is changed to `None_`.
 
@@ -131,7 +129,7 @@ def system_enum_to_namedtuple(enum):
 
 
 def system_datetime_to_datetime(sdt):
-    """Convert a System.DateTime into a datetime.datetime instance.
+    """Converts a System.DateTime into a datetime.datetime instance.
 
     N.B.: As the System.DateTime does not contain info on the timezone, there might be an error if these do not match
     between the supplied DateTime instance and the current computer
@@ -146,7 +144,7 @@ def system_datetime_to_datetime(sdt):
     datetime.datetime
         The pyton datetime instance
     """
-    return datetime(  # noqa: DTZ001
+    return dt(
         year=sdt.Year,
         month=sdt.Month,
         day=sdt.Day,
@@ -154,5 +152,4 @@ def system_datetime_to_datetime(sdt):
         minute=sdt.Minute,
         second=sdt.Second,
         microsecond=sdt.Millisecond * 1000,
-        tzinfo=None,
     )

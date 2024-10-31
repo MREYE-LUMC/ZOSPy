@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import itertools as _itertools
 import logging as _logging
-from collections.abc import Iterable
 from types import SimpleNamespace as _SimpleNamespace
 from typing import TypeVar
 
@@ -56,10 +55,9 @@ def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
     for enumkey in zosapi_enumkeys:
         subkeys = enumkey.split(".")
 
-        # TODO: raise an exception instead of assert
         assert len(subkeys) > 1  # should at least be 2
 
-        if len(subkeys) == 2:  # noqa: PLR2004 No nesting
+        if len(subkeys) == 2:  # No nesting
             clrattr = getattr(zosapi, subkeys[-1], None)
 
             # Set constant
@@ -67,32 +65,22 @@ def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
 
         else:  # with nesting
             base = subkeys[1]
-            nsp_parts = list(
-                _itertools.accumulate(subkeys[2:-1], func=_itertools_joinfunc)
-            )
+            nsp_parts = list(_itertools.accumulate(subkeys[2:-1], func=_itertools_joinfunc))
 
             if base not in added_namespaces:
-                globals()[
-                    base
-                ] = _SimpleNamespace()  # Create the base as simplenamespace
+                globals()[base] = _SimpleNamespace()  # Create the base as simplenamespace
                 added_namespaces.add(base)
             for nsp in nsp_parts:
                 if ".".join((base, nsp)) in added_namespaces:  # check if already added
                     continue
-
-                _pyutils.rsetattr(
-                    globals()[base], nsp, _SimpleNamespace()
-                )  # add nested objects
-                added_namespaces.add(".".join((base, nsp)))
+                else:
+                    _pyutils.rsetattr(globals()[base], nsp, _SimpleNamespace())  # add nested objects
+                    added_namespaces.add(".".join((base, nsp)))
 
             clrattr = _pyutils.rgetattr(zosapi, ".".join(subkeys[1:]), None)
 
             # set constants
-            _pyutils.rsetattr(
-                globals()[base],
-                ".".join(subkeys[2:]),
-                _clrutils.system_enum_to_namedtuple(clrattr),
-            )
+            _pyutils.rsetattr(globals()[base], ".".join(subkeys[2:]), _clrutils.system_enum_to_namedtuple(clrattr))
 
 
 Constant = TypeVar("Constant")
@@ -100,17 +88,13 @@ Constant = TypeVar("Constant")
 
 def process_constant(constant: type[Constant], value: Constant | str | None) -> Constant:
     if (value is None or value == "None") and hasattr(constant, "None_"):
-        return constant.None_
-
-    if isinstance(value, str) and hasattr(constant, value):
+        return getattr(constant, "None_")
+    elif isinstance(value, str) and hasattr(constant, value):
         return getattr(constant, value)
-
-    if value in constant:
+    elif value in constant:
         return value
 
-    raise ValueError(
-        f"Constant {type(constant).__name__} does not contain value {value!s}"
-    )
+    raise ValueError(f"Constant {type(constant).__name__} does not contain value {str(value)}")
 
 
 def get_constantname_by_value(constant_tuple, value):
@@ -130,8 +114,8 @@ def get_constantname_by_value(constant_tuple, value):
     """
     try:
         if isinstance(value, int):
-            return constant_tuple._fields[value]
+            return constant_tuple._fields[value]  # noqa
 
-        return constant_tuple._fields[constant_tuple.index(value)]
-    except KeyError as e:
-        raise ValueError(f"None of the constants has value {value} assigned") from e
+        return constant_tuple._fields[constant_tuple.index(value)]  # noqa
+    except KeyError:
+        raise ValueError(f"None of the constants has value {value} assigned")

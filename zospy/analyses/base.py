@@ -10,23 +10,24 @@ from datetime import datetime
 from enum import Enum
 from importlib import import_module
 from types import SimpleNamespace
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import numpy as np
 import pandas as pd
 
+from zospy.api import _ZOSAPI, constants
 from zospy.utils.clrutils import system_datetime_to_datetime
-
-if TYPE_CHECKING:
-    from zospy.api import _ZOSAPI, constants
-    from zospy.zpcore import OpticStudioSystem
+from zospy.zpcore import OpticStudioSystem
 
 
 def _pprint(d, indent=0):
     """Pretty print an attribute dict."""
     items = []
     for key, value in sorted(d.items(), key=lambda x: str(x[0])):
-        strkey = f"'{key}'" if isinstance(key, str) else str(key)
+        if isinstance(key, str):
+            strkey = f"'{key}'"
+        else:
+            strkey = str(key)
         if isinstance(value, MutableMapping):
             items.append(" " * indent + strkey + ":")
             items.extend(_pprint(value, indent + 2))
@@ -57,17 +58,16 @@ def _convert_dicttype(dictionary, newtype=dict, convert_nested=True, method="dee
     ret = newtype()
     for key, value in dictionary.items():
         if convert_nested and isinstance(value, dict):
-            ret[key] = _convert_dicttype(
-                value, newtype=newtype, convert_nested=convert_nested, method=method
-            )
-        elif method == "deepcopy":
-            ret[key] = copy.deepcopy(value)
-        elif method == "copy":
-            ret[key] = copy.copy(value)
-        elif method == "assign":
-            ret[key] = value
+            ret[key] = _convert_dicttype(value, newtype=newtype, convert_nested=convert_nested, method=method)
         else:
-            raise ValueError
+            if method == "deepcopy":
+                ret[key] = copy.deepcopy(value)
+            elif method == "copy":
+                ret[key] = copy.copy(value)
+            elif method == "assign":
+                ret[key] = value
+            else:
+                raise ValueError()
     return ret
 
 
@@ -117,10 +117,7 @@ class _AnalysisResultJSONEncoder(json.JSONEncoder):
         object_type = self._type_name(o)
 
         if any(isinstance(v, AttrDict) for v in o.values()):
-            o = {
-                k: (self._process_attrdict(v) if isinstance(v, AttrDict) else v)
-                for k, v in o.items()
-            }
+            o = {k: (self._process_attrdict(v) if isinstance(v, AttrDict) else v) for k, v in o.items()}
 
         return {"__type__": object_type, "data": dict(o)}
 
@@ -235,9 +232,7 @@ class AttrDict(dict):
         dict
             The AttrDict as standard Dict
         """
-        return _convert_dicttype(
-            self, newtype=dict, convert_nested=convert_nested, method=method
-        )
+        return _convert_dicttype(self, newtype=dict, convert_nested=convert_nested, method=method)
 
     @classmethod
     def from_dict(cls, dictionary, convert_nested=True, method="deepcopy"):
@@ -257,9 +252,7 @@ class AttrDict(dict):
         AttrDict
             The converted AttrDict
         """
-        return _convert_dicttype(
-            dictionary, newtype=cls, convert_nested=convert_nested, method=method
-        )
+        return _convert_dicttype(dictionary, newtype=cls, convert_nested=convert_nested, method=method)
 
 
 class AnalysisResult(AttrDict):
@@ -269,8 +262,8 @@ class AnalysisResult(AttrDict):
         data: Any = None,
         settings: pd.Series = None,
         metadata: AnalysisMetadata = None,
-        headerdata: list[str] | None = None,
-        messages: list[AnalysisMessage] | None = None,
+        headerdata: list[str] = None,
+        messages: list[AnalysisMessage] = None,
         **kwargs,
     ):
         """A class designed to hold an OpticStudio analysis.
@@ -422,9 +415,7 @@ class Analysis:
         """Analysis results."""
         return self._analysis.GetResults()
 
-    def complete(
-        self, oncomplete: OnComplete | str, result: AnalysisResult
-    ) -> AnalysisResult:
+    def complete(self, oncomplete: OnComplete | str, result: AnalysisResult) -> AnalysisResult:
         """Completes the analysis by either closing, releasing or sustaining it.
 
         Parameters
@@ -453,9 +444,7 @@ class Analysis:
             result.Analysis = self
             return result
 
-        raise ValueError(
-            f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}"
-        )
+        raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}")
 
     def set_field(self, value: int | str):
         """Sets the field value for the analysis.
@@ -608,9 +597,7 @@ class Analysis:
         elif isinstance(value, int):
             self.Settings.Surface.SetSurfaceNumber(value)
         else:
-            raise ValueError(
-                f'Surface value should be "Image", "Objective" or an integer, got {value}'
-            )
+            raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
 
     def __getattr__(self, item):
         return getattr(self._analysis, item)
@@ -620,9 +607,7 @@ class Analysis:
 
 
 def new_analysis(
-    oss: OpticStudioSystem,
-    analysis_type: constants.Analysis.AnalysisIDM,
-    settings_first: bool = True,
+    oss: OpticStudioSystem, analysis_type: constants.Analysis.AnalysisIDM, settings_first: bool = True
 ) -> Analysis:
     """
     Creates a new analysis in Zemax.

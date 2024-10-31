@@ -1,25 +1,18 @@
-""""Core module for ZOSPy.
-
-Handles the connection to OpticStudio and the creation of OpticStudioSystem instances.
-"""
-
 from __future__ import annotations
 
 import locale
 import logging
 import warnings
 import weakref
+from os import PathLike
 from sys import version_info
-from typing import TYPE_CHECKING, ClassVar, Literal
+from typing import Literal
 
 from semver.version import Version
 
 from zospy.api import _ZOSAPI, constants
 from zospy.api.apisupport import load_zosapi, load_zosapi_nethelper
 from zospy.utils.pyutils import abspath
-
-if TYPE_CHECKING:
-    from os import PathLike
 
 logger = logging.getLogger(__name__)
 
@@ -43,16 +36,16 @@ class OpticStudioSystem:
         self._OpenFile = None
 
     @property
-    def SystemName(self) -> str:  # noqa: N802
+    def SystemName(self) -> str:
         """Name of the current optical system."""
         return self._System.SystemName
 
     @SystemName.setter
-    def SystemName(self, value: str):  # noqa: N802
+    def SystemName(self, value: str):
         self._System.SystemName = value
 
     @property
-    def SystemID(self) -> int:  # noqa: N802
+    def SystemID(self) -> int:
         """Unique identifier for the optical system.
 
         This identifier can be used to differentiate between multiple `OpticStudioSystem` instances.
@@ -71,17 +64,17 @@ class OpticStudioSystem:
         return self._System.SystemID
 
     @property
-    def Mode(self) -> str:  # noqa: N802
+    def Mode(self) -> str:
         """Mode of the optical system. Either "Sequential" or "NonSequential"."""
         return str(self._System.Mode)
 
     @property
-    def SystemFile(self) -> str:  # noqa: N802
+    def SystemFile(self) -> str:
         """File path to the current optical system."""
         return self._System.SystemFile
 
     @property
-    def IsNonAxial(self) -> bool:  # noqa: N802
+    def IsNonAxial(self) -> bool:
         """Indicates whether the optical system is axial and sequential.
 
         `True` if the system is non-axial, `False` otherwise.
@@ -89,12 +82,12 @@ class OpticStudioSystem:
         return self._System.IsNonAxial
 
     @property
-    def NeedsSave(self) -> bool:  # noqa: N802
+    def NeedsSave(self) -> bool:
         """Indicates if the optical system contains unsaved changes."""
         return self._System.NeedsSave
 
     @property
-    def SystemData(self) -> _ZOSAPI.SystemData.ISystemData:  # noqa: N802
+    def SystemData(self) -> _ZOSAPI.SystemData.ISystemData:
         """Data for configuring everything in the system explorer.
 
         Examples
@@ -110,47 +103,47 @@ class OpticStudioSystem:
         return self._System.SystemData
 
     @property
-    def LDE(self) -> _ZOSAPI.Editors.LDE.ILensDataEditor:  # noqa: N802
+    def LDE(self) -> _ZOSAPI.Editors.LDE.ILensDataEditor:
         """Lens Data Editor."""
         return self._System.LDE
 
     @property
-    def NCE(self) -> _ZOSAPI.Editors.NCE.INonSeqEditor:  # noqa: N802
+    def NCE(self) -> _ZOSAPI.Editors.NCE.INonSeqEditor:
         """Non-Sequential Component Editor."""
         return self._System.NCE
 
     @property
-    def MFE(self) -> _ZOSAPI.Editors.MFE.IMeritFunctionEditor:  # noqa: N802
+    def MFE(self) -> _ZOSAPI.Editors.MFE.IMeritFunctionEditor:
         """Merit Function Editor."""
         return self._System.MFE
 
     @property
-    def TDE(self) -> _ZOSAPI.Editors.TDE.IToleranceDataEditor:  # noqa: N802
+    def TDE(self) -> _ZOSAPI.Editors.TDE.IToleranceDataEditor:
         """Tolerance Data Editor."""
         return self._System.TDE
 
     @property
-    def MCE(self) -> _ZOSAPI.Editors.MCE.IMultiConfigEditor:  # noqa: N802
+    def MCE(self) -> _ZOSAPI.Editors.MCE.IMultiConfigEditor:
         """Multi-Configuration Editor."""
         return self._System.MCE
 
     @property
-    def Analyses(self) -> _ZOSAPI.Analysis.I_Analyses:  # noqa: N802
+    def Analyses(self) -> _ZOSAPI.Analysis.I_Analyses:
         """Analyses for the current system."""
         return self._System.Analyses
 
     @property
-    def Tools(self) -> _ZOSAPI.Tools.IOpticalSystemTools:  # noqa: N802
+    def Tools(self) -> _ZOSAPI.Tools.IOpticalSystemTools:
         """Interface to run various tools on the optical system."""
         return self._System.Tools
 
     @property
-    def TheApplication(self) -> _ZOSAPI.IZOSAPI_Application:  # noqa: N802
+    def TheApplication(self) -> _ZOSAPI.IZOSAPI_Application:
         """Application in which the optical system is opened."""
         return self._System.TheApplication
 
     @property
-    def LensUpdateMode(self) -> str:  # noqa: N802
+    def LensUpdateMode(self) -> str:
         """Lens update mode of the optical system.
 
         Possible values are ['None', 'EditorsOnly', 'AllWindows'] or `zospy.constants.LensUpdateMode`.
@@ -158,11 +151,11 @@ class OpticStudioSystem:
         return str(self._System.UpdateMode)
 
     @LensUpdateMode.setter
-    def LensUpdateMode(self, value: constants.LensUpdateMode | str):  # noqa: N802
+    def LensUpdateMode(self, value: constants.LensUpdateMode | str):
         self._System.UpdateMode = value
 
     @property
-    def SessionModes(self) -> str:  # noqa: N802
+    def SessionModes(self) -> str:
         """Session mode of the optical system.
 
         Possible values are ['FromPreferences', 'SessionOn', 'SessionOff'], or `zospy.constants.SessionModes`.
@@ -170,7 +163,7 @@ class OpticStudioSystem:
         return str(self._System.SessionMode)
 
     @SessionModes.setter
-    def SessionModes(self, value: constants.SessionModes | str):  # noqa: N802
+    def SessionModes(self, value: constants.SessionModes | str):
         self._System.SessionMode = constants.process_constant(constants.SessionModes, value)
 
     def get_current_status(self) -> str:
@@ -213,12 +206,12 @@ class OpticStudioSystem:
         """
         filepath = abspath(filepath)
 
-        logger.debug(f"Opening {filepath} with SaveIfNeeded set to {saveifneeded}")
+        logger.debug("Opening {} with SaveIfNeeded set to {}".format(filepath, saveifneeded))
 
         self._System.LoadFile(filepath, saveifneeded)
         self._OpenFile = filepath
 
-        logger.info(f"Opened {filepath}")
+        logger.info("Opened {}".format(filepath))
 
     def new(self, saveifneeded: bool = False):
         """Create a new session file.
@@ -245,12 +238,12 @@ class OpticStudioSystem:
         """
         filepath = abspath(filepath, check_directory_only=True)
 
-        logger.debug(f"Saving open session as {filepath}")
+        logger.debug("Saving open session as {}".format(filepath))
 
         self._System.SaveAs(filepath)
         self._OpenFile = filepath
 
-        logger.info(f"File saved as {filepath}")
+        logger.info("File saved as {}".format(filepath))
 
     def save(self) -> bool:
         """Save the current OpticStudio session.
@@ -313,15 +306,14 @@ class OpticStudioSystem:
         """
         logger.debug("Ensuring correct mode")
         if self.Mode != required:
-            err = f"Incorrect system type. System is in {self.Mode} mode but {required} mode is required"
+            err = "Incorrect system type. System is in {} mode but {} mode is required".format(self.Mode, required)
             logger.critical(err)
             raise TypeError(err)
-
-        logger.debug("System is in correct mode")
-        # TODO: Eveluate what happens in 'mixed mode'
+        else:
+            logger.debug("System is in correct mode")
+        # ToDo: Eveluate what happens in 'mixed mode'
 
     def __del__(self):
-        """Close the optical system when the instance is deleted."""
         logger.debug("Closing connections with Zemax OpticStudio")
 
 
@@ -377,10 +369,9 @@ class ZOS:
 
     _OpticStudioSystem = OpticStudioSystem
 
-    _instances: ClassVar[set] = set()
+    _instances = set()
 
-    def __new__(cls, *args, **kwargs):  # noqa: ARG003
-        """Allow only a single instance of ZOS to exist at any time."""
+    def __new__(cls, *args, **kwargs):
         if len(cls._instances) >= 1:
             # As the number of applications within runtime is limited to 1 by Zemax, it is logical to also limit the
             # number of ZOS instances
@@ -391,12 +382,14 @@ class ZOS:
                 "new one. See https://zospy.rtfd.io/faq#single-zos-instance for more information."
             )
 
-        return super().__new__(cls)
+        instance = super(ZOS, cls).__new__(cls)
+
+        return instance
 
     def __init__(
         self, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
     ):
-        """Initiate the connection with OpticStudio.
+        """Initiation of the ZOS instance.
 
         The ZOS instance can subsequently be used to connect to OpticStudio. See the examples in the class docstring for
         more information.
@@ -452,7 +445,7 @@ class ZOS:
             )
             self._assign_connection()
 
-    def wakeup(self, preload: bool = False, zosapi_nethelper: str | None = None):
+    def wakeup(self, preload: bool = False, zosapi_nethelper: str = None):
         """Wake the ZOS-API.
 
         .. deprecated:: 1.1.0
@@ -512,7 +505,7 @@ class ZOS:
         if zosapi_nethelper is not None and opticstudio_directory is not None:
             raise ValueError("Only one of `zosapi_nethelper` and `opticstudio_directory` may be specified.")
 
-        logger.debug(f"Loading ZOS DLLs with preload set to {preload}")
+        logger.debug("Loading ZOS DLLs with preload set to {}".format(preload))
 
         if opticstudio_directory is not None:
             self.ZOSAPI = load_zosapi(zemaxdirectory=opticstudio_directory, preload=preload)
@@ -561,7 +554,7 @@ class ZOS:
 
         self._assign_connection()
 
-        if self.Connection.IsAlive:  # TODO ensure no memory leak
+        if self.Connection.IsAlive:  # ToDo ensure no memory leak
             raise RuntimeError("Only one Zemax application can exist within runtime")
 
         if mode == "standalone":
@@ -607,7 +600,7 @@ class ZOS:
 
         self._assign_connection()
 
-        if self.Connection.IsAlive:  # TODO ensure no memory leak
+        if self.Connection.IsAlive:  # ToDo ensure no memory leak
             raise RuntimeError("Only one Zemax application can exist within runtime")
 
         self.Application = self.Connection.ConnectAsExtension(instancenumber)
@@ -648,7 +641,7 @@ class ZOS:
 
         self._assign_connection()
 
-        if self.Connection.IsAlive:  # TODO ensure no memory leak
+        if self.Connection.IsAlive:  # ToDo ensure no memory leak
             raise RuntimeError("Only one Zemax application can exist within runtime")
 
         self.Application = self.Connection.CreateNewApplication()
@@ -667,7 +660,7 @@ class ZOS:
         return True
 
     def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
-        """Create a standalone Zemax OpticStudio instance.
+        """Creates a standalone Zemax OpticStudio instance.
 
         ..deprecated:: 2.0.0
                 This method is deprecated and will be removed in ZOSPy 2.0.0. Use `ZOS.connect()` instead.
@@ -703,9 +696,7 @@ class ZOS:
         logger.info("Disconnected from OpticStudio")
 
     def create_new_system(self, system_mode: constants.SystemType | str = "Sequential") -> OpticStudioSystem:
-        """Create a new OpticStudioSystem.
-
-        This works only if ZOSPy is connected to a standalone application.
+        """Creates a new OpticStudioSystem. This works only if ZOSPy is connected to a standalone application.
 
         Parameters
         ----------
@@ -737,7 +728,7 @@ class ZOS:
         # Automatically populate _OpenFile when connecting in extension mode, to prevent unnecessary errors when
         # calling save
         if self.Application.Mode == constants.ZOSAPI_Mode.Plugin:
-            optic_studio_system._OpenFile = optic_studio_system.SystemFile  # noqa: SLF001
+            optic_studio_system._OpenFile = optic_studio_system.SystemFile
 
         return optic_studio_system
 
@@ -778,8 +769,7 @@ class ZOS:
 
         if str(self.Application.Preferences.General.TXTFileEncoding) == "Unicode":
             return "UTF-16-le"
-
-        if str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
+        elif str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
             if version_info < (3, 11):
                 return locale.getpreferredencoding(False)
 
@@ -788,7 +778,7 @@ class ZOS:
             return locale.getencoding()
         else:
             raise NotImplementedError(
-                f"ZOSPy cannot handle encoding {self.Application.Preferences.General.TXTFileEncoding!s}"
+                f"ZOSPy cannot handle encoding {str(self.Application.Preferences.General.TXTFileEncoding)}"
             )
 
     def retrieve_logs(self) -> str:

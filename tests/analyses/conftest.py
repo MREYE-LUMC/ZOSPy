@@ -35,7 +35,7 @@ def expected_data(request, optic_studio_version) -> AnalysisResult:
     if not data_file.exists():
         pytest.skip(f"Data file {data_file} does not exist")
 
-    with open(data_file) as f:
+    with open(data_file, "r") as f:
         return AnalysisResult.from_json(f.read())
 
 
@@ -49,5 +49,5 @@ def reference_data(request) -> AnalysisResult:
     if not data_file.exists():
         pytest.skip(f"Data file {data_file} does not exist")
 
-    with open(data_file) as f:
+    with open(data_file, "r") as f:
         return AnalysisResult.from_json(f.read())

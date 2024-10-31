@@ -1,5 +1,3 @@
-"""Helper functions for the Lens Data Editor (LDE) in OpticStudio."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -22,7 +20,7 @@ class PupilData:
 
 
 def get_pupil(oss: OpticStudioSystem):
-    """Obtain the pupil data.
+    """Obtains the pupil data.
 
     Parameters
     ----------
@@ -38,7 +36,8 @@ def get_pupil(oss: OpticStudioSystem):
     --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
-    >>> oss = zos.connect()
+    >>> zos.connect_as_extension()
+    >>> oss = zos.get_primary_system()
     >>> zp.functions.lde.get_pupil(oss)
     """
     return PupilData(*oss.LDE.GetPupil())
@@ -93,7 +92,7 @@ def surface_change_type(
 def find_surface_by_comment(
     lde: _ZOSAPI.Editors.LDE, comment: str, case_sensitive: bool = True
 ) -> list[_ZOSAPI.Editors.LDE.ILDERow]:
-    """Get a list of surfaces from the LDE that have the supplied string as Comment.
+    """Returns a list of surfaces from the LDE that have the supplied string as Comment.
 
     In case of multiple matches, the surfaces are returned in ascending order.
 

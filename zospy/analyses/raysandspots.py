@@ -53,7 +53,7 @@ def _structure_ray_trace_data_result(line_list: list[str]) -> dict[str, Any]:
     order_of_appearance = [item[0] for item in sorted(inds.items(), key=lambda x: x[1]["rnum"])]
 
     # Add general lens data
-    for target in inds:
+    for target in inds.keys():
         section_start = inds[target]["rnum"] + 1  # + 1 to ignore section title
 
         # Get endpoint
@@ -166,7 +166,7 @@ def single_ray_trace(
 
     # Get results
     analysis.Results.GetTextFile(txtoutfile)
-    line_list = [line for line in open(txtoutfile, encoding=oss._ZOS.get_txtfile_encoding())]
+    line_list = [line for line in open(txtoutfile, "r", encoding=oss._ZOS.get_txtfile_encoding())]
     data = _structure_ray_trace_data_result(line_list)
 
     # Get headerdata, metadata and messages

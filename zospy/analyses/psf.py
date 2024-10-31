@@ -66,7 +66,7 @@ def huygens_psf(
     -------
     AnalysisResult
         A HuygensPsf analysis result
-    """  # TODO check if default for filed is correct
+    """  # ToDo check if default for filed is correct
     analysistype = constants.Analysis.AnalysisIDM.HuygensPsf
 
     # Create analysis

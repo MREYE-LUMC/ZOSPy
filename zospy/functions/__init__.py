@@ -7,6 +7,6 @@ Utility functions for ZOSPy.
 - **`zospy.functions.nce`** provides helper functions for the Non-sequential Component Editor (NCE).
 """
 
-from zospy.functions import lde, nce
+from . import lde, nce
 
 __all__ = ("lde", "nce")

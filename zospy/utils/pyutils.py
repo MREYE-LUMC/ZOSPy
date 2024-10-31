@@ -1,17 +1,13 @@
-"""Internal Python utilities for ZOSPy."""
-
 from __future__ import annotations
 
 import functools
+from collections.abc import Callable
+from os import PathLike
 from pathlib import Path
 from sys import version_info
 from typing import TypeVar
 
 import zospy.api.config as _config
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-    from os import PathLike
 
 
 def _check_path(path: Path, *, directory_only: bool = False) -> bool:
@@ -48,13 +44,12 @@ def abspath(path: PathLike | str, *, check_directory_only: bool = False) -> str:
 
     if _check_path(absolute_path, directory_only=check_directory_only):
         return str(absolute_path)
-
-    raise FileNotFoundError(absolute_path)
+    else:
+        raise FileNotFoundError(absolute_path)
 
 
 def rsetattr(obj, attr, val):
-    """
-    Set a nested attribute of an object.
+    """Wrapper for the setattr() function that handles nested strings.
 
     Parameters
     ----------
@@ -73,9 +68,8 @@ def rsetattr(obj, attr, val):
     return setattr(rgetattr(obj, pre) if pre else obj, post, val)
 
 
-# TODO: investigate replacement with operator.attrgetter
 def rgetattr(obj, attr, *args):
-    """Get a nested attribute from an object.
+    """Wrapper for the getattr() function that handles nested strings.
 
     Parameters
     ----------
@@ -101,7 +95,7 @@ def rgetattr(obj, attr, *args):
     def _getattr(subobj, subattr, *subargs):
         return getattr(subobj, subattr, *subargs)
 
-    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj, *attr.split(".")])
+    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj] + attr.split("."))
 
 
 def _delocalize(

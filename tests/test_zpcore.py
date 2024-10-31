@@ -154,7 +154,7 @@ def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode
         zos.create_new_system()
 
 
-@pytest.fixture
+@pytest.fixture()
 def oss_with_modifiable_config(zos: zp.ZOS, connection_mode, tmp_path) -> zp.zpcore.OpticStudioSystem:
     config_file = tmp_path / "opticstudio_config_file.CFG"
     zos.Connection.PreferencesFile = str(config_file)
@@ -205,5 +205,5 @@ class TestTxtFileEncoding:
         txtoutfile = str(tmp_path / "test_analysis_result_parsed_with_correct_encoding.txt")
         analysis.Results.GetTextFile(txtoutfile)
 
-        with open(txtoutfile, encoding=oss_with_modifiable_config._ZOS.get_txtfile_encoding()) as txtfile:
+        with open(txtoutfile, "r", encoding=oss_with_modifiable_config._ZOS.get_txtfile_encoding()) as txtfile:
             assert "System/Prescription Data" in txtfile.readline()

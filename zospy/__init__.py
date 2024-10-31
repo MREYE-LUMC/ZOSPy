@@ -4,8 +4,9 @@ __version__ = "1.3.0"
 
 import logging
 
+import zospy.api.config as config
 from zospy import analyses, functions, solvers
-from zospy.api import config, constants
+from zospy.api import constants
 from zospy.zpcore import ZOS
 
 config.set_decimal_point_and_thousands_separator()

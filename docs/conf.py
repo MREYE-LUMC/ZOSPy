@@ -11,7 +11,7 @@ from shutil import copytree
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ZOSPy"
-copyright = "2023, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # noqa: A001
+copyright = "2023, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 
 # -- General configuration ---------------------------------------------------
@@ -29,13 +29,7 @@ extensions = [
 myst_enable_extensions = ["colon_fence", "attrs_block"]
 
 templates_path = ["_templates"]
-exclude_patterns = [
-    "_build",
-    "Thumbs.db",
-    ".DS_Store",
-    "**/.conda",
-    "**/.ipynb_checkpoints",
-]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/.conda", "**/.ipynb_checkpoints"]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -80,11 +74,7 @@ example_directory = documentation_directory.parent / "examples"
 for example in example_directory.iterdir():
     # Only include examples that are provided as notebooks
     if len(list(example.glob("*.ipynb"))) > 0:
-        copytree(
-            example,
-            documentation_directory / "examples" / example.name,
-            dirs_exist_ok=True,
-        )
+        copytree(example, documentation_directory / "examples" / example.name, dirs_exist_ok=True)
 
 # Add a banner to each example notebook included in the documentation
 zp_version = importlib.metadata.version("zospy")
@@ -106,7 +96,7 @@ nbsphinx_prolog = rf"""
 ANNOTATION_SUBSTITUTIONS = {"_ZOSAPI": "ZOSAPI"}
 
 
-def apply_annotation_substitutions(app, obj: object, bound_method):  # noqa: ARG001
+def apply_annotation_substitutions(app, obj: object, bound_method):
     """Substitute certain values in type annotations."""
     if not hasattr(obj, "__annotations__"):
         return

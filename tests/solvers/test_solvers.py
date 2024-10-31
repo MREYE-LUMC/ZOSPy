@@ -1,7 +1,7 @@
 import pytest
 
 import zospy as zp
-from zospy import solvers
+import zospy.solvers as solvers
 from zospy.api.config import DECIMAL_POINT
 
 

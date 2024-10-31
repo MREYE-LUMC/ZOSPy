@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+import zospy.api.constants as constants
 from zospy.analyses.base import (
     AnalysisMessage,
     AnalysisMetadata,
@@ -14,7 +15,6 @@ from zospy.analyses.base import (
     _AnalysisResultJSONEncoder,
     new_analysis,
 )
-from zospy.api import constants
 
 
 def test_oncomplete():
@@ -30,7 +30,7 @@ class TestToJSON:
     @pytest.fixture(scope="class")
     def example_analysis_result(self):
         metadata = AnalysisMetadata(
-            DateTime=datetime.now(),  # noqa: DTZ005
+            DateTime=datetime.now(),
             LensFile="C:\\Path\\To\\Lens\\File.ZOS",
             LensTitle="LensTitle",
             FeatureDescription="",
@@ -66,11 +66,9 @@ class TestToJSON:
         assert isinstance(restored_result.Data, AttrDict)
 
     def test_restore_pandas_series(self):
-        series = pd.Series({"a": 1, "b": 2, "c": 3}, dtype=float)
+        series = pd.Series(dict(a=1, b=2, c=3), dtype=float)
 
-        restored_series = _AnalysisResultJSONDecoder().decode(
-            _AnalysisResultJSONEncoder().encode(series)
-        )
+        restored_series = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(series))
 
         assert isinstance(restored_series, pd.Series)
         assert all(restored_series == series)
@@ -79,9 +77,7 @@ class TestToJSON:
         index = pd.MultiIndex.from_product((["a", "b"], [1, 2]))
         series = pd.Series([123, 456, 345, 678], index=index)
 
-        restored_series = _AnalysisResultJSONDecoder().decode(
-            _AnalysisResultJSONEncoder().encode(series)
-        )
+        restored_series = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(series))
 
         assert isinstance(restored_series, pd.Series)
         assert isinstance(restored_series.index, pd.MultiIndex)
@@ -89,16 +85,14 @@ class TestToJSON:
 
     def test_restore_pandas_dataframe(self):
         dataframe = pd.DataFrame(
-            {
-                "int_column": [1, 2, 3, 4],
-                "float_column": [1.2, 3.4, 5.6, 7.8],
-                "str_column": ["this", "ain't", "string", "theory"],
-            }
+            dict(
+                int_column=[1, 2, 3, 4],
+                float_column=[1.2, 3.4, 5.6, 7.8],
+                str_column=["this", "ain't", "string", "theory"],
+            )
         )
 
-        restored_dataframe = _AnalysisResultJSONDecoder().decode(
-            _AnalysisResultJSONEncoder().encode(dataframe)
-        )
+        restored_dataframe = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(dataframe))
 
         assert isinstance(restored_dataframe, pd.DataFrame)
         assert all(restored_dataframe == dataframe)
@@ -106,21 +100,15 @@ class TestToJSON:
     def test_restore_numpy_ndarray(self):
         array = np.array([1.2345, 2.3456, 3.4567, 4.5678])
 
-        restored_array = _AnalysisResultJSONDecoder().decode(
-            _AnalysisResultJSONEncoder().encode(array)
-        )
+        restored_array = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(array))
 
         assert isinstance(restored_array, np.ndarray)
         assert all(restored_array == array)
 
     def test_restore_datetime(self):
-        test_datetime = datetime(  # noqa: DTZ001
-            year=2023, month=4, day=17, hour=10, minute=41, second=42, microsecond=43
-        )
+        test_datetime = datetime(year=2023, month=4, day=17, hour=10, minute=41, second=42, microsecond=43)
 
-        restored_datetime = _AnalysisResultJSONDecoder().decode(
-            _AnalysisResultJSONEncoder().encode(test_datetime)
-        )
+        restored_datetime = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(test_datetime))
 
         assert isinstance(restored_datetime, datetime)
         assert restored_datetime == test_datetime
