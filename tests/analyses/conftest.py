@@ -8,13 +8,13 @@ from tests.config import CONFIG_DATA_FOLDER, REFERENCE_DATA_FOLDER, REFERENCE_VE
 from zospy.analyses.base import AnalysisResult
 
 
-def pytest_make_parametrize_id(config, val, argname):
+def pytest_make_parametrize_id(config, val, argname):  # noqa: ARG001
     """Custom hook to control the name of dictionaries in the description."""
     if isinstance(val, dict):
         return hashlib.md5(json.dumps(val, sort_keys=True).encode("utf-8")).hexdigest()
-    else:
-        # Default ID for non-dictionary parameters
-        return None
+
+    # Default ID for non-dictionary parameters
+    return None
 
 
 @pytest.fixture(scope="class")
@@ -33,7 +33,7 @@ def expected_data(request, optic_studio_version) -> AnalysisResult:
     if not data_file.exists():
         pytest.skip(f"Data file {data_file} does not exist")
 
-    with open(data_file, "r") as f:
+    with open(data_file) as f:
         return AnalysisResult.from_json(f.read())
 
 
@@ -47,5 +47,5 @@ def reference_data(request) -> AnalysisResult:
     if not data_file.exists():
         pytest.skip(f"Data file {data_file} does not exist")
 
-    with open(data_file, "r") as f:
+    with open(data_file) as f:
         return AnalysisResult.from_json(f.read())

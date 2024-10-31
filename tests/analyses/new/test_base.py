@@ -41,7 +41,7 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
     _needs_config_file = False
     _needs_text_output_file = False
 
-    def __init__(self, int_setting: int = 1, string_setting: str = "a", block_remove_temp_files: bool = False):
+    def __init__(self, int_setting: int = 1, string_setting: str = "a", *, block_remove_temp_files: bool = False):
         super().__init__(MockAnalysisSettings(), locals())
 
         self.block_remove_temp_files = block_remove_temp_files
@@ -54,7 +54,7 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
             Close=lambda: None,
         )
 
-    def run_analysis(self, *args, **kwargs) -> AnalysisData:
+    def run_analysis(self) -> AnalysisData:
         if self.block_remove_temp_files:
             self._remove_config_file = False
             self._remove_text_output_file = False
@@ -62,7 +62,7 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
         return MockAnalysisData()
 
 
-MockOpticStudioSystem = type("OpticStudioSystem", tuple(), {})
+MockOpticStudioSystem = type("OpticStudioSystem", (), {})
 
 
 class TestAnalysisWrapper:

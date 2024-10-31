@@ -236,7 +236,7 @@ class TestStringToNumberConversion:
         # Get results
         analysis.Results.GetTextFile(txtoutfile)
 
-        with open(txtoutfile, "r", encoding=simple_system._ZOS.get_txtfile_encoding()) as f:
+        with open(txtoutfile, encoding=simple_system._ZOS.get_txtfile_encoding()) as f:
             text_output = f.read()
 
         xphase_out = atox(_get_number_field("X-Phase", text_output), dtype=float)

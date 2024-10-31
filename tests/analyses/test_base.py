@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import zospy.api.constants as constants
 from zospy.analyses.base import (
     AnalysisMessage,
     AnalysisMetadata,
@@ -15,6 +14,7 @@ from zospy.analyses.base import (
     _AnalysisResultJSONEncoder,
     new_analysis,
 )
+from zospy.api import constants
 
 
 def test_oncomplete():
@@ -22,7 +22,7 @@ def test_oncomplete():
     assert OnComplete.Sustain == "Sustain"
     assert OnComplete.Release == "Release"
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="'NonExistentValue' is not a valid OnComplete"):
         OnComplete("NonExistentValue")
 
 
@@ -40,8 +40,8 @@ class TestToJSON:
         return AnalysisResult(
             analysistype="DummyAnalysis",
             data=AttrDict(
-                a=pd.Series(dict(b=1, c=2, d=3, e=4)),
-                f=pd.DataFrame(dict(g=[5.6, 7.8, 9.10, 11.12], h=["i", "j", "k", "l"])),
+                a=pd.Series({"b": 1, "c": 2, "d": 3, "e": 4}),
+                f=pd.DataFrame({"g": [5.6, 7.8, 9.10, 11.12], "h": ["i", "j", "k", "l"]}),
                 m="a useless string",
             ),
             metadata=metadata,
@@ -66,7 +66,7 @@ class TestToJSON:
         assert isinstance(restored_result.Data, AttrDict)
 
     def test_restore_pandas_series(self):
-        series = pd.Series(dict(a=1, b=2, c=3), dtype=float)
+        series = pd.Series({"a": 1, "b": 2, "c": 3}, dtype=float)
 
         restored_series = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(series))
 
@@ -85,11 +85,11 @@ class TestToJSON:
 
     def test_restore_pandas_dataframe(self):
         dataframe = pd.DataFrame(
-            dict(
-                int_column=[1, 2, 3, 4],
-                float_column=[1.2, 3.4, 5.6, 7.8],
-                str_column=["this", "ain't", "string", "theory"],
-            )
+            {
+                "int_column": [1, 2, 3, 4],
+                "float_column": [1.2, 3.4, 5.6, 7.8],
+                "str_column": ["this", "ain't", "string", "theory"],
+            }
         )
 
         restored_dataframe = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(dataframe))

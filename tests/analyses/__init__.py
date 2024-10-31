@@ -1,1 +1,1 @@
-"""Unit tests for Zemax OpticStudio analyses."""
+"""Unit tests for OpticStudio analyses."""

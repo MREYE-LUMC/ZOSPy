@@ -37,7 +37,7 @@ class TestPhysicalOpticsPropagation:
                 "AstigmaticGaussian",
                 {"Waist X", "Waist Y", "Waist Position X", "Waist Position Y", "Decenter X:", "Decenter Y:"},
             ),
-            # Todo: create bug report regarding colons in decenter x and y
+            # TODO: create bug report regarding colons in decenter x and y
         ],
     )
     def test_create_beam_parameter_dict_returns_correct_parameters(self, simple_system, beam_type, expected_parameters):
@@ -63,7 +63,7 @@ class TestPhysicalOpticsPropagation:
                 "AstigmaticGaussian",
                 {"Waist X", "Waist Y", "Waist Position X", "Waist Position Y", "Decenter X:", "Decenter Y:"},
             ),
-            # Todo: create bug report regarding colons in decenter x and y
+            # TODO: create bug report regarding colons in decenter x and y
         ],
     )
     def test_create_fiber_parameter_dict_returns_correct_parameters(
@@ -249,17 +249,20 @@ class TestPhysicalOpticsPropagation:
     def test_physical_optics_propagation_with_matching_use_total_power_and_peak_irradiance_raises_exception(
         self, simple_system, use_total_power, use_peak_irradiance
     ):
-        with pytest.raises(ValueError):
+        with pytest.raises(
+            ValueError,
+            match="Either use_total_power or use_peak_irradiance should be True, they cannot both be True or False",
+        ):
             physical_optics_propagation(
                 simple_system, use_total_power=use_total_power, use_peak_irradiance=use_peak_irradiance
             )
 
     def test_physical_optics_propagation_with_wrong_beam_parameter_raises_exception(self, simple_system):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="The following .+ parameters are specified but not accepted"):
             physical_optics_propagation(simple_system, beam_type="GaussianWaist", beam_parameters={"WrongName": 1})
 
     def test_physical_optics_propagation_with_wrong_fiber_parameter_raises_exception(self, simple_system):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="The following .+ parameters are specified but not accepted"):
             physical_optics_propagation(
                 simple_system,
                 compute_fiber_coupling_integral=True,

@@ -148,6 +148,7 @@ extend-ignore = [
 [tool.ruff.lint.extend-per-file-ignores]
 "**/tests/**" = [
     "D", # pydocstyle
+    "DTZ", # Datetime timezones
 ]
 "scripts/**" = [
     "D", # pydocstyle
