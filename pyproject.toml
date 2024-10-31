@@ -55,7 +55,7 @@ docs = [
 ]
 example = "{env:HATCH_UV:uv} run scripts/run_examples/run_single_example.py {args}"
 all-examples = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_all_examples.py {args:examples}"
-format-docstrings = "{env:HATCH_UV:uv} tool uvx pydocstringformatter {args:examples scripts tests zospy}"
+format-docstrings = "{env:HATCH_UV:uv} tool uvx pydocstringformatter --write {args:examples scripts tests zospy}"
 
 # Generate reference data for unit tests
 generate-reference-data = "hatch run reference-data:generate"
@@ -142,7 +142,6 @@ parametrize-names-type = "csv"
 convention = "numpy"
 
 [tool.pydocstringformatter]
-write = true
 style = "numpydoc"
 max-line-length = 120
 max-summary-lines = 1
