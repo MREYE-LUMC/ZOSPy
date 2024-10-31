@@ -94,7 +94,9 @@ class OpticStudioSystem:
         --------
         Change the aperture type to "FloatByStopSize":
 
-        >>> oss.SystemData.Aperture.ApertureType = zp.constants.SystemData.ZemaxApertureType.FloatByStopSize
+        >>> oss.SystemData.Aperture.ApertureType = (
+        ...     zp.constants.SystemData.ZemaxApertureType.FloatByStopSize
+        ... )
 
         Add a wavelength of 543 nm with weight 1:
 
@@ -206,12 +208,12 @@ class OpticStudioSystem:
         """
         filepath = abspath(filepath)
 
-        logger.debug("Opening {} with SaveIfNeeded set to {}".format(filepath, saveifneeded))
+        logger.debug(f"Opening {filepath} with SaveIfNeeded set to {saveifneeded}")
 
         self._System.LoadFile(filepath, saveifneeded)
         self._OpenFile = filepath
 
-        logger.info("Opened {}".format(filepath))
+        logger.info(f"Opened {filepath}")
 
     def new(self, saveifneeded: bool = False):
         """Create a new session file.
@@ -238,12 +240,12 @@ class OpticStudioSystem:
         """
         filepath = abspath(filepath, check_directory_only=True)
 
-        logger.debug("Saving open session as {}".format(filepath))
+        logger.debug(f"Saving open session as {filepath}")
 
         self._System.SaveAs(filepath)
         self._OpenFile = filepath
 
-        logger.info("File saved as {}".format(filepath))
+        logger.info(f"File saved as {filepath}")
 
     def save(self) -> bool:
         """Save the current OpticStudio session.
@@ -305,12 +307,11 @@ class OpticStudioSystem:
         """
         logger.debug("Ensuring correct mode")
         if self.Mode != required:
-            err = "Incorrect system type. System is in {} mode but {} mode is required".format(self.Mode, required)
+            err = f"Incorrect system type. System is in {self.Mode} mode but {required} mode is required"
             logger.critical(err)
             raise TypeError(err)
-        else:
-            logger.debug("System is in correct mode")
-        # ToDo: Eveluate what happens in 'mixed mode'
+        logger.debug("System is in correct mode")
+        # TODO: Eveluate what happens in 'mixed mode'
 
     def __del__(self):
         logger.debug("Closing connections with Zemax OpticStudio")
@@ -503,7 +504,7 @@ class ZOS:
         if zosapi_nethelper is not None and opticstudio_directory is not None:
             raise ValueError("Only one of `zosapi_nethelper` and `opticstudio_directory` may be specified.")
 
-        logger.debug("Loading ZOS DLLs with preload set to {}".format(preload))
+        logger.debug(f"Loading ZOS DLLs with preload set to {preload}")
 
         if opticstudio_directory is not None:
             self.ZOSAPI = load_zosapi(zemaxdirectory=opticstudio_directory, preload=preload)
@@ -552,7 +553,7 @@ class ZOS:
 
         self._assign_connection()
 
-        if self.Connection.IsAlive:  # ToDo ensure no memory leak
+        if self.Connection.IsAlive:  # TODO ensure no memory leak
             raise RuntimeError("Only one Zemax application can exist within runtime")
 
         if mode == "standalone":
@@ -598,7 +599,7 @@ class ZOS:
 
         self._assign_connection()
 
-        if self.Connection.IsAlive:  # ToDo ensure no memory leak
+        if self.Connection.IsAlive:  # TODO ensure no memory leak
             raise RuntimeError("Only one Zemax application can exist within runtime")
 
         self.Application = self.Connection.ConnectAsExtension(instancenumber)
@@ -639,7 +640,7 @@ class ZOS:
 
         self._assign_connection()
 
-        if self.Connection.IsAlive:  # ToDo ensure no memory leak
+        if self.Connection.IsAlive:  # TODO ensure no memory leak
             raise RuntimeError("Only one Zemax application can exist within runtime")
 
         self.Application = self.Connection.CreateNewApplication()
@@ -710,6 +711,7 @@ class ZOS:
             new_system = self.Application.CreateNewSystem(constants.process_constant(constants.SystemType, system_mode))
             return self._OpticStudioSystem(zos_instance=self, system_instance=new_system)
 
+        # TODO: Check if this is really true
         raise ValueError("Can only create a new system when using a standalone connection.")
 
     def get_primary_system(self) -> OpticStudioSystem:
@@ -765,17 +767,16 @@ class ZOS:
 
         if str(self.Application.Preferences.General.TXTFileEncoding) == "Unicode":
             return "UTF-16-le"
-        elif str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
+        if str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
             if version_info < (3, 11):
                 return locale.getpreferredencoding(False)
 
             # Python 3.11 introduced locale.getencoding, which returns the system preferred encoding also if Python's
             # UTF-8 mode is enabled
             return locale.getencoding()
-        else:
-            raise NotImplementedError(
-                f"ZOSPy cannot handle encoding {str(self.Application.Preferences.General.TXTFileEncoding)}"
-            )
+        raise NotImplementedError(
+            f"ZOSPy cannot handle encoding {self.Application.Preferences.General.TXTFileEncoding!s}"
+        )
 
     def retrieve_logs(self) -> str:
         """Retrieve messages logged by OpticStudio.
