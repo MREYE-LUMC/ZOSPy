@@ -12,16 +12,9 @@ jobs:
         python: ["3.9", "3.10", "3.11", "3.12"]
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python }}
-        cache: pip
     - name: Set up uv
       id: setup-uv
       uses: astral-sh/setup-uv@v3
-      with:
-        enable-cache: true
     - name: Build package
       run: uv build --python ${{ matrix.python }}
     - name: Install package
@@ -34,8 +27,6 @@ jobs:
       - name: Set up uv
         id: setup-uv
         uses: astral-sh/setup-uv@v3
-        with:
-          enable-cache: true
       - name: Lint code
         run: |
           uvx hatch fmt --check
