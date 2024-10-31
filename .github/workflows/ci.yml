@@ -33,7 +33,7 @@ jobs:
       - name: Lint docstrings
         if: always() # Run even if previous step fails
         run: |
-          uvx pydocstringformatter examples scripts tests zospy
+          uvx pydocstringformatter --exit-code examples scripts tests zospy
 
   check_file_updates:
     runs-on: ubuntu-latest
