@@ -15,12 +15,12 @@ from zospy.analyses.new.base import (
     AnalysisData,
     AnalysisMetadata,
     AnalysisResult,
-    AnalysisWrapper,
+    BaseAnalysisWrapper,
 )
 from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.analyses.new.reports.surface_data import SurfaceDataSettings
 
-analysis_wrapper_classes = AnalysisWrapper.__subclasses__()
+analysis_wrapper_classes = BaseAnalysisWrapper.__subclasses__()
 
 
 @dataclass
@@ -35,7 +35,7 @@ class MockAnalysisSettings:
     string_setting: str = "a"
 
 
-class MockAnalysis(AnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
+class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
     TYPE = "MockAnalysis"
 
     _needs_config_file = False

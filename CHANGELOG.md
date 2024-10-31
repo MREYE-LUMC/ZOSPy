@@ -15,6 +15,9 @@ ZOS-API can also be added in patch releases.
 
 ### Changed
 
+- `zospy.analyses.new.new_analysis`: `settings_first` is now a keyword-only argument.
+- 
+
 ### Deprecated
 
 ### Removed

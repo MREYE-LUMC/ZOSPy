@@ -1,31 +1,40 @@
+"""Zernike Standard Coefficients analysis."""
+
 from __future__ import annotations
 
-from typing import Annotated, TypedDict
+from typing import TYPE_CHECKING, Annotated, TypedDict
 
 from pydantic import Field
 
-from zospy.analyses.new.base import AnalysisData, AnalysisWrapper
+from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers import ZospyTransformer
 from zospy.analyses.new.parsers.transformers import SimpleField
-from zospy.analyses.new.parsers.types import UnitField
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
+if TYPE_CHECKING:
+    from zospy.analyses.new.parsers.types import UnitField
 
-class _ZernikeStandardCoefficient(TypedDict):
-    value: float
-    formula: str
+__all__ = ("ZernikeStandardCoefficients", "ZernikeStandardCoefficientsSettings", "ZernikeStandardCoefficientsResult")
 
 
 class ZernikeStandardCoefficientsTransformer(ZospyTransformer):
+    """Transformer for the output of the Zernike Standard Coefficients analysis."""
+
+    class _ZernikeStandardCoefficient(TypedDict):
+        value: float
+        formula: str
+
     def coefficients(self, args):
+        """Convert the coefficients to a SimpleField."""
         return SimpleField("Coefficients", dict(args))
 
     def zernike_coefficient(self, args):
+        """Convert a Zernike coefficient to a SimpleField with the value and the formula."""
         index, value, formula = args
 
-        return SimpleField(index, _ZernikeStandardCoefficient(value=value, formula=formula))
+        return SimpleField(index, self._ZernikeStandardCoefficient(value=value, formula=formula))
 
 
 @analysis_result
@@ -44,6 +53,8 @@ class IntegrationData:
 
 @analysis_result
 class ZernikeStandardCoefficientsResult:
+    """Data for the Zernike Standard Coefficients analysis."""
+
     subaperture_decenter_sx: float | None = Field(alias="Subaperture decenter Sx", default=None)
     subaperture_decenter_sy: float | None = Field(alias="Subaperture decenter Sy", default=None)
     subaperture_radius_sr: float | None = Field(alias="Subaperture radius Sr", default=None)
@@ -66,6 +77,8 @@ class ZernikeStandardCoefficientsResult:
 
 @analysis_settings
 class ZernikeStandardCoefficientsSettings:
+    """Settings for the Zernike Standard Coefficients analysis."""
+
     sampling: str = Field(default="64x64", description="Sampling grid size")
     maximum_term: int = Field(default=37, ge=0, description="Maximum term")
     wavelength: str | Annotated[int, Field(ge=0)] = Field(default=1, description="Wavelength")
@@ -78,14 +91,17 @@ class ZernikeStandardCoefficientsSettings:
 
 
 class ZernikeStandardCoefficients(
-    AnalysisWrapper[ZernikeStandardCoefficientsResult, ZernikeStandardCoefficientsSettings]
+    BaseAnalysisWrapper[ZernikeStandardCoefficientsResult, ZernikeStandardCoefficientsSettings]
 ):
+    """Zernike Standard Coefficients analysis."""
+
     TYPE = "ZernikeStandardCoefficients"
 
     _needs_text_output_file = True
 
     def __init__(
         self,
+        *,
         sampling: str = "64x64",
         maximum_term: int = 37,
         wavelength: str | int = 1,
@@ -99,7 +115,8 @@ class ZernikeStandardCoefficients(
     ):
         super().__init__(settings or ZernikeStandardCoefficientsSettings(), locals())
 
-    def run_analysis(self, *args, **kwargs) -> AnalysisData:
+    def run_analysis(self) -> ZernikeStandardCoefficientsResult:
+        """Run the Zernike Standard Coefficients analysis."""
         self.analysis.Settings.SampleSize = getattr(
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.sampling)
         )
@@ -108,7 +125,7 @@ class ZernikeStandardCoefficients(
         self.analysis.field = self.settings.field
         self.analysis.Settings.ReferenceOBDToVertex = (
             self.settings.reference_opd_to_vertex
-        )  # ToDo: Monitor name with zemax updates
+        )  # TODO: Monitor name with zemax updates
         self.analysis.set_surface(self.settings.surface)
         self.analysis.Settings.Sx = self.settings.sx
         self.analysis.Settings.Sy = self.settings.sy
@@ -118,10 +135,8 @@ class ZernikeStandardCoefficients(
         self.analysis.ApplyAndWaitForCompletion()
 
         # Get results
-        result = self.parse_output(
+        return self.parse_output(
             "zernike_standard_coefficients",
             transformer=ZernikeStandardCoefficientsTransformer,
             result_type=ZernikeStandardCoefficientsResult,
         )
-
-        return result

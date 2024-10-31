@@ -1,27 +1,33 @@
+"""Single Ray Trace analysis."""
+
 from __future__ import annotations
 
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 from warnings import warn
 
 import pandas as pd
-from lark import Discard
 from pydantic import Field, model_validator
 
-from zospy.analyses.new.base import AnalysisWrapper
+from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import ZospyTransformer
-from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame
 from zospy.api import constants
+
+if TYPE_CHECKING:
+    from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame
+
+__all__ = ("SingleRayTrace", "SingleRayTraceSettings", "SingleRayTraceResult")
 
 
 class SingleRayTraceTransformer(ZospyTransformer):
-    def NAN(self, args):
+    """Transformer for the output of the Single Ray Trace analysis."""
+
+    def NAN(self, args):  # noqa: N802, ARG002
+        """Transform a NaN value."""
         return float("nan")
 
-    def text(self, args):
-        return Discard
-
     def ray_trace_data_table(self, args):
+        """Transform the ray trace data table to a DataFrame."""
         header, rows = args[0]
         header_length = len(header)
 
@@ -43,6 +49,8 @@ class SingleRayTraceTransformer(ZospyTransformer):
 
 @analysis_result
 class SingleRayTraceResult:
+    """Data for the Single Ray Trace analysis."""
+
     units: str = Field(alias="Units")
     coordinates: str = Field(alias="Coordinates")
     wavelength: UnitField[float] = Field(alias="Wavelength")
@@ -61,6 +69,7 @@ class SingleRayTraceResult:
 
     @model_validator(mode="after")
     def validate_ray_trace_data(self):
+        """Check if all ray trace data types belonging to the ray trace type are present."""
         if (
             self.real_ray_trace_data is None
             and self.paraxial_ray_trace_data is None
@@ -81,23 +90,29 @@ class SingleRayTraceResult:
 
 @analysis_settings
 class SingleRayTraceSettings:
+    """Settings for the Single Ray Trace analysis."""
+
+    # TODO: document the fields
     hx: float = Field(ge=-1, le=1, default=0, description="Normalized X field coordinate")
     hy: float = Field(ge=-1, le=1, default=0, description="Normalized Y field coordinate")
     px: float = Field(ge=-1, le=1, default=0, description="Normalized X pupil coordinate")
     py: float = Field(ge=-1, le=1, default=0, description="Normalized Y pupil coordinate")
     wavelength: Literal["All"] | int = Field(gt=0, default=1, description="Wavelength number or 'All'")
     field: Literal["All"] | int = Field(gt=0, default=1, description="Field number or 'All'")
-    raytrace_type: (Literal["DirectionCosines", "TangentAngle", "YmUmYcUc"]) = Field(default="DirectionCosines")
+    raytrace_type: Literal["DirectionCosines", "TangentAngle", "YmUmYcUc"] = Field(default="DirectionCosines")
     global_coordinates: bool = Field(default=False, description="Use global coordinates")
 
 
-class SingleRayTrace(AnalysisWrapper[SingleRayTraceResult, SingleRayTraceSettings]):
+class SingleRayTrace(BaseAnalysisWrapper[SingleRayTraceResult, SingleRayTraceSettings]):
+    """Single Ray Trace analysis."""
+
     TYPE = "RayTrace"
 
     _needs_text_output_file = True
 
     def __init__(
         self,
+        *,
         hx: float = 0,
         hy: float = 0,
         px: float = 0,
@@ -110,15 +125,8 @@ class SingleRayTrace(AnalysisWrapper[SingleRayTraceResult, SingleRayTraceSetting
     ):
         super().__init__(settings or SingleRayTraceSettings(), locals())
 
-    @property
-    def settings(self) -> SingleRayTraceSettings:
-        return self._settings
-
-    @settings.setter
-    def settings(self, settings: SingleRayTraceSettings):
-        self._settings = settings
-
-    def run_analysis(self, *args, **kwargs) -> SingleRayTraceResult:
+    def run_analysis(self) -> SingleRayTraceResult:
+        """Run the Single Ray Trace analysis."""
         self.analysis.Settings.Hx = self.settings.hx
         self.analysis.Settings.Hy = self.settings.hy
         self.analysis.Settings.Px = self.settings.px
@@ -134,8 +142,6 @@ class SingleRayTrace(AnalysisWrapper[SingleRayTraceResult, SingleRayTraceSetting
         self.analysis.ApplyAndWaitForCompletion()
 
         # Get results
-        result = self.parse_output(
+        return self.parse_output(
             "single_ray_trace", transformer=SingleRayTraceTransformer, result_type=SingleRayTraceResult
         )
-
-        return result

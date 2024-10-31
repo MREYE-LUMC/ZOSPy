@@ -1,3 +1,5 @@
+"""Decorators for Pydantic dataclasses with default configurations."""
+
 from __future__ import annotations
 
 import pydantic
