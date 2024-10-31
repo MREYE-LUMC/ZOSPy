@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "zospy"
@@ -39,13 +39,6 @@ Source = "https://github.com/MREYE-LUMC/ZOSPy"
 Documentation = "https://mreye-lumc.github.io/ZOSPy"
 
 [project.optional-dependencies]
-# Dependencies for unit testing
-test = [
-    "pytest",
-    "tox",
-]
-
-# Dependencies for building the documentation
 docs = [
     "ipython",
     "myst-parser",
@@ -56,13 +49,113 @@ docs = [
     "sphinx-design",
 ]
 
-# Development tools
-dev = [
-    "zospy[test]",
-    "black[jupyter] == 23.3.0",
-    "isort",
-    "ruff",
+### Hatch configuration
+
+[tool.hatch.version]
+path = "zospy/__init__.py"
+
+[tool.hatch.envs.default]
+python = "3.12"
+installer = "uv"
+
+[tool.hatch.envs.default.scripts]
+test-extension = "hatch test --extension {args}"
+
+# Build and serve documentation
+docs = [
+    "hatch run docs:build",
+    "hatch run docs:serve"
 ]
+
+# Run examples using the development version of ZOSPy
+example = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_single_example.py {args} --zospy-location ."
+all-examples = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_all_examples.py {args:examples} --zospy-location ."
+
+# Format docstrings according to numpydoc
+format-docstrings = "{env:HATCH_UV:uv} tool uvx pydocstringformatter --write {args:examples scripts tests zospy}"
+
+# Generate reference data for unit tests
+generate-reference-data = "hatch run reference-data:generate"
+
+## Unit testing using hatch test
+[tool.hatch.envs.hatch-test]
+randomize = false
+retries = 0
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.13", "3.12", "3.11", "3.10", "3.9"]
+
+## Documentation
+[tool.hatch.envs.docs]
+installer = "uv"
+features = ["docs"]
+
+[tool.hatch.envs.docs.scripts]
+# Build documentation; run as hatch run docs:build
+build = "sphinx-build -M {args:html} ./docs ./docs/_build"
+# Serve documentation locally; run as hatch run docs:serve
+serve = "python -m http.server -d ./docs/_build/html {args:8888}"
+
+## Test reference data generation
+[tool.hatch.envs.reference-data]
+dependencies = ["pyyaml"]
+
+[tool.hatch.envs.reference-data.scripts]
+generate = "python scripts/generate_test_reference_data"
+
+## Formatting using hatch fmt
+[tool.hatch.envs.hatch-static-analysis]
+config-path = "ruff_defaults.toml"
+
+# Linting and formatting options
+[tool.ruff]
+extend = "ruff_defaults.toml"
+
+line-length = 120
+exclude = [
+    "zospy/api/_ZOSAPI",
+    "zospy/api/_ZOSAPI_constants"
+]
+
+[tool.ruff.lint]
+extend-select = [
+    "D", # pydocstyle
+    "NPY", # numpy-specific
+]
+extend-ignore = [
+    "B028",
+    "EM101",
+    "EM102",
+    "G004",
+    "TD004",
+    "TRY003"
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"**/tests/**" = [
+    "D", # pydocstyle
+]
+"scripts/**" = [
+    "D", # pydocstyle
+]
+"docs/conf.py" = [
+    "INP001", # Missing __init__.py
+    "D100", # Missing docstring in public module
+    "D103", # Missing docstring in public function
+]
+
+[tool.ruff.lint.flake8-pytest-style]
+parametrize-names-type = "csv"
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.pydocstringformatter]
+style = "numpydoc"
+max-line-length = 120
+max-summary-lines = 1
+summary-quotes-same-line = true
+linewrap-full-docstring = true
 
 [tool.pytest.ini_options]
 markers = [
@@ -84,41 +177,3 @@ module = [
     "zospy.api._ZOSAPI_constants"
 ]
 ignore_errors = "True"
-
-[tool.black]
-line-length = 120
-
-[tool.isort]
-profile = "black"
-
-[tool.ruff]
-line-length = 120
-ignore-init-module-imports = true
-
-exclude = [
-    "zospy/api/_ZOSAPI",
-    "zospy/api/_ZOSAPI_constants"
-]
-
-# Rule sets for linting
-select = [
-    "F",    # pyflakes
-    "E",    # pycodestyle error
-    "W",    # pycodestyle warning
-    "I",    # isort
-    "D",    # pydocstyle
-    "NPY",  # numpy-specific
-]
-
-ignore = [
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D104",
-    "D105",
-    "D401"
-]
-
-[tool.ruff.pydocstyle]
-convention = "numpy"
