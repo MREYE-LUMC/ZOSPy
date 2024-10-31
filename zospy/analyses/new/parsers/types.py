@@ -1,22 +1,27 @@
 """Data types for analysis result objects."""
+
 from __future__ import annotations
 
-from typing import Annotated, Generic, TypeVar
+from typing import TYPE_CHECKING, Annotated, Generic, TypeVar
 
 from numpy import array, ndarray
 from pandas import DataFrame
-from pydantic import GetCoreSchemaHandler
 from pydantic.dataclasses import dataclass
 
 __all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray")
 
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
+if TYPE_CHECKING:
+    from pydantic import GetCoreSchemaHandler
+
 Value = TypeVar("Value")
 
 
 @dataclass
 class UnitField(Generic[Value]):
+    """A field with a unit."""
+
     value: Value
     unit: str
 
