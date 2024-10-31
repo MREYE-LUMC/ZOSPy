@@ -11,7 +11,7 @@ jobs:
       matrix:
         python: ["3.9", "3.10", "3.11", "3.12"]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up uv
       id: setup-uv
       uses: astral-sh/setup-uv@v3
@@ -23,7 +23,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up uv
         id: setup-uv
         uses: astral-sh/setup-uv@v3
@@ -39,7 +39,7 @@ jobs:
     if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip changelog')
     name: Check CHANGELOG.md for updates
     steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
         - name: Check for file updates
           id: changed-files
           uses: tj-actions/changed-files@v41
