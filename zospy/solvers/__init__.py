@@ -63,7 +63,7 @@ def fixed(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveFixed:
 
     Parameters
     ----------
-    cell: ZOSAPI.Editors.IEditorCell
+    cell : ZOSAPI.Editors.IEditorCell
 
     Returns
     -------
@@ -87,13 +87,13 @@ def material_model(
 
     Parameters
     ----------
-    material_cell: ZOSAPI.Editors.IEditorCell
+    material_cell : ZOSAPI.Editors.IEditorCell
         MaterialCell of the LDE surface row or NCE object row that requires the modification
-    refractive_index: float
+    refractive_index : float
         Refractive index of the material
-    abbe_number: float
+    abbe_number : float
         Abbe number of the material
-    partial_dispersion: float
+    partial_dispersion : float
         Partial dispersion term at d-light
 
     Returns
@@ -151,11 +151,11 @@ def position(
 
     Parameters
     ----------
-    thickness_cell: ZOSAPI.Editors.IEditorCell
+    thickness_cell : ZOSAPI.Editors.IEditorCell
         Surface for which the position should be set
-    from_surface: ZOSAPI.Editors.IEditorRow | int
+    from_surface : ZOSAPI.Editors.IEditorRow | int
         Index of the surface or surface from which the position is measured
-    length: float
+    length : float
         Distance between `from_surface` and `surface`.
 
     Returns
@@ -189,16 +189,16 @@ def surface_pickup(
 
     Parameters
     ----------
-    cell: ZOSAPI.Editors.IEditorCell
+    cell : ZOSAPI.Editors.IEditorCell
         Cell for which the value should be set
-    from_surface: ZOSAPI.Editors.IEditorRow
+    from_surface : ZOSAPI.Editors.IEditorRow
         Index of the surface or surface from which the value is picked up
-    from_column: float
+    from_column : float
         Column from which the value is picked up
-    scale: float
+    scale : float
         Factor by which the picked up value is scaled. This value is only set if the cell supports a scale
         factor. Defaults to 1.
-    offset: float
+    offset : float
         Offset which is added to the picked up value. This value is only set if the cell supports an offset.
         Defaults to 0.
 
@@ -229,7 +229,7 @@ def variable(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveVariabl
 
     Parameters
     ----------
-    cell: ZOSAPI.Editors.IEditorCell
+    cell : ZOSAPI.Editors.IEditorCell
 
     Returns
     -------

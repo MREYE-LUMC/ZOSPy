@@ -58,43 +58,43 @@ def polarization_pupil_map(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    jx: float
+    jx : float
         Jones x electric field. Defaults to 1.
-    jy: float
+    jy : float
         Jones y electric field. Defaults to 0.
-    x_phase: float
+    x_phase : float
         Phase of the X component of the Jones electric field in degrees. Defaults to 0.
-    y_phase: float
+    y_phase : float
         Phase of the Y component of the Jones electric field in degrees. Defaults to 0.
-    wavelength: int
+    wavelength : int
         The wavelength number that is to be used. Should be an integer specifying the wavelength number.
         Defaults to 1.
-    field: int
+    field : int
         The field number that is to be used. Must be an integer specifying the field number. Defaults
         to 1.
-    surface: str or int
+    surface : str or int
         The surface that is to be analyzed. Either 'Image', or an integer. Defaults to 'Image'.
-    sampling: str or int
+    sampling : str or int
         The size of the used grid, either string (e.g. '65x65') or int. The integer will be treated as if obtained from
         zospy.constants.Analysis.SampleSizes_ContrastLoss. Defaults to '11x11'.
-    add_configs: str
+    add_configs : str
         The add configs string.
-    sub_configs: str
+    sub_configs : str
         The subtract configs string.
-    oncomplete: str
+    oncomplete : str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    cfgoutfile: str or None
+    cfgoutfile : str or None
         The configuration file to which the current configuration is saved. If None, a temporary file will be created
         and deleted. If string, it should be a full system path with '.CFG' as extension, after which the file will be
         saved in that location. Defaults to
         None.
-    txtoutfile: str or None
+    txtoutfile : str or None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.
@@ -268,33 +268,33 @@ def transmission(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    sampling: str or int
+    sampling : str or int
         The size of the used grid, either string (e.g. '128x128') or int. The integer will be treated as if obtained
         from zospy.constants.Analysis.SampleSizes. Defaults to '32x32'.
-    unpolarized: bool
+    unpolarized : bool
         Defines if unpolarized light is used. Defaults to False.
-    jx: float
+    jx : float
         Jones x electric field. Defaults to 1.
-    jy: float
+    jy : float
         Jones y electric field. Defaults to 0.
-    x_phase: float
+    x_phase : float
         Phase of the X component of the Jones electric field in degrees. Defaults to 0.
-    y_phase: float
+    y_phase : float
         Phase of the Y component of the Jones electric field in degrees. Defaults to 0.
-    oncomplete: str
+    oncomplete : str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    cfgoutfile: str or None
+    cfgoutfile : str or None
         The configuration file to which the current configuration is saved. If None, a temporary file will be created
         and deleted. If string, it should be a full system path with '.CFG' as extension, after which the file will be
         saved in that location. Defaults to
         None.
-    txtoutfile: str or None
+    txtoutfile : str or None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.

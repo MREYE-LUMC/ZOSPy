@@ -25,9 +25,9 @@ class OpticStudioSystem:
 
         Parameters
         ----------
-        zos_instance: ZOS
+        zos_instance : ZOS
             A ZOS instance
-        system_instance: ZOS.Application.PrimarySystem
+        system_instance : ZOS.Application.PrimarySystem
             A PrimarySystem instance obtained from the zos_instance.
         """
         self._ZOS: ZOS = zos_instance
@@ -199,9 +199,9 @@ class OpticStudioSystem:
 
         Parameters
         ----------
-        filepath: str | PathLike
+        filepath : str | PathLike
             Path to the file that should be loaded
-        saveifneeded: bool
+        saveifneeded : bool
             Defines if the current file is saved before opening the new file. Defaults to False.
         """
         filepath = abspath(filepath)
@@ -218,7 +218,7 @@ class OpticStudioSystem:
 
         Parameters
         ----------
-        saveifneeded: bool
+        saveifneeded : bool
             Defines if the current file is saved before opening the new file. Defaults to False.
         """
         logger.debug("Creating new file")
@@ -233,7 +233,7 @@ class OpticStudioSystem:
 
         Parameters
         ----------
-        filepath: str | PathLike
+        filepath : str | PathLike
             The filepath where the system should be saved. Note that a partial path or relative path does not work.
         """
         filepath = abspath(filepath, check_directory_only=True)
@@ -252,7 +252,6 @@ class OpticStudioSystem:
         On these occurences, save_as() should be used once.
 
         Returns (bool): A boolean indicating if the saving was successful.
-
         """
         logger.debug("Saving file")
 
@@ -292,7 +291,7 @@ class OpticStudioSystem:
 
         Parameters
         ----------
-        required: str
+        required : str
             The required system type. Either 'Sequential' or 'NonSequential'.
 
         Returns
@@ -322,7 +321,6 @@ class ZOS:
 
     This class manages the connection between Python and Zemax OpticStudio through .NET, and controls OpticStudio
     instances. Only one instance of `ZOS` can exist at any time.
-
 
     Parameters
     ----------
@@ -483,9 +481,9 @@ class ZOS:
 
         Parameters
         ----------
-        preload: bool
+        preload : bool
             A boolean indicating if nested namespaces should be preloaded.
-        zosapi_nethelper: str, optional
+        zosapi_nethelper : str, optional
             Path to the ZOSAPI_NetHelper dll, if `None`, the Windows registry will be used to find
             ZOSAPI_NetHelper dll. Defaults to `None`.
         opticstudio_directory : str, optional
@@ -587,7 +585,7 @@ class ZOS:
         ----------
         instancenumber : int, optional
             An integer to specify the number of the instance used.
-        return_primary_system: bool, optional
+        return_primary_system : bool, optional
             A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
 
         Returns
@@ -715,8 +713,7 @@ class ZOS:
         raise ValueError("Can only create a new system when using a standalone connection.")
 
     def get_primary_system(self) -> OpticStudioSystem:
-        """
-        Get the primary optical system.
+        """Get the primary optical system.
 
         Returns
         -------
@@ -733,8 +730,7 @@ class ZOS:
         return optic_studio_system
 
     def get_system(self, pos: int = 0) -> OpticStudioSystem:
-        """
-        Get the optical system at the specified position.
+        """Get the optical system at the specified position.
 
         Parameters
         ----------

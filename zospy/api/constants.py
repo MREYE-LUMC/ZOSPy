@@ -43,7 +43,7 @@ def _construct_from_zosapi_and_enumkeys(zosapi, zosapi_enumkeys):
     ----------
     zosapi:
         A ZOSAPI instance.
-    zosapi_enumkeys: list[str]
+    zosapi_enumkeys : list[str]
         The enumeration keys obtained from can be obtained through zp.utils.clrutils.reflect_dll_content()
 
     Returns
@@ -102,9 +102,9 @@ def get_constantname_by_value(constant_tuple, value):
 
     Parameters
     ----------
-    constant_tuple: tuple
+    constant_tuple : tuple
         The set of constants used to look up the value
-    value: int
+    value : int
         The value for which the constant name is to be found
 
     Returns

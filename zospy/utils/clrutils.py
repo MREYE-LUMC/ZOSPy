@@ -14,7 +14,7 @@ def clr_get_available_assemblies(with_meta=True):
 
     Parameters
     ----------
-    with_meta: bool
+    with_meta : bool
         Defines if metadata should also be returned
 
     Returns
@@ -30,7 +30,7 @@ def reflect_dll_content(dllfilepath):
 
     Parameters
     ----------
-    dllfilepath: str
+    dllfilepath : str
         The absolute path to the dll, including extension.
 
     Returns
@@ -56,7 +56,7 @@ def system_get_enum_key_from_value(enum, value):
 
     Parameters
     ----------
-    enum: System.Enum
+    enum : System.Enum
         The Enum instance.
     value
         The value for which the key should be returned
@@ -74,7 +74,7 @@ def system_get_enum_names(enum):
 
     Parameters
     ----------
-    enum: System.Enum
+    enum : System.Enum
         An Enum instance.
 
     Returns
@@ -90,7 +90,7 @@ def system_get_enum_values(enum):
 
     Parameters
     ----------
-    enum: System.Enum
+    enum : System.Enum
         An Enum instance.
 
     Returns
@@ -108,14 +108,13 @@ def system_enum_to_namedtuple(enum):
 
     Parameters
     ----------
-    enum: System.Enum
+    enum : System.Enum
         An Enum instance.
 
     Returns
     -------
     namedtuple
         A namedtuple containing the enum data.
-
     """
     label = enum.__name__
     names = system_get_enum_names(enum)
@@ -136,7 +135,7 @@ def system_datetime_to_datetime(sdt):
 
     Parameters
     ----------
-    sdt: System.DateTime
+    sdt : System.DateTime
         An System.DateTime instance
 
     Returns

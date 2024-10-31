@@ -41,13 +41,13 @@ def _convert_dicttype(dictionary, newtype=dict, convert_nested=True, method="dee
 
     Parameters
     ----------
-    dictionary: dict
+    dictionary : dict
         A dictionary or dictionary subtype, optionally with nested dictionaries
-    newtype: type
+    newtype : type
         The new dictionary (sub)type
-    convert_nested: bool
+    convert_nested : bool
         Whether nested dictionaries should be converted as well. Defaults to True
-    method: str
+    method : str
         The method used to copy values. One of 'deepcopy', 'copy' and 'assign'. Defaults to 'deepcopy'
 
     Returns
@@ -222,9 +222,9 @@ class AttrDict(dict):
 
         Parameters
         ----------
-        convert_nested: bool
+        convert_nested : bool
             Whether nested dictionaries should be converted as well. Defaults to True
-        method: str
+        method : str
             The method used to copy values. One of 'deepcopy', 'copy' and 'assign'. Defaults to 'deepcopy'
 
         Returns
@@ -240,11 +240,11 @@ class AttrDict(dict):
 
         Parameters
         ----------
-        dictionary: dict
+        dictionary : dict
             The dictionary that is to be converted
-        convert_nested: bool
+        convert_nested : bool
             Whether nested dictionaries should be converted as well. Defaults to True
-        method: str
+        method : str
             The method used to copy values. One of 'deepcopy', 'copy' and 'assign'. Defaults to 'deepcopy'
 
         Returns
@@ -273,29 +273,28 @@ class AnalysisResult(AttrDict):
 
         Parameters
         ----------
-        analysistype: str
+        analysistype : str
             The type of analysis that has been performed. Will be assigned to AnalysisResult.AnalysisType (also
             available through AnalysisResult['AnalysisType'].
-        data: Any, optional
+        data : Any, optional
             The analysis data, can be any of the native python datatypes, a pd.Series, pd.DataFrame, np.ndarray or
             AnalysisData. Will be assigned to AnalysisResult.Data (also available through AnalysisResult['Data'].
             Defaults to None.
-        settings: pd.Series, optional
+        settings : pd.Series, optional
             The analysis settings. Will be assigned to AnalysisResult.Settings (also available through
             AnalysisResult['Settings']. Defaults to None.
-        metadata: AnalysisMetadata, optional
+        metadata : AnalysisMetadata, optional
             The analysis metadata. Will be assigned to AnalysisResult.MetaData (also available through
             AnalysisResult['MetaData']. Defaults to None.
-        headerdata: list[str], optional
+        headerdata : list[str], optional
             The analysis headerdata. Will be assigned to AnalysisResult.HeaderData (also available through
             AnalysisResult['HeaderData']. Defaults to None.
-        messages: list[AnalysisMessage], optional:
+        messages : list[AnalysisMessage], optional:
             The analysis messages. Will be assigned to AnalysisResult.Messages (also available through
             AnalysisResult['Messages']. Defaults to None.
         kwargs:
             Any supplied kwarg will be assigned as an attribute (also available as AnalysisResult[kwarg]. Note that
             'AnalysisType', 'Data', 'Settings' 'MetaData', 'HeaderData' and 'Messages' are not available to be set.
-
 
         Returns
         -------
@@ -323,7 +322,7 @@ class AnalysisResult(AttrDict):
 
         Returns
         -------
-        json_string: str
+        json_string : str
             A JSON representation of the analysis result.
         """
         return _AnalysisResultJSONEncoder().encode(self)
@@ -360,8 +359,7 @@ class AnalysisResult(AttrDict):
 
 
 class OnComplete(str, Enum):
-    """
-    Action to perform after running an OpticStudio analysis.
+    """Action to perform after running an OpticStudio analysis.
 
     This `Enum` can be passed to analysis methods in `zospy.analyses`.
 
@@ -395,12 +393,11 @@ class OnComplete(str, Enum):
 
 class Analysis:
     def __init__(self, analysis: _ZOSAPI.Analysis.IA_):
-        """
-        Zemax OpticStudio Analysis with full access to its Settings and Results attributes.
+        """Zemax OpticStudio Analysis with full access to its Settings and Results attributes.
 
         Parameters
         ----------
-        analysis: ZOSAPI.Analysis.IA_
+        analysis : ZOSAPI.Analysis.IA_
             analysis object
         """
         self._analysis = analysis
@@ -420,9 +417,9 @@ class Analysis:
 
         Parameters
         ----------
-        oncomplete: OnComplete | str
+        oncomplete : OnComplete | str
             Action to perform on completion.
-        result: AnalysisResult
+        result : AnalysisResult
             Result of the analysis.
 
         Returns
@@ -451,7 +448,7 @@ class Analysis:
 
         Parameters
         ----------
-        value: int or str
+        value : int or str
             The value to which the field should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
@@ -479,7 +476,6 @@ class Analysis:
         -------
         int | str
             Either the field number, or 'All' if field was set to 'All'.
-
         """
         field_number = self.Settings.Field.GetFieldNumber()
 
@@ -536,7 +532,7 @@ class Analysis:
 
         Parameters
         ----------
-        value: int | str
+        value : int | str
             The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
@@ -548,7 +544,6 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'All'.
-
         """
         if value == "All":
             self.Settings.Wavelength.UseAllWavelengths()
@@ -564,7 +559,6 @@ class Analysis:
         -------
         int | str
             Either the wavelength number, or 'All' if wavelength was set to 'All'.
-
         """
         wavelength = self.Settings.Wavelength.GetWavelengthNumber()
 
@@ -575,7 +569,7 @@ class Analysis:
 
         Parameters
         ----------
-        value: int or str
+        value : int or str
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
             string.
 
@@ -588,7 +582,6 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'Image' or 'Objective'.
-
         """
         if value == "Image":
             self.Settings.Surface.UseImageSurface()
@@ -609,21 +602,20 @@ class Analysis:
 def new_analysis(
     oss: OpticStudioSystem, analysis_type: constants.Analysis.AnalysisIDM, settings_first: bool = True
 ) -> Analysis:
-    """
-    Creates a new analysis in Zemax.
+    """Creates a new analysis in Zemax.
 
     Parameters
     ----------
-    oss: OpticStudioSystem
+    oss : OpticStudioSystem
         The Zemax OpticStudio system
-    analysis_type: zospy.constants.Analysis.AnalysisIDM
+    analysis_type : zospy.constants.Analysis.AnalysisIDM
         Analysis type from `ZOSAPI.Analysis.AnalysisIDM`
-    settings_first: bool
+    settings_first : bool
         Do not run the analysis immediately, which allows to adjust settings. Defaults to `True`.
 
     Returns
     -------
-    analysis: Analysis
+    analysis : Analysis
 
     Examples
     --------

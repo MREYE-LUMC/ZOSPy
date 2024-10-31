@@ -168,7 +168,7 @@ def _structure_zernike_standard_coefficients_result(line_list: list[str]) -> tup
 
     Parameters
     ----------
-    line_list: list of str
+    line_list : list of str
         The line list obtained by reading in the results
 
     Returns
@@ -249,33 +249,33 @@ def zernike_standard_coefficients(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    sampling: str | int
+    sampling : str | int
         The sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants integer.
-    maximum_term: int
+    maximum_term : int
         The maximum Zernike term, defaults to 37.
-    wavelength: int
+    wavelength : int
         The wavelength number that is to be used. Defaults to 1 (the first wavelength).
     field:
         The field that is to be analyzed. Defaults to 1.
-    reference_opd_to_vertex: bool
+    reference_opd_to_vertex : bool
         If the OPD should be referenced to vertex. Defaults to False.
-    surface: str | int
+    surface : str | int
         The surface that is to be analyzed. Either 'Image', 'Object' or an integer. Defaults to 'Image'.
-    sx: float
+    sx : float
         The sx.
-    sy: float
+    sy : float
         The sy.
-    sr: float
+    sr : float
         The sr.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    txtoutfile: str | None
+    txtoutfile : str | None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.

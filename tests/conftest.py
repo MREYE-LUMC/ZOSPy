@@ -164,7 +164,7 @@ def simple_system(empty_system) -> zp.zpcore.OpticStudioSystem:
 
 @pytest.fixture
 def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
-    """Simple system with a polarizing front lens surface"""
+    """Simple system with a polarizing front lens surface."""
     oss = simple_system
 
     lens_front = oss.LDE.GetSurfaceAt(2)

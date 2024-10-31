@@ -109,11 +109,11 @@ def _delocalize(
 
     Parameters
     ----------
-    string: str
+    string : str
         The string that is to be converted.
-    decimal_point: str
+    decimal_point : str
         The decimal point separator used in the string. Defaults to zospy.api.config.DECIMAL_POINT.
-    thousands_separator: str | None
+    thousands_separator : str | None
         The thousands separator used in the string. Defaults to zospy.api.config.THOUSANDS_SEPARATOR.
 
     Returns
@@ -150,13 +150,13 @@ def atox(
 
     Parameters
     ----------
-    string: str
+    string : str
         The string that is to be converted.
-    dtype: Callable[[str], int | float]
+    dtype : Callable[[str], int | float]
         The function used to convert the delocalized string into a number.
-    decimal_point: str
+    decimal_point : str
         The decimal point separator used in the string. Defaults to zospy.api.config.DECIMAL_POINT.
-    thousands_separator: str | None
+    thousands_separator : str | None
         The thousands separator used in the string. Defaults to zospy.api.config.THOUSANDS_SEPARATOR.
 
     Returns
@@ -178,11 +178,11 @@ def xtoa(
 
     Parameters
     ----------
-    number: int | float
+    number : int | float
         The number that is to be converted.
-    decimal_point: str
+    decimal_point : str
         The decimal point separator used in the string. Defaults to zospy.api.config.DECIMAL_POINT.
-    thousands_separator: str | None
+    thousands_separator : str | None
         The thousands separator used in the string. Defaults to zospy.api.config.THOUSANDS_SEPARATOR.
 
     Returns

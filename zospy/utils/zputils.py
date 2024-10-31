@@ -16,14 +16,14 @@ def flatten_dict(unflattend_dict, parent_key="", sep=".", keep_unflattend=False)
 
     Parameters
     ----------
-    unflattend_dict: dict or MutableMapping
+    unflattend_dict : dict or MutableMapping
         A dictionary with nested dictionaries
-    parent_key: str
+    parent_key : str
         A key to which the flattened keys are added. Mainly present to support flatting of subdicts, should be '' in
         most primary calls.. Defaults to ''.
-    sep: str
+    sep : str
         The separator used for the flat items. Defaults to '.'
-    keep_unflattend: bool
+    keep_unflattend : bool
         Whether the keys, value pairs of nested dicts or MutableMappings should remain present in the output or not.
         Defaults to False
 
@@ -51,7 +51,7 @@ def flatten_dlltreedict(dlltreedict):
 
     Parameters
     ----------
-    dlltreedict: dict
+    dlltreedict : dict
         A dictionary with nested dictionaries
 
     Returns
@@ -122,7 +122,7 @@ def standardize_sampling(sampling: SamplingType) -> SamplingType:
 
     Parameters
     ----------
-    sampling: int | str
+    sampling : int | str
         The sampling pattern to use. Should be int or string. Accepts both S_00x00 and 00x00 string representation.
 
     Returns

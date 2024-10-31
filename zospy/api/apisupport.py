@@ -17,7 +17,7 @@ def get_zos_root():
 
     Returns
     -------
-    filepath: str
+    filepath : str
         The root folder of the installed Zemax Version
 
     Raises
@@ -57,14 +57,14 @@ def load_zosapi_nethelper(filepath=None, preload=False):
 
     Parameters
     ----------
-    filepath: str, optional
+    filepath : str, optional
         The location of the ZOSAPI_NetHelper. If not supplied, the location will be deducted from the windows registry.
-    preload: bool
+    preload : bool
         Specifies if CLR should import with preload on (True) or off (False). Defaults to False).
 
     Returns
     -------
-    ZOSAPI_NetHelper: netModuleObject
+    ZOSAPI_NetHelper : netModuleObject
         The ZOSAPI_NetHelper as module object
     """
     if not filepath:  # get the path through the windows registry
@@ -89,18 +89,18 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, preload=False):
 
     Parameters
     ----------
-    zosapi_nethelper: netModuleObject, optional
+    zosapi_nethelper : netModuleObject, optional
         The loaded ZOSAPI_NetHelper DLL. If None, the zemaxdirectory parameter will be used. Note that either the
         zosapi_nethelper or the zemaxdirectory has to be specified, not both.
-    zemaxdirectory: str, optional
+    zemaxdirectory : str, optional
         The directory containing the Zemax DLLs. If None, the directory will be acquired through the zosapi_nethelper.
         Note that either the zosapi_nethelper or the zemaxdirectory has to be specified, not both.
-    preload: bool
+    preload : bool
         Specifies if CLR should import with preload on (True) or off (False). Defaults to False).
 
     Returns
     -------
-    zosapi: netModuleObject
+    zosapi : netModuleObject
         The ZOSAPI module.
 
     Raises

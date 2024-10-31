@@ -134,7 +134,7 @@ def _map_parameter_names(parameters: TestParameters):
 
     Parameters
     ----------
-    parameters: dict
+    parameters : dict
         A dictionary containing the test parameters in the form {param_name: param_value}.
 
     Returns

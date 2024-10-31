@@ -28,34 +28,34 @@ def huygens_psf(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    pupil_sampling: str | int
+    pupil_sampling : str | int
         The pupil sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants
         integer.
-    image_sampling: str | int
+    image_sampling : str | int
         The image sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants
         integer.
-    image_delta: float | int
+    image_delta : float | int
         The image delta
-    rotation: int
+    rotation : int
         The rotation, should be one of [0, 90, 180, 270].
-    wavelength: str | int
+    wavelength : str | int
         The wavelength number that is to be used. Either 'All' or an integer specifying the wavelength number.
         Defaults to 'All'.
-    field: str | int
+    field : str | int
         The field number that is to be used. Either 'All' or an integer specifying the field number. Defaults to 1.
-    psftype: str | int
+    psftype : str | int
         The PSF type (e.g. 'Linear') that is calculated. Defaults to 'Linear'.
-    show_as: str | int
+    show_as : str | int
         Defines how the data is showed within OpticStudio. Defaults to 'Surface'
-    use_polarization: bool
+    use_polarization : bool
         Defines if polarization is used. Defaults to False.
-    use_centroid: bool
+    use_centroid : bool
         Defines if centroid is used. Defaults to False.
-    normalize: bool
+    normalize : bool
         Defines if normalization is used. Defaults to False.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link

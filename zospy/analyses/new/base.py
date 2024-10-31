@@ -155,8 +155,7 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
 
 
 class OnComplete(str, Enum):
-    """
-    Action to perform after running an OpticStudio analysis.
+    """Action to perform after running an OpticStudio analysis.
 
     This `Enum` can be passed to analysis methods in `zospy.analyses`.
 
@@ -190,12 +189,11 @@ class OnComplete(str, Enum):
 
 class Analysis:
     def __init__(self, analysis: _ZOSAPI.Analysis.IA_):
-        """
-        Zemax OpticStudio Analysis with full access to its Settings and Results attributes.
+        """Zemax OpticStudio Analysis with full access to its Settings and Results attributes.
 
         Parameters
         ----------
-        analysis: ZOSAPI.Analysis.IA_
+        analysis : ZOSAPI.Analysis.IA_
             analysis object
         """
         self._analysis = analysis
@@ -215,9 +213,9 @@ class Analysis:
 
         Parameters
         ----------
-        oncomplete: OnComplete | str
+        oncomplete : OnComplete | str
             Action to perform on completion.
-        result: AnalysisResult
+        result : AnalysisResult
             Result of the analysis.
 
         Returns
@@ -261,7 +259,7 @@ class Analysis:
 
         Parameters
         ----------
-        value: int or str
+        value : int | str
             The value to which the field should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
@@ -339,7 +337,6 @@ class Analysis:
         -------
         int | str
             Either the wavelength number, or 'All' if wavelength was set to 'All'.
-
         """
         wavelength = self.Settings.Wavelength.GetWavelengthNumber()
 
@@ -351,7 +348,7 @@ class Analysis:
 
         Parameters
         ----------
-        value: int | Literal["All"]
+        value : int | Literal["All"]
             The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
@@ -363,7 +360,6 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'All'.
-
         """
         if value == "All":
             self.Settings.Wavelength.UseAllWavelengths()
@@ -377,7 +373,7 @@ class Analysis:
 
         Parameters
         ----------
-        value: int or str
+        value : int | str
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
             string.
 
@@ -390,7 +386,6 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'Image' or 'Objective'.
-
         """
         if value == "Image":
             self.Settings.Surface.UseImageSurface()
@@ -404,7 +399,7 @@ class Analysis:
     def get_text_output(self, txtoutfile: str, encoding: str):
         self.Results.GetTextFile(txtoutfile)
 
-        with open(txtoutfile, "r", encoding=encoding) as f:
+        with open(txtoutfile, encoding=encoding) as f:
             output = f.read()
 
         return output
@@ -419,21 +414,20 @@ class Analysis:
 def new_analysis(
     oss: OpticStudioSystem, analysis_type: constants.Analysis.AnalysisIDM, settings_first: bool = True
 ) -> Analysis:
-    """
-    Creates a new analysis in Zemax.
+    """Creates a new analysis in Zemax.
 
     Parameters
     ----------
-    oss: OpticStudioSystem
+    oss : OpticStudioSystem
         The Zemax OpticStudio system
-    analysis_type: zospy.constants.Analysis.AnalysisIDM
+    analysis_type : zospy.constants.Analysis.AnalysisIDM
         Analysis type from `ZOSAPI.Analysis.AnalysisIDM`
-    settings_first: bool
+    settings_first : bool
         Do not run the analysis immediately, which allows to adjust settings. Defaults to `True`.
 
     Returns
     -------
-    analysis: Analysis
+    analysis : Analysis
 
     Examples
     --------
@@ -537,7 +531,7 @@ class AnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     def get_text_output(self) -> str:
         self.analysis.Results.GetTextFile(str(self.text_output_file))
 
-        with open(self._text_output_file, "r", encoding=self.oss._ZOS.get_txtfile_encoding()) as f:
+        with open(self._text_output_file, encoding=self.oss._ZOS.get_txtfile_encoding()) as f:
             output = f.read()
 
         return output

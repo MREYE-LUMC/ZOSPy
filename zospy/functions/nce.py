@@ -10,9 +10,9 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
 
     Parameters
     ----------
-    obj: ZOSAPI.Editors.NCE.INCERow
+    obj : ZOSAPI.Editors.NCE.INCERow
         The Row/Object for which the change is to be made.
-    new_type: zospy.constants.Editors.NCE.ObjectType | str
+    new_type : zospy.constants.Editors.NCE.ObjectType | str
         The new object type, either string (e.g. 'StandardLens') or int. The integer will be treated as if obtained from
         zp.constants.Editors.NCE.ObjectType.
 
@@ -46,11 +46,11 @@ def find_object_by_comment(
 
     Parameters
     ----------
-    nce: ZOSAPI.Editors.NCE
+    nce : ZOSAPI.Editors.NCE
         The Non-sequential Component Editor (NCE).
-    comment: str
+    comment : str
         String that is searched for in the Comment column of the NCE.
-    case_sensitive: bool=False
+    case_sensitive : bool=False
         Flag that specifies whether the search is case-sensitive (default value) or not.
 
     Returns
@@ -114,7 +114,7 @@ def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IOb
 
     Parameters
     ----------
-    obj: ZOSAPI.Editors.NCE.INCERow
+    obj : ZOSAPI.Editors.NCE.INCERow
         The Row/Object for which the data is requested.
 
     Returns

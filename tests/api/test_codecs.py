@@ -1,6 +1,6 @@
 import clr
 import pytest
-from System.Reflection import Assembly  # noqa
+from System.Reflection import Assembly
 
 import zospy as zp
 from zospy.api.codecs import OpticStudioInterfaceEncoder
@@ -74,7 +74,7 @@ class TestOpticStudioInterfaceEncoder:
         assert surface_data.Dr == 0
 
     def test_editors_lde_isurfaceaperturetype(self, simple_system):
-        """Test downcasting for `ZOSAPI.Editors.LDE.ISurfaceApertureType.`"""
+        """Test downcasting for `ZOSAPI.Editors.LDE.ISurfaceApertureType`."""
         stop_surface = simple_system.LDE.GetSurfaceAt(simple_system.LDE.StopSurface)
 
         spider_aperture = stop_surface.ApertureData.CreateApertureTypeSettings(

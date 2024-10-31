@@ -21,11 +21,11 @@ def _correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype) -> None:
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    analysis: Analysis
+    analysis : Analysis
         An FFT Through Focus MTF analysis.
-    mtftype: zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
+    mtftype : zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
 
     Returns
     -------
@@ -64,27 +64,27 @@ def fft_through_focus_mtf(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    sampling: str | int
+    sampling : str | int
         The sampling, either string (e.g. '64x64') or int. The integer will be treated as a ZOSAPI Constants integer.
-    deltafocus: float
+    deltafocus : float
         The delta focus, defaults to 0.1
-    frequency: float
+    frequency : float
         The frequency. Defaults to 0.
-    numberofsteps: int
+    numberofsteps : int
         The number of steps. Defaults to 5.
-    wavelength: str | int
+    wavelength : str | int
         The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
-    field: str | int
+    field : str | int
         The field to use in the MTF. Either 'All' or an integer specifying the field number.
-    mtftype: zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
+    mtftype : zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
         The MTF type (e.g. `Modulation`) that is calculated.
-    use_polarization: bool
+    use_polarization : bool
         Use polarization. Defaults to False.
-    use_dashes: bool
+    use_dashes : bool
         Use dashes. Defaults to False.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -168,11 +168,11 @@ def fft_through_focus_mtf_fromcfg(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    cfgfile: str
+    cfgfile : str
         Full filepath (including extension) to a configuration file.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link

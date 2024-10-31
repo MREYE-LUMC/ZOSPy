@@ -62,7 +62,7 @@ def geometric_image_analysis(
     file : str
         The image file used for the analysis. Must be an .IMA of .BIM file and reside in the OpticStudio images folder.
         Defaults to 'LETTERF.IMA'.
-    rotation: float
+    rotation : float
         The rotation angle in degrees. Defaults to 0.
     rays_x_1000 : int
         The approximate amount of rays that are traced. See OpticStudio manual for further clarification. Defaults to
@@ -75,7 +75,7 @@ def geometric_image_analysis(
     number_of_pixels : int
         The number of pixels across the width of the image. Not used when show_as is set to 'SpotDiagram'. Defaults to
         100.
-    row_column_number: int | str
+    row_column_number : int | str
         An integer defining the row or column number used when show_as is either 'CrossX' or 'CrossY'. Also accepts
         'Center'. Defaults to 'Center'.
     na : float

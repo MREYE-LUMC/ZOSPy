@@ -29,13 +29,13 @@ def _warn_specified_parameters(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance.
-    variables: dict
+    variables : dict
         A dictionary of variables to compare with the default values of the function. Can be obtained using `locals()`.
-    function: Callable[[Any], Any]
+    function : Callable[[Any], Any]
         The function to compare the variables with.
-    ignore: tuple[str], optional
+    ignore : tuple[str], optional
         A tuple of parameter names to ignore. Defaults to ("oss", "oncomplete").
 
     Examples
@@ -145,7 +145,7 @@ def cross_section(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     start_surface : int, optional
         The starting surface index for the cross-section analysis. Defaults to 1.
@@ -178,7 +178,7 @@ def cross_section(
         The thickness of the lines in the output visualization. Defaults to "Standard".
     imgoutfile : PathLike | str | None, optional
         The path to save the output image file. If None, no image is saved. Defaults to None.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -310,7 +310,7 @@ def viewer_3d(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
     start_surface : int, optional
         The starting surface index for the 3D viewer. Defaults to 1.
@@ -374,7 +374,7 @@ def viewer_3d(
         Rotation of the system around the Z-axis, in degrees. Defaults to 0.
     imgoutfile : PathLike | str | None, optional
         The path to save the output image file. If None, no image is saved. Defaults to None.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -490,9 +490,9 @@ def shaded_model(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -536,9 +536,9 @@ def nsc_3d_layout(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be non-sequential.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
@@ -582,9 +582,9 @@ def nsc_shaded_model(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be non-sequential.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link

@@ -24,7 +24,7 @@ def get_pupil(oss: OpticStudioSystem):
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance.
 
     Returns
@@ -50,9 +50,9 @@ def surface_change_type(
 
     Parameters
     ----------
-    surface: ZOSAPI.Editors.LDE.ILDERow
+    surface : ZOSAPI.Editors.LDE.ILDERow
         The Row/Surface for which the change is to be made.
-    new_type: zospy.constants.Editors.LDE.SurfaceType | str
+    new_type : zospy.constants.Editors.LDE.SurfaceType | str
         The new surface type, either string (e.g. 'Standard') or int. The integer will be treated as if obtained from
         zp.constants.Editors.LDE.SurfaceType.
 
@@ -98,11 +98,11 @@ def find_surface_by_comment(
 
     Parameters
     ----------
-    lde: ZOSAPI.Editors.LDE
+    lde : ZOSAPI.Editors.LDE
         The Lens Data Editor (LDE)
-    comment: str
+    comment : str
         String that is searched for in the Comment column of the LDE.
-    case_sensitive: bool
+    case_sensitive : bool
         Flag that specifies whether the search is case-sensitive or not. Defaults to True.
 
     Returns
@@ -203,29 +203,29 @@ def surface_change_aperturetype(
 
     Parameters
     ----------
-    surface: ZOSAPI.Editors.LDE.ILDERow
+    surface : ZOSAPI.Editors.LDE.ILDERow
         The Row/Surface for which the change is to be made.
-    new_type: zospy.constants.Editors.LDE.SurfaceApertureTypes | str
+    new_type : zospy.constants.Editors.LDE.SurfaceApertureTypes | str
         The new surface aperture type.
-    aperture_file: str | None
+    aperture_file : str | None
         The aperture file. Defaults to None.
-    aperture_x_decenter: int | None
+    aperture_x_decenter : int | None
         The x decenter of the aperture. Defaults to None.
-    aperture_y_decenter: int | None
+    aperture_y_decenter : int | None
         The y decenter of the aperture. Defaults to None.
-    maximum_radius: float | None
+    maximum_radius : float | None
         The maximum radius. Defaults to None.
-    minimum_radius: float | None
+    minimum_radius : float | None
         The minimum radius. Defaults to None.
-    number_of_arms: int | None
+    number_of_arms : int | None
         The number of arms. Defaults to None.
-    uda_scale: float | None
+    uda_scale : float | None
         The UDA scale. Defaults to None.
-    width_of_arms: float | None
+    width_of_arms : float | None
         The width of arms. Defaults to None.
-    x_half_width: float | None
+    x_half_width : float | None
         The x half width. Defaults to None
-    y_half_width: float | None
+    y_half_width : float | None
         The y half width. Defaults to None
 
     Returns
