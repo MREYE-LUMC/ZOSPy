@@ -54,7 +54,7 @@ docs = [
     "hatch run docs:serve"
 ]
 example = "{env:HATCH_UV:uv} run scripts/run_examples/run_single_example.py {args}"
-all-examples = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_all_examples.py {args:examples}"
+all-examples = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_all_examples.py {args:examples --zospy-location .}"
 format-docstrings = "{env:HATCH_UV:uv} tool uvx pydocstringformatter --write {args:examples scripts tests zospy}"
 
 # Generate reference data for unit tests

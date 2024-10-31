@@ -1,5 +1,4 @@
-"""
-Script to run all examples in a directory and save the output.
+"""Script to run all examples in a directory and save the output.
 
 This script runs all examples using the `run_single_example.py` script and saves the output.
 `uv` is used to run the examples in isolated environments, with only the required dependencies.
@@ -18,7 +17,7 @@ EXECUTOR_PYTHON_VERSION: str = "3.12"
 SCRIPT_DIR = Path(__file__).parent.resolve(strict=True)
 
 
-def _dependencies_args(dependencies: list[str]) -> list[str]:
+def _dependencies_args(dependencies: set[str]) -> list[str]:
     result = []
 
     for dep in dependencies:
@@ -31,18 +30,37 @@ def _quote(s: Any) -> str:
     return f'"{s!s}"'
 
 
+def get_dependencies_from_requirements(requirements: Path) -> list[str]:
+    with requirements.open("r") as f:
+        return [line.strip() for line in f.readlines() if line.strip()]
+
+
 def run_example_with_uv(
     example_path: Path,
     output_path: Path | None = None,
     requirements: Path | None = None,
     *,
+    editable_zospy_location: Path | None = None,
     keep_extension_mode: bool = False,
 ) -> bool:
     # Build dependencies string
-    dependencies = _dependencies_args(["zospy", "ipykernel"])
+    # dependencies = _dependencies_args(["zospy", "ipykernel"])
+    dependencies = {"ipykernel"}
 
     if requirements is not None:
-        dependencies.extend(["--with-requirements", requirements.resolve().as_posix()])
+        dependencies.update(get_dependencies_from_requirements(requirements))
+
+    # Use the editable zospy location if provided, otherwise use the required zospy version
+    required_zospy = next((dep for dep in dependencies if dep.startswith("zospy")), None)
+    dependencies.discard(required_zospy)
+    dependencies_arguments = _dependencies_args(dependencies)
+
+    if editable_zospy_location is not None:
+        dependencies_arguments.extend(["--with-editable", editable_zospy_location.as_posix()])
+    elif required_zospy is not None:
+        dependencies_arguments.extend(["--with", required_zospy])
+    else:
+        dependencies_arguments.extend(["--with", "zospy"])
 
     parameters = []
 
@@ -60,7 +78,7 @@ def run_example_with_uv(
         "run",
         "--python",
         EXECUTOR_PYTHON_VERSION,
-        *dependencies,
+        *dependencies_arguments,
         "--no-project",  # Do not run in the project environment
         str(SCRIPT_DIR / "run_single_example.py"),
         ".",  # The command is run in the example directory
@@ -75,6 +93,7 @@ def run_example_with_uv(
 def process_example(
     example_path: Path,
     output_path: Path | None = None,
+    editable_zospy_location: str | None = None,
     *,
     keep_extension_mode: bool = False,
 ) -> bool:
@@ -82,7 +101,13 @@ def process_example(
     requirements = example_path / "requirements.txt" if (example_path / "requirements.txt").exists() else None
 
     # Run the example
-    return run_example_with_uv(example_path, output_path, requirements, keep_extension_mode=keep_extension_mode)
+    return run_example_with_uv(
+        example_path,
+        output_path,
+        requirements,
+        editable_zospy_location=editable_zospy_location,
+        keep_extension_mode=keep_extension_mode,
+    )
 
 
 def _handle_output_folder(output_folder: Path | None, example_folder: Path) -> Path:
@@ -128,7 +153,13 @@ def main(args: argparse.Namespace) -> Literal[1, 0]:
         output_folder = _handle_output_folder(args.output, subfolder)
 
         print(f"Processing example {subfolder}")
-        success[subfolder] = process_example(subfolder, output_folder, keep_extension_mode=args.keep_extension_mode)
+        zospy_location = args.zospy_location.resolve(strict=False) if args.zospy_location is not None else None
+        success[subfolder] = process_example(
+            subfolder,
+            output_folder,
+            editable_zospy_location=zospy_location,
+            keep_extension_mode=args.keep_extension_mode,
+        )
 
     print(
         "\n\n--- Results ---\n",
@@ -141,10 +172,18 @@ def main(args: argparse.Namespace) -> Literal[1, 0]:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run all examples in a directory and save the output.")
+    (
+        parser.add_argument(
+            "example_directory",
+            type=Path,
+            help="Path to the directory containing the examples.",
+        ),
+    )
     parser.add_argument(
-        "example_directory",
+        "--zospy-location",
         type=Path,
-        help="Path to the directory containing the examples.",
+        help="Path to the directory containing ZOSPy. If not provided, ZOSPy is installed from PyPI.",
+        default=None,
     )
     parser.add_argument(
         "--output",

@@ -6,8 +6,7 @@
 # ]
 # ///
 
-"""
-Run a single ZOSPy example.
+"""Run a single ZOSPy example.
 
 This script is used to run a single ZOSPy example. It is called by `run_all_examples.py`.
 The script reads a Jupyter notebook, changes the connection mode from extension to standalone
