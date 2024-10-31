@@ -31,6 +31,7 @@ jobs:
         run: |
           uvx hatch fmt --check
       - name: Lint docstrings
+        if: always() # Run even if previous step fails
         run: |
           uvx pydocstringformatter examples scripts tests zospy
 
