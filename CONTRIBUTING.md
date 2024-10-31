@@ -10,11 +10,9 @@ interface for the OpticStudio API.
 Any contributions serving this goal, or aiding optical simulations in OpticStudio, are welcome. If you don't know what to contribute, here are some ideas that are
 definitely welcome:
 
-1. Examples of various kinds of optical systems (in `examples/`). These can be supplied as Python scripts, but Jupyter
-   Notebooks are preferred;
+1. Examples of various kinds of optical systems (in `examples/`). These must be supplied as Jupyter Notebooks;
 2. Implementation of additional analyses (in `zospy/analyses`). Please refer to other analyses on how to implement them.
-   If you add a new
-   analysis, please include unit tests as well;
+   If you add a new analysis, please include unit tests as well;
 3. Implementation of additional solvers (in `zospy/solvers`);
 4. Compatibility checks. If you are using a version of OpticStudio that is not listed in the [README](README.md),
    please [run the unit tests](#3-test) and update the README accordingly.
@@ -22,19 +20,35 @@ definitely welcome:
 ## Code style
 
 - Please format your docstrings according to [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html).
-- Additional code styling is automatically applied when running the tests using `tox`.
+- Lint and format your code using [ruff](https://astral.sh/ruff).
+
+All formatting can be applied automatically (see below). 
+Compliance with these guidelines will be checked when you submit a Pull Request.
 
 ## Workflow
 
 ### 1. Setting up a development environment
 
-For development, additional dependencies are necessary for unit testing etc. They can be installed by running
+ZOSPy uses [Hatch](https://hatch.pypa.io/) for project management.
+To get started with ZOSPy development, install Hatch:
+
+- [Install Hatch on Windows](https://hatch.pypa.io/latest/install/#gui-installer_1)
+
+Alternatively, you can install Hatch using [`uv`](https://docs.astral.sh/uv/) or [`pipx`](https://pipx.pypa.io/latest/installation/):
 
 ```shell
-pip install .[dev]
+# Using uv
+uv tool install hatch
+
+# Using pipx
+pipx install hatch
 ```
 
-in the project directory.
+Next, open the project directory and run the following command to set up the development environment:
+
+```shell
+hatch env create
+```
 
 ### 2. Add your new feature
 
@@ -47,7 +61,7 @@ to run all unit tests prior to opening a Pull Request. Testing has been automate
 can be initiated by running
 
 ```shell
-tox
+hatch test
 ```
 
 in the project directory. More information about running the unit tests can be found [here](tests/README.md).

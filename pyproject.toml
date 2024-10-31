@@ -38,22 +38,6 @@ dynamic = ["version"]
 Source = "https://github.com/MREYE-LUMC/ZOSPy"
 Documentation = "https://mreye-lumc.github.io/ZOSPy"
 
-#[project.optional-dependencies]
-## Dependencies for unit testing
-#test = [
-#    "pytest",
-#    "tox",
-#]
-#
-## Development tools
-#dev = [
-#    "zospy[test]",
-#    "black[jupyter] == 23.3.0",
-#    "isort",
-#    "pydantic ~= 2.0.0",
-#    "ruff",
-#]
-
 ### Hatch configuration
 
 [tool.hatch.version]
@@ -71,10 +55,10 @@ docs = [
 ]
 example = "{env:HATCH_UV:uv} run scripts/run_examples/run_single_example.py {args}"
 all-examples = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_all_examples.py {args:examples}"
-file-exists = "python -c \"from pathlib import Path; p = Path(r'{args}'); print(p); print(p.exists())\""
+format-docstrings = "{env:HATCH_UV:uv} tool uvx pydocstringformatter {args:examples scripts tests zospy}"
 
 # Generate reference data for unit tests
-generate_reference_data = "hatch run reference-data:generate"
+generate-reference-data = "hatch run reference-data:generate"
 
 ## Unit testing using hatch test
 [tool.hatch.envs.hatch-test]
@@ -83,20 +67,6 @@ retries = 0
 
 [[tool.hatch.envs.hatch-test.matrix]]
 python = ["3.13", "3.12", "3.11", "3.10", "3.9"]
-
-#[tool.hatch.envs.test.scripts]
-## Run tests in extension mode
-#extension = "pytest tests --extension {args}"
-## Run tests in standalone mode
-#standalone = "pytest tests --standalone {args}"
-## Run zpcore tests in standalone mode with legacy connection code
-#legacy = "pytest tests/test_zpcore.py --legacy-connection-setup {args}"
-## Full test suite
-#full = [
-#    "standalone",
-#    "legacy",
-#    "coverage"
-#]
 
 ## Documentation
 [tool.hatch.envs.docs]
@@ -127,17 +97,6 @@ generate = "python scripts/generate_test_reference_data"
 ## Formatting using hatch fmt
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "ruff_defaults.toml"
-#dependencies = ["ruff", "numpydoc"]
-#
-#[tool.hatch.envs.hatch-static-analysis.scripts]
-#lint-check = [
-##    "ruff check{env:HATCH_FMT_ARGS:} {args:.}",
-#    "numpydoc lint {args:.}"
-#]
-#lint-fix = [
-##    "ruff check{env:HATCH_FMT_ARGS:} {args:.}",
-#    "numpydoc lint {args:.}"
-#]
 
 # Linting and formatting options
 [tool.ruff]
@@ -185,6 +144,9 @@ convention = "numpy"
 [tool.pydocstringformatter]
 write = true
 style = "numpydoc"
+max-line-length = 120
+max-summary-lines = 1
+summary-quotes-same-line = true
 linewrap-full-docstring = true
 
 [tool.pytest.ini_options]
