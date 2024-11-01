@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Analysis import SampleSizes
 from zospy.api._ZOSAPI.Analysis.Settings import IAS_
 

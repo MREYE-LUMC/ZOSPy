@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Analysis.Settings import IAS_
 
 __all__ = ("ColorRaysBy", "IAS_Spot", "Patterns", "Reference", "ShowScales")

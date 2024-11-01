@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Editors.LDE import SurfaceColumn
 from zospy.api._ZOSAPI.Editors.NCE import ObjectColumn
 from zospy.api._ZOSAPI.SystemData import FieldColumn
@@ -164,10 +162,10 @@ class IEditorRow:
     def GetCellAt(self, pos: int) -> IEditorCell: ...
 
 class ISolveAplanatic(ISolveData):
-    pass
+    ...
 
 class ISolveAutomatic(ISolveData):
-    pass
+    ...
 
 class ISolveCenterOfCurvature(ISolveData):
     @property
@@ -188,7 +186,7 @@ class ISolveChiefRayHeight(ISolveData):
     def Height(self, value: float) -> None: ...
 
 class ISolveChiefRayNormal(ISolveData):
-    pass
+    ...
 
 class ISolveCocentricRadius(ISolveData):
     @property
@@ -351,7 +349,7 @@ class ISolveFieldPickup(ISolveData):
     def MakePickupFromCurrentColumn(self) -> None: ...
 
 class ISolveFixed(ISolveData):
-    pass
+    ...
 
 class ISolveFNumber(ISolveData):
     @property
@@ -382,7 +380,7 @@ class ISolveMarginalRayHeight(ISolveData):
     def PupilZone(self, value: float) -> None: ...
 
 class ISolveMarginalRayNormal(ISolveData):
-    pass
+    ...
 
 class ISolveMaterialModel(ISolveData):
     @property
@@ -427,10 +425,10 @@ class ISolveMaterialSubstitute(ISolveData):
     def Catalog(self, value: str) -> None: ...
 
 class ISolveMaximum(ISolveData):
-    pass
+    ...
 
 class ISolveNone(ISolveData):
-    pass
+    ...
 
 class ISolveObjectPickup(ISolveData):
     @property
@@ -487,7 +485,7 @@ class ISolvePosition(ISolveData):
     def Length(self, value: float) -> None: ...
 
 class ISolvePupilPosition(ISolveData):
-    pass
+    ...
 
 class ISolveSurfacePickup(ISolveData):
     @property
@@ -520,7 +518,7 @@ class ISolveThermalPickup(ISolveData):
     def Configuration(self, value: int) -> None: ...
 
 class ISolveVariable(ISolveData):
-    pass
+    ...
 
 class ISolveZPLMacro(ISolveData):
     @property

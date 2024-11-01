@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Analysis import IMessage
 from zospy.api._ZOSAPI.Common import (
     ICoordinateTransform,
@@ -1432,10 +1430,10 @@ class ISurfaceABCD(ISurface):
     def Dy(self, value: float) -> None: ...
 
 class ISurfaceAlternateEven(ISurfaceNthEvenOrderTerms, ISurface):
-    pass
+    ...
 
 class ISurfaceAlternateOdd(ISurfaceNthOrderTerms, ISurface):
-    pass
+    ...
 
 class ISurfaceAnnularZernikeSag(ISurfaceNthEvenOrderTerms, ISurface):
     @property
@@ -1517,10 +1515,10 @@ class ISurfaceApertureElliptical(ISurfaceApertureType):
     def ApertureYDecenter(self, value: float) -> None: ...
 
 class ISurfaceApertureFloating(ISurfaceApertureType):
-    pass
+    ...
 
 class ISurfaceApertureNone(ISurfaceApertureType):
-    pass
+    ...
 
 class ISurfaceApertureRectangular(ISurfaceApertureType):
     @property
@@ -2337,7 +2335,7 @@ class ISurfaceEllipticalGrating2(ISurfaceXYPolynomial, ISurface):
     def NormRadius(self, value: float) -> None: ...
 
 class ISurfaceEvenAspheric(ISurface, ISurfaceNthEvenOrderTerms):
-    pass
+    ...
 
 class ISurfaceExtendedAsphere(ISurfaceCoeff_P_NthEvenPower, ISurface):
     @property
@@ -3946,7 +3944,7 @@ class ISurfaceFreeformXYPolynomial(ISurface):
     def X2Y19(self, value: float) -> None: ...
 
 class ISurfaceFresnel(ISurfaceNthEvenOrderTerms, ISurface):
-    pass
+    ...
 
 class ISurfaceGeneralizedFresnel(ISurfaceXYPolynomial, ISurface, ISurfaceNthEvenOrderTerms):
     @property
@@ -4840,7 +4838,7 @@ class ISurfaceNthZernike(ISurface):
     def SetNthZernikeCoefficient(self, n: int, Value: float) -> None: ...
 
 class ISurfaceOddAsphere(ISurfaceNthOrderTerms, ISurface):
-    pass
+    ...
 
 class ISurfaceOddCosine(ISurfaceCoeff_R_NthPower, ISurface, ISurfaceAPBC):
     @property
@@ -5023,7 +5021,7 @@ class ISurfacePeriodic(ISurface):
     def Y_Frequency(self, value: float) -> None: ...
 
 class ISurfacePolynomial(ISurfaceCoeff_X_NthEvenPower_8, ISurface, ISurfaceCoeff_Y_NthEvenPower_8):
-    pass
+    ...
 
 class ISurfaceQTypeAsphere(ISurface):
     @property
@@ -5118,7 +5116,7 @@ class ISurfaceRadialNurbs(ISurface):
     def ZnCell(self, n: int) -> IEditorCell: ...
 
 class ISurfaceRetroReflect(ISurface):
-    pass
+    ...
 
 class ISurfaceScatteringABg(ISurfaceScatteringType):
     @property
@@ -5184,7 +5182,7 @@ class ISurfaceScatteringLambertian(ISurfaceScatteringType):
     def ScatterFraction(self, value: float) -> None: ...
 
 class ISurfaceScatteringNone(ISurfaceScatteringType):
-    pass
+    ...
 
 class ISurfaceScatteringType:
     @property
@@ -5239,7 +5237,7 @@ class ISurfaceSlide(ISurface):
     def Y_HalfWidth(self, value: float) -> None: ...
 
 class ISurfaceStandard(ISurface):
-    pass
+    ...
 
 class ISurfaceSuperconic(ISurface):
     @property

@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Common import ZemaxColor
 from zospy.api._ZOSAPI.Editors import IEditor, IEditorCell, IEditorRow
 
