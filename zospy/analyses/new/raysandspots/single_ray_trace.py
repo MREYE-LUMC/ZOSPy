@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 from warnings import warn
 
 import pandas as pd
@@ -11,10 +11,8 @@ from pydantic import Field, model_validator
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import ZospyTransformer
+from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame  # noqa: TCH001
 from zospy.api import constants
-
-if TYPE_CHECKING:
-    from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame
 
 __all__ = ("SingleRayTrace", "SingleRayTraceSettings", "SingleRayTraceResult")
 

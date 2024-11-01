@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, TypedDict
+from typing import Annotated, TypedDict
 
 from pydantic import Field
 
@@ -10,11 +10,9 @@ from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers import ZospyTransformer
 from zospy.analyses.new.parsers.transformers import SimpleField
+from zospy.analyses.new.parsers.types import UnitField  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
-
-if TYPE_CHECKING:
-    from zospy.analyses.new.parsers.types import UnitField
 
 __all__ = ("ZernikeStandardCoefficients", "ZernikeStandardCoefficientsSettings", "ZernikeStandardCoefficientsResult")
 
