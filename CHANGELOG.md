@@ -20,6 +20,7 @@ ZOS-API can also be added in patch releases.
 - `zospy.api.apisupport.load_zosapi`: `preload` is now a keyword-only argument.
 - `zospy.functions.lde.find_surface_by_comment`: `case_sensitive` is now a keyword-only argument.
 - `zospy.functions.nce.find_object_by_comment`: `case_sensitive` is now a keyword-only argument.
+- `zospy.utils.flatten_dict`: `keep_unflattened` is now a keyword-only argument.
 
 ### Deprecated
 

@@ -1,13 +1,17 @@
+"""Utility functions for working with Python types."""
+
 from __future__ import annotations
 
 import functools
-from collections.abc import Callable
-from os import PathLike
 from pathlib import Path
 from sys import version_info
-from typing import TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
 import zospy.api.config as _config
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from os import PathLike
 
 
 def _check_path(path: Path, *, directory_only: bool = False) -> bool:
@@ -44,12 +48,11 @@ def abspath(path: PathLike | str, *, check_directory_only: bool = False) -> str:
 
     if _check_path(absolute_path, directory_only=check_directory_only):
         return str(absolute_path)
-    else:
-        raise FileNotFoundError(absolute_path)
+    raise FileNotFoundError(absolute_path)
 
 
 def rsetattr(obj, attr, val):
-    """Wrapper for the setattr() function that handles nested strings.
+    """Set a nested attribute of an object.
 
     Parameters
     ----------
@@ -68,8 +71,9 @@ def rsetattr(obj, attr, val):
     return setattr(rgetattr(obj, pre) if pre else obj, post, val)
 
 
+# TODO: investigate if this can be replaced with operators.attrgetter
 def rgetattr(obj, attr, *args):
-    """Wrapper for the getattr() function that handles nested strings.
+    """Get a nested attribute of an object.
 
     Parameters
     ----------
@@ -95,7 +99,7 @@ def rgetattr(obj, attr, *args):
     def _getattr(subobj, subattr, *subargs):
         return getattr(subobj, subattr, *subargs)
 
-    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj] + attr.split("."))
+    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj] + attr.split("."))  # noqa: RUF005
 
 
 def _delocalize(
@@ -144,7 +148,7 @@ def atox(
     decimal_point: str = ...,
     thousands_separator: str | None = ...,
 ) -> Number:
-    """Parses a string as a number format.
+    """Parse a string to a numeric type.
 
     By default, the locale settings stored in zospy.api.config are used to delocalize the string.
 
@@ -168,11 +172,11 @@ def atox(
 
 
 def xtoa(
-    number: float | int,
+    number: float,
     decimal_point: str = ...,
     thousands_separator: str | None = ...,
 ) -> str:
-    """Localizes a number back to a string suing the locale settings.
+    """Localize a number back to a string using the locale settings.
 
     By default, the locale settings stored in zospy.api.config are used.
 
@@ -194,22 +198,15 @@ def xtoa(
     decimal_point = _config.DECIMAL_POINT if decimal_point is ... else decimal_point
 
     if isinstance(number, int):
-        if thousands_separator:
-            string = format(number, ",").replace(",", thousands_separator)
-        else:
-            string = str(number)
-        return string
+        return format(number, ",").replace(",", thousands_separator) if thousands_separator else str(number)
 
     if isinstance(number, float):
         if not decimal_point:
             raise ValueError("Converting float to string requires decimal point to be known")
 
-        if thousands_separator:
-            string = format(number, ",")
-        else:
-            string = str(number)
+        string = format(number, ",") if thousands_separator else str(number)
 
         # swap , and . simultaneously for thousands_separator and decimal_point
-        string = string.translate(str.maketrans({",": thousands_separator, ".": decimal_point}))
+        return string.translate(str.maketrans({",": thousands_separator, ".": decimal_point}))
 
-        return string
+    raise TypeError(f"Expected int or float, got {type(number).__name__}")
