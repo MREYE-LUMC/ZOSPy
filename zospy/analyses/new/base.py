@@ -35,7 +35,7 @@ from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from typing import TYPE_CHECKING, Generic, Literal, NotRequired, TypedDict, TypeVar, cast
+from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast
 
 import numpy as np
 import pandas as pd
@@ -54,10 +54,17 @@ from zospy.api import _ZOSAPI, constants
 from zospy.utils.clrutils import system_datetime_to_datetime
 
 if TYPE_CHECKING:
+    import sys
+
     from lark import Transformer
     from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
     from zospy.zpcore import OpticStudioSystem
+
+    if sys.version_info <= (3, 11):
+        from typing_extensions import NotRequired
+    else:
+        from typing import NotRequired
 
 
 __all__ = ("Analysis", "AnalysisResult", "BaseAnalysisWrapper", "OnComplete", "new_analysis")
