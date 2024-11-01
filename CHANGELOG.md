@@ -16,7 +16,8 @@ ZOS-API can also be added in patch releases.
 ### Changed
 
 - `zospy.analyses.new.new_analysis`: `settings_first` is now a keyword-only argument.
-- 
+- `zospy.api.apisupport.load_zosapi_nethelper`: `preload` is now a keyword-only argument.
+- `zospy.api.apisupport.load_zosapi`: `preload` is now a keyword-only argument.
 
 ### Deprecated
 
