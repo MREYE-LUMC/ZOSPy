@@ -16,18 +16,22 @@ Change the refractive index of a medium:
 >>> surface = oss.InsertNewSurfaceAt(1)
 >>> zp.solvers.material_model(surface.MaterialCell, refractive_index=1.5)
 """
+
 from __future__ import annotations
 
 from zospy.api import _ZOSAPI, constants
+
+# ruff: noqa: SLF001
 
 
 def _get_surface_index(surface: _ZOSAPI.Editors.IEditorRow | int) -> int:
     if isinstance(surface, int):
         return surface
-    elif surface.GetType().BaseType.FullName == "ZemaxUI.ZOSAPI.Editors.ZOSAPI_EditorRowBase":
+
+    if surface.GetType().BaseType.FullName == "ZemaxUI.ZOSAPI.Editors.ZOSAPI_EditorRowBase":
         return surface.RowIndex
-    else:
-        raise ValueError(f"from_surface should be an int or a Surface, got {surface}")
+
+    raise ValueError(f"from_surface should be an int or a Surface, got {surface}")
 
 
 def element_power(radius_cell: _ZOSAPI.Editors.IEditorCell, power: float) -> _ZOSAPI.Editors.ISolveElementPower:
@@ -59,7 +63,7 @@ def element_power(radius_cell: _ZOSAPI.Editors.IEditorCell, power: float) -> _ZO
 
 
 def fixed(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveFixed:
-    """Sets the cell solve type to Fixed.
+    """Set the cell solve type to Fixed.
 
     Parameters
     ----------
@@ -113,7 +117,7 @@ def material_model(
 def pickup_chief_ray(
     cell: _ZOSAPI.Editors.IEditorCell, field: int = 1, wavelength: int = 0
 ) -> _ZOSAPI.Editors.ISolvePickupChiefRay:
-    """Chief Ray solver.
+    """Set the cell solve type to Chief Ray Pickup.
 
     Adjusts the value of `cell` so the chief ray passes through the center of the surface.
 
@@ -145,7 +149,7 @@ def position(
     from_surface: _ZOSAPI.Editors.LDE.ILDERow | _ZOSAPI.Editors.NCE.INCERow,
     length: float,
 ) -> _ZOSAPI.Editors.ISolvePosition:
-    """Solver for position.
+    """Set the cell solve type to Position.
 
     Solves the position of `surface` relative to `from_surface`. This solver works only on thickness cells.
 
@@ -185,7 +189,9 @@ def surface_pickup(
     scale: float = 1,
     offset: float = 0,
 ) -> _ZOSAPI.Editors.ISolveSurfacePickup:
-    """Picks up the value of `cell` from another surface.
+    """Set the cell solve type to Surface Pickup.
+
+    This solver picks up the value from another surface and optionally applies a scale and offset to it.
 
     Parameters
     ----------
@@ -193,7 +199,7 @@ def surface_pickup(
         Cell for which the value should be set
     from_surface : ZOSAPI.Editors.IEditorRow
         Index of the surface or surface from which the value is picked up
-    from_column : float
+    from_column : zospy.api.constants.Editors.LDE.SurfaceColumn | str, optional
         Column from which the value is picked up
     scale : float
         Factor by which the picked up value is scaled. This value is only set if the cell supports a scale
@@ -225,7 +231,7 @@ def surface_pickup(
 
 
 def variable(cell: _ZOSAPI.Editors.IEditorCell) -> _ZOSAPI.Editors.ISolveVariable:
-    """Sets the cell solve type to Variable.
+    """Set the cell solve type to Variable.
 
     Parameters
     ----------
