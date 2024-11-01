@@ -23,17 +23,10 @@
 
 # Additional information
 <!--
-  We would like to know which versions of Python and OpticStudio you are running.
+  We would like to know which version of OpticStudio you are running.
   This helps us to keep the compatibility section in our documentation updated.
-  
-  Please list all Python versions you used to test your changes. The unit tests will
-  automatically try to test all currently supported Python versions. If you would like
-  to do us a favor, install all necessary Python versions on your system. This helps
-  us to ensure compatibility and detect any problems we might not be able to detect
-  on our own systems. This makes your contribution even more valuable!
 -->
 
-- Python version: ...
 - OpticStudio version: ...
 
 ## Related issues
@@ -47,20 +40,21 @@
 -->
 
 - [ ] I have followed the [contribution guidelines][contribution-guidelines]
-- [ ] The code has been linted, formatted and tested locally using tox.
+- [ ] The code has been linted, formatted and tested (see the [contribution guidelines][code-style-guidelines]).
 - [ ] Local tests pass. **Please fix any problems before opening a PR. If this is not possible, specify what doesn't work and why you can't fix it.**
+- [ ] I tested ZOSPy for _all_ supported Python versions (`hatch test -a`).
 - [ ] I added new tests for any features contributed, or updated existing tests.
 - [ ] I updated CHANGELOG.md with my changes (except for refactorings and changes in the documentation).
 
-If you contributed an analysis:
+If you updated an example:
 
-- [ ] I did not use `AttrDict`s for the analysis result data (please use dataclasses instead).
+- [ ] I executed all examples and verified that they run without errors (`hatch run all-examples`).
 
 If you contributed an example:
 
 - [ ] I contributed my example as a Jupyter notebook.
     <!--
-    This is important, because it allows users to see the results without
+    Examples must be supplied as Jupyter notebooks, because this allows users to see the results without
     executing the complete example.
     -->
 
@@ -70,5 +64,6 @@ If you contributed an example:
   the quality of your contribution:
 -->
 [contribution-guidelines]: https://github.com/MREYE-LUMC/ZOSPy/blob/main/CONTRIBUTING.md
+[code-style-guidelines]: https://github.com/MREYE-LUMC/ZOSPy/blob/main/CONTRIBUTING.md#workflow
 [unittest-instructions]: https://github.com/MREYE-LUMC/ZOSPy/blob/main/tests/README.md
 [numpydoc]: https://numpydoc.readthedocs.io/en/latest/format.html
