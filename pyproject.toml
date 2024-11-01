@@ -112,6 +112,9 @@ config-path = "ruff_defaults.toml"
 extend = "ruff_defaults.toml"
 
 line-length = 120
+extend-include = [
+    "*.ipynb",
+]
 exclude = [
     "zospy/api/_ZOSAPI",
     "zospy/api/_ZOSAPI_constants",
@@ -146,6 +149,9 @@ extend-ignore = [
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
+"examples/**" = [
+    "T201", # Allow use of print
+]
 "**/tests/**" = [
     "D", # pydocstyle
     "DTZ", # Datetime timezones
