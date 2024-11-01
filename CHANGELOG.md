@@ -25,6 +25,8 @@ ZOS-API can also be added in patch releases.
 - `zospy.zpcore.OpticStudioSystem.new`: `saveifneeded` is now a keyword-only argument.
 - `zospy.zpcore.OpticStudioSystem.close`: `saveifneeded` is now a keyword-only argument.
 - `zospy.zpcore.ZOS.__init__`: all parameters are now keyword-only arguments.
+- Removed `zospy.utils.zputils.rgetattr` because `operator.attrgetter` does the same thing.
+- Replaced `zospy.utils.zputils.rsetattr` with `zospy.utils.zputils.attrsetter`, based on `operator.attrgetter`.
 
 ### Deprecated
 

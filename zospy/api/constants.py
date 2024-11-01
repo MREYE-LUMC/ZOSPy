@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import itertools as _itertools
 import logging as _logging
+from operator import attrgetter
 from types import SimpleNamespace as _SimpleNamespace
 from typing import TypeVar
 
@@ -77,13 +78,13 @@ def _construct_from_zosapi_and_enumkeys(zosapi: _ZOSAPI, zosapi_enumkeys: list[s
             for nsp in nsp_parts:
                 if f"{base}.{nsp}" in added_namespaces:  # check if already added
                     continue
-                _pyutils.rsetattr(globals()[base], nsp, _SimpleNamespace())  # add nested objects
+                _pyutils.attrsetter(globals()[base], nsp, _SimpleNamespace())  # add nested objects
                 added_namespaces.add(f"{base}.{nsp}")
 
-            clrattr = _pyutils.rgetattr(zosapi, ".".join(subkeys[1:]), None)
+            clrattr = attrgetter(".".join(subkeys[1:]))(zosapi)
 
             # set constants
-            _pyutils.rsetattr(globals()[base], ".".join(subkeys[2:]), _clrutils.system_enum_to_namedtuple(clrattr))
+            _pyutils.attrsetter(globals()[base], ".".join(subkeys[2:]), _clrutils.system_enum_to_namedtuple(clrattr))
 
 
 Constant = TypeVar("Constant")

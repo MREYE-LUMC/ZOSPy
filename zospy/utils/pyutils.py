@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import functools
+from operator import attrgetter
 from pathlib import Path
 from sys import version_info
 from typing import TYPE_CHECKING, TypeVar
@@ -51,15 +51,15 @@ def abspath(path: PathLike | str, *, check_directory_only: bool = False) -> str:
     raise FileNotFoundError(absolute_path)
 
 
-def rsetattr(obj, attr, val):
-    """Set a nested attribute of an object.
+def attrsetter(obj, attr, val):
+    """Set an attribute of an object.
 
     Parameters
     ----------
     obj
         The object from which the attribute is set
     attr
-        The name of the attribute. Can be nested, e.g. 'aa.bb.cc'
+        The name of the attribute
     val
         The value to which the attribute is set
 
@@ -68,38 +68,7 @@ def rsetattr(obj, attr, val):
         None
     """
     pre, _, post = attr.rpartition(".")
-    return setattr(rgetattr(obj, pre) if pre else obj, post, val)
-
-
-# TODO: investigate if this can be replaced with operators.attrgetter
-def rgetattr(obj, attr, *args):
-    """Get a nested attribute of an object.
-
-    Parameters
-    ----------
-    obj
-        The object from which the attribute is obtained
-    attr
-        The name of the attribute. Can be nested, e.g. 'aa.bb.cc'
-    *args
-        [default,] The default return if the attribute is not found. If not supplied, AttributeError can be
-        raised
-
-    Returns
-    -------
-    attribute
-        The attribute or the default return when not the attribute is not found
-
-    Raises
-    ------
-    AttributeError
-        When the attribute does not exist and no default is supplied in the *args
-    """
-
-    def _getattr(subobj, subattr, *subargs):
-        return getattr(subobj, subattr, *subargs)
-
-    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj] + attr.split("."))  # noqa: RUF005
+    return setattr(attrgetter(pre)(obj) if pre else obj, post, val)
 
 
 def _delocalize(
