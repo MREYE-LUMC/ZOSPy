@@ -21,6 +21,10 @@ ZOS-API can also be added in patch releases.
 - `zospy.functions.lde.find_surface_by_comment`: `case_sensitive` is now a keyword-only argument.
 - `zospy.functions.nce.find_object_by_comment`: `case_sensitive` is now a keyword-only argument.
 - `zospy.utils.flatten_dict`: `keep_unflattened` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.load`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.new`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.close`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.ZOS.__init__`: all parameters are now keyword-only arguments.
 
 ### Deprecated
 
