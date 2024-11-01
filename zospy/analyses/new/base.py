@@ -30,11 +30,12 @@ import os
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, fields, is_dataclass
+from datetime import datetime  # noqa: TCH003 Pydantic needs datetime to be present at runtime
 from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast
+from typing import TYPE_CHECKING, Generic, Literal, NotRequired, TypedDict, TypeVar, cast
 
 import numpy as np
 import pandas as pd
@@ -53,8 +54,6 @@ from zospy.api import _ZOSAPI, constants
 from zospy.utils.clrutils import system_datetime_to_datetime
 
 if TYPE_CHECKING:
-    from datetime import datetime
-
     from lark import Transformer
     from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
@@ -88,16 +87,16 @@ AnalysisSettings = TypeVar("AnalysisSettings")
 
 class _TypeInfo(TypedDict):
     data_type: Literal["dataframe", "ndarray", "dataclass"]
-    name: str | None
-    module: str | None
+    name: NotRequired[str | None]
+    module: NotRequired[str | None]
 
 
 def _serialize_analysis_data_type(data: AnalysisData) -> _TypeInfo:
     if isinstance(data, pd.DataFrame):
-        return {"data_type": "dataframe", "name": None, "module": None}
+        return {"data_type": "dataframe"}
 
     if isinstance(data, np.ndarray):
-        return {"data_type": "ndarray", "name": None, "module": None}
+        return {"data_type": "ndarray"}
 
     if is_dataclass(data):
         return {"data_type": "dataclass", "name": type(data).__name__, "module": type(data).__module__}
@@ -661,7 +660,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         if self._needs_text_output_file:
             self._text_output_file, self._remove_text_output_file = self._create_tempfile(text_output_file, ".txt")
 
-        data = self.run_analysis(oss)
+        data = self.run_analysis()
 
         result = AnalysisResult(
             data,
