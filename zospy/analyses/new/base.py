@@ -51,6 +51,7 @@ from pydantic import (
 from zospy.analyses.new.parsers import load_grammar, parse
 from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.api import _ZOSAPI, constants
+from zospy.utils import zputils
 from zospy.utils.clrutils import system_datetime_to_datetime
 
 if TYPE_CHECKING:
@@ -695,6 +696,46 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         parse_result = parse(self.get_text_output(), parser, transformer)
 
         return cast(result_type, result_type(**parse_result))
+
+    @staticmethod
+    def _process_data_series_or_grid(data: list[pd.DataFrame]) -> pd.DataFrame | None:
+        if len(data) == 0:
+            return None
+
+        if len(data) == 1:
+            return data[0]
+
+        return pd.concat(data, axis=1)
+
+    def get_data_series(self) -> pd.DataFrame | None:
+        """Get the data series from the analysis result.
+
+        Returns
+        -------
+        pd.Series | None
+            The data series from the analysis result, or None if there are no data series.
+        """
+        data = [
+            zputils.unpack_dataseries(self.analysis.Results.DataSeries[i])
+            for i in range(self.analysis.Results.NumberOfDataSeries)
+        ]
+
+        return self._process_data_series_or_grid(data)
+
+    def get_data_grid(self) -> pd.DataFrame | None:
+        """Get the data grids from the analysis result.
+
+        Returns
+        -------
+        pd.DataFrame | None
+            The data grids from the analysis result, or None if there are no data grids.
+        """
+        data = [
+            zputils.unpack_datagrid(self.analysis.Results.DataGrids[i])
+            for i in range(self.analysis.Results.NumberOfDataGrids)
+        ]
+
+        return self._process_data_series_or_grid(data)
 
     def __call__(self, oss: OpticStudioSystem, *args, **kwargs):
         """Run the analysis and return the results."""
