@@ -42,9 +42,15 @@ def group_parametric_fields(
 
 class ZospyTransformer(Transformer):
     DATE = str
-    INT = int
-    UINT = int
     WORD = str
+
+    def INT(self, i: str) -> int:
+        """Integer number."""
+        return atox(i, int)
+
+    def UINT(self, i: str) -> int:
+        """Unsigned integer number."""
+        return atox(i, int)
 
     def FLOAT(self, f: str) -> float:
         """Floating point number with localized decimal separator."""
@@ -59,7 +65,7 @@ class ZospyTransformer(Transformer):
     list = list
 
     def dict(self, args):
-        """Kay-value mapping."""
+        """Key-value mapping."""
         keys = map(lambda f: f.name, args)
 
         result = {}
