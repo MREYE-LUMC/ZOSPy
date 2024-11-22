@@ -13,8 +13,10 @@ from zospy.analyses.new.parsers.transformers import ZospyTransformer
 @lru_cache
 def load_grammar(name: str) -> Lark:
     try:
-        return Lark.open_from_package("zospy", f"{name}.lark", "analyses/new/parsers/grammars")
-    except FileNotFoundError as e:
+        return Lark.open_from_package(
+            "zospy.analyses.new.parsers.grammars", f"{name}.lark", parser="earley", start="start"
+        )
+    except (FileNotFoundError, OSError, IOError) as e:
         raise FileNotFoundError(f"Grammar file {name}.lark not found") from e
 
 
