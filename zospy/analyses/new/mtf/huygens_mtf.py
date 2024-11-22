@@ -1,21 +1,55 @@
+"""Huygens MTF analysis."""
+
 from __future__ import annotations
 
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 from pandas import DataFrame
 from pydantic import Field
 
 from zospy.analyses.new.base import AnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
+
+if TYPE_CHECKING:
+    from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber
 
 __all__ = ("HuygensMtfSettings", "HuygensMTF")
 
 
 @analysis_settings
 class HuygensMtfSettings:
+    """Settings for the Huygens MTF analysis.
+
+    For an in depth explanation of the parameters, see the OpticStudio user manual.
+
+    Attributes
+    ----------
+    pupil_sampling : str | int
+        The pupil sampling, either string (e.g. '64x64') or int.
+        The integer will be treated as a ZOSAPI Constants integer.
+    image_sampling : str | int
+        The image sampling, either string (e.g., '64x64') or int.
+        The integer will be treated as a ZOSAPI Constants integer.
+    image_delta : float
+        The Image Delta, defaults to 0.0.
+    wavelength : str | int
+        The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
+    field : str | int
+        The field to use in the MTF. Either 'All' or an integer specifying the field number.
+    mtf_type : ZOSAPI.Analysis.Settings.Mtf.MtfTypes.Modulation
+        The MTF type (e.g. `Modulation`) that is calculated.
+    maximum_frequency : float
+        The maximum frequency at which the MTF is calculated.
+        Units are either cycles/mm or cycles/mr, depending on system setting.
+        Defaults to 150.0, which is more appropriate when units are set to cycles/mm.
+    use_polarization : bool
+        Use polarization. Defaults to False.
+    use_dashes : bool
+        Use dashes. Defaults to False.
+    """
+
     pupil_sampling: str | Annotated[int, Field(ge=0)] = Field(default="32x32", description="Pupil sampling grid size")
     image_sampling: str | Annotated[int, Field(ge=0)] = Field(default="32x32", description="Image sampling grid size")
     image_delta: float = Field(default=0.0, description="Image delta")
@@ -37,6 +71,7 @@ class HuygensMTF(AnalysisWrapper[DataFrame, HuygensMtfSettings]):
 
     def __init__(
         self,
+        *,
         pupil_sampling: str | int = "32x32",
         image_sampling: str | int = "32x32",
         image_delta: float = 0.0,
@@ -48,6 +83,7 @@ class HuygensMTF(AnalysisWrapper[DataFrame, HuygensMtfSettings]):
         use_dashes: bool = False,
         settings: HuygensMtfSettings | None = None,
     ):
+        """Create a new Huygens MTF analysis."""
         super().__init__(settings or HuygensMtfSettings(), locals())
 
     def run_analysis(self, *args, **kwargs) -> DataFrame | None:
