@@ -90,9 +90,9 @@ class ZospyTransformer(Transformer):
 
     def field_group(self, args):
         """A group of fields under a common key."""
-        name, *fields = args
+        name, fields = args
 
-        return SimpleField(name, self.dict(fields))
+        return SimpleField(name, fields)
 
     def simple_field(self, args) -> SimpleField:
         """A simple field with a name and a value."""

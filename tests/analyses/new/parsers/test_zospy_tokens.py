@@ -294,13 +294,14 @@ def test_field(value, expected, setup_field_test):
 FIELD_GROUP_VALUE = """Group key:
     Simple field : 1.23
     Parametric field 1 2: 3.14
+    Parametric unit field 3.14 : 1.23 m
 """
 
 FIELD_GROUP_GRAMMAR = r"""start: _fg
 
-_fg: field_group{name, _fields}
+_fg: field_group{name, fields}
 !name: "Group" "key" -> field_name
-_fields: _field+
+fields: _field+ -> dict
 
 %import zospy (_field, field_group)
 %import common.WS_INLINE
@@ -313,7 +314,14 @@ def test_field_group(setup_field_test):
 
     result = transformer.transform(parser.parse(FIELD_GROUP_VALUE))
 
-    assert result == SimpleField("Group key", {"Simple field": 1.23, "Parametric field": {(1, 2): 3.14}})
+    assert result == SimpleField(
+        "Group key",
+        {
+            "Simple field": 1.23,
+            "Parametric field": {(1, 2): 3.14},
+            "Parametric unit field": {3.14: {"value": 1.23, "unit": "m"}},
+        },
+    )
 
 
 TABLE_VALUE = """Alice Bob Charlie
