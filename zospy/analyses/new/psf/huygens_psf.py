@@ -2,18 +2,16 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Literal
+from typing import Annotated, Literal
 
+from pandas import DataFrame
 from pydantic import Field
 
-from zospy.analyses.new.base import AnalysisWrapper
+from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber
+from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
-
-if TYPE_CHECKING:
-    from pandas import DataFrame
 
 
 @analysis_settings
@@ -62,7 +60,7 @@ class HuygensPSFSettings:
     normalize: bool = Field(default=False, description="Normalize")
 
 
-class HuygensPSF(AnalysisWrapper[DataFrame | None, HuygensPSFSettings]):
+class HuygensPSF(BaseAnalysisWrapper[DataFrame | None, HuygensPSFSettings]):
     """Huygens Point Spread Function (PSF) analysis."""
 
     def __init__(
@@ -89,7 +87,7 @@ class HuygensPSF(AnalysisWrapper[DataFrame | None, HuygensPSFSettings]):
         """
         super().__init__(settings or HuygensPSFSettings(), locals())
 
-    def run_analysis(self, *args, **kwargs) -> DataFrame | None:
+    def run_analysis(self) -> DataFrame | None:
         """Run the Huygens PSF analysis."""
         self.analysis.Settings.PupilSampleSize = getattr(
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.pupil_sampling)
