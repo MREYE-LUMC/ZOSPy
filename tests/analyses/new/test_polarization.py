@@ -1,4 +1,4 @@
-from zospy.analyses.new.polarization import PolarizationTransmission, PolarizationPupilMap
+from zospy.analyses.new.polarization import PolarizationPupilMap, PolarizationTransmission
 
 
 class TestPolarizationTransmission:

@@ -115,7 +115,7 @@ class PolarizationPupilMap(AnalysisWrapper[None, PolarizationPupilMapSettings]):
         """
         super().__init__(settings or PolarizationPupilMapSettings(), locals())
 
-    def run_analysis(self, *args, **kwargs) -> PolarizationPupilMapResult:
+    def run_analysis(self) -> PolarizationPupilMapResult:
         """Run the polarization pupil map analysis."""
         settings = self.analysis.Settings
         config_file = str(self.config_file)

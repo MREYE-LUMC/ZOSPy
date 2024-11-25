@@ -92,7 +92,7 @@ class PolarizationTransmissionSettings:
     y_phase: float = Field(default=0, description="Jones electric field vector Y phase in degrees")
 
 
-class PolarizationTransmission(AnalysisWrapper[PolarizationTransmissionResult, PolarizationTransmissionSettings]):
+class PolarizationTransmission(BaseAnalysisWrapper[PolarizationTransmissionResult, PolarizationTransmissionSettings]):
     """Polarization transmission analysis."""
 
     TYPE = "Transmission"
@@ -119,7 +119,7 @@ class PolarizationTransmission(AnalysisWrapper[PolarizationTransmissionResult, P
         """
         super().__init__(settings or PolarizationTransmissionSettings(), locals())
 
-    def run_analysis(self, *args, **kwargs) -> PolarizationTransmissionResult:
+    def run_analysis(self) -> PolarizationTransmissionResult:
         """Run the polarization transmission analysis."""
         settings = self.analysis.Settings
         settings.SaveTo(str(self.config_file))
