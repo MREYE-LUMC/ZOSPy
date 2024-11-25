@@ -60,15 +60,15 @@ class ZospyTransformer(Transformer):
     DATE = str
     WORD = str
 
-    def INT(self, i: str) -> int:
+    def INT(self, i: str) -> int:  # noqa: N802
         """Integer number."""
         return atox(i, int)
 
-    def UINT(self, i: str) -> int:
+    def UINT(self, i: str) -> int:  # noqa: N802
         """Unsigned integer number."""
         return atox(i, int)
 
-    def FLOAT(self, f: str) -> float:
+    def FLOAT(self, f: str) -> float:  # noqa: N802
         """Floating point number with localized decimal separator."""
         return atox(f, float)
 
