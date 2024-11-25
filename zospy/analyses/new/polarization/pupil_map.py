@@ -78,7 +78,7 @@ class PolarizationPupilMapSettings:
     y_phase: float = Field(default=0.0, description="Jones electric field vector Y phase in degrees")
     wavelength: int = Field(default=1, ge=1, description="Wavelength number")
     field: int = Field(default=1, ge=1, description="Field number")
-    surface: Literal["Image"] | int = Field(default="Pupil", description="Surface to analyze")
+    surface: Literal["Image"] | int = Field(default="Image", description="Surface to analyze")
     sampling: str | int = Field(default="11x11", description="Sampling grid size")
     add_configs: str = Field(default="", description="Add configurations")
     sub_configs: str = Field(default="", description="Subtract configurations")
