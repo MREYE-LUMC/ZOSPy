@@ -1,4 +1,4 @@
-"""Polarization Transmission analysis."""
+"""Polarization transmission analysis."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame  # no
 from zospy.api import constants
 from zospy.utils import zputils
 
-__all__ = ("PolarizationTransmission", "PolarizationTransmissionSettings", "PolarizationTransmissionResult")
+__all__ = ("PolarizationTransmission", "PolarizationTransmissionSettings")
 
 
 class PolarizationTransmissionTransformer(ZospyTransformer):
@@ -66,9 +66,24 @@ class PolarizationTransmissionResult:
 
 @analysis_settings
 class PolarizationTransmissionSettings:
-    """Settings for the Polarization Transmission analysis."""
+    """Settings for the polarization transmission analysis.
 
-    # TODO: Document fields
+    Attributes
+    ----------
+    sampling: str | int
+        Sampling grid size. Defaults to "32x32".
+    unpolarized: bool
+        Use unpolarized light. Defaults to `False`.
+    jx: float
+        Jones x electric field. Defaults to 1.
+    jy: float
+        Jones y electric field. Defaults to 0.
+    x_phase: float
+        Phase of the X component of the Jones electric field in degrees. Defaults to 0.
+    y_phase: float
+        Phase of the Y component of the Jones electric field in degrees. Defaults to 0.
+    """
+
     sampling: str | Annotated[int, Field(ge=0)] = Field(default="32x32", description="Sampling grid size")
     unpolarized: bool = Field(default=False, description="Use unpolarized light")
     jx: float = Field(default=1, description="Jones electric field vector X component")
@@ -77,8 +92,8 @@ class PolarizationTransmissionSettings:
     y_phase: float = Field(default=0, description="Jones electric field vector Y phase in degrees")
 
 
-class PolarizationTransmission(BaseAnalysisWrapper[PolarizationTransmissionResult, PolarizationTransmissionSettings]):
-    """Polarization Transmission analysis."""
+class PolarizationTransmission(AnalysisWrapper[PolarizationTransmissionResult, PolarizationTransmissionSettings]):
+    """Polarization transmission analysis."""
 
     TYPE = "Transmission"
 
@@ -96,16 +111,16 @@ class PolarizationTransmission(BaseAnalysisWrapper[PolarizationTransmissionResul
         y_phase: float = 0,
         settings: PolarizationTransmissionSettings | None = None,
     ):
+        """Create a new polarization transmission analysis.
+
+        See Also
+        --------
+        PolarizationTransmissionSettings : Settings for the polarization transmission analysis.
+        """
         super().__init__(settings or PolarizationTransmissionSettings(), locals())
 
-    def run_analysis(self) -> PolarizationTransmissionResult:
-        """Run the analysis and return the results.
-
-        Returns
-        -------
-        PolarizationTransmissionResult
-            The analysis results.
-        """
+    def run_analysis(self, *args, **kwargs) -> PolarizationTransmissionResult:
+        """Run the polarization transmission analysis."""
         settings = self.analysis.Settings
         settings.SaveTo(str(self.config_file))
 

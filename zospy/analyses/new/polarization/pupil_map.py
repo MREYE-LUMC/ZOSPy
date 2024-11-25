@@ -1,6 +1,8 @@
+"""Polarization pupil map analysis."""
+
 from __future__ import annotations
 
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 from pydantic import Field
@@ -9,10 +11,13 @@ from zospy.analyses.new.base import AnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers import ZospyTransformer
 from zospy.analyses.new.parsers.transformers import SimpleField
-from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame
 from zospy.api import constants
 from zospy.utils.pyutils import xtoa
 from zospy.utils.zputils import standardize_sampling
+
+if TYPE_CHECKING:
+    from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame
+
 
 __all__ = ("PolarizationPupilMap", "PolarizationPupilMapSettings")
 
@@ -105,9 +110,16 @@ class PolarizationPupilMap(AnalysisWrapper[None, PolarizationPupilMapSettings]):
         sub_configs: str = "",
         settings: PolarizationPupilMapSettings | None = None,
     ):
+        """Create a new polarization pupil map analysis.
+
+        See Also
+        --------
+        PolarizationPupilMapSettings : Settings for the polarization pupil map analysis.
+        """
         super().__init__(settings or PolarizationPupilMapSettings(), locals())
 
     def run_analysis(self, *args, **kwargs) -> PolarizationPupilMapResult:
+        """Run the polarization pupil map analysis."""
         settings = self.analysis.Settings
         config_file = str(self.config_file)
 
