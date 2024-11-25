@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import importlib.resources
-import sys
 from functools import lru_cache
 from typing import Any
 
@@ -11,11 +9,6 @@ from lark import Lark, Transformer
 from lark.visitors import merge_transformers
 
 from zospy.analyses.new.parsers.transformers import ZospyTransformer
-
-if sys.version_info < (3, 10):
-    GRAMMARS = importlib.resources.files("zospy.analyses.new.parsers").joinpath("grammars")
-else:
-    GRAMMARS = importlib.resources.files("zospy.analyses.new.parsers.grammars")
 
 
 @lru_cache
@@ -40,12 +33,12 @@ def load_grammar(name: str) -> Lark:
     FileNotFoundError
         If the grammar file is not found.
     """
-    grammar_file = GRAMMARS.joinpath(f"{name}.lark")
-
-    if not grammar_file.is_file():
-        raise FileNotFoundError(f"Grammar file {name}.lark not found")
-
-    return Lark.open(str(grammar_file), start="start", parser="earley")
+    try:
+        return Lark.open_from_package(
+            "zospy.analyses.new.parsers.grammars", f"{name}.lark", parser="earley", start="start"
+        )
+    except (FileNotFoundError, OSError, IOError) as e:
+        raise FileNotFoundError(f"Grammar file {name}.lark not found") from e
 
 
 def parse(text: str, parser: Lark, transformer: type[Transformer]) -> dict[str, dict[list[int | float], Any]]:

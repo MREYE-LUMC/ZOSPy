@@ -38,7 +38,9 @@ field_name: FIELD_NAME+
 FIELD_NAME: (LETTER | "_" | "-" | "(" | ")")+
 
 field_value: (INT | FLOAT | DATE | multi_string)
-field_parameters: _number+
+
+// One or more parameters, separated by whitespace
+field_parameters: _numbers
 
 multi_string: STRING+
 
@@ -46,14 +48,18 @@ multi_string: STRING+
 // Numbers
 //
 
+// One or more numbers, separated by whitespace
+// Whitespace separation must be explicitly specified, otherwise 4.56 will be parsed as 4 0.56
+_numbers: _number (_WS_INLINE _number)*
+
 // Either an integer or a float, always inlined.
 // This rule helps to match any number type, but parse it as either a float or an integer.
-_number: INT | FLOAT
+_number: FLOAT | INT
 
 // Float, optionally in scientific notation
 FLOAT: SIGN? ("infinity"i | _UNSIGNED_FLOAT)
-_UNSIGNED_FLOAT: UINT? DECIMAL_SEPARATOR UINT* EXPONENT?
-EXPONENT: "e"i SIGN? INT
+_UNSIGNED_FLOAT: UINT? DECIMAL_SEPARATOR UINT EXPONENT?
+EXPONENT: "e"i SIGN? UINT
 
 SIGN: "+" | "-"
 
@@ -71,7 +77,7 @@ STRING_SEQUENCE: STRING+
 ALPHANUMERIC: (LETTER | DIGIT)+  
 
 // String without whitespace
-// Because this reges matches almost anything, it has a lower priority to make sure other terminals are matched first
+// Because this regex matches almost anything, it has a lower priority to make sure other terminals are matched first
 STRING.-1: /\S+/
 
 // Date. Needs a higher priority than STRING, because this also matches dates.
@@ -80,6 +86,7 @@ DATESEP: "/" | "-" | "."
 
 _COLON: ":"
 
+%import common.WS_INLINE -> _WS_INLINE
 %import common.NEWLINE -> _NEWLINE
 %import common.SIGNED_INT -> INT
 %import common.INT -> UINT

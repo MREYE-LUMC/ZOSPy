@@ -58,11 +58,17 @@ class ZospyTransformer(Transformer):
     """Parse tree transformations for common constructs in OpticStudio analysis output."""
 
     DATE = str
-    INT = int
-    UINT = int
     WORD = str
 
-    def FLOAT(self, f: str) -> float:  # noqa: N802
+    def INT(self, i: str) -> int:
+        """Integer number."""
+        return atox(i, int)
+
+    def UINT(self, i: str) -> int:
+        """Unsigned integer number."""
+        return atox(i, int)
+
+    def FLOAT(self, f: str) -> float:
         """Floating point number with localized decimal separator."""
         return atox(f, float)
 
