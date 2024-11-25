@@ -47,28 +47,28 @@ class PolarizationPupilMapSettings:
 
     Attributes
     ----------
-    jx: float
+    jx : float
         Jones x electric field. Defaults to 1.
-    jy: float
+    jy : float
         Jones y electric field. Defaults to 0.
-    x_phase: float
+    x_phase : float
         Phase of the X component of the Jones electric field in degrees. Defaults to 0.
-    y_phase: float
+    y_phase : float
         Phase of the Y component of the Jones electric field in degrees. Defaults to 0.
-    wavelength: int
+    wavelength : int
         The wavelength number that is to be used. Should be an integer specifying the wavelength number.
         Defaults to 1.
-    field: int | str
+    field : int | str
         The field number that is to be used. Must be an integer specifying the field number. Defaults
         to 1.
-    surface: str or int
+    surface : str or int
         The surface that is to be analyzed. Either 'Image', or an integer. Defaults to 'Image'.
-    sampling: str or int
+    sampling : str or int
         The size of the used grid, either string (e.g. '65x65') or int. The integer will be treated as if obtained from
         zospy.constants.Analysis.SampleSizes_ContrastLoss. Defaults to '11x11'.
-    add_configs: str
+    add_configs : str
         The add configs string.
-    sub_configs: str
+    sub_configs : str
         The subtract configs string.
     """
 

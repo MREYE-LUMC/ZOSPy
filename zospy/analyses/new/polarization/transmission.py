@@ -70,17 +70,17 @@ class PolarizationTransmissionSettings:
 
     Attributes
     ----------
-    sampling: str | int
+    sampling : str | int
         Sampling grid size. Defaults to "32x32".
-    unpolarized: bool
+    unpolarized : bool
         Use unpolarized light. Defaults to `False`.
-    jx: float
+    jx : float
         Jones x electric field. Defaults to 1.
-    jy: float
+    jy : float
         Jones y electric field. Defaults to 0.
-    x_phase: float
+    x_phase : float
         Phase of the X component of the Jones electric field in degrees. Defaults to 0.
-    y_phase: float
+    y_phase : float
         Phase of the Y component of the Jones electric field in degrees. Defaults to 0.
     """
 
