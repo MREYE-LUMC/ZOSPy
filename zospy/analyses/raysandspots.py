@@ -22,7 +22,7 @@ def _structure_ray_trace_data_result(line_list: list[str]) -> dict[str, Any]:
 
     Parameters
     ----------
-    line_list: list[str]
+    line_list : list[str]
         The line list obtained by reading in the results
 
     Returns
@@ -99,33 +99,33 @@ def single_ray_trace(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    hx: float
+    hx : float
         Normalized X Field Coord. Defaults to 0.
-    hy: float
+    hy : float
         Normalized Y Field Coord. Defaults to 0.
-    px: float
+    px : float
         Normalized X Pupil Coord. Defaults to 0.
-    py: float
+    py : float
         Normalized Y Pupil Coord. Defaults to 1.
-    raytrace_type: zospy.api.constants.Analysis.Settings.Aberrations.RayTraceType
+    raytrace_type : zospy.api.constants.Analysis.Settings.Aberrations.RayTraceType
         The Ray Trace type (e.g. 'DirectionCosines') that is calculated. Defaults to 'DirectionCosines'.
-    wavelength: int
+    wavelength : int
         The wavelength number that is to be used. Must be an integer specifying the wavelength number.
         Defaults to 1.
-    field: int
+    field : int
         The field number that is to be used. Must be an integer specifying the field number. "Arbitrary" is 0. Defaults
         to 0.
-    global_coordinates: bool
+    global_coordinates : bool
         Defines if global coordinates are used. Defaults to False.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    txtoutfile: str | None
+    txtoutfile : str | None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.
@@ -223,32 +223,32 @@ def ray_fan(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    plot_scale: int | float
+    plot_scale : int | float
         Sets the maximum vertical scale for the plots. When 0, automatic scaling is used. Defaults to 0.
-    number_of_rays: int
+    number_of_rays : int
         This is the number of rays traced on each side of the origin of the plot.
-    field: str or int
+    field : str or int
         The field number that is to be used. Either 'All' or an integer specifying the field number. Defaults to 'All'.
-    wavelength: str | int
+    wavelength : str | int
         The wavelength number that is to be used. Either 'All' or an integer specifying the wavelength number.
         Defaults to 'All'.
-    tangential: str | int
+    tangential : str | int
         The aberration component that is plotted for the tangential fan. Accepts sting ('Aberration_Y' or
         'Aberration_X') or int (respectively 0 and 1). Defaults to 'Aberration_Y'.
-    sagittal: str | int
+    sagittal : str | int
         The aberration component that is plotted for the sagittal fan. Accepts sting ('Aberration_X' or
         'Aberration_Y') or int (respectively 0 and 1). Defaults to 'Aberration_X'.
-    surface: str | int
+    surface : str | int
         The surface that is to be analyzed. Either 'Image', 'Object' or an integer. Defaults to 'Image'.
-    use_dashes: bool
+    use_dashes : bool
         Defines whether solid lines or dashes are used to differentiate curves. Defaults to False.
-    vignetted_pupil: bool
+    vignetted_pupil : bool
         Defines whether the pupil axis is scaled to the unvignetted pupil or not. Defaults to True.
-    check_apertures: bool
+    check_apertures : bool
         Defines whether only rays that pass all surface apertures are drawn or not. Defaults to True.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link

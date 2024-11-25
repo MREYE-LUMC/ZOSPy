@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 __all__ = (
     "CriterionTypes",
     "DefaultAndDegrees",

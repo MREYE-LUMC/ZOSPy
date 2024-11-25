@@ -24,7 +24,7 @@ def _structure_surface_data_result(line_list: list[str]) -> pd.Series:
 
     Parameters
     ----------
-    line_list: list of str
+    line_list : list of str
         The line list obtained by reading in the results
 
     Returns
@@ -158,22 +158,22 @@ def surface_data(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    surface: int
+    surface : int
         The surface number that is to be analyzed
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    cfgoutfile: str | None
+    cfgoutfile : str | None
         The configuration file to which the current configuration is saved. If None, a temporary file will be created
         and deleted. If string, it should be a full system path with '.CFG' as extension, after which the file will be
         saved in that location. (Allowing usage of this configuration file using surface_data_fromcfg()). Defaults to
         None.
-    txtoutfile: str | None
+    txtoutfile : str | None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.
@@ -268,17 +268,17 @@ def surface_data_fromcfg(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    cfgfile: str
+    cfgfile : str
         The configuration file that is to be used. Should be a full system path with '.CFG' as extension.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    txtoutfile: str | None
+    txtoutfile : str | None
         The textfile to which the Zemax output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.
@@ -350,7 +350,7 @@ def _structure_system_data_result(line_list: list[str]) -> dict[str, Any]:
 
     Parameters
     ----------
-    line_list: list[str]
+    line_list : list[str]
         The line list obtained by reading in the results
 
     Returns
@@ -570,15 +570,15 @@ def system_data(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    txtoutfile: str or None
+    txtoutfile : str or None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.
@@ -639,7 +639,7 @@ def _structure_cardinal_point_result(line_list: list[str]) -> pd.Series:
 
     Parameters
     ----------
-    line_list: list[str]
+    line_list : list[str]
         The line list obtained by reading in the results
 
     Returns
@@ -759,24 +759,24 @@ def cardinal_points(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    surface_1: int
+    surface_1 : int
         The surface number corresponding to the first surface of the analyzed system
-    surface_2: int
+    surface_2 : int
         The surface number corresponding to the last surface of the analyzed system
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    cfgoutfile: str | None
+    cfgoutfile : str | None
         The configuration file to which the current configuration is saved. If None, a temporary file will be created
         and deleted. If string, it should be a full system path with '.CFG' as extension, after which the file will be
         saved in that location. (Allowing usage of this configuration file using surface_data_fromcfg()). Defaults to
         None.
-    txtoutfile: str | None
+    txtoutfile : str | None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.
@@ -873,17 +873,17 @@ def cardinal_points_fromcfg(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    cfgfile: str
+    cfgfile : str
         The configuration file that is to be used. Should be a full system path with '.CFG' as extension.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link
         with python will be sustained. To enable interaction when oncomplete == 'Sustain', the OpticStudio Analysis
         instance will be available in the returned AnalysisResult through AnalysisResult.Analysis. Defaults to 'Close'.
-    txtoutfile: str | None
+    txtoutfile : str | None
         The textfile to which the OpticStudio output is saved. If None, a temporary file will be created and deleted. If
         string, it should be a full system path with '.txt' as extension, after which the file will be saved in that
         location. Defaults to None.

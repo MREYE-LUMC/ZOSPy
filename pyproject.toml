@@ -112,9 +112,25 @@ config-path = "ruff_defaults.toml"
 extend = "ruff_defaults.toml"
 
 line-length = 120
+extend-include = [
+    "*.ipynb",
+]
 exclude = [
     "zospy/api/_ZOSAPI",
-    "zospy/api/_ZOSAPI_constants"
+    "zospy/api/_ZOSAPI_constants",
+
+    # TODO: Change this when movind the old analyses to zospy.analyses.old
+    "zospy/analyses/base.py",
+    "zospy/analyses/extendedscene.py",
+    "zospy/analyses//mtf.py",
+    "zospy/analyses/physicaloptics.py",
+    "zospy/analyses/polarization.py",
+    "zospy/analyses/psf.py",
+    "zospy/analyses/raysandspots.py",
+    "zospy/analyses/reports.py",
+    "zospy/analyses/surface.py",
+    "zospy/analyses/systemviewers.py",
+    "zospy/analyses/wavefront.py",
 ]
 
 [tool.ruff.lint]
@@ -127,16 +143,22 @@ extend-ignore = [
     "EM101",
     "EM102",
     "G004",
+    "PLR2004",
     "TD004",
     "TRY003"
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
+"examples/**" = [
+    "T201", # Allow use of print
+]
 "**/tests/**" = [
     "D", # pydocstyle
+    "DTZ", # Datetime timezones
 ]
 "scripts/**" = [
     "D", # pydocstyle
+    "S101", # Use of assert
 ]
 "docs/conf.py" = [
     "INP001", # Missing __init__.py

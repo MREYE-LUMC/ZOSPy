@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Analysis import Beam, IMessage, IMessages, SampleSizes, ShowAs
 
 from . import (
@@ -384,7 +382,7 @@ class IAS_Wavelength:
     def UseAllWavelengths(self) -> IMessage: ...
 
 class IAS_XXXTemplateXXX(IAS_):
-    pass
+    ...
 
 class Parity:
     Even = 0

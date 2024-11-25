@@ -15,6 +15,19 @@ ZOS-API can also be added in patch releases.
 
 ### Changed
 
+- `zospy.analyses.new.new_analysis`: `settings_first` is now a keyword-only argument.
+- `zospy.api.apisupport.load_zosapi_nethelper`: `preload` is now a keyword-only argument.
+- `zospy.api.apisupport.load_zosapi`: `preload` is now a keyword-only argument.
+- `zospy.functions.lde.find_surface_by_comment`: `case_sensitive` is now a keyword-only argument.
+- `zospy.functions.nce.find_object_by_comment`: `case_sensitive` is now a keyword-only argument.
+- `zospy.utils.flatten_dict`: `keep_unflattened` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.load`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.new`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.close`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.ZOS.__init__`: all parameters are now keyword-only arguments.
+- Removed `zospy.utils.zputils.rgetattr` because `operator.attrgetter` does the same thing.
+- Replaced `zospy.utils.zputils.rsetattr` with `zospy.utils.zputils.attrsetter`, based on `operator.attrgetter`.
+
 ### Deprecated
 
 ### Removed

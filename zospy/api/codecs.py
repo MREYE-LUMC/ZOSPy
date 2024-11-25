@@ -7,13 +7,13 @@ References
 ----------
 .. [1] Codecs. https://pythonnet.github.io/pythonnet/codecs.html
 """
+
 from __future__ import annotations
 
 import logging
-from typing import Type
 
 import clr  # noqa
-import Python.Runtime  # noqa
+import Python.Runtime
 import Python.Runtime.Codecs as Codecs  # noqa
 
 logger = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
         )
     )
 
-    def CanEncode(self, clr_type) -> bool:
+    def CanEncode(self, clr_type) -> bool:  # noqa: N802
         """Check if `clr_type` should be encoded.
 
         An object can be encoded if it is an interface and its full name is present in
@@ -65,7 +65,7 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
         logger.debug("%s cannot be encoded by OpticStudioInterfaceEncoder", clr_type.FullName)
         return False
 
-    def TryEncode(self, obj):
+    def TryEncode(self, obj):  # noqa: N802
         """Try to downcast `obj` to its implementation."""
         logger.debug("Converting %s to its implementation", obj.GetType().FullName)
         return obj.__implementation__
@@ -84,7 +84,9 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
         Examples
         --------
         >>> import zospy.api.codecs as codecs
-        >>> codecs.OpticStudioInterfaceEncoder.register_interfaces("ZOSAPI.Editors.NCE.ISourceColorSettings")
+        >>> codecs.OpticStudioInterfaceEncoder.register_interfaces(
+        ...     "ZOSAPI.Editors.NCE.ISourceColorSettings"
+        ... )
         """
         if isinstance(new_interfaces, str):
             new_interfaces = [new_interfaces]
@@ -92,7 +94,7 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
         cls._interfaces |= set(new_interfaces)
 
 
-def try_register_encoder(encoder: Type[Python.Runtime.IPyObjectEncoder]) -> None:
+def try_register_encoder(encoder: type[Python.Runtime.IPyObjectEncoder]) -> None:
     """Register `encoder` as Python.NET codec.
 
     Parameters

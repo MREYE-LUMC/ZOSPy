@@ -11,6 +11,8 @@ from zospy.analyses.systemviewers import (
     viewer_3d,
 )
 
+# ruff: noqa: SLF001
+
 
 class TestViewers:
     def test_can_run_cross_section(self, simple_system):
@@ -51,8 +53,8 @@ class TestViewers:
     @pytest.mark.parametrize(
         "analysis,parameters",
         [
-            (cross_section, dict(start_surface=2, number_of_rays=10)),
-            (viewer_3d, dict(end_surface=2, hide_x_bars=True)),
+            (cross_section, {"start_surface": 2, "number_of_rays": 10}),
+            (viewer_3d, {"end_surface": 2, "hide_x_bars": True}),
         ],
     )
     def test_old_opticstudio_version_raises_warning(self, simple_system, analysis, parameters, monkeypatch):

@@ -11,7 +11,7 @@ from shutil import copytree
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ZOSPy"
-copyright = "2023, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
+copyright = "2023, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # noqa: A001
 author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 
 # -- General configuration ---------------------------------------------------
@@ -96,7 +96,7 @@ nbsphinx_prolog = rf"""
 ANNOTATION_SUBSTITUTIONS = {"_ZOSAPI": "ZOSAPI"}
 
 
-def apply_annotation_substitutions(app, obj: object, bound_method):
+def apply_annotation_substitutions(app, obj: object, bound_method):  # noqa: ARG001
     """Substitute certain values in type annotations."""
     if not hasattr(obj, "__annotations__"):
         return

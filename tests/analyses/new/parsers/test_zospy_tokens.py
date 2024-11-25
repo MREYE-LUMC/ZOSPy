@@ -121,13 +121,13 @@ def test_number(value, expected, monkeypatch):
         ("Multiple  spaces", "Multiple spaces"),
         (" Leading space", "Leading space"),
         ("Trailing space ", "Trailing space"),
-        ("  Leading and    spaces  ", "Leading and trailing spaces"),
-        ("Tabs\tand\ttabs", "tabs and tabs"),
+        ("  Leading and  trailing  spaces  ", "Leading and trailing spaces"),
+        ("Tabs\tand\ttabs", "Tabs and tabs"),
     ],
 )
 def test_multi_string(value, expected):
-    result = parse_token("multi_string", "Alice Bob Charlie")
-    assert result == "Alice Bob Charlie"
+    result = parse_token("multi_string", value)
+    assert result == expected
 
 
 def test_string_list():
@@ -194,7 +194,7 @@ def test_simple_field(value, expected, setup_field_test):
     result = parse_token("simple_field", value)
 
     assert result == expected
-    assert type(result.value) is type(expected.value)
+    assert isinstance(result.value, type(expected.value))
 
 
 @pytest.mark.parametrize(
@@ -214,13 +214,13 @@ def test_parametric_field(value, expected, setup_field_test):
     result: SimpleField[ParametricField] = parse_token("parametric_field", value)
 
     assert result == expected
-    assert type(result.value.value) is type(expected.value.value)
+    assert isinstance(result.value.value, type(expected.value.value))
 
     if isinstance(result.value.parameters, tuple):
         for r, e in zip(result.value.parameters, expected.value.parameters):
-            assert type(r) is type(e)
+            assert isinstance(r, type(e))
     else:
-        assert type(result.value.parameters) is type(expected.value.parameters)
+        assert isinstance(result.value.parameters, type(expected.value.parameters))
 
 
 @pytest.mark.parametrize(
@@ -242,7 +242,7 @@ def test_unit_field(value, expected, setup_field_test):
     result = parse_token("unit_field", value)
 
     assert result == expected
-    assert type(result.value) is type(expected.value)
+    assert isinstance(result.value, type(expected.value))
 
 
 @pytest.mark.parametrize(
@@ -261,13 +261,13 @@ def test_parametric_unit_field(value, expected, setup_field_test):
     result = parse_token("parametric_unit_field", value)
 
     assert result == expected
-    assert type(result.value.value) is type(expected.value.value)
+    assert isinstance(result.value.value, type(expected.value.value))
 
     if isinstance(result.value.parameters, tuple):
         for r, e in zip(result.value.parameters, expected.value.parameters):
-            assert type(r) is type(e)
+            assert isinstance(r, type(e))
     else:
-        assert type(result.value.parameters) is type(expected.value.parameters)
+        assert isinstance(result.value.parameters, type(expected.value.parameters))
 
 
 @pytest.mark.parametrize(
@@ -288,7 +288,7 @@ def test_field(value, expected, setup_field_test):
     result = parse_token("_field", value)
 
     assert result == expected
-    assert type(result.value) is type(expected.value)
+    assert isinstance(result.value, type(expected.value))
 
 
 FIELD_GROUP_VALUE = """Group key:
@@ -309,7 +309,7 @@ fields: _field+ -> dict
 """
 
 
-def test_field_group(setup_field_test):
+def test_field_group(setup_field_test):  # noqa: ARG001
     parser = Lark(FIELD_GROUP_GRAMMAR, parser="earley", start="start", import_paths=[zospy_grammar_loader])
 
     result = transformer.transform(parser.parse(FIELD_GROUP_VALUE))
@@ -342,7 +342,7 @@ row: _numbers -> list
 """
 
 
-def test_table(setup_field_test):
+def test_table(setup_field_test):  # noqa: ARG001
     parser = Lark(TABLE_GRAMMAR, parser="earley", start="start", import_paths=[zospy_grammar_loader])
 
     result = transformer.transform(parser.parse(TABLE_VALUE))
@@ -359,7 +359,7 @@ def test_table(setup_field_test):
         ("Simple field : 123\n", SimpleField("Simple field", 123), ["STRING", "simple_field"], "simple_field"),
     ],
 )
-def test_token_precedence(value, expected, tokens, expected_token, setup_field_test):
+def test_token_precedence(value, expected, tokens, expected_token, setup_field_test):  # noqa: ARG001
     grammar = f"""start: _value _NEWLINE?
 
 _value: {" | ".join(tokens)}

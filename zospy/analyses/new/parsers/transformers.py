@@ -1,3 +1,8 @@
+"""Transformers and helper classes for parsing OpticStudio analysis output.
+
+Provides the `ZospyTransformer` class for transforming common OpticStudio constructs into dictionaries.
+"""
+
 from __future__ import annotations
 
 from itertools import groupby
@@ -11,48 +16,59 @@ FieldValue = TypeVar("FieldValue")
 
 
 class SimpleField(NamedTuple):
+    """A simple field with a name and a value."""
+
     name: str
     value: FieldValue
 
 
 class ParametricField(NamedTuple):
+    """A field with parameters and a value.
+
+    Should be used as a value for a `SimpleField`.
+    """
+
     parameters: int | float | tuple[int | float, ...]
     value: FieldValue
 
 
 class UnitField(TypedDict):
+    """A field with a unit.
+
+    Should be used as a value for a `SimpleField`.
+    """
+
     value: float
     unit: str
 
 
-def atof(s: str) -> float:
-    return float(s.replace(",", "."))
-
-
 def group_parametric_fields(
-    fields: list[SimpleField[ParametricField]],
+    parametric_fields: list[SimpleField[ParametricField]],
 ) -> dict[str, dict[list[int | float], Any]]:
+    """Convert a list of parametric fields into a dictionary of dictionaries."""
     result = {}
 
-    for name, fields in groupby(fields, lambda field: field.name):
+    for name, fields in groupby(parametric_fields, lambda field: field.name):
         result[name] = {field.value.parameters: field.value.value for field in fields}
 
     return result
 
 
 class ZospyTransformer(Transformer):
+    """Parse tree transformations for common constructs in OpticStudio analysis output."""
+
     DATE = str
     WORD = str
 
-    def INT(self, i: str) -> int:
+    def INT(self, i: str) -> int:  # noqa: N802
         """Integer number."""
         return atox(i, int)
 
-    def UINT(self, i: str) -> int:
+    def UINT(self, i: str) -> int:  # noqa: N802
         """Unsigned integer number."""
         return atox(i, int)
 
-    def FLOAT(self, f: str) -> float:
+    def FLOAT(self, f: str) -> float:  # noqa: N802
         """Floating point number with localized decimal separator."""
         return atox(f, float)
 
@@ -65,8 +81,8 @@ class ZospyTransformer(Transformer):
     list = list
 
     def dict(self, args):
-        """Key-value mapping."""
-        keys = map(lambda f: f.name, args)
+        """Transform a key-value mapping."""
+        keys = (f.name for f in args)
 
         result = {}
 
@@ -79,23 +95,23 @@ class ZospyTransformer(Transformer):
         return {k: result[k] for k in keys}
 
     def start(self, args):
-        """The root of the parse tree."""
+        """Transform the root of the parse tree."""
         return dict(args)
 
     def table(self, args):
-        """A table with a header and one or more rows."""
+        """Transform a table with a header and one or more rows."""
         header, *rows = args
 
         return (header, rows)
 
     def field_group(self, args):
-        """A group of fields under a common key."""
+        """Transform a group of fields under a common key to a SimpleField."""
         name, fields = args
 
         return SimpleField(name, fields)
 
     def simple_field(self, args) -> SimpleField:
-        """A simple field with a name and a value."""
+        """Transform a simple field with a name and a value."""
         if len(args) == 2:
             return SimpleField(*args)
 
@@ -105,43 +121,43 @@ class ZospyTransformer(Transformer):
         return args
 
     def parametric_unit_field(self, args) -> SimpleField[ParametricField[UnitField]]:
-        """A field with parameters and a unit."""
+        """Transform a field with parameters and a unit."""
         name, parameters, value, unit = args
 
         return SimpleField(str(name), ParametricField(parameters, UnitField(value=value, unit=unit)))
 
     def unit_field(self, args) -> SimpleField[UnitField]:
-        """A field with a unit."""
+        """Transform a field with a unit."""
         name, value, unit = args
 
         return SimpleField(str(name), UnitField(value=value, unit=unit))
 
     def unit(self, args) -> str:
-        """Unit of measurement."""
+        """Transform a unit of measurement."""
         return " ".join(args)
 
     def parametric_field(self, args) -> SimpleField[ParametricField]:
-        """A field with parameters."""
+        """Transform a field with parameters."""
         name, parameters, value = args
 
         return SimpleField(str(name), ParametricField(parameters, value))
 
     def field_name(self, name) -> str:
-        """Field name."""
+        """Transform a field name."""
         return " ".join(name)
 
     def field_value(self, value):
-        """Field value."""
+        """Transform a field value."""
         (value,) = value
         return value
 
     def field_parameters(self, args):
-        """Field parameters."""
+        """Transform field parameters."""
         if len(args) == 1:
             return args[0]
 
         return tuple(args)
 
-    def text(self, args):
-        """Text that can be ignored."""
+    def text(self, args):  # noqa: ARG002
+        """Discard text that can be ignored."""
         return Discard

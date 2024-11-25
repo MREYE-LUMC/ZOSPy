@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Analysis import IMessage, SampleSizes
 from zospy.api._ZOSAPI.Common import IMetadata, ZemaxColor, ZemaxOpacity
 from zospy.api._ZOSAPI.Editors import (
@@ -394,7 +392,7 @@ class IIMS_GRIN(IIndexModelSettings):
     def SetParameterValue(self, paramIdx: int, Value: float) -> bool: ...
 
 class IIMS_Isotropic(IIndexModelSettings):
-    pass
+    ...
 
 class IIndexModelSettings:
     @property
@@ -2852,13 +2850,13 @@ class IObjectCADAssemblySolidWorks(IObject):
     def Explode(self, value: bool) -> None: ...
 
 class IObjectCADPartAutodeskInventor(IObject):
-    pass
+    ...
 
 class IObjectCADPartCreoParametric(IObject):
-    pass
+    ...
 
 class IObjectCADPartSolidWorks(IObject):
-    pass
+    ...
 
 class IObjectCADPartSTEPIGESSAT(IObject):
     @property
@@ -2913,7 +2911,7 @@ class IObjectCADPartSTL(IObject):
     def IsVolume(self, value: bool) -> None: ...
 
 class IObjectCADPartZPD(IObject):
-    pass
+    ...
 
 class IObjectCompoundLens(IObject):
     @property
@@ -5661,7 +5659,7 @@ class IObjectMEMS(IObject):
     def SetPixelAddressGroupN(self, n: int, Value: int) -> None: ...
 
 class IObjectNullObject(IObject):
-    pass
+    ...
 
 class IObjectOddAsphereLens(IObject):
     @property
@@ -6644,7 +6642,7 @@ class IObjectSourceDiode(IObjectSources, IObject):
     def YMinusWidthHY(self, value: float) -> None: ...
 
 class IObjectSourceDLL(IObjectSources, IObject):
-    pass
+    ...
 
 class IObjectSourceEllipse(IObjectSources, IObject):
     @property
@@ -7966,7 +7964,7 @@ class IObjectTypeSettings:
     def GetFileNames2(self) -> list[str]: ...
 
 class IObjectUserDefinedObject(IObject):
-    pass
+    ...
 
 class IObjectWolterSurface(IObject):
     @property
@@ -9696,7 +9694,7 @@ class IOSS_Lambertian(IObjectScatteringSettings):
     def ScatterFraction(self, value: float) -> None: ...
 
 class IOSS_None(IObjectScatteringSettings):
-    pass
+    ...
 
 class IOSS_User(IObjectScatteringSettings):
     @property
@@ -9897,7 +9895,7 @@ class ISCS_SpectrumFile(ISourceColorSettings):
     def GetAvailableSpectrumFiles(self) -> list[str]: ...
 
 class ISCS_SystemWavelengths(ISourceColorSettings):
-    pass
+    ...
 
 class ISCS_UniformPowerSpectrum(ISourceColorSettings):
     @property
@@ -10065,7 +10063,7 @@ class IVolumePhysicsModelSettings:
     def _S_PhotoluminescenceModel(self) -> IVMPS_PhotoluminscenceModel: ...
 
 class IVPMS_None(IVolumePhysicsModelSettings):
-    pass
+    ...
 
 class NCEIndexType:
     Isotropic = 0

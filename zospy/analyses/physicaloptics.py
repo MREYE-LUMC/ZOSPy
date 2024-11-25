@@ -43,7 +43,7 @@ def pop_create_beam_parameter_dict(
     for i in range(analysis.Settings.NumberOfParameters):
         beam_params[analysis.Settings.GetParameterName(i)] = analysis.Settings.GetParameterValue(i)
 
-    analysis.Close()  # noqa
+    analysis.Close()
 
     return beam_params
 
@@ -80,14 +80,13 @@ def pop_create_fiber_parameter_dict(
     for i in range(analysis.Settings.NumberOfFiberParameters):
         fiber_params[analysis.Settings.GetFiberParameterName(i)] = analysis.Settings.GetFiberParameterValue(i)
 
-    analysis.Close()  # noqa
+    analysis.Close()
 
     return fiber_params
 
 
 def _set_pop_parameters(analysis: Analysis, which: Literal["beam", "fiber"], parameters: dict) -> None:
-    """
-    Sets beam or fiber parameters using on the provided dictionary.
+    """Sets beam or fiber parameters using the provided dictionary.
 
     Only parameters present in the dictionary are set. After setting, the function checks if all provided parameters
     were used and raises an error if any are left unused.
@@ -287,7 +286,7 @@ def physical_optics_propagation(
         Defines whether polarization is considered. Defaults to True.
     fiber_type : constants.Analysis.PhysicalOptics.POPFiberTypes | str
         The fiber type. Defaults to 'GaussianWaist'.
-    fiber_position :  constants.Analysis.PhysicalOptics.POPFiberPositions | str
+    fiber_position : constants.Analysis.PhysicalOptics.POPFiberPositions | str
         The reference for the center of the receiving fiber. Defaults t 'ChiefRay'.
     tilt_about_x :
         The tilt of the fiber around the x-axis in degrees with respect to the beam. Defaults to 0.0.
@@ -295,7 +294,7 @@ def physical_optics_propagation(
         The tilt of the fiber around the y-axis in degrees with respect to the beam. Defaults to 0.0.
     fiber_type_file :
         The file containing the fiber description. Only used is fiber_type is set to 'File' or 'DLL'.
-    fiber_parameters :  dict | None
+    fiber_parameters : dict | None
         The fiber parameters. Either a dictionary containing the fiber parameters settings or None. Only the parameters
         that are defined in the dictionary will be set, the other parameters will remain their default value. Note that
         the accepted beam parameters vary per fiber type. The accepted parameters for a specific fiber type and their
@@ -318,7 +317,7 @@ def physical_optics_propagation(
     AnalysisResult
         A Physical Optics Propagation analysis result.
     """
-    # ToDo: evaluate what happens when output_beam_file includes either a filepath or the .ZBF extension.
+    # TODO: evaluate what happens when output_beam_file includes either a filepath or the .ZBF extension.
     analysis_type = constants.Analysis.AnalysisIDM.PhysicalOpticsPropagation
 
     # Create analysis
@@ -380,7 +379,7 @@ def physical_optics_propagation(
         if str(analysis.Settings.BeamType) in ("File", "DLL", "Multimode"):
             analysis.Settings.BeamFile = beam_file
         else:
-            raise ValueError(f"Beam type {str(beam_type)} does not allow specification of beam_file.")
+            raise ValueError(f"Beam type {beam_type!s} does not allow specification of beam_file.")
 
     _set_pop_parameters(analysis, which="beam", parameters=beam_parameters)
 
@@ -407,8 +406,7 @@ def physical_optics_propagation(
     if analysis.Settings.SaveOutputBeam:
         if output_beam_file == "":
             raise ValueError("output_beam_file should be a valid filepath if save_output_beam is True.")
-        else:
-            analysis.Settings.OutputBeamFile = output_beam_file
+        analysis.Settings.OutputBeamFile = output_beam_file
     else:
         if output_beam_file != "":
             raise warnings.warn("save_output_beam is False but output_beam_file is specified.")
@@ -434,7 +432,7 @@ def physical_optics_propagation(
                 analysis.Settings.FiberTypeFile = fiber_type_file
             else:
                 raise ValueError(
-                    f"Beam type {str(analysis.Settings.FiberType)} does not allow specification of fiber_type_file."
+                    f"Beam type {analysis.Settings.FiberType!s} does not allow specification of fiber_type_file."
                 )
 
         _set_pop_parameters(analysis, which="fiber", parameters=fiber_parameters)

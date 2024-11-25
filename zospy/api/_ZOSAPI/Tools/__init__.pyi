@@ -4,7 +4,7 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
+from typing import overload
 
 from zospy.api._ZOSAPI.Analysis import SampleSizes
 from zospy.api._ZOSAPI.Common import IVectorData

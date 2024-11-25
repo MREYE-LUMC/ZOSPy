@@ -27,38 +27,38 @@ def curvature(
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance. Should be sequential.
-    sampling: str | int
+    sampling : str | int
         The size of the used grid, either string (e.g. '65x65') or int. The integer will be treated as if obtained from
         zospy.constants.Analysis.SampleSizes_Pow2Plus1_X. Defaults to '65x65'.
-    data: str
+    data : str
         The used data type. Should be one of ['TangentialCurvature', 'SagittalCurvature', 'X_Curvature', 'Y_Curvature']
         or int. The integer will be treated as if obtained from zospy.constants.Analysis.SurfaceCurvatureData. Defaults
         to 'TangentialCurvature'.
-    remove: str | int
+    remove : str | int
         Defines whether a reference volume is removed or not. Should be one of ['None', 'BaseROC', 'BestFitSphere'] or
         int. The integer will be treated as if obtained from zospy.constants.Analysis.RemoveOptions. Defaults
         to 'None'.
-    surface: int
+    surface : int
         The surface that is te be analyzed. defaults to 1.
-    showas: str | int
+    showas : str | int
         Defines how the data is displayed in OpticStudio. Should be one of ['Surface', 'Contour', 'GreyScale',
         'InverseGreyScale', 'FalseColor', 'InverseFalseColor'] or int. The integer will be treated as if obtained from
         zospyconstants.Analysis.ShowAs. Defaults to 'Contour'.
-    offaxiscoordinates: bool
+    offaxiscoordinates : bool
         Defines whether apertures defined in the Surface Properties of the surface are considered or not. Defaults to
         False.
-    contourformat: str
+    contourformat : str
         The contour format. Only usable when showas == 'Contour'. Defaults to ''.
-    bfs_criterion: str | int
+    bfs_criterion : str | int
         The criterion for BFS removal. Only usable when remove == 'BestFitSphere'. Should be one of ['MinimumVolume',
         'MinimumRMS', 'MinimumRMSWithOffset'] or int. The integer will be treated as if obtained from
         constants.Analysis.BestFitSphereOptions. Defaults to 'MinimumVolume'.
-    bfs_reversedirection: bool
+    bfs_reversedirection : bool
         Defines if the sign of the BFS radius should be reversed or not. Only usable when remove == 'BestFitSphere'
         and bfs_criterion == 'MinimumVolume'. Defaults to False.
-    oncomplete: OnComplete | str
+    oncomplete : OnComplete | str
         Defines behaviour upon completion of the analysis. Should be one of ['Close', 'Release', 'Sustain']. If 'Close',
         the analysis will be closed after completion. If 'Release', the analysis will remain open in OpticStudio, but
         the link with python will be destroyed. If 'Sustain' the analysis will be kept open in OpticStudio and the link

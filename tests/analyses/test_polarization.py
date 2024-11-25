@@ -149,7 +149,7 @@ class TestTransmission:
         assert simple_system.SystemData.Fields.NumberOfFields == 2
 
         with pytest.raises(NotImplementedError):
-            result = transmission(simple_system)
+            transmission(simple_system)
 
     def test_transmission_multiple_wavelengths_raises_notimplementederror(self, simple_system):
         simple_system.SystemData.Wavelengths.AddWavelength(0.314, 1.0)
@@ -157,4 +157,4 @@ class TestTransmission:
         assert simple_system.SystemData.Wavelengths.NumberOfWavelengths == 2
 
         with pytest.raises(NotImplementedError):
-            result = transmission(simple_system)
+            transmission(simple_system)

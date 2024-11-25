@@ -4,7 +4,7 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
+from typing import overload
 
 from zospy.api._ZOSAPI.Tools import ISystemTool
 from zospy.api._ZOSAPI.Tools.General import RayPatternType

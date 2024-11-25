@@ -1,3 +1,5 @@
+"""Utility functions for the Non-Sequential Component Editor (NCE) in OpticStudio."""
+
 from __future__ import annotations
 
 from warnings import warn
@@ -6,13 +8,13 @@ from zospy.api import _ZOSAPI, constants
 
 
 def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Editors.NCE.ObjectType | str):
-    """Simple function to change the object type in the NCE.
+    """Change the object type in the Non-Sequential Component Editor.
 
     Parameters
     ----------
-    obj: ZOSAPI.Editors.NCE.INCERow
+    obj : ZOSAPI.Editors.NCE.INCERow
         The Row/Object for which the change is to be made.
-    new_type: zospy.constants.Editors.NCE.ObjectType | str
+    new_type : zospy.constants.Editors.NCE.ObjectType | str
         The new object type, either string (e.g. 'StandardLens') or int. The integer will be treated as if obtained from
         zp.constants.Editors.NCE.ObjectType.
 
@@ -24,11 +26,12 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
     --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
-    >>> zos.connect_as_extension()
-    >>> oss = zos.get_primary_system()
+    >>> oss = zos.connect()
     >>> oss.make_nonsequential()
-    >>> newobj = oss.NCE.InsertNewObjectAt(1)
-    >>> zp.functions.nce.object_change_type(newobj, zp.constants.Editors.NCE.ObjectType.StandardLens)
+    >>> new_object = oss.NCE.InsertNewObjectAt(1)
+    >>> zp.functions.nce.object_change_type(
+    ...     new_object, zp.constants.Editors.NCE.ObjectType.StandardLens
+    ... )
     """
     new_type = constants.process_constant(constants.Editors.NCE.ObjectType, new_type)
 
@@ -38,19 +41,19 @@ def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Edi
 
 
 def find_object_by_comment(
-    nce: _ZOSAPI.Editors.NCE, comment: str, case_sensitive: bool = True
+    nce: _ZOSAPI.Editors.NCE, comment: str, *, case_sensitive: bool = True
 ) -> list[_ZOSAPI.Editors.NCE.INCERow]:
-    """Returns a list of objects from the NCE that have the supplied string as Comment.
+    """Retrieve objects from the Non-Sequential Component Editor that have the supplied string as Comment.
 
     In case of multiple matches, the objects are returned in ascending order.
 
     Parameters
     ----------
-    nce: ZOSAPI.Editors.NCE
+    nce : ZOSAPI.Editors.NCE
         The Non-sequential Component Editor (NCE).
-    comment: str
+    comment : str
         String that is searched for in the Comment column of the NCE.
-    case_sensitive: bool=False
+    case_sensitive : bool=False
         Flag that specifies whether the search is case-sensitive (default value) or not.
 
     Returns
@@ -62,16 +65,15 @@ def find_object_by_comment(
     --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
-    >>> zos.connect_as_extension()
-    >>> oss = zos.get_primary_system()
+    >>> oss = zos.connect()
     >>> oss.make_nonsequential()
-    >>> newobj1 = oss.NCE.InsertNewObjectAt(1)
-    >>> newobj1.Comment = 'aa'
-    >>> newobj2 = oss.NCE.InsertNewObjectAt(1)
-    >>> newobj2.Comment = 'bb'
-    >>> newobj3 = oss.NCE.InsertNewObjectAt(1)
-    >>> newobj3.Comment = 'aA'
-    >>> find_object_by_comment(oss.NCE, 'aa')
+    >>> nce_object_1 = oss.NCE.InsertNewObjectAt(1)
+    >>> nce_object_1.Comment = "aa"
+    >>> nce_object_2 = oss.NCE.InsertNewObjectAt(1)
+    >>> nce_object_2.Comment = "bb"
+    >>> nce_object_3 = oss.NCE.InsertNewObjectAt(1)
+    >>> nce_object_3.Comment = "aA"
+    >>> find_object_by_comment(oss.NCE, "aa")
     """
     # Number of objects in the NCE
     number_of_objects = nce.NumberOfObjects
@@ -106,7 +108,7 @@ def find_object_by_comment(
 
 
 def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IObject:
-    """Returns the object-specific data.
+    """Get the object-specific data.
 
     .. deprecated:: 1.2.0
             `get_object_data` will be removed in ZOSPy 2.0.0, as this conversion is now implemented in
@@ -114,7 +116,7 @@ def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IOb
 
     Parameters
     ----------
-    obj: ZOSAPI.Editors.NCE.INCERow
+    obj : ZOSAPI.Editors.NCE.INCERow
         The Row/Object for which the data is requested.
 
     Returns
@@ -126,11 +128,12 @@ def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IOb
     --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
-    >>> zos.connect_as_extension()
-    >>> oss = zos.get_primary_system()
+    >>> oss = zos.connect()
     >>> oss.make_nonsequential()
     >>> detector_object = oss.NCE.GetObjectAt(1)
-    >>> detector_type = detector_object.GetObjectTypeSettings(zp.constants.Editors.NCE.ObjectType.DetectorRectangle)
+    >>> detector_type = detector_object.GetObjectTypeSettings(
+    ...     zp.constants.Editors.NCE.ObjectType.DetectorRectangle
+    ... )
     >>> detector_object.ChangeType(detector_type)
     >>> detector_data = zp.functions.nce.get_object_data(detector_object)
     >>> number_of_x_pixels = detector_data.NumberXPixels

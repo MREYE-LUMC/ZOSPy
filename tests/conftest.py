@@ -19,9 +19,8 @@ def pytest_addoption(parser):
 
 
 def pytest_runtest_makereport(item, call):
-    if any(m.name == "must_pass" for m in item.iter_markers()):
-        if call.excinfo is not None:
-            pytest.exit(f"Aborting because a must pass test failed: {item.name}", 1)
+    if any(m.name == "must_pass" for m in item.iter_markers()) and call.excinfo is not None:
+        pytest.exit(f"Aborting because a must pass test failed: {item.name}", 1)
 
 
 @pytest.fixture(scope="session")
@@ -70,8 +69,7 @@ def system_save_file(request):
     if output_directory:
         save_file = output_directory / f"{request.fspath.basename}-{request.node.name}.zos"
         return save_file.absolute()
-    else:
-        return None
+    return None
 
 
 @pytest.fixture(scope="session")
@@ -86,12 +84,7 @@ def opticstudio_directory(request) -> Path | None:
 
 @pytest.fixture(scope="session")
 def zos(opticstudio_directory) -> zp.ZOS:
-    if opticstudio_directory is not None:
-        zos = zp.ZOS(opticstudio_directory=str(opticstudio_directory))
-    else:
-        zos = zp.ZOS()
-
-    return zos
+    return zp.ZOS(opticstudio_directory=str(opticstudio_directory)) if opticstudio_directory is not None else zp.ZOS()
 
 
 @pytest.fixture
@@ -164,7 +157,7 @@ def simple_system(empty_system) -> zp.zpcore.OpticStudioSystem:
 
 @pytest.fixture
 def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
-    """Simple system with a polarizing front lens surface"""
+    """Simple system with a polarizing front lens surface."""
     oss = simple_system
 
     lens_front = oss.LDE.GetSurfaceAt(2)

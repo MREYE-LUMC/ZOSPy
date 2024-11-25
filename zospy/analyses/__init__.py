@@ -15,7 +15,9 @@ Run a Single Ray Trace analysis:
 Open an analysis for which a wrapper function is not yet available:
 
 >>> import zospy as zp
->>> analysis = zp.analyses.new_analysis(oss, zp.constants.Analysis.AnalysisIDM.ImageSimulation)
+>>> analysis = zp.analyses.new_analysis(
+...     oss, zp.constants.Analysis.AnalysisIDM.ImageSimulation
+... )
 """
 
 from zospy.analyses import (

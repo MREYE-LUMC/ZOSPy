@@ -1,18 +1,25 @@
+"""Surface Data analysis."""
+
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from pydantic import AliasChoices, Field
 
-from zospy.analyses.new.base import AnalysisSettings, AnalysisWrapper
+from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import SimpleField, ZospyTransformer
-from zospy.zpcore import OpticStudioSystem
 
-__all__ = ("SurfaceData", "SurfaceDataSettings")
+if TYPE_CHECKING:
+    from pathlib import Path
+
+
+__all__ = ("SurfaceData", "SurfaceDataSettings", "SurfaceDataResult")
 
 
 class SurfaceDataTransformer(ZospyTransformer):
+    """Transformer for the output of the Surface Data analysis."""
+
     def refractive_index_table(self, args):
         """Convert the refractive index table to a list of dictionaries."""
         header, rows = args[0]
@@ -72,6 +79,8 @@ class SurfacePowers:
 
 @analysis_result
 class SurfaceDataResult:
+    """Data for the Surface Data analysis."""
+
     comment: str | None = Field(alias="Comment", default=None)
     date: str = Field(alias="Date")
     file: Path = Field(alias="File")
@@ -86,10 +95,15 @@ class SurfaceDataResult:
 
 @analysis_settings
 class SurfaceDataSettings:
+    """Settings for the Surface Data analysis."""
+
+    # TODO: document the fields
     surface: int = Field(default=1, ge=0, description="Surface number to analyze.")
 
 
-class SurfaceData(AnalysisWrapper[SurfaceDataResult, SurfaceDataSettings]):
+class SurfaceData(BaseAnalysisWrapper[SurfaceDataResult, SurfaceDataSettings]):
+    """Surface Data analysis."""
+
     TYPE = "SurfaceDataSettings"
 
     _needs_config_file = True
@@ -98,11 +112,8 @@ class SurfaceData(AnalysisWrapper[SurfaceDataResult, SurfaceDataSettings]):
     def __init__(self, surface: int = 1, settings: SurfaceDataSettings | None = None):
         super().__init__(settings or SurfaceDataSettings(), locals())
 
-    @property
-    def settings(self) -> AnalysisSettings:
-        return self._settings
-
-    def run_analysis(self, oss: OpticStudioSystem, *args, **kwargs) -> SurfaceDataResult:
+    def run_analysis(self) -> SurfaceDataResult:
+        """Run the Surface Data analysis."""
         settings = self.analysis.GetSettings()
         settings.SaveTo(str(self.config_file))
 
@@ -118,6 +129,4 @@ class SurfaceData(AnalysisWrapper[SurfaceDataResult, SurfaceDataSettings]):
         self.analysis.ApplyAndWaitForCompletion()
 
         # Read text file and parse to object
-        result = self.parse_output("surface_data", transformer=SurfaceDataTransformer, result_type=SurfaceDataResult)
-
-        return result
+        return self.parse_output("surface_data", transformer=SurfaceDataTransformer, result_type=SurfaceDataResult)

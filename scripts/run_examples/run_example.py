@@ -57,7 +57,7 @@ def process_notebook(
     old_connection_mode = change_connection_mode(nb, "extension", "standalone") if not keep_extension_mode else False
 
     # Run the notebook
-    ep = ExecutePreprocessor(timeout=600, kernel_name="python3")
+    ep = ExecutePreprocessor(kernel_name="python3")
     try:
         ep.preprocess(nb, {"metadata": {"path": notebook_path.parent}})
     except CellExecutionError:
