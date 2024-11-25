@@ -7,7 +7,7 @@ from typing import Literal
 import pandas as pd
 from pydantic import Field
 
-from zospy.analyses.new.base import AnalysisWrapper
+from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers import ZospyTransformer
 from zospy.analyses.new.parsers.transformers import SimpleField
@@ -84,7 +84,7 @@ class PolarizationPupilMapSettings:
     sub_configs: str = Field(default="", description="Subtract configurations")
 
 
-class PolarizationPupilMap(AnalysisWrapper[None, PolarizationPupilMapSettings]):
+class PolarizationPupilMap(BaseAnalysisWrapper[None, PolarizationPupilMapSettings]):
     """Polarization pupil map analysis."""
 
     TYPE = "PolarizationPupilMap"
