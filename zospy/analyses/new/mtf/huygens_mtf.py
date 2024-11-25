@@ -2,18 +2,16 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
 
 from pandas import DataFrame
 from pydantic import Field
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
+from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
-
-if TYPE_CHECKING:
-    from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber
 
 __all__ = ("HuygensMtfSettings", "HuygensMTF")
 
