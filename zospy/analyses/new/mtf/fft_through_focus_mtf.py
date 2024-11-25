@@ -32,13 +32,13 @@ class FFTThroughFocusMTFSettings:
         The number of steps in the focus range. Defaults to 5.
     wavelength : int | str
         The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
-    field: str | int
+    field : str | int
         The field to use in the MTF. Either 'All' or an integer specifying the field number.
-    mtf_type: zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
+    mtf_type : zospy.constants.Analysis.Settings.Mtf.MtfTypes.Modulation
         The MTF type (e.g. `Modulation`) that is calculated.
-    use_polarization: bool
+    use_polarization : bool
         Use polarization. Defaults to False.
-    use_dashes: bool
+    use_dashes : bool
         Use dashes. Defaults to False.
     """
 
