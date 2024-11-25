@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 from pandas import DataFrame
 from pydantic import Field
 
-from zospy.analyses.new.base import AnalysisWrapper
+from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
@@ -55,7 +55,7 @@ class FFTThroughFocusMTFSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
-class FFTThroughFocusMTF(AnalysisWrapper[DataFrame | None, FFTThroughFocusMTFSettings]):
+class FFTThroughFocusMTF(BaseAnalysisWrapper[DataFrame | None, FFTThroughFocusMTFSettings]):
     """FFT Through Focus MTF analysis."""
 
     TYPE = "FftThroughFocusMtf"
@@ -85,7 +85,7 @@ class FFTThroughFocusMTF(AnalysisWrapper[DataFrame | None, FFTThroughFocusMTFSet
         """
         super().__init__(settings or FFTThroughFocusMTFSettings(), locals())
 
-    def run_analysis(self, *args, **kwargs) -> DataFrame | None:
+    def run_analysis(self) -> DataFrame | None:
         """Run the FFT Through Focus MTF analysis."""
         self.analysis.Settings.SampleSize = getattr(
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.sampling)
@@ -119,7 +119,7 @@ class FFTThroughFocusMTF(AnalysisWrapper[DataFrame | None, FFTThroughFocusMTFSet
         -------
         None
         """
-        if self.oss._ZOS.version < "21.2.0":
+        if self.oss._ZOS.version < "21.2.0":  # noqa: SLF001
             config_file = str(self.config_file)
 
             self.analysis.Settings.SaveTo(config_file)

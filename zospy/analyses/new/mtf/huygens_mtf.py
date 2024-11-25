@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Annotated
 from pandas import DataFrame
 from pydantic import Field
 
-from zospy.analyses.new.base import AnalysisWrapper
+from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
@@ -61,7 +61,7 @@ class HuygensMtfSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
-class HuygensMTF(AnalysisWrapper[DataFrame, HuygensMtfSettings]):
+class HuygensMTF(BaseAnalysisWrapper[DataFrame, HuygensMtfSettings]):
     """Huygens Modulation Transfer Function (MTF) analysis."""
 
     TYPE = "HuygensMtf"
@@ -86,7 +86,7 @@ class HuygensMTF(AnalysisWrapper[DataFrame, HuygensMtfSettings]):
         """Create a new Huygens MTF analysis."""
         super().__init__(settings or HuygensMtfSettings(), locals())
 
-    def run_analysis(self, *args, **kwargs) -> DataFrame | None:
+    def run_analysis(self) -> DataFrame | None:
         """Run the Huygens MTF analysis."""
         self.analysis.Settings.PupilSampleSize = getattr(
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.pupil_sampling)
