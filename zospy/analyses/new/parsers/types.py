@@ -8,10 +8,9 @@ from numpy import array, ndarray
 from pandas import DataFrame
 from pydantic import Field
 from pydantic.dataclasses import dataclass
+from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
 __all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "FieldNumber")
-
-from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
 if TYPE_CHECKING:
     from pydantic import GetCoreSchemaHandler
