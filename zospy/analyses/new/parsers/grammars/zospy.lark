@@ -23,7 +23,7 @@ parametric_unit_field: field_name field_parameters+ ":" field_value ( "(" unit "
 
 // Field with a unit, optionally in parentheses
 unit_field: field_name ":" field_value ( "(" unit ")" | unit ) _NEWLINE
-!unit: WORD+ | "µm"  // Can be made more generic, but µm is the only non-alphanumeric we encountered so far
+!unit: WORD+ | "µm" | "%" // Can be made more generic, but µm is the only non-alphanumeric we encountered so far
 
 // Simple key-value pair
 simple_field: field_name ":" field_value? _NEWLINE
