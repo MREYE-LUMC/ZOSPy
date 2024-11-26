@@ -1,16 +1,16 @@
-"""Data types for analysis result objects."""
+"""Data types for analysis result and settings objects."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Generic, TypeVar
+from typing import TYPE_CHECKING, Annotated, Generic, Literal, TypeVar, Union
 
 from numpy import array, ndarray
 from pandas import DataFrame
+from pydantic import Field
 from pydantic.dataclasses import dataclass
-
-__all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray")
-
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
+
+__all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "FieldNumber")
 
 if TYPE_CHECKING:
     from pydantic import GetCoreSchemaHandler
@@ -113,3 +113,6 @@ class ValidatedNDArrayAnnotation:
 
 
 ValidatedNDArray = Annotated[ndarray, ValidatedNDArrayAnnotation]
+
+WavelengthNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]
+FieldNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]
