@@ -76,8 +76,8 @@ class RayFanSettings:
         default="Image", description="Surface " "to be analyzed"
     )
     use_dashes: bool = Field(default=False, description="Use dashed lines for the rays")
-    vignetted_pupil: bool = Field(default=False, description="Scale the pupil axis to the unvignetted pupil")
-    check_apertures: bool = Field(default=False, description="Only draw rays that pass all surface apertures")
+    vignetted_pupil: bool = Field(default=True, description="Scale the pupil axis to the unvignetted pupil")
+    check_apertures: bool = Field(default=True, description="Only draw rays that pass all surface apertures")
 
 
 class RayFan(BaseAnalysisWrapper[DataFrame | None, RayFanSettings]):
