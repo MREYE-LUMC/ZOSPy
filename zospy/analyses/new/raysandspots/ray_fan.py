@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Union
 
 import numpy as np
 import pandas as pd
@@ -80,7 +80,7 @@ class RayFanSettings:
     check_apertures: bool = Field(default=True, description="Only draw rays that pass all surface apertures")
 
 
-class RayFan(BaseAnalysisWrapper[DataFrame | None, RayFanSettings]):
+class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings]):
     """Ray Fan analysis."""
 
     TYPE = "RayFan"

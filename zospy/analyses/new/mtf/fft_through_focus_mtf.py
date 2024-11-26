@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Union
 
 from pandas import DataFrame
 from pydantic import Field
@@ -55,7 +55,7 @@ class FFTThroughFocusMTFSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
-class FFTThroughFocusMTF(BaseAnalysisWrapper[DataFrame | None, FFTThroughFocusMTFSettings]):
+class FFTThroughFocusMTF(BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughFocusMTFSettings]):
     """FFT Through Focus MTF analysis."""
 
     TYPE = "FftThroughFocusMtf"
