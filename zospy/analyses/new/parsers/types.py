@@ -12,7 +12,6 @@ from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
 __all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "FieldNumber")
 
-
 if TYPE_CHECKING:
     from pydantic import GetCoreSchemaHandler
 
