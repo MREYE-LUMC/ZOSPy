@@ -20,6 +20,7 @@ class TestSystemData:
         result = SystemData().run(simple_system)
         assert result.from_json(result.to_json()).to_json() == result.to_json()
 
+
 class TestCardinalPoints:
     def test_can_run(self, simple_system):
         result = CardinalPoints().run(simple_system)

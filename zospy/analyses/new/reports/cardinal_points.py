@@ -111,6 +111,12 @@ class CardinalPoints(BaseAnalysisWrapper[CardinalPointsResult, CardinalPointsSet
         orientation: Literal["Y-Z", "X-Z"] = "Y-Z",
         settings: CardinalPointsSettings | None = None,
     ):
+        """Create a new Cardinal Points analysis.
+
+        See Also
+        --------
+        CardinalPointsSettings : Settings for the Cardinal Points analysis.
+        """
         super().__init__(settings or CardinalPointsSettings(), locals())
 
     def run_analysis(self) -> CardinalPointsResult:
