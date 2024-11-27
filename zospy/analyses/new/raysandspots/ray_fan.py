@@ -26,13 +26,51 @@ class FanData:
     field_coordinate: UnitField[float]
     data: ValidatedDataFrame
 
+    def to_dataframe(self) -> DataFrame:
+        df: DataFrame = self.data.copy()
+        df.insert(0, "Field Number", self.field_number)
+        df.insert(1, "Field", self.field_coordinate.value)
+
+        return df
+
 
 @analysis_result
 class RayFanResult:
-    """Data for the Ray Fan analysis."""
+    """Data for the Ray Fan analysis.
+
+    Methods
+    -------
+    to_dataframe()
+        Convert the data to a Pandas DataFrame.
+    """
 
     tangential: list[FanData]
     sagittal: list[FanData]
+
+    def to_dataframe(self) -> DataFrame:
+        """Convert the data to a Pandas DataFrame.
+
+        The separate dataframes for each field are combined in a DataFrame in long format.
+        In addition to the columns for each wavelength, the returned DataFrame has the following columns:
+
+        - Direction: The direction of the fan, either 'Tangential' or 'Sagittal'.
+        - Field Number: The field number.
+        - Field: The field coordinate.
+
+        Returns
+        -------
+        DataFrame
+            The data in long format.
+        """
+        dataframes = []
+
+        for direction, fans in [("Tangential", self.tangential), ("Sagittal", self.sagittal)]:
+            for fan in fans:
+                df = fan.to_dataframe()
+                df.insert(0, "Direction", direction)
+                dataframes.append(df.reset_index())  # Move the index to a separate column to prevent overlap
+
+        return pd.concat(dataframes, ignore_index=True)
 
 
 @analysis_settings
