@@ -1,0 +1,10 @@
+start: "\ufeff"? _NEWLINE? text _field+ text+ cardinal_points
+
+cardinal_points: cardinal_points_header _NEWLINE cardinal_point+
+!cardinal_points_header: ("Object Space" | "Image Space")~2 -> string_list
+cardinal_point: /[\w -]+\w/ ":" _number _number _NEWLINE
+
+%import .zospy (_field, _number, text, STRING)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE
