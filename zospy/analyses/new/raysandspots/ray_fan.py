@@ -23,7 +23,7 @@ from zospy.utils.pyutils import atox
 @analysis_result
 class FanData:
     field_number: Annotated[int, Field(ge=0)]
-    field_coordinate: UnitField[float]
+    field_coordinate: UnitField[float | tuple[float, float]]
     data: ValidatedDataFrame
 
     def to_dataframe(self) -> DataFrame:
@@ -178,9 +178,11 @@ class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings]):
 
     def get_data_series(self) -> RayFanResult | None:
         """Get the data series from the Ray Fan analysis."""
+        re_float = rf"\d+\{config.DECIMAL_POINT}\d+"
         ray_fan_description_regex = re.compile(
             rf"(?P<direction>sagittal|tangential) fan, field number (?P<field>\d+) = "
-            rf"(?P<coordinate>\d+\{config.DECIMAL_POINT}\d+) \((?P<unit>.+)\)",
+            rf"(?P<coordinate_x>{re_float})(?:, (?P<coordinate_y>{re_float}))? "
+            r"\((?P<unit>.+)\)",
             re.IGNORECASE,
         )
 
@@ -202,9 +204,13 @@ class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings]):
             columns = [atox(label, float) for label in data_series.SeriesLabels]
             data = np.array(data_series.YData.Data)
 
+            coordinate_x = atox(match.group("coordinate_x"), float)
+            coordinate_y = atox(match.group("coordinate_y"), float) if match.group("coordinate_y") else None
+            coordinate = (coordinate_x, coordinate_y) if coordinate_y else coordinate_x
+
             fan_data = FanData(
                 field_number=int(match.group("field")),
-                field_coordinate=UnitField(value=atox(match.group("coordinate"), float), unit=match.group("unit")),
+                field_coordinate=UnitField(value=coordinate, unit=match.group("unit")),
                 data=DataFrame(index=index, columns=columns, data=data),
             )
 
