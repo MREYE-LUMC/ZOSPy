@@ -85,6 +85,9 @@ class TestAnalysisWrapper:
 
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_init_contains_all_settings(self, cls):
+        if cls().settings is None:
+            return
+
         init_signature = inspect.signature(cls.__init__)
         settings_fields = fields(cls().settings)
 
@@ -92,6 +95,9 @@ class TestAnalysisWrapper:
 
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_analyses_default_values(self, cls):
+        if cls().settings is None:
+            return
+
         settings_defaults = self.get_settings_defaults(type(cls().settings))
         init_signature = inspect.signature(cls.__init__)
 

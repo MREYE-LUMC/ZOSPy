@@ -113,10 +113,11 @@ class ZospyTransformer(Transformer):
     def simple_field(self, args) -> SimpleField:
         """Transform a simple field with a name and a value."""
         if len(args) == 2:
-            return SimpleField(*args)
+            name, value = args
+            return SimpleField(str(name), value)
 
         if len(args) == 1:
-            return SimpleField(args[0], None)
+            return SimpleField(str(args[0]), None)
 
         return args
 

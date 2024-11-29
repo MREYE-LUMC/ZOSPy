@@ -1,0 +1,61 @@
+start: "\ufeff"? _NEWLINE? text _field+ general_lens_data field_data _vignetting_data wavelength_data abcd_matrix
+
+general_lens_data: /GENERAL LENS DATA:/i _NEWLINE _value+ _NEWLINE*
+
+_value: j_e_conversion
+    | glass_catalogs
+    | system_aperture
+    | apodization
+    | opd_modulo_2_pi
+    | efl_air
+    | efl_image
+    | primary_wavelength
+    | method_to_compute_f
+    | image_space_f
+    | paraxial_working_f
+    | working_f
+    | _field
+
+glass_catalogs: /Glass Catalogs/ ":" glass_catalogs_list _NEWLINE -> simple_field
+glass_catalogs_list: WORD* -> string_list
+
+j_e_conversion: /J\/E Conversion Method/ ":" multi_string _NEWLINE -> simple_field
+system_aperture: /System Aperture/ ":" multi_string "=" _number _NEWLINE
+apodization.2: /Apodization/ ":" apodization_type "," "factor" "=" _number _NEWLINE
+apodization_type: WORD+ -> multi_string
+opd_modulo_2_pi: /OPD Modulo 2 Pi/ ":" WORD _NEWLINE -> simple_field
+efl_air: /Effective Focal Length/ ":" _number "(" "in" "air" "at" "system" "temperature" "and" "pressure" ")" _NEWLINE
+efl_image: /Effective Focal Length/ ":" _number "(" "in" "image" "space" ")" _NEWLINE
+primary_wavelength: /Primary Wavelength/ "[µm]" ":" _number _NEWLINE -> simple_field
+
+// Fields related to F/#
+method_to_compute_f: /Method to Compute F\/#/ ":" multi_string _NEWLINE -> simple_field
+image_space_f: /Image Space F\/#/ ":" _number _NEWLINE -> simple_field
+paraxial_working_f: /Paraxial Working F\/#/ ":" _number _NEWLINE -> simple_field
+working_f: /Working F\/#/ ":" _number _NEWLINE -> simple_field
+
+field_data: simple_field~2 fields_table _NEWLINE*
+
+fields_table: table{fields_header, fields_row}
+!fields_header: "#" "X-Value" "Y-Value" "Weight" -> string_list
+fields_row: UINT _number~3 -> list
+
+_vignetting_data: "Vignetting" "Factors" _NEWLINE vignetting_table _NEWLINE*
+
+vignetting_table: table{vignetting_header, vignetting_row}
+!vignetting_header: "#" "VDX" "VDY" "VCX" "VCY" "VAN" -> string_list
+vignetting_row: UINT _number~5 -> list
+
+wavelength_data: simple_field~2 wavelength_table _NEWLINE*
+
+wavelength_table: table{wavelength_header, wavelength_row}
+!wavelength_header: "#" "Value" "Weight" -> string_list
+wavelength_row: UINT _number~2 -> list
+
+abcd_matrix: "Predicted" "coordinate" "ABCD" "matrix" ":" _NEWLINE abcd_entry~4 _NEWLINE*
+abcd_entry: /A|B|C|D/ "=" _number _NEWLINE -> simple_field
+
+%import .zospy (_field, _number, multi_string, simple_field, table, text, UINT, STRING)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE

@@ -19,10 +19,10 @@ field_group{name, fields}.2: name ":" _NEWLINE fields
 _field: simple_field | parametric_field | unit_field | parametric_unit_field
 
 // Field with parameters and a unit, optionally in parentheses
-parametric_unit_field: field_name field_parameters+ ":" field_value ( "(" unit ")" | unit ) _NEWLINE
+parametric_unit_field: field_name field_parameters+ ":" _number ( "(" unit ")" | unit ) _NEWLINE
 
 // Field with a unit, optionally in parentheses
-unit_field: field_name ":" field_value ( "(" unit ")" | unit ) _NEWLINE
+unit_field: field_name ":" _number ( "(" unit ")" | unit ) _NEWLINE
 !unit: WORD+ | "µm" | "%" // Can be made more generic, but µm is the only non-alphanumeric we encountered so far
 
 // Simple key-value pair

@@ -515,6 +515,9 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     def _init_settings(self, settings: AnalysisSettings, parameters: dict[str, any]):
         self._settings = settings
 
+        if settings is None:
+            return
+
         if not is_dataclass(settings):
             raise ValueError("settings should be a dataclass.")
 
