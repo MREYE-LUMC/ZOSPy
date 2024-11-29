@@ -28,10 +28,16 @@ class FanData:
 
     def to_dataframe(self) -> DataFrame:
         df: DataFrame = self.data.copy()
-        df.insert(0, "Field Number", self.field_number)
-        df.insert(1, "Field", self.field_coordinate.value)
 
-        return df
+        # Stack different columns for each wavelength
+        stacked_df = pd.DataFrame(df.stack(future_stack=True), columns=["Aberration"]).reset_index(
+            level=1, names=["Pupil", "Wavelength"]
+        )
+
+        stacked_df.insert(0, "Field Number", self.field_number)
+        stacked_df.insert(1, "Field", self.field_coordinate.value)
+
+        return stacked_df
 
 
 @analysis_result
