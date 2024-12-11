@@ -592,12 +592,12 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         with open(self._text_output_file, encoding=self.oss._ZOS.get_txtfile_encoding()) as f:  # noqa: SLF001
             return f.read()
 
-    def _create_analysis(self):
+    def _create_analysis(self, *, settings_first=True):
         if self.analysis is not None and self.analysis.TypeName == self.TYPE:
             return
 
         analysis_type = constants.process_constant(constants.Analysis.AnalysisIDM, self.TYPE)
-        self._analysis = new_analysis(self.oss, analysis_type)
+        self._analysis = new_analysis(self.oss, analysis_type, settings_first=settings_first)
 
     @abstractmethod
     def run_analysis(self, *args, **kwargs) -> AnalysisData:
