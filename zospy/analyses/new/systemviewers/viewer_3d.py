@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import TYPE_CHECKING, Annotated, Literal
 
 from pydantic import Field
 
 from zospy.analyses.new.decorators import analysis_settings
 from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
 from zospy.analyses.new.systemviewers.base import ImageSize, SystemViewerWrapper
-from zospy.api import _ZOSAPI, constants
+from zospy.api import constants
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
 
 __all__ = ("Viewer3D", "Viewer3DSettings")
 
@@ -169,6 +172,12 @@ class Viewer3D(SystemViewerWrapper[Viewer3DSettings]):
         image_size: tuple[int, int] = (800, 600),
         settings: Viewer3DSettings | None = None,
     ):
+        """Create a new 3D system viewer.
+
+        See Also
+        --------
+        Viewer3DSettings : Settings for the 3D system viewer.
+        """
         super().__init__(settings or Viewer3DSettings(), locals())
 
     def configure_layout_tool(

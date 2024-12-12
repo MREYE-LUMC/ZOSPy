@@ -21,7 +21,7 @@ class ShadedModelSettings:
 
     Notes
     -----
-    Not all settings in OpticStudio are supported yet.
+    Not all settings available in OpticStudio are supported yet.
     """
 
     image_size: ImageSize = Field(default=(800, 600), description="Image size")
@@ -31,8 +31,15 @@ class ShadedModel(SystemViewerWrapper[ShadedModelSettings]):
     """Shaded Model viewer."""
 
     TYPE = "ShadedModel"
+    MODE = "Sequential"
 
     def __init__(self, *, image_size: tuple[int, int] = (800, 600), settings: ShadedModelSettings | None = None):
+        """Initialize the Shaded Model viewer.
+
+        See Also
+        --------
+        ShadedModelSettings : Settings for the Shaded Model viewer.
+        """
         super().__init__(settings or ShadedModelSettings, locals())
 
     def configure_layout_tool(

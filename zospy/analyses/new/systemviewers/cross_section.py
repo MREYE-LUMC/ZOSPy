@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import TYPE_CHECKING, Annotated, Literal
 
-import numpy as np
 from pydantic.dataclasses import Field
 
 from zospy.analyses.new.decorators import analysis_settings
 from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber, ZOSAPIConstant
 from zospy.analyses.new.systemviewers.base import ImageSize, SystemViewerWrapper
 from zospy.api import constants
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
 
 __all__ = ("CrossSection", "CrossSectionSettings")
 
@@ -103,10 +105,15 @@ class CrossSection(SystemViewerWrapper[CrossSectionSettings]):
         surface_line_thickness: constants.Tools.Layouts.LineThicknessOptions | str = "Standard",
         settings: CrossSectionSettings | None = None,
     ):
-        """Initialize the cross section viewer."""
+        """Create a new cross section viewer.
+
+        See Also
+        --------
+        CrossSectionSettings : Settings for the cross section viewer.
+        """
         super().__init__(settings or CrossSectionSettings(), locals())
 
-    def configure_layout_tool(self) -> np.ndarray | None:
+    def configure_layout_tool(self) -> _ZOSAPI.Tools.Layouts.ICrossSectionExport:
         """Configure the cross section viewer."""
         layout_tool = self.oss.Tools.Layouts.OpenCrossSectionExport()
         layout_tool.StartSurface = self.settings.start_surface
