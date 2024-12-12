@@ -1,10 +1,14 @@
+"""Base classes for system viewers.
+
+System viewers are slightly different from other analyses: the analyses themselves are not configurable,
+but there is a separate tool for each viewer. This module provides the base classes for interacting with these tools.
+"""
+
 from __future__ import annotations
 
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from os import PathLike
-from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Generic, Literal
 from warnings import warn
 
@@ -16,6 +20,9 @@ from zospy.analyses.new.base import AnalysisData, AnalysisResult, AnalysisSettin
 from zospy.utils.pyutils import abspath
 
 if TYPE_CHECKING:
+    from os import PathLike
+    from pathlib import Path
+
     from zospy.api import _ZOSAPI
     from zospy.zpcore import OpticStudioSystem
 
@@ -160,7 +167,6 @@ class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSetting
         oss: OpticStudioSystem,
         image_output_file: str | Path | None = None,
         oncomplete: OnComplete | Literal["Close", "Release", "Sustain"] = "Close",
-        **kwargs,
     ) -> AnalysisData:
         """Run the analysis.
 

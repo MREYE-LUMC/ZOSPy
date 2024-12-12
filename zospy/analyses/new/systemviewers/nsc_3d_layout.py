@@ -1,4 +1,4 @@
-"""3D Layout viewer for Non-Sequential systems."""
+"""Nonsequential 3D Layout viewer."""
 
 from __future__ import annotations
 
