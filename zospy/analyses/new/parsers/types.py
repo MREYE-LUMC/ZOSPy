@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Generic, Literal, TypeVar, Union
+from operator import attrgetter
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, TypeVar, Union
 
 from numpy import array, ndarray
 from pandas import DataFrame
@@ -10,10 +11,13 @@ from pydantic import Field
 from pydantic.dataclasses import dataclass
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
-__all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "FieldNumber")
+from zospy.api import constants
 
 if TYPE_CHECKING:
     from pydantic import GetCoreSchemaHandler
+
+__all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "FieldNumber", "ZOSAPIConstant")
+
 
 Value = TypeVar("Value")
 
@@ -49,7 +53,7 @@ class ValidatedDataFrameAnnotation:
         return value.to_dict(orient="tight")
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type: any, handler: GetCoreSchemaHandler) -> CoreSchema:
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.dict_schema(),
             python_schema=core_schema.union_schema(
@@ -93,7 +97,7 @@ class ValidatedNDArrayAnnotation:
         return value
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type: any, handler: GetCoreSchemaHandler) -> CoreSchema:
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.list_schema(),
             python_schema=core_schema.union_schema(
@@ -113,6 +117,40 @@ class ValidatedNDArrayAnnotation:
 
 
 ValidatedNDArray = Annotated[ndarray, ValidatedNDArrayAnnotation]
+
+ZospyConstantType = TypeVar("ZospyConstantType")
+
+
+class ZOSAPIConstantAnnotation:
+    """Pydantic validation and serialization for ZOSAPI constants."""
+
+    def __init__(self, enum: str):
+        self.enum = enum
+
+    def _validate_constant(self, value: ZospyConstantType | str) -> ZospyConstantType:
+        try:
+            constant = attrgetter(self.enum)(constants)
+        except AttributeError as e:
+            raise AttributeError(f"Constant {self.enum} not found in zospy.constants") from e
+
+        return constants.process_constant(constant, value)
+
+    def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> any:
+        """Validate ZOSAPI constants."""
+        schema = core_schema.json_or_python_schema(
+            json_schema=core_schema.any_schema(),
+            python_schema=core_schema.any_schema(),
+        )
+
+        serializer = core_schema.plain_serializer_function_ser_schema(str, when_used="json-unless-none")
+
+        return core_schema.no_info_after_validator_function(self._validate_constant, schema, serialization=serializer)
+
+
+def ZOSAPIConstant(enum: str) -> type[str]:  # noqa: N802
+    """Pydantic validation and serialization for ZOSAPI constants."""
+    return Annotated[str, ZOSAPIConstantAnnotation(enum)]
+
 
 WavelengthNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]
 FieldNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]

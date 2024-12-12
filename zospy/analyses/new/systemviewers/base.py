@@ -5,11 +5,11 @@ from abc import ABC, abstractmethod
 from dataclasses import fields
 from os import PathLike
 from pathlib import Path
-from typing import TYPE_CHECKING, Generic, Literal
+from typing import TYPE_CHECKING, Annotated, Generic, Literal
 from warnings import warn
 
 import numpy as np
-from pydantic.fields import FieldInfo
+from pydantic.fields import Field, FieldInfo
 from System import Array
 
 from zospy.analyses.new.base import AnalysisData, AnalysisResult, AnalysisSettings, BaseAnalysisWrapper, OnComplete
@@ -18,6 +18,9 @@ from zospy.utils.pyutils import abspath
 if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
     from zospy.zpcore import OpticStudioSystem
+
+
+__all__ = ("SystemViewerWrapper", "ImageSize")
 
 
 class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSettings], ABC, Generic[AnalysisSettings]):
@@ -184,3 +187,7 @@ class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSetting
         self._complete(OnComplete(oncomplete))
 
         return result
+
+
+_UInt = Annotated[int, Field(gt=0)]
+ImageSize = tuple[_UInt, _UInt]
