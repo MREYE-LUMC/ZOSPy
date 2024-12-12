@@ -125,7 +125,13 @@ class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSetting
     @abstractmethod
     def configure_layout_tool(
         self,
-    ) -> _ZOSAPI.Tools.Layouts.ICrossSectionExport | _ZOSAPI.Tools.Layouts.I3DViewerExport:
+    ) -> (
+        _ZOSAPI.Tools.Layouts.ICrossSectionExport
+        | _ZOSAPI.Tools.Layouts.I3DViewerExport
+        | _ZOSAPI.Tools.Layouts.IShadedModelExport
+        | _ZOSAPI.Tools.Layouts.INSC3DLayoutExport
+        | _ZOSAPI.Tools.Layouts.INSCShadedModelExport
+    ):
         """Configure the layout tool for the analysis."""
 
     def run_analysis(self) -> np.ndarray | None:
