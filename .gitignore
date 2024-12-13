@@ -21,6 +21,7 @@ __pycache__/
 .pytest_cache/
 .tox/
 .ruff_cache/
+.venv/
 
 # Editor settings
 .idea/

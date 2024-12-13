@@ -2,11 +2,8 @@ import numpy as np
 import pytest
 
 import zospy.api.config as _config
-from zospy.analyses.polarization import (
-    _get_number_field,
-    polarization_pupil_map,
-    transmission,
-)
+from zospy.analyses.polarization import polarization_pupil_map, transmission
+from zospy.utils.zputils import _get_number_field
 
 XFAIL_REASON = "Intentionally skipped for this OpticStudio version. See https://zospy.readthedocs.io/compatibility."
 
@@ -85,7 +82,7 @@ class TestPolarizationPupilMap:
                 90,
                 "Image",
                 "17x17",
-                marks=pytest.mark.xfail_for_opticstudio_versions(["20.3.2"], XFAIL_REASON),
+                marks=pytest.mark.xfail_for_opticstudio_versions(["20.3.2", ">=24.1.3"], XFAIL_REASON),
             ),
         ],
     )

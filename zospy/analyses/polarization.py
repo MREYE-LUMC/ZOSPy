@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import re
 import struct
 from dataclasses import dataclass
 from io import StringIO
@@ -15,14 +14,8 @@ import zospy.api.config as _config
 from zospy import utils
 from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import constants
+from zospy.utils.zputils import _get_number_field
 from zospy.zpcore import OpticStudioSystem
-
-
-def _get_number_field(name: str, text: str) -> str:
-    return re.search(
-        rf"{re.escape(name)}\s*:\s*([-+]?(\d+({re.escape(_config.DECIMAL_POINT)}\d*)?|{re.escape(_config.DECIMAL_POINT)}\d+)(?:[Ee][-+]?\d+)?)",
-        text,
-    ).group(1)
 
 
 @dataclass

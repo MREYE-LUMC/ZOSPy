@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Literal
 
@@ -10,6 +12,10 @@ import zospy as zp
 def pytest_addoption(parser):
     parser.addoption("--extension", action="store_true", help="Connect to Zemax OpticStudio as extension")
     parser.addoption("--output-directory", type=Path)
+    parser.addoption("--update-ui", type=bool, default=False)
+    parser.addoption(
+        "--opticstudio-directory", type=Path, default=None, help="Path to the OpticStudio installation directory"
+    )
 
 
 def pytest_runtest_makereport(item, call):
@@ -29,6 +35,19 @@ def skip_by_connection_mode(request, connection_mode):
         required_mode = request.node.get_closest_marker("require_mode").args[0]
         if required_mode != connection_mode:
             pytest.skip(f"Test is only applicable in {required_mode} mode.")
+
+
+@pytest.fixture(autouse=True)
+def skip_for_opticstudio_versions(request, optic_studio_version):
+    if request.node.get_closest_marker("skip_for_opticstudio_versions"):
+        conditions, reason = request.node.get_closest_marker("skip_for_opticstudio_versions").args[:2]
+
+        if isinstance(conditions, str):
+            conditions = [conditions]
+
+        for condition in conditions:
+            if optic_studio_version.match(condition):
+                pytest.skip(reason=reason)
 
 
 @pytest.fixture(autouse=True)
@@ -56,15 +75,32 @@ def system_save_file(request):
 
 
 @pytest.fixture(scope="session")
-def zos() -> zp.ZOS:
-    zos = zp.ZOS()
+def opticstudio_directory(request) -> Path | None:
+    path = request.config.getoption("--opticstudio-directory")
+
+    if path is not None:
+        return path.resolve()
+
+    return None
+
+
+@pytest.fixture(scope="session")
+def zos(opticstudio_directory) -> zp.ZOS:
+    if opticstudio_directory is not None:
+        zos = zp.ZOS(opticstudio_directory=str(opticstudio_directory))
+    else:
+        zos = zp.ZOS()
 
     return zos
 
 
 @pytest.fixture
-def oss(zos: zp.ZOS, connection_mode) -> zp.zpcore.OpticStudioSystem:
+def oss(zos: zp.ZOS, connection_mode, request) -> zp.zpcore.OpticStudioSystem:
     oss = zos.connect(connection_mode)
+
+    if connection_mode == "extension":
+        # Disable UI updates using command line option, making the tests run faster
+        zos.Application.ShowChangesInUI = request.config.getoption("--update-ui")
 
     yield oss
 

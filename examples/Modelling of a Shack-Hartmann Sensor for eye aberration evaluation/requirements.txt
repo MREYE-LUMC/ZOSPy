@@ -1,0 +1,6 @@
+jupyter
+matplotlib
+numpy
+pandas
+lmfit
+zospy==1.3.0

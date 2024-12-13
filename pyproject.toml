@@ -24,10 +24,13 @@ classifiers = [
 ]
 requires-python = ">=3.9,<3.13"
 dependencies = [
+    "lark ~= 1.2.0",
     "pythonnet >=3.0.0,<4",
     "pandas",
+    "pydantic >= 2.4.0",
     "numpy",
-    "semver >= 3.0.0,<4"
+    "semver >= 3.0.0,<4",
+    "eval_type_backport", # TODO: Remove when dropping support for Python 3.9
 ]
 dynamic = ["version"]
 
@@ -58,7 +61,6 @@ dev = [
     "zospy[test]",
     "black[jupyter] == 23.3.0",
     "isort",
-    "pydantic ~= 2.0.0",
     "ruff",
 ]
 
@@ -66,7 +68,8 @@ dev = [
 markers = [
     "must_pass: test must pass, otherwise all other tests will be skipped",
     "require_mode: requires the specified connection mode, otherwise the test will be skipped",
-    "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions"
+    "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions",
+    "skip_for_opticstudio_versions: test is skipped for specific OpticStudio versions"
 ]
 
 [tool.mypy]

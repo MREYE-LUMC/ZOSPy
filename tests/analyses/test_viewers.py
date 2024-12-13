@@ -1,3 +1,8 @@
+from types import SimpleNamespace
+
+import pytest
+from semver import Version
+
 from zospy.analyses.systemviewers import (
     cross_section,
     nsc_3d_layout,
@@ -42,3 +47,16 @@ class TestViewers:
         result.Analysis._analysis.Close()
 
         assert analysistype == "NSCShadedModel"
+
+    @pytest.mark.parametrize(
+        "analysis,parameters",
+        [
+            (cross_section, dict(start_surface=2, number_of_rays=10)),
+            (viewer_3d, dict(end_surface=2, hide_x_bars=True)),
+        ],
+    )
+    def test_old_opticstudio_version_raises_warning(self, simple_system, analysis, parameters, monkeypatch):
+        monkeypatch.setattr(simple_system, "_ZOS", SimpleNamespace(version=Version(20, 1, 0)))
+
+        with pytest.warns(UserWarning, match=", ".join(parameters.keys())):
+            analysis(simple_system, **parameters, oncomplete="Close")
