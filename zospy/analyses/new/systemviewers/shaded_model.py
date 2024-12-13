@@ -40,7 +40,7 @@ class ShadedModel(SystemViewerWrapper[ShadedModelSettings]):
         --------
         ShadedModelSettings : Settings for the Shaded Model viewer.
         """
-        super().__init__(settings or ShadedModelSettings, locals())
+        super().__init__(settings or ShadedModelSettings(), locals())
 
     def configure_layout_tool(
         self,
