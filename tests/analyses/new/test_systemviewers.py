@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextlib import nullcontext as does_not_raise
 from datetime import datetime
 from types import SimpleNamespace
@@ -5,14 +7,19 @@ from types import SimpleNamespace
 import pytest
 
 from zospy.analyses.new.base import AnalysisMetadata
+from zospy.analyses.new.decorators import analysis_settings
 from zospy.analyses.new.systemviewers import CrossSection, NSC3DLayout, NSCShadedModel, ShadedModel, Viewer3D
 from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
 
 
 class TestBase:
-    class MockSystemViewer(SystemViewerWrapper[None]):
-        def __init__(self):
-            super().__init__(None, {})
+    @analysis_settings
+    class MockSystemViewerSettings:
+        number: int = 5
+
+    class MockSystemViewer(SystemViewerWrapper[MockSystemViewerSettings]):
+        def __init__(self, *, number: int = 5, settings: TestBase.MockSystemViewerSettings | None = None):
+            super().__init__(settings or TestBase.MockSystemViewerSettings(), locals())
 
         def _create_analysis(self, *, settings_first=True):  # noqa: ARG002
             self._analysis = SimpleNamespace(
@@ -150,6 +157,13 @@ class TestBase:
         with expectation:
             result = viewer._validate_end_surface(start_surface, end_surface)  # noqa: SLF001
             assert result == expected
+
+    @pytest.mark.skip_for_opticstudio_versions(">=24.1.0", "Settings are supported from OpticStudio 24R1")
+    def test_warn_ignored_settings(self):
+        viewer = TestBase.MockSystemViewer(number=6)
+
+        with pytest.warns(UserWarning, match="Some parameters were specified but ignored"):
+            viewer.run()
 
 
 class TestCrossSection:
