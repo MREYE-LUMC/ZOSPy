@@ -80,8 +80,11 @@ class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSetting
 
             raise ValueError("wavelength must be an integer or 'All'.")
 
-        if wavelength < -1 or wavelength > self.oss.SystemData.Wavelengths.NumberOfWavelengths:
+        if wavelength < -1 or wavelength == 0 or wavelength > self.oss.SystemData.Wavelengths.NumberOfWavelengths:
             raise ValueError("wavelength must be -1 or between 1 and the number of wavelengths.")
+
+        if not isinstance(wavelength, int):
+            raise TypeError("wavelength must be an integer or 'All'.")
 
         return wavelength
 
@@ -92,8 +95,11 @@ class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSetting
 
             raise ValueError("field must be an integer or 'All'.")
 
-        if field < 1 or field > self.oss.SystemData.Fields.NumberOfFields:
+        if field < -1 or field == 0 or field > self.oss.SystemData.Fields.NumberOfFields:
             raise ValueError("field must be -1 or between 1 and the number of fields.")
+
+        if not isinstance(field, int):
+            raise TypeError("field must be an integer or 'All'.")
 
         return field
 
