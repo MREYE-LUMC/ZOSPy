@@ -19,8 +19,10 @@ from zospy.analyses.new.base import (
 )
 from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.analyses.new.reports.surface_data import SurfaceDataSettings
+from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
 
 analysis_wrapper_classes = BaseAnalysisWrapper.__subclasses__()
+analysis_wrapper_classes.remove(SystemViewerWrapper)
 
 
 @dataclass
