@@ -13,22 +13,21 @@ Helper functions that are used in the raytracing and analysis notebooks.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Callable, NamedTuple
+
 import numpy as np
 import pandas as pd
 import sympy
-import zospy as zp
-
 from scipy.integrate import quad
 from sympy.geometry import Ellipse, Line2D, Point2D, intersection
-from typing import Callable, NamedTuple, TYPE_CHECKING
+
+import zospy as zp
 
 if TYPE_CHECKING:
     import zospy as zp
 
 
-def _ignore_fields(
-    oss: zp.zpcore.OpticStudioSystem, index: int | list[int], ignore=True
-):
+def _ignore_fields(oss: zp.zpcore.OpticStudioSystem, index: int | list[int], ignore=True):
     if isinstance(index, int):
         index = [index]
 
@@ -38,12 +37,9 @@ def _ignore_fields(
 
 def get_nodal_points(oss: zp.zpcore.OpticStudioSystem) -> tuple[float, float]:
     """Calculate the object and image nodal points of an optical system using OpticStudio."""
-    surface_1_to_iris = sum(
-        oss.LDE.GetSurfaceAt(i).Thickness for i in range(1, oss.LDE.StopSurface)
-    )
+    surface_1_to_iris = sum(oss.LDE.GetSurfaceAt(i).Thickness for i in range(1, oss.LDE.StopSurface))
     surface_2_to_iris = sum(
-        oss.LDE.GetSurfaceAt(i).Thickness
-        for i in range(oss.LDE.StopSurface, oss.LDE.NumberOfSurfaces - 1)
+        oss.LDE.GetSurfaceAt(i).Thickness for i in range(oss.LDE.StopSurface, oss.LDE.NumberOfSurfaces - 1)
     )
 
     # Only use the chief ray
@@ -53,12 +49,8 @@ def get_nodal_points(oss: zp.zpcore.OpticStudioSystem) -> tuple[float, float]:
         oss, surface_1=1, surface_2=oss.LDE.NumberOfSurfaces - 1
     )
 
-    object_nodal_point = (
-        cardinal_points_result.Data["Object Space"]["Nodal Planes"] - surface_1_to_iris
-    )
-    image_nodal_point = (
-        cardinal_points_result.Data["Image Space"]["Nodal Planes"] + surface_2_to_iris
-    )
+    object_nodal_point = cardinal_points_result.Data["Object Space"]["Nodal Planes"] - surface_1_to_iris
+    image_nodal_point = cardinal_points_result.Data["Image Space"]["Nodal Planes"] + surface_2_to_iris
 
     # Enable rays again
     _ignore_fields(oss, range(2, oss.SystemData.Fields.NumberOfFields + 1), False)
@@ -73,7 +65,6 @@ def get_ray_input_angle(
     coordinate="Y-coordinate",
 ):
     """Calculate the input angle of a ray with respect to the optical axis."""
-
     x0, y0 = (
         df.loc[reference_surface - 1, "Z-coordinate"],
         df.loc[reference_surface - 1, coordinate],
@@ -129,18 +120,10 @@ class InputOutputAngles(NamedTuple):
 
         return cls(
             input_angle_field=field_angle,
-            input_angle_cornea=get_ray_input_angle(
-                real_ray_trace_data, reference_surface=2, coordinate=coordinate
-            ),
-            input_angle_pupil=get_ray_input_angle(
-                real_ray_trace_data, reference_surface=4, coordinate=coordinate
-            ),
-            output_angle_pupil=get_ray_output_angle(
-                real_ray_trace_data, reference_point=(0, 0), coordinate=coordinate
-            ),
-            output_angle_np2=get_ray_output_angle(
-                real_ray_trace_data, reference_point=(np2, 0), coordinate=coordinate
-            ),
+            input_angle_cornea=get_ray_input_angle(real_ray_trace_data, reference_surface=2, coordinate=coordinate),
+            input_angle_pupil=get_ray_input_angle(real_ray_trace_data, reference_surface=4, coordinate=coordinate),
+            output_angle_pupil=get_ray_output_angle(real_ray_trace_data, reference_point=(0, 0), coordinate=coordinate),
+            output_angle_np2=get_ray_output_angle(real_ray_trace_data, reference_point=(np2, 0), coordinate=coordinate),
             output_angle_retina_center=(
                 get_ray_output_angle(
                     real_ray_trace_data,
@@ -167,9 +150,7 @@ class InputOutputAngles(NamedTuple):
 
 def get_retina_locations(row: pd.Series, ray_trace_data: pd.DataFrame):
     """Get the retina locations for a given row in the input-output angles DataFrame."""
-    retina_ray_trace_result = ray_trace_data.query(
-        "InputAngle == @row.input_angle_field and Comment == 'Retina'"
-    )
+    retina_ray_trace_result = ray_trace_data.query("InputAngle == @row.input_angle_field and Comment == 'Retina'")
 
     if len(retina_ray_trace_result) != 1 and row.input_angle_field != 0:
         raise RuntimeError(f"Got more than one result for {row.input_angle_field=}")
@@ -187,12 +168,8 @@ def euclidean_distance(column_1: pd.Series, column_2: pd.Series):
     return sign * distance
 
 
-def _build_ellipse_intersection_function() -> (
-    Callable[[float, float, float, float, float], tuple[float, float]]
-):
-    line_x_0, angle, r_x, r_y, ellipse_x_0 = sympy.symbols(
-        "line_x_0 angle r_x r_y ellipse_x_0"
-    )
+def _build_ellipse_intersection_function() -> Callable[[float, float, float, float, float], tuple[float, float]]:
+    line_x_0, angle, r_x, r_y, ellipse_x_0 = sympy.symbols("line_x_0 angle r_x r_y ellipse_x_0")
 
     ellipse = Ellipse(center=Point2D(ellipse_x_0, 0), hradius=r_x, vradius=r_y)
 
@@ -217,8 +194,8 @@ def find_ellipse_intersection(
     r_y: float,
     ellipse_center_x: float,
 ) -> tuple[float, float]:
-    """
-    Find the intersection between a straight line and an ellipse.
+    """Find the intersection between a straight line and an ellipse.
+
     The ellipse has horizontal (axial) radius `r_x` and vertical (radial) radius `r_y`.
     The line intersects the horizontal axis at `distance_to_center` from the ellipse center
     and has an angle `angle` with the horizontal axis.
@@ -245,9 +222,7 @@ def find_ellipse_intersection(
     if angle <= 1e-3:
         return ellipse_center_x + r_x, 0
 
-    all_intersections = sympy_ellipse_intersection(
-        reference_point, angle, r_x, r_y, ellipse_center_x
-    )
+    all_intersections = sympy_ellipse_intersection(reference_point, angle, r_x, r_y, ellipse_center_x)
 
     if len(all_intersections) == 2:
         if (
