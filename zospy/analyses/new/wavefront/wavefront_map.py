@@ -1,3 +1,5 @@
+"""Wavefront Map analysis."""
+
 from __future__ import annotations
 
 from typing import Annotated, Literal
@@ -7,7 +9,7 @@ from pydantic import Field
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import ZOSAPIConstant
+from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
