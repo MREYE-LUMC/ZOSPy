@@ -496,6 +496,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     """
 
     TYPE: str = None
+    MODE: Literal["Sequential", "Nonsequential"] | None = None
 
     # Flags to indicate if the analysis needs a configuration file or text output file
     _needs_config_file: bool = False
@@ -592,16 +593,23 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         with open(self._text_output_file, encoding=self.oss._ZOS.get_txtfile_encoding()) as f:  # noqa: SLF001
             return f.read()
 
-    def _create_analysis(self):
+    def _create_analysis(self, *, settings_first=True):
         if self.analysis is not None and self.analysis.TypeName == self.TYPE:
             return
 
         analysis_type = constants.process_constant(constants.Analysis.AnalysisIDM, self.TYPE)
-        self._analysis = new_analysis(self.oss, analysis_type)
+        self._analysis = new_analysis(self.oss, analysis_type, settings_first=settings_first)
 
     @abstractmethod
     def run_analysis(self, *args, **kwargs) -> AnalysisData:
         """Run the analysis and return the results."""
+
+    def _check_mode(self):
+        if self.MODE is None:
+            return
+
+        if self.oss.Mode != self.MODE:
+            raise ValueError(f"The analysis requires {self.MODE} mode, got {self.oss.Mode}.")
 
     @staticmethod
     def _create_tempfile(path: Path | None, suffix: str) -> (Path, bool):
@@ -663,6 +671,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
             The analysis results.
         """
         self._oss = weakref.proxy(oss)
+        self._check_mode()
         self._create_analysis()
 
         if self._needs_config_file:
