@@ -150,7 +150,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings]):
         match = curvature_description_regex.match(datagrid.Description)
 
         if match is None:  # fall back to using exported text files
-            logging.warning("Could not obtain description parameters from datagrid.Description, trying to use exported textfile")
+            logging.warning("Could not obtain description parameters from datagrid.Description, trying to use exported text file")
 
             self._needs_text_output_file = True
             self._text_output_file, self._remove_text_output_file = self._create_tempfile(None, ".txt")
