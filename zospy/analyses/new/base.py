@@ -94,12 +94,15 @@ AnalysisSettings = TypeVar("AnalysisSettings")
 
 
 class _TypeInfo(TypedDict):
-    data_type: Literal["dataframe", "ndarray", "dataclass"]
+    data_type: Literal["dataframe", "ndarray", "dataclass", "none"]
     name: NotRequired[str | None]
     module: NotRequired[str | None]
 
 
 def _serialize_analysis_data_type(data: AnalysisData) -> _TypeInfo:
+    if data is None:
+        return {"data_type": "none"}
+
     if isinstance(data, pd.DataFrame):
         return {"data_type": "dataframe"}
 
@@ -126,6 +129,9 @@ def _deserialize_dataclass(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
 
 
 def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> AnalysisData:
+    if typeinfo['data_type'] == "none":
+        return None
+
     if typeinfo["data_type"] == "dataframe":
         return pd.DataFrame.from_dict(data, orient="tight")
 
