@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import re
 from typing import Annotated
 
@@ -147,6 +148,13 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings]):
 
         datagrid = self.analysis.Results.GetDataGrid(0)
         match = curvature_description_regex.match(datagrid.Description)
+
+        if match is None:  # fall back to using exported text files
+            logging.warning("Could not obtain description parameters from datagrid.Description, trying to use exported textfile")
+
+            self._needs_text_output_file = True
+            self._text_output_file, self._remove_text_output_file = self._create_tempfile(None, ".txt")
+            match = curvature_description_regex.search(self.get_text_output())
 
         if match is None:
             raise ValueError(f"Could not parse description: {datagrid.Description}")
