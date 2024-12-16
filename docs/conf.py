@@ -4,6 +4,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import importlib.metadata
+from datetime import datetime
 from pathlib import Path
 from shutil import copytree
 
@@ -11,7 +12,7 @@ from shutil import copytree
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ZOSPy"
-copyright = "2023, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
+copyright = f"2023 - {datetime.now().year}, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 
 # -- General configuration ---------------------------------------------------
