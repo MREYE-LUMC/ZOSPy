@@ -159,11 +159,11 @@ class TestBase:
             assert result == expected
 
     @pytest.mark.skip_for_opticstudio_versions(">=24.1.0", "Settings are supported from OpticStudio 24R1")
-    def test_warn_ignored_settings(self):
+    def test_warn_ignored_settings(self, simple_system):
         viewer = TestBase.MockSystemViewer(number=6)
 
         with pytest.warns(UserWarning, match="Some parameters were specified but ignored"):
-            viewer.run()
+            viewer.run(simple_system)
 
 
 class TestCrossSection:
