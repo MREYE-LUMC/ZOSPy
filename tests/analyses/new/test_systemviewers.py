@@ -14,10 +14,11 @@ from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
 
 def consider_minimal_opticstudio_version_in_result(result, minimal_version):
     """Makes sure systemviewer results is correctly asserted for different versions of OpticStudio."""
-    if minimal_version >= '24.1.0':
+    if minimal_version >= "24.1.0":
         assert result.data is not None
     else:  # No result.data as layout exports are not supported
         assert result.data is None
+
 
 class TestBase:
     @analysis_settings

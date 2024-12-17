@@ -129,7 +129,7 @@ def _deserialize_dataclass(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
 
 
 def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> AnalysisData:
-    if typeinfo['data_type'] == "none":
+    if typeinfo["data_type"] == "none":
         return None
 
     if typeinfo["data_type"] == "dataframe":
