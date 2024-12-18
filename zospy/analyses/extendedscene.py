@@ -14,14 +14,16 @@ from zospy.zpcore import OpticStudioSystem
 class _GiaDataGridWrapper:
     def __init__(self, datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx: int | float, miny: int | float):
         """Wrapper for datagrids that specifically allows for overriding MinX and MinY.
+
         Parameters
         ----------
-            datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid
-                The datagrid that should be wrapped
-            minx: int | float
-                The new minx
-            miny: int | float
-                The new miny
+        datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid
+            The datagrid that should be wrapped
+        minx: int | float
+            The new minx
+        miny: int | float
+            The new miny
+
         Returns
         -------
         _GiaDataGridWrapper
@@ -57,6 +59,7 @@ def _gia_correct_datagrid_origin(
     wavelength: Literal["All"] | int = "All",
 ) -> _GiaDataGridWrapper:
     """Corrects the datagrid origin (MinX, MinY) for the Geometric Image Analysis.
+
     Parameters
     ----------
     oss : OpticStudioSystem
@@ -70,10 +73,12 @@ def _gia_correct_datagrid_origin(
     wavelength : str | int
         The wavelength used in the analysis. Either 'All' or an integer specifying the wavelength number. Defaults to
         'All'.
+
     Returns
     -------
     _GiaDataGridWrapper
         A wrapper around the datagrid in which the MinX and MinY attributes are corrected
+
     Raises
     ------
     RuntimeError
