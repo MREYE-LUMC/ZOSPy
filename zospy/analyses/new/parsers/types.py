@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from operator import attrgetter
 from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, TypeVar, Union
 
@@ -130,8 +131,9 @@ class ZOSAPIConstantAnnotation:
     def _validate_constant(self, value: ZospyConstantType | str) -> ZospyConstantType:
         try:
             constant = attrgetter(self.enum)(constants)
-        except AttributeError as e:
-            raise AttributeError(f"Constant {self.enum} not found in zospy.constants") from e
+        except AttributeError:
+            logging.warning(f"Constant {self.enum} not found in zospy.constants")
+            return None
 
         return constants.process_constant(constant, value)
 

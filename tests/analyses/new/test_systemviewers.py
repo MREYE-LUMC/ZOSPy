@@ -12,6 +12,14 @@ from zospy.analyses.new.systemviewers import CrossSection, NSC3DLayout, NSCShade
 from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
 
 
+def assert_systemviewer_result(result, minimal_version):
+    """Makes sure systemviewer results is correctly asserted for different versions of OpticStudio."""
+    if minimal_version >= "24.1.0":
+        assert result.data is not None
+    else:  # No result.data as layout exports are not supported
+        assert result.data is None
+
+
 class TestBase:
     @analysis_settings
     class MockSystemViewerSettings:
@@ -167,9 +175,9 @@ class TestBase:
 
 
 class TestCrossSection:
-    def test_can_run(self, simple_system):
+    def test_can_run(self, simple_system, optic_studio_version):
         result = CrossSection().run(simple_system)
-        assert result.data is not None
+        assert_systemviewer_result(result, optic_studio_version)
 
     def test_to_json(self, simple_system):
         result = CrossSection().run(simple_system)
@@ -177,9 +185,9 @@ class TestCrossSection:
 
 
 class TestViewer3D:
-    def test_can_run(self, simple_system):
+    def test_can_run(self, simple_system, optic_studio_version):
         result = Viewer3D().run(simple_system)
-        assert result.data is not None
+        assert_systemviewer_result(result, optic_studio_version)
 
     def test_to_json(self, simple_system):
         result = Viewer3D().run(simple_system)
@@ -187,9 +195,9 @@ class TestViewer3D:
 
 
 class TestShadedModel:
-    def test_can_run(self, simple_system):
+    def test_can_run(self, simple_system, optic_studio_version):
         result = ShadedModel().run(simple_system)
-        assert result.data is not None
+        assert_systemviewer_result(result, optic_studio_version)
 
     def test_to_json(self, simple_system):
         result = ShadedModel().run(simple_system)
@@ -197,9 +205,9 @@ class TestShadedModel:
 
 
 class TestNSC3DLayout:
-    def test_can_run(self, nsc_simple_system):
+    def test_can_run(self, nsc_simple_system, optic_studio_version):
         result = NSC3DLayout().run(nsc_simple_system)
-        assert result.data is not None
+        assert_systemviewer_result(result, optic_studio_version)
 
     def test_to_json(self, nsc_simple_system):
         result = NSC3DLayout().run(nsc_simple_system)
@@ -207,9 +215,9 @@ class TestNSC3DLayout:
 
 
 class TestNSCShadedModel:
-    def test_can_run(self, nsc_simple_system):
+    def test_can_run(self, nsc_simple_system, optic_studio_version):
         result = NSCShadedModel().run(nsc_simple_system)
-        assert result.data is not None
+        assert_systemviewer_result(result, optic_studio_version)
 
     def test_to_json(self, nsc_simple_system):
         result = NSCShadedModel().run(nsc_simple_system)
