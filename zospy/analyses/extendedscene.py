@@ -17,11 +17,11 @@ class _GiaDataGridWrapper:
 
         Parameters
         ----------
-        datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid
+        datagrid : _ZOSAPI.Analysis.Data.IAR_DataGrid
             The datagrid that should be wrapped
-        minx: int | float
+        minx : int | float
             The new minx
-        miny: int | float
+        miny : int | float
             The new miny
 
         Returns
