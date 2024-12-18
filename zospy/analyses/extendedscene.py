@@ -8,8 +8,127 @@ import pandas as pd
 
 from zospy import utils
 from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
-from zospy.api import constants
+from zospy.api import constants, _ZOSAPI
 from zospy.zpcore import OpticStudioSystem
+
+class _GiaDataGridWrapper:
+    def __init__(self, datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx: int | float, miny: int | float):
+        """Wrapper for datagrids that specifically allows for overriding MinX and MinY.
+        Parameters
+        ----------
+            datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid
+                The datagrid that should be wrapped
+            minx: int | float
+                The new minx
+            miny: int | float
+                The new miny
+        Returns
+        -------
+        _GiaDataGridWrapper
+            A wrapper around the datagrid in which the MinX and MinY attributes are corrected
+        """
+        self._DataGrid = datagrid  # Store the original DataGrid instance
+        self._MinX = minx
+        self._MinY = miny
+
+    def __getattr__(self, name):
+        # Intercept attribute access
+        if name == "Minx":
+            return self._MinX
+        if name == "MinY":
+            return self._MinY
+        else:
+            # Default: forward all other attributes to the original object
+            return getattr(self._DataGrid, name)
+
+    def __setattr__(self, name, value):
+        if name == "_DataGrid":
+            # Allow setting the internal _DataGrid reference
+            super().__setattr__(name, value)
+        else:
+            setattr(self._DataGrid, name, value)
+
+
+def _gia_correct_datagrid_origin(
+    oss: OpticStudioSystem,
+    datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid,
+    reference: constants.Analysis.Settings.ReferenceGia | str = "ChiefRay",
+    surface: Literal["Image", "Object"] | int = "Image",
+    wavelength: Literal["All"] | int = "All",
+) -> _GiaDataGridWrapper:
+    """Corrects the datagrid origin (MinX, MinY) for the Geometric Image Analysis.
+    Parameters
+    ----------
+    oss : OpticStudioSystem
+        A ZOSPy OpticStudioSystem instance. Should be sequential.
+    datagrid : _ZOSAPI.Analysis.Data.IAR_DataGrid
+        The datagrid for which the origin should be corrected
+    reference : constants.Analysis.Settings.ReferenceGia | str
+        Defines the reference coordinate for the center of the plot. Defaults to 'ChiefRay'.
+    surface : Literal["Image", "Object"] | int
+        The surface that is to be analyzed. Either 'Image', 'Object' or an integer. Defaults to 'Image'.
+    wavelength : str | int
+        The wavelength used in the analysis. Either 'All' or an integer specifying the wavelength number. Defaults to
+        'All'.
+    Returns
+    -------
+    _GiaDataGridWrapper
+        A wrapper around the datagrid in which the MinX and MinY attributes are corrected
+    Raises
+    ------
+    RuntimeError
+        When reference is set to 'PrimaryChief' and the primary wavelength cannot be identified.
+    """
+    if surface == "Image":
+        surface = oss.LDE.NumberOfSurfaces - 1  # last surface
+    elif surface == "Object":
+        surface = 0
+    elif isinstance(surface, int):
+        pass
+    else:
+        raise ValueError("Surface value should be 'Image', 'Object' or an integer, got {value}")
+
+    if str(reference) in ("ChiefRay", "PrimaryChief"):
+        x_operand = constants.Editors.MFE.MeritOperandType.REAX
+        y_operand = constants.Editors.MFE.MeritOperandType.REAY
+    elif str(reference == "Vertex"):
+        x_operand = constants.Editors.MFE.MeritOperandType.GLCX
+        y_operand = constants.Editors.MFE.MeritOperandType.GLCY
+    elif str(reference == "Centroid"):
+        x_operand = constants.Editors.MFE.MeritOperandType.CENX
+        y_operand = constants.Editors.MFE.MeritOperandType.CENY
+    else:
+        raise ValueError("Reference should be one of 'ChiefRay', 'Vertex', 'Centroid', 'PrimaryChief")
+
+    if str(reference) == "PrimaryChief":  # use primary wavelength
+        for i in oss.SystemData.Wavelengths.NumberOfWavelengths:
+            if oss.SystemData.Wavelengths.GetWavelength(i).IsPrimary:
+                break
+        else:
+            raise RuntimeError("Cannot identify primary wavelength")
+
+        cx = oss.MFE.GetOperandValue(x_operand, surface, i, 0, 0, 0, 0, 0, 0)
+        cy = oss.MFE.GetOperandValue(y_operand, surface, i, 0, 0, 0, 0, 0, 0)
+    elif wavelength == "All":  # ToDo check what OpticStudio does exactly
+        cxs = [
+            oss.MFE.GetOperandValue(x_operand, surface, i, 0, 0, 0, 0, 0, 0)
+            for i in range(1, oss.SystemData.Wavelengths.NumberOfWavelengths + 1, 1)
+        ]
+        cx = sum(cxs) / oss.SystemData.Wavelengths.NumberOfWavelengths
+
+        cys = [
+            oss.MFE.GetOperandValue(y_operand, surface, i, 0, 0, 0, 0, 0, 0)
+            for i in range(1, oss.SystemData.Wavelengths.NumberOfWavelengths + 1, 1)
+        ]
+        cy = sum(cys) / oss.SystemData.Wavelengths.NumberOfWavelengths
+    else:
+        cx = oss.MFE.GetOperandValue(x_operand, surface, wavelength, 0, 0, 0, 0, 0, 0)
+        cy = oss.MFE.GetOperandValue(y_operand, surface, wavelength, 0, 0, 0, 0, 0, 0)
+
+    minx = cx - 0.5 * datagrid.Nx * datagrid.Dx
+    miny = cy - 0.5 * datagrid.Ny * datagrid.Dy
+
+    return _GiaDataGridWrapper(datagrid=datagrid, minx=minx, miny=miny)
 
 
 def geometric_image_analysis(
