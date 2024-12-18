@@ -10,7 +10,7 @@ from datetime import datetime
 from enum import Enum
 from importlib import import_module
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import pandas as pd
@@ -564,12 +564,12 @@ class Analysis:
 
         return "All" if wavelength == 0 else wavelength
 
-    def set_surface(self, value: int | str):
+    def set_surface(self, value: int | Literal["Image", "Objective", "Object"]):
         """Sets the surface value for the analysis.
 
         Parameters
         ----------
-        value : int or str
+        value : int or Literal["Image", "Objective", "Object"]
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
             string.
 
@@ -581,11 +581,11 @@ class Analysis:
         ------
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
-            equal 'Image' or 'Objective'.
+            equal 'Image', 'Objective' or 'Object'.
         """
         if value == "Image":
             self.Settings.Surface.UseImageSurface()
-        elif value == "Objective":
+        elif value in ("Object", "Objective"):
             self.Settings.Surface.UseObjectiveSurface()
         elif isinstance(value, int):
             self.Settings.Surface.SetSurfaceNumber(value)
