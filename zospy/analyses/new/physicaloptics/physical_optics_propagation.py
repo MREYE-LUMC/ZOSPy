@@ -110,7 +110,7 @@ class PhysicalOpticsPropagationSettings:
         Defaults to False.
     compute_fiber_coupling_integral : bool
         Defines whether the fibre coupling is computed. Defaults to False.
-    ignore_fibre_polarization :
+    ignore_fiber_polarization :
         Defines whether polarization is considered. Defaults to True.
     fiber_type : constants.Analysis.PhysicalOptics.POPFiberTypes | str
         The fiber type. Defaults to 'GaussianWaist'.
@@ -170,7 +170,7 @@ class PhysicalOpticsPropagationSettings:
         default="AlongBeam", description="Projection types"
     )
     contour_format: str = Field(default="", description="Contour format")
-    plot_scale: float = Field(default=1, ge=0, description="Plot scale")
+    plot_scale: float = Field(default=0, description="Plot scale")
     scale_type: ZOSAPIConstant("Analysis.PhysicalOptics.POPScaleTypes") = Field(
         default="Linear", description="Scale type"
     )
@@ -183,7 +183,7 @@ class PhysicalOpticsPropagationSettings:
 
     # Fiber definition
     compute_fiber_coupling_integral: bool = Field(default=False, description="Compute fiber coupling integral")
-    ignore_fibre_polarization: bool = Field(default=False, description="Ignore fibre polarization")
+    ignore_fiber_polarization: bool = Field(default=True, description="Ignore fibre polarization")
     fiber_type: ZOSAPIConstant("Analysis.PhysicalOptics.POPFiberTypes") = Field(
         default="GaussianWaist", description="Fiber type"
     )
@@ -195,7 +195,7 @@ class PhysicalOpticsPropagationSettings:
     fiber_type_file: str = Field(default="", description="Fiber type file")
     fiber_parameters: dict | None = Field(default=None, description="Fiber parameters dictionary")
 
-    auto_calculate_beam_sampling: bool = Field(default=True, description="Automatically calculate beam sampling")
+    auto_calculate_beam_sampling: bool = Field(default=False, description="Automatically calculate beam sampling")
 
     @model_validator(mode="after")
     def _validate_total_power_peak_irradiance(self):
@@ -273,7 +273,7 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
         output_beam_file: str = "",
         save_beam_at_all_surfaces: bool = False,
         compute_fiber_coupling_integral: bool = False,
-        ignore_fibre_polarization: bool = True,
+        ignore_fiber_polarization: bool = True,
         fiber_type: constants.Analysis.PhysicalOptics.POPFiberTypes | str = "GaussianWaist",
         fiber_position: constants.Analysis.PhysicalOptics.POPFiberPositions | str = "ChiefRay",
         tilt_about_x: float = 0,

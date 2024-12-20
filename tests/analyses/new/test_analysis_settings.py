@@ -1,7 +1,8 @@
 import re
-from inspect import getsource, getsourcelines
+from inspect import getsource
 
 import pytest
+
 from zospy.analyses.new.base import BaseAnalysisWrapper, new_analysis
 from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
 from zospy.api import constants
