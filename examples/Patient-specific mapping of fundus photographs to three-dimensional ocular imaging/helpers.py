@@ -61,7 +61,7 @@ def get_nodal_points(oss: zp.zpcore.OpticStudioSystem) -> tuple[float, float]:
 def get_ray_input_angle(
     df: pd.DataFrame,
     reference_surface: int = 2,
-    reference_point: tuple[float, float] = None,
+    reference_point: tuple[float, float] | None = None,
     coordinate="Y-coordinate",
 ):
     """Calculate the input angle of a ray with respect to the optical axis."""
@@ -99,10 +99,10 @@ class InputOutputAngles(NamedTuple):
     input_angle_pupil: float
     output_angle_pupil: float
     output_angle_np2: float
-    output_angle_retina_center: float = None
-    output_angle_navarro_np2: float = None
-    location_np2: float = None
-    location_retina_center: float = None
+    output_angle_retina_center: float | None = None
+    output_angle_navarro_np2: float | None = None
+    location_np2: float | None = None
+    location_retina_center: float | None = None
     patient: int | str | None = None
 
     @classmethod
@@ -111,11 +111,11 @@ class InputOutputAngles(NamedTuple):
         ray_trace_result: zp.analyses.base.AnalysisResult,
         field_angle: float,
         np2: float,
-        np2_navarro: float = None,
-        retina_center: float = None,
-        patient: int = None,
+        np2_navarro: float | None = None,
+        retina_center: float | None = None,
+        patient: int | None = None,
         coordinate="Y-coordinate",
-    ) -> "InputOutputAngles":
+    ) -> InputOutputAngles:
         real_ray_trace_data = ray_trace_result.Data.RealRayTraceData
 
         return cls(

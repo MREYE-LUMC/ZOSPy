@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import TYPE_CHECKING, Annotated, Literal
 from warnings import warn
 
 from pandas import DataFrame
@@ -10,10 +10,12 @@ from pydantic import Field, model_validator
 
 from zospy.analyses.new.base import BaseAnalysisWrapper, new_analysis
 from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import WavelengthNumber, ZOSAPIConstant
+from zospy.analyses.new.parsers.types import WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
-from zospy.zpcore import OpticStudioSystem
+
+if TYPE_CHECKING:
+    from zospy.zpcore import OpticStudioSystem
 
 
 @analysis_settings
@@ -239,7 +241,8 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
     TYPE = "PhysicalOpticsPropagation"
     MODE = "Sequential"
 
-    def __init__(self,
+    def __init__(
+        self,
         *,
         wavelength: WavelengthNumber = "All",
         field: int = 1,
@@ -283,16 +286,24 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
         auto_calculate_beam_sampling: bool = False,
         settings: PhysicalOpticsPropagationSettings | None = None,
     ):
+        """Create a Physical Optics Propagation analysis.
+
+        See Also
+        --------
+        PhysicalOpticsPropagationSettings : Settings for the Physical Optics Propagation analysis.
+        """
         super().__init__(settings or PhysicalOpticsPropagationSettings(), locals())
 
-    def run_analysis(self, *args, **kwargs) -> DataFrame:
+    def run_analysis(self) -> DataFrame:
         """Run the Physical Optics Propagation analysis."""
         if self.settings.start_surface == "Ent. Pupil":
             self.analysis.Settings.StartSurface.SetSurfaceNumber(0)
         elif isinstance(self.settings.start_surface, int):
             self.analysis.Settings.StartSurface.SetSurfaceNumber(self.settings.start_surface)
         else:
-            raise ValueError(f'start_surface value should be "Ent. Pupil" or an integer, got {self.settings.start_surface}')
+            raise ValueError(
+                f'start_surface value should be "Ent. Pupil" or an integer, got {self.settings.start_surface}'
+            )
 
         if self.settings.end_surface == "Image":
             self.analysis.Settings.EndSurface.UseImageSurface()
@@ -313,11 +324,23 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
             constants.Analysis.PhysicalOptics.POPBeamTypes, self.settings.beam_type
         )
 
-        x_sampling = f"{self.settings.x_sampling}x{self.settings.y_sampling}" if isinstance(self.settings.x_sampling, int) else self.settings.x_sampling
-        y_sampling = f"{self.settings.x_sampling}x{self.settings.y_sampling}" if isinstance(self.settings.y_sampling, int) else self.settings.y_sampling
+        x_sampling = (
+            f"{self.settings.x_sampling}x{self.settings.y_sampling}"
+            if isinstance(self.settings.x_sampling, int)
+            else self.settings.x_sampling
+        )
+        y_sampling = (
+            f"{self.settings.x_sampling}x{self.settings.y_sampling}"
+            if isinstance(self.settings.y_sampling, int)
+            else self.settings.y_sampling
+        )
 
-        self.analysis.Settings.XSampling = constants.process_constant(constants.Analysis.SampleSizes, standardize_sampling(x_sampling))
-        self.analysis.Settings.YSampling = constants.process_constant(constants.Analysis.SampleSizes, standardize_sampling(y_sampling))
+        self.analysis.Settings.XSampling = constants.process_constant(
+            constants.Analysis.SampleSizes, standardize_sampling(x_sampling)
+        )
+        self.analysis.Settings.YSampling = constants.process_constant(
+            constants.Analysis.SampleSizes, standardize_sampling(y_sampling)
+        )
         self.analysis.Settings.XWidth = self.settings.x_width
         self.analysis.Settings.YWidth = self.settings.y_width
 
@@ -347,7 +370,9 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
         if self.settings.show_as == "Contour":
             self.analysis.Settings.ContourFormat = self.settings.contour_format
         elif self.settings.show_as in ("CrossX", "CrossY"):
-            self.analysis.Settings.RowOrColumn = 0 if self.settings.row_or_column == "Center" else self.settings.row_or_column
+            self.analysis.Settings.RowOrColumn = (
+                0 if self.settings.row_or_column == "Center" else self.settings.row_or_column
+            )
 
         self.analysis.Settings.PlotScale = self.settings.plot_scale
         self.analysis.Settings.ScaleType = constants.process_constant(
@@ -383,7 +408,11 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
             self._set_pop_parameters("fiber", self.settings.fiber_parameters)
 
         # Auto calculate beam sampling
-        if self.settings.auto_calculate_beam_sampling and str(self.settings.beam_type) not in ("File", "DLL", "Multimode"):
+        if self.settings.auto_calculate_beam_sampling and str(self.settings.beam_type) not in (
+            "File",
+            "DLL",
+            "Multimode",
+        ):
             self.analysis.Settings.AutoCalculateBeamSampling()
 
         # Run analysis

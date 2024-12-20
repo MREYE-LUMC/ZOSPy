@@ -98,7 +98,5 @@ class TestZOSAPIConstant:
         return True
 
     @pytest.mark.parametrize("annotation", _get_instances())
-    def test_constant_exists(self, zos, annotation):
+    def test_constant_exists(self, zos, annotation):  # noqa: ARG002
         assert self._hasattr(constants, annotation.enum)
-
-
