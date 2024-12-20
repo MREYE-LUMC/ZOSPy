@@ -20,10 +20,11 @@ Open an analysis for which a wrapper function is not yet available:
 ... )
 """
 
-from zospy.analyses.new import mtf, polarization, raysandspots, reports, surface, systemviewers, wavefront
+from zospy.analyses.new import mtf, polarization, raysandspots, reports, surface, systemviewers, wavefront, physicaloptics
 
 __all__ = (
     "mtf",
+    "physicaloptics",
     "polarization",
     "raysandspots",
     "reports",

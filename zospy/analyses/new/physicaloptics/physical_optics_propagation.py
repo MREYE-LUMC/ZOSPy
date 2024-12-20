@@ -204,25 +204,33 @@ class PhysicalOpticsPropagationSettings:
                 "Either use_total_power or use_peak_irradiance should be True, they cannot both be True or False."
             )
 
+        return self
+
     @model_validator(mode="after")
     def _validate_beam_file(self):
         if str(self.beam_type) not in ("File", "DLL", "Multimode") and self.beam_file != "":
             ValueError(f"Beam type {self.beam_type!s} does not allow specification of beam_file.")
 
+        return self
+
     @model_validator(mode="after")
     def _validate_output_beam_file(self):
         if self.save_output_beam and self.output_beam_file == "":
             ValueError("output_beam_file should be specified when save_output_beam is True.")
-        if not self.save_output_beam
+        if not self.save_output_beam:
             if self.output_beam_file != "":
                 warn("output_beam_file is ignored when save_output_beam is False.")
             if self.save_beam_at_all_surfaces:
                 warn("save_beam_at_all_surfaces is ignored when save_output_beam is False.")
 
+        return self
+
     @model_validator(mode="after")
     def _validate_fiber_type_file(self):
         if str(self.fiber_type) not in ("File", "DLL") and self.fiber_type_file != "":
             ValueError(f"Fiber type {self.fiber_type!s} does not allow specification of fiber_type_file.")
+
+        return self
 
 
 class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSettings, DataFrame]):
