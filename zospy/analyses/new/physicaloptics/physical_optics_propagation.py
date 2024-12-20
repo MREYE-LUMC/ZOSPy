@@ -156,7 +156,7 @@ class PhysicalOpticsPropagationSettings:
     y_width: float = Field(default=1, description="Beam width in Y direction")
     use_total_power: bool = Field(default=False, description="Use total power")
     total_power: float = Field(default=1, description="Total power")
-    use_peak_irradiance: bool = Field(default=False, description="Use peak irradiance")
+    use_peak_irradiance: bool = Field(default=True, description="Use peak irradiance")
     peak_irradiance: float = Field(default=1, description="Peak irradiance")
 
     # Display
