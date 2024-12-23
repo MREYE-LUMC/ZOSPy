@@ -96,7 +96,7 @@ class FFTThroughFocusMTF(BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughF
         self.analysis.Settings.NumberOfSteps = self.settings.number_of_steps
         self.analysis.wavelength = self.settings.wavelength
         self.analysis.field = self.settings.field
-        self.analysis.Settings.MtfType = constants.process_constant(
+        self.analysis.Settings.Type = constants.process_constant(
             constants.Analysis.Settings.Mtf.MtfTypes, self.settings.mtf_type
         )
         self.analysis.Settings.UsePolarization = self.settings.use_polarization
