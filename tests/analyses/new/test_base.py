@@ -16,10 +16,42 @@ from zospy.analyses.new.base import (
     AnalysisMetadata,
     AnalysisResult,
     BaseAnalysisWrapper,
+    _validated_setter,
 )
 from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.analyses.new.reports.surface_data import SurfaceDataSettings
 from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
+
+
+class TestValidatedSetter:
+    class MockSettings:
+        int_setting: int = 1
+        string_setting: str = "a"
+
+    def test_get_existing(self):
+        settings = _validated_setter(self.MockSettings())
+
+        assert settings.int_setting == self.MockSettings.int_setting
+
+    def test_get_non_existing(self):
+        settings = _validated_setter(self.MockSettings())
+
+        with pytest.raises(AttributeError):
+            assert settings.non_existing
+
+    def test_set_existing(self):
+        settings = _validated_setter(self.MockSettings())
+
+        settings.int_setting = 2
+
+        assert settings.int_setting == 2
+
+    def test_set_non_existing(self):
+        settings = _validated_setter(self.MockSettings())
+
+        with pytest.raises(AttributeError, match="'MockSettings' object has no attribute 'non_existing'"):
+            settings.non_existing = 2
+
 
 analysis_wrapper_classes = BaseAnalysisWrapper.__subclasses__()
 analysis_wrapper_classes.remove(SystemViewerWrapper)
