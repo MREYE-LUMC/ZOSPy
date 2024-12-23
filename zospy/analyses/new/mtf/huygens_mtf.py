@@ -53,7 +53,9 @@ class HuygensMtfSettings:
     image_delta: float = Field(default=0.0, description="Image delta")
     wavelength: WavelengthNumber = Field(default="All", description="Wavelength number or 'All'")
     field: FieldNumber = Field(default="All", description="Field number or 'All'")
-    mtf_type: ZOSAPIConstant("Analysis.Settings.Mtf.HuygensMtfTypes") = Field(default="Modulation", description="MTF type")
+    mtf_type: ZOSAPIConstant("Analysis.Settings.Mtf.HuygensMtfTypes") = Field(
+        default="Modulation", description="MTF type"
+    )
     maximum_frequency: float = Field(default=150.0, description="Maximum frequency")
     use_polarization: bool = Field(default=False, description="Use polarization")
     use_dashes: bool = Field(default=False, description="Use dashes")
@@ -95,7 +97,9 @@ class HuygensMTF(BaseAnalysisWrapper[DataFrame, HuygensMtfSettings]):
         self.analysis.Settings.ImageDelta = self.settings.image_delta
         self.analysis.wavelength = self.settings.wavelength
         self.analysis.field = self.settings.field
-        self.analysis.Settings.Type = constants.process_constant(constants.Analysis.Settings.Mtf.HuygensMtfTypes, self.settings.mtf_type)
+        self.analysis.Settings.Type = constants.process_constant(
+            constants.Analysis.Settings.Mtf.HuygensMtfTypes, self.settings.mtf_type
+        )
         self.analysis.Settings.MaximumFrequency = self.settings.maximum_frequency
         self.analysis.Settings.UsePolarization = self.settings.use_polarization
         self.analysis.Settings.UseDashes = self.settings.use_dashes
