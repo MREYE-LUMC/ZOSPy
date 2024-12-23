@@ -14,8 +14,6 @@ docs/api/
 docs/examples/
 
 # Tool and cache folders
-.conda/
-.ipynb_checkpoints/
 __pycache__/
 .mypy_cache/
 .pytest_cache/
