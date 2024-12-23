@@ -24,8 +24,7 @@ import logging
 import warnings
 import weakref
 from sys import version_info
-from typing import TYPE_CHECKING, ClassVar, Literal
-from warnings import warn
+from typing import TYPE_CHECKING, Literal
 from weakref import WeakValueDictionary
 
 from semver.version import Version
@@ -400,7 +399,7 @@ class ZOS:
         if cls not in cls._instances:
             cls._instances[cls] = super().__new__(cls)
         else:
-            warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")
+            warnings.warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")
 
         return cls._instances[cls]
 
@@ -462,30 +461,6 @@ class ZOS:
                 preload=preload, zosapi_nethelper=zosapi_nethelper, opticstudio_directory=opticstudio_directory
             )
             self._assign_connection()
-
-    def wakeup(self, *, preload: bool = False, zosapi_nethelper: str | None = None):
-        """Wake the ZOS-API.
-
-        .. deprecated:: 1.1.0
-                `wakeup` will be removed in ZOSPy 2.0.0, as it is automatically called by `__init__`.
-
-        The parameters are passed to self._load_zos_dlls().
-
-        Parameters
-        ----------
-        preload : bool
-            A boolean indicating if nested namespaces should be preloaded.
-        zosapi_nethelper : str, optional
-            File path to the ZOSAPI_NetHelper dll, if None, the Windows registry will be used to find
-            ZOSAPI_NetHelper dll. Defaults to None.
-        """
-        warnings.warn(
-            "ZOS.wakeup is deprecated and will be removed in ZOSPy 2.0.0. "
-            "It is now automatically called by __init__.",
-            DeprecationWarning,
-        )
-
-        self._wakeup(preload=preload, zosapi_nethelper=zosapi_nethelper)
 
     def _load_zos_dlls(
         self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
@@ -591,119 +566,6 @@ class ZOS:
 
         return self.get_primary_system()
 
-    # TODO: Remove in 2.0.0
-    def connect_as_extension(
-        self,
-        instancenumber: int = 0,
-        return_primary_system: bool = False,  # noqa: FBT001, FBT002
-    ) -> bool | OpticStudioSystem:
-        """Connect to OpticStudio as extension.
-
-        .. deprecated:: 1.2.0
-                This method is deprecated and will be removed in ZOSPy 2.0.0. Use `ZOS.connect("extension")` instead.
-
-        The application will be assigned to ZOS.Application.
-
-        Parameters
-        ----------
-        instancenumber : int, optional
-            An integer to specify the number of the instance used.
-        return_primary_system : bool, optional
-            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
-
-        Returns
-        -------
-        bool | OpticStudioSystem
-            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
-            returns the primary `OpticStudioSystem`.
-        """
-        warnings.warn("This method is deprecated, use 'ZOS.connect(\"extension\")' instead.", DeprecationWarning)
-
-        self._assign_connection()
-
-        if self.Connection.IsAlive:  # TODO ensure no memory leak
-            raise RuntimeError("Only one Zemax application can exist within runtime")
-
-        self.Application = self.Connection.ConnectAsExtension(instancenumber)
-
-        if not self.Application.IsValidLicenseForAPI:
-            logger.critical("OpticStudio Licence is not valid for API, connection not established")
-
-            if return_primary_system:
-                raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
-
-            return False
-
-        if return_primary_system:
-            return self.get_primary_system()
-
-        return True
-
-    # TODO: Remove in 2.0.0
-    def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:  # noqa: FBT001, FBT002
-        """Create a standalone OpticStudio instance.
-
-        .. deprecated:: 1.2.0
-                This method is deprecated and will be removed in ZOSPy 2.0.0. Use `ZOS.connect()` instead.
-
-        The application will be assigned to ZOS.Application.
-
-        Parameters
-        ----------
-        return_primary_system : bool, optional
-            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
-
-        Returns
-        -------
-        bool | OpticStudioSystem
-            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
-            returns the primary `OpticStudioSystem`.
-        """
-        warnings.warn("This method is deprecated, use 'ZOS.connect(\"standalone\")' instead.", DeprecationWarning)
-
-        self._assign_connection()
-
-        if self.Connection.IsAlive:  # TODO ensure no memory leak
-            raise RuntimeError("Only one Zemax application can exist within runtime")
-
-        self.Application = self.Connection.CreateNewApplication()
-
-        if not self.Application.IsValidLicenseForAPI:
-            logger.critical("OpticStudio Licence is not valid for API, connection not established")
-
-            if return_primary_system:
-                raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
-
-            return False
-
-        if return_primary_system:
-            return self.get_primary_system()
-
-        return True
-
-    # TODO: Remove in 2.0.0
-    def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:  # noqa: FBT001, FBT002
-        """Create a standalone OpticStudio instance.
-
-        ..deprecated:: 2.0.0
-                This method is deprecated and will be removed in ZOSPy 2.0.0. Use `ZOS.connect()` instead.
-
-        Equal to `ZOS.create_new_application`.
-
-        Parameters
-        ----------
-        return_primary_system : bool, optional
-            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
-
-        Returns
-        -------
-        bool | OpticStudioSystem
-            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
-            returns the primary `OpticStudioSystem`.
-            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
-        """
-        return self.create_new_application(return_primary_system=return_primary_system)
-
     def disconnect(self):
         """Disconnect from the connected OpticStudio instance.
 
@@ -735,7 +597,7 @@ class ZOS:
         """
         if self.Application.Mode == constants.ZOSAPI_Mode.Server:
             new_system = self.Application.CreateNewSystem(constants.process_constant(constants.SystemType, system_mode))
-            return self._OpticStudioSystem(zos_instance=self, system_instance=new_system)
+            return OpticStudioSystem(zos_instance=self, system_instance=new_system)
 
         # TODO: Check if this is really true
         raise ValueError("Can only create a new system when using a standalone connection.")
@@ -748,7 +610,7 @@ class ZOS:
         OpticStudioSystem
             Primary optical system.
         """
-        optic_studio_system = self._OpticStudioSystem(zos_instance=self, system_instance=self.Application.PrimarySystem)
+        optic_studio_system = OpticStudioSystem(zos_instance=self, system_instance=self.Application.PrimarySystem)
 
         # Automatically populate _OpenFile when connecting in extension mode, to prevent unnecessary errors when
         # calling save
@@ -770,8 +632,8 @@ class ZOS:
         OpticStudioSystem
             Optical system at position `pos`.
         """
-        opticstudiosystem = self.Application.GetSystemAt(pos)
-        return self._OpticStudioSystem(zos_instance=self, system_instance=opticstudiosystem)
+        optic_studio_system = self.Application.GetSystemAt(pos)
+        return OpticStudioSystem(zos_instance=self, system_instance=optic_studio_system)
 
     def get_txtfile_encoding(self) -> str:
         """Determine the encoding used to write text files in OpticStudio.
@@ -835,4 +697,3 @@ class ZOS:
             The current instance of ZOS, or `None` if no instance exists.
         """
         return cls._instances.get(cls)
-
