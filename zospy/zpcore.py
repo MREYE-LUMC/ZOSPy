@@ -25,6 +25,8 @@ import warnings
 import weakref
 from sys import version_info
 from typing import TYPE_CHECKING, ClassVar, Literal
+from warnings import warn
+from weakref import WeakValueDictionary
 
 from semver.version import Version
 
@@ -388,29 +390,19 @@ class ZOS:
         >>> oss = zos.connect(mode="standalone")
     """
 
-    _OpticStudioSystem = OpticStudioSystem
-
-    _instances: ClassVar = set()
+    _instances: WeakValueDictionary = WeakValueDictionary()
 
     def __new__(cls, *args, **kwargs):  # noqa: ARG003
         """Ensure that only one instance of ZOS exists at any time.
 
-        Raises
-        ------
-        ValueError
-            When a second instance of `ZOS` is initiated.
+        If a ZOS instance already exists, the existing instance is returned. If not, a new instance is created.
         """
-        if len(cls._instances) >= 1:
-            # As the number of applications within runtime is limited to 1 by Zemax, it is logical to also limit the
-            # number of ZOS instances
-            raise ValueError(
-                "Cannot have more than one active ZOS instance.\n\n"
-                "Since OpticStudio limits the number of connections to the ZOS-API to 1, only a single ZOS instance "
-                "is allowed. Re-use the existing instance, or delete the existing instance prior to initializing a "
-                "new one. See https://zospy.rtfd.io/faq#single-zos-instance for more information."
-            )
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__new__(cls)
+        else:
+            warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")
 
-        return super().__new__(cls)
+        return cls._instances[cls]
 
     def __init__(
         self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
@@ -436,13 +428,11 @@ class ZOS:
 
         self.ZOSAPI: _ZOSAPI = None
         self.ZOSAPI_NetHelper = None
-        self.Connection: _ZOSAPI.IZOSAPI_Connection = None
-        self.Application: _ZOSAPI.IZOSAPI_Application = None
+        self.Connection: _ZOSAPI.IZOSAPI_Connection | None = None
+        self.Application: _ZOSAPI.IZOSAPI_Application | None = None
 
         # Register the instance and create finalizers to tear down the ZOS instance when deleted
-        ZOS._instances.add(id(self))
-        weakref.finalize(self, ZOS.disconnect, self)
-        weakref.finalize(self, ZOS._instances.discard, id(self))
+        weakref.finalize(self, ZOS.disconnect)
 
         logger.info("ZOS instance initialized")
 
@@ -832,3 +822,17 @@ class ZOS:
             minor=self.Application.ZOSMinorVersion,
             patch=self.Application.ZOSSPVersion,
         )
+
+    @classmethod
+    def get_instance(cls) -> ZOS | None:
+        """Get the current instance of ZOS.
+
+        Unlike `__new__`, this method does not create a new instance if none exists.
+
+        Returns
+        -------
+        ZOS | None
+            The current instance of ZOS, or `None` if no instance exists.
+        """
+        return cls._instances.get(cls)
+
