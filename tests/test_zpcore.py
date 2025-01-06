@@ -41,6 +41,17 @@ def test_load_zos_dlls_with_nethelper_and_opticstudio_directory_raises_valueerro
         zos._load_zos_dlls(zosapi_nethelper="dummy/path", opticstudio_directory="dummy/path")
 
 
+def test_init_second_zos_instance(zos):
+    zos2 = zp.ZOS()
+
+    with pytest.warns(match="Only a single instance of ZOS can exist at any time\. Returning existing instance\."):
+        assert zos2 is zos
+
+
+def test_zos_get_instance(zos):
+    assert zp.ZOS.get_instance() is zos
+
+
 @pytest.mark.must_pass
 def test_can_connect(oss):
     assert oss._System is not None
