@@ -308,7 +308,7 @@ class OpticStudioSystem:
         zospy.zpcore.OpticStudioSystem
             A ZOSPy OpticStudioSystem instance. Should be sequential.
         """
-        return OpticStudioSystem(self._ZOS, self._System.CopySystem())
+        return OpticStudioSystem(self.ZOS, self._System.CopySystem())
 
     def _ensure_correct_mode(self, required: str):
         """Ensure that the system is in the required type.
@@ -344,7 +344,8 @@ class ZOS:
     """A Communication instance for Zemax OpticStudio.
 
     This class manages the connection between Python and Zemax OpticStudio through .NET, and controls OpticStudio
-    instances. Only one instance of `ZOS` can exist at any time.
+    instances. Only one instance of `ZOS` can exist at any time. If a second instance is attempted to be created, the
+    existing instance is returned.
 
     Parameters
     ----------
@@ -364,11 +365,6 @@ class ZOS:
         The ZOSAPI interface once loaded, else `None`.
     ZOSAPI_NetHelper : None | netModuleObject
         The ZOSAPI_NetHelper interface once loaded, else `None`.
-
-    Raises
-    ------
-    ValueError
-        When it is attempted to initiate a second instance of  `ZOS`. Only one instance can exist at any time.
 
     Examples
     --------
@@ -397,7 +393,8 @@ class ZOS:
         If a ZOS instance already exists, the existing instance is returned. If not, a new instance is created.
         """
         if cls not in cls._instances:
-            cls._instances[cls] = super().__new__(cls)
+            instance = super().__new__(cls)
+            cls._instances[cls] = instance
         else:
             warnings.warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")
 
