@@ -188,7 +188,7 @@ class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSetting
 
         image_data = None
 
-        if self.oss.ZOS.version >= (24, 1, 0):  # noqa: SLF001
+        if self.oss.ZOS.version >= (24, 1, 0):
             self._close_current_tool()
             image_data = self.run_analysis()
         else:

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from warnings import warn
-
 from zospy.api import _ZOSAPI, constants
 
 
