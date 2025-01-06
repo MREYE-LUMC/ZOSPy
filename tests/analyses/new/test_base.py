@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import inspect
 import json
 from dataclasses import fields
@@ -7,6 +9,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 from pandas import DataFrame
+from pydantic import Field
 from pydantic.dataclasses import dataclass
 from pydantic.fields import FieldInfo
 
@@ -17,6 +20,7 @@ from zospy.analyses.new.base import (
     AnalysisResult,
     BaseAnalysisWrapper,
 )
+from zospy.analyses.new.decorators import analysis_settings
 from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.analyses.new.reports.surface_data import SurfaceDataSettings
 from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
@@ -31,10 +35,10 @@ class MockAnalysisData:
     string_data: str = "a"
 
 
-@dataclass
+@analysis_settings
 class MockAnalysisSettings:
-    int_setting: int = 1
-    string_setting: str = "a"
+    int_setting: int = Field(default=1, description="An integer setting")
+    string_setting: str = Field(default="a", description="A string setting")
 
 
 class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
@@ -43,8 +47,9 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
     _needs_config_file = False
     _needs_text_output_file = False
 
-    def __init__(self, int_setting: int = 1, string_setting: str = "a", *, block_remove_temp_files: bool = False):
-        super().__init__(MockAnalysisSettings(), locals())
+    def __init__(self, int_setting: int = 1, string_setting: str = "a", settings: MockAnalysisSettings | None = None,
+                 *, block_remove_temp_files: bool = False):
+        super().__init__(settings or MockAnalysisSettings(), locals())
 
         self.block_remove_temp_files = block_remove_temp_files
 
@@ -106,6 +111,26 @@ class TestAnalysisWrapper:
         for field_name, default_value in settings_defaults.items():
             assert field_name in init_signature.parameters
             assert init_signature.parameters[field_name].default == default_value
+
+    def test_update_settings_from_parameters(self):
+        analysis = MockAnalysis(int_setting=2, string_setting="b")
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_from_object(self):
+        settings = MockAnalysisSettings(int_setting=2, string_setting="b")
+        analysis = MockAnalysis(settings=settings)
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_from_parameters_and_object(self):
+        settings = MockAnalysisSettings(int_setting=2, string_setting="b")
+        analysis = MockAnalysis(int_setting=3, settings=settings)
+
+        assert analysis.settings.int_setting == 3
+        assert analysis.settings.string_setting == "b"
 
     @pytest.mark.parametrize(
         "temp_file_type,filename",
