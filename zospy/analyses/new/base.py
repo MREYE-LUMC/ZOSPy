@@ -47,6 +47,7 @@ from pydantic import (
     model_serializer,
     model_validator,
 )
+from pydantic.fields import FieldInfo
 
 from zospy.analyses.new.parsers import load_grammar, parse
 from zospy.analyses.new.parsers.types import ValidatedDataFrame
@@ -509,6 +510,23 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     _needs_text_output_file: bool = False
 
     def __init__(self, settings: AnalysisSettings, settings_arguments: dict[str, any]):
+        """Create a new analysis wrapper.
+
+        Settings can be set using the `settings` argument or by passing the settings as keyword arguments.
+        If settings are changed using both methods, the keyword arguments will take precedence.
+
+        Parameters
+        ----------
+        settings : AnalysisSettings
+            Settings of the analysis.
+        settings_arguments : dict[str, any]
+            Arguments to set the settings of the analysis.
+
+        Raises
+        ------
+        ValueError
+            If `settings` is not a dataclass.
+        """
         self._init_settings(settings, settings_arguments)
 
         self._config_file = None
@@ -529,7 +547,9 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
             raise ValueError("settings should be a dataclass.")
 
         for field in fields(settings):
-            if field.name in parameters:
+            default = field.default.default if isinstance(field.default, FieldInfo) else field.default
+
+            if field.name in parameters and parameters[field.name] != default:
                 setattr(self.settings, field.name, parameters[field.name])
 
     @property
