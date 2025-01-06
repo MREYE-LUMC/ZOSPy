@@ -15,6 +15,7 @@ from zospy.utils.zputils import standardize_sampling
 
 __all__ = ("HuygensPSF", "HuygensPSFSettings")
 
+
 @analysis_settings
 class HuygensPSFSettings:
     """Settings for the Huygens PSF analysis.

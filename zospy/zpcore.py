@@ -431,7 +431,7 @@ class ZOS:
         self.Application: _ZOSAPI.IZOSAPI_Application | None = None
 
         # Register the instance and create finalizers to tear down the ZOS instance when deleted
-        weakref.finalize(self, ZOS.disconnect)
+        weakref.finalize(self, self.disconnect)
 
         logger.info("ZOS instance initialized")
 
