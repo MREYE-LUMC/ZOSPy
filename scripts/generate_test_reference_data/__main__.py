@@ -167,13 +167,13 @@ def process_test(
     test_parameters = test.parameters
     parametrized = test.parametrized
 
-    optic_studio_version = str(oss._ZOS.version)  # noqa: SLF001
+    optic_studio_version = str(oss.ZOS.version)  # noqa: SLF001
 
     for parameters in test_parameters:
         result_file_name = f"{optic_studio_version}-{test_file}-{test_name}"
 
         if isinstance(parameters, VersionDependentParameters):
-            if not oss._ZOS.version.match(parameters.opticstudio):  # noqa: SLF001
+            if not oss.ZOS.version.match(parameters.opticstudio):  # noqa: SLF001
                 logger.info(f"Skipping {result_file_name} because it requires OpticStudio {parameters.opticstudio}")
                 continue
 

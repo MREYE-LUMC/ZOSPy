@@ -119,7 +119,7 @@ class FFTThroughFocusMTF(BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughF
         -------
         None
         """
-        if self.oss._ZOS.version < "21.2.0":  # noqa: SLF001
+        if self.oss.ZOS.version < "21.2.0":  # noqa: SLF001
             config_file = str(self.config_file)
 
             self.analysis.Settings.SaveTo(config_file)

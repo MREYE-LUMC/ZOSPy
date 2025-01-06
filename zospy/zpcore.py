@@ -52,7 +52,8 @@ class OpticStudioSystem:
         system_instance : ZOS.Application.PrimarySystem
             A PrimarySystem instance obtained from the zos_instance.
         """
-        self._ZOS: ZOS = zos_instance
+        # Use weakref to make sure that the ZOS instance is not kept alive by the OpticStudioSystem instance
+        self.ZOS: ZOS = weakref.proxy(zos_instance)
 
         self._System: _ZOSAPI.IOpticalSystem = system_instance
         self._OpenFile = None
