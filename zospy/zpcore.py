@@ -36,6 +36,8 @@ from zospy.utils.pyutils import abspath
 if TYPE_CHECKING:
     from os import PathLike
 
+__all__ = ("OpticStudioSystem", "ZOS")
+
 logger = logging.getLogger(__name__)
 
 

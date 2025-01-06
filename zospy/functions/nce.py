@@ -4,6 +4,11 @@ from __future__ import annotations
 
 from zospy.api import _ZOSAPI, constants
 
+__all__ = (
+    "find_object_by_comment",
+    "object_change_type",
+)
+
 
 def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Editors.NCE.ObjectType | str):
     """Change the object type in the Non-Sequential Component Editor.

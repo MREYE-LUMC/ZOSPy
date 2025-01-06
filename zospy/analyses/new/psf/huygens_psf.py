@@ -13,6 +13,7 @@ from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber  # no
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
+__all__ = ("HuygensPSF", "HuygensPSFSettings")
 
 @analysis_settings
 class HuygensPSFSettings:

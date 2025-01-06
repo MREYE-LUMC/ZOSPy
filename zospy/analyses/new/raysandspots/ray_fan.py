@@ -10,6 +10,7 @@ import pandas as pd
 from pandas import DataFrame
 from pydantic import Field
 
+from zospy.utils.pyutils import atox
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.types import FieldNumber, UnitField, ValidatedDataFrame, WavelengthNumber
@@ -17,7 +18,6 @@ from zospy.api import config, constants
 
 __all__ = ("RayFan", "RayFanSettings")
 
-from zospy.utils.pyutils import atox
 
 
 @analysis_result

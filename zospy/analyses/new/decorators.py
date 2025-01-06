@@ -5,6 +5,8 @@ from __future__ import annotations
 import pydantic
 from pydantic import ConfigDict
 
+__all__ = ("analysis_result", "analysis_settings")
+
 
 def analysis_result(cls=None, config: ConfigDict | None = None, **kwargs):
     """Pydantic dataclass with default configuration for analysis results."""

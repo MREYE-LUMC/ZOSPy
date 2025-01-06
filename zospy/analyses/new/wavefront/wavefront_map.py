@@ -14,6 +14,9 @@ from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
 
+__all__ = ("WavefrontMap", "WavefrontMapSettings")
+
+
 @analysis_settings
 class WavefrontMapSettings:
     """Settings for the Wavefront Map analysis.
