@@ -47,8 +47,14 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
     _needs_config_file = False
     _needs_text_output_file = False
 
-    def __init__(self, int_setting: int = 1, string_setting: str = "a", settings: MockAnalysisSettings | None = None,
-                 *, block_remove_temp_files: bool = False):
+    def __init__(
+        self,
+        int_setting: int = 1,
+        string_setting: str = "a",
+        settings: MockAnalysisSettings | None = None,
+        *,
+        block_remove_temp_files: bool = False,
+    ):
         super().__init__(settings or MockAnalysisSettings(), locals())
 
         self.block_remove_temp_files = block_remove_temp_files
