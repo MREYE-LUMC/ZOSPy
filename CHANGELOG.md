@@ -11,10 +11,14 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- `zospy.zpcore.ZOS.get_instance` to get the existing `ZOS` instance, if present (#107)
+
 ### Fixed
 
 ### Changed
 
+- `zospy.zpcore.ZOS` now uses a singleton pattern to ensure only one instance of `ZOS` is created. If a second instance is created, the existing instance is returned instead and a warning is raised (#107)
+- `zospy.zpcore.OpticStudioSystem._ZOS` was renamed to `ZOS`, making it a public attribute (#107)
 - `zospy.analyses.new.new_analysis`: `settings_first` is now a keyword-only argument.
 - `zospy.api.apisupport.load_zosapi_nethelper`: `preload` is now a keyword-only argument.
 - `zospy.api.apisupport.load_zosapi`: `preload` is now a keyword-only argument.
@@ -31,6 +35,10 @@ ZOS-API can also be added in patch releases.
 ### Deprecated
 
 ### Removed
+
+- `zospy.zpcore.ZOS.wakeup` is no longer needed, as the ZOS-API is now loaded in `zospy.zpcore.ZOS.__init__` (#107)
+- `zospy.zpcore.ZOS.connect_as_extension`, `zospy.zpcore.ZOS.create_new_application` and `zospy.zpcore.ZOS.connect_as_standalone` have been removed in favor of `zospy.zpcore.ZOS.connect` (#107)
+- `zospy.functions.nce.get_object_data` has been removed because it implements a conversion that is now done automatically by `zospy.api.codecs.OpticStudioInterfaceEncoder` (#107)
 
 ## [[1.3.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.3.0) - 2024-10-30
 
