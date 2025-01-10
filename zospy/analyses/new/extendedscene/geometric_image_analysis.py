@@ -1,14 +1,15 @@
 """Geometric Image Analysis."""
+
 from __future__ import annotations
 
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 from pandas import DataFrame
-from pydantic import Field, field_validator, ValidatorFunctionWrapHandler, ValidationError
+from pydantic import Field
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import ZOSAPIConstant
+from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 
 
@@ -90,11 +91,13 @@ class GeometricImageAnalysisSettings:
     rays_x_1000: int = Field(default=10, gt=1, description="Approximate number of traced rays (x 1000)")
     show_as: ZOSAPIConstant("Analysis.GiaShowAsTypes") = Field(default="Surface", description="Show As")
     source: ZOSAPIConstant("Analysis.Settings.SourceGia") = Field(default="Uniform", description="Source")
-    number_of_pixels: int =  Field(default=100, gt=1, description="Number of pixels")
-    row_column_number: Literal["Center"] | Annotated[int, Field(gt=0)] = Field(default="Center", description="Row or column number")
+    number_of_pixels: int = Field(default=100, gt=1, description="Number of pixels")
+    row_column_number: Literal["Center"] | Annotated[int, Field(gt=0)] = Field(
+        default="Center", description="Row or column number"
+    )
     na: float = Field(default=0, description="Numerical aperture cut-off")
     total_watts: float = Field(default=1, gt=0, description="Total watts")
-    parity: ZOSAPIConstant("Analysis.Settings.Parity") =  Field(default="Even", description="Parity")
+    parity: ZOSAPIConstant("Analysis.Settings.Parity") = Field(default="Even", description="Parity")
     reference: ZOSAPIConstant("Analysis.Settings.ReferenceGia") = Field(default="ChiefRay", description="Chief Ray")
     use_symbols: bool = Field(default=False, description="Use symbols")
     use_polarization: bool = Field(default=False, description="Use polarization")
@@ -113,7 +116,9 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
     _needs_config_file = False
     _needs_text_output_file = False
 
-    def __init__(self, *,
+    def __init__(
+        self,
+        *,
         wavelength: Literal["All"] | int = "All",
         field: int = 1,
         surface: Literal["Image", "Object"] | int = "Image",
@@ -145,10 +150,8 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
         --------
         GeometricImageAnalysisSettings : Settings for the FFT Through Focus MTF analysis.
         """
-
-
         super().__init__(settings or GeometricImageAnalysisSettings(), locals())
-    
+
     def run_analysis(self) -> DataFrame | None:
         """Run the FFT Through Focus MTF analysis."""
         self.analysis.wavelength = self.settings.wavelength
@@ -159,8 +162,12 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
         self.analysis.Settings.File = self.settings.file
         self.analysis.Settings.Rotation = self.settings.rotation
         self.analysis.Settings.RaysX1000 = self.settings.rays_x_1000
-        self.analysis.Settings.ShowAs = constants.process_constant(constants.Analysis.GiaShowAsTypes, self.settings.show_as)
-        self.analysis.Settings.Source = constants.process_constant(constants.Analysis.Settings.SourceGia, self.settings.source)
+        self.analysis.Settings.ShowAs = constants.process_constant(
+            constants.Analysis.GiaShowAsTypes, self.settings.show_as
+        )
+        self.analysis.Settings.Source = constants.process_constant(
+            constants.Analysis.Settings.SourceGia, self.settings.source
+        )
 
         if str(self.settings.show_as) in ("CrossX", "CrossY"):
             if self.settings.row_column_number == "Center":
@@ -174,8 +181,12 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
 
         self.analysis.Settings.NA = self.settings.na
         self.analysis.Settings.TotalWatts = self.settings.total_watts
-        self.analysis.Settings.Parity = constants.process_constant(constants.Analysis.Settings.Parity, self.settings.parity)
-        self.analysis.Settings.Reference = constants.process_constant(constants.Analysis.Settings.ReferenceGia, self.settings.reference)
+        self.analysis.Settings.Parity = constants.process_constant(
+            constants.Analysis.Settings.Parity, self.settings.parity
+        )
+        self.analysis.Settings.Reference = constants.process_constant(
+            constants.Analysis.Settings.ReferenceGia, self.settings.reference
+        )
 
         self.analysis.Settings.UsePolarization = self.settings.use_polarization
         self.analysis.Settings.RemoveVignettingFactors = self.settings.remove_vignetting_factors
