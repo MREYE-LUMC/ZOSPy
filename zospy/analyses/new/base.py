@@ -246,8 +246,44 @@ class OnComplete(str, Enum):
     """Keep the analysis open and active."""
 
 
+class _ValidatedSetter:
+    """Wrapper class that only allows to set existing properties."""
+
+    __slots__ = ("_obj",)
+
+    def __init__(self, obj):
+        self._obj = obj
+
+    def __getattr__(self, name):
+        return getattr(self._obj, name)
+
+    def __setattr__(self, name, value):
+        if name in self.__slots__:
+            super().__setattr__(name, value)
+        elif hasattr(self._obj, name):
+            setattr(self._obj, name, value)
+        else:
+            raise AttributeError(f"'{type(self._obj).__name__}' object has no attribute '{name}'")
+
+
+_ValidatedSetterType = TypeVar("_ValidatedSetterType")
+
+
+def _validated_setter(obj: _ValidatedSetterType) -> _ValidatedSetterType:
+    """Wrap an object to only allow setting existing properties.
+
+    Helper function that retains the original object's type information.
+
+    Parameters
+    ----------
+    obj : Any
+        The object to wrap.
+    """
+    return _ValidatedSetter(obj)
+
+
 class Analysis:
-    """Zemax OpticStudio analysis.
+    """OpticStudio analysis.
 
     This class wraps ZOSAPI analysis objects to provide direct access to its settings and results.
     All properties and methods of the ZOSAPI analysis object are available through this class.
@@ -261,12 +297,12 @@ class Analysis:
         analysis : ZOSAPI.Analysis.IA_
             analysis object
         """
-        self._analysis = analysis
+        self._analysis = _validated_setter(analysis)
 
     @property
     def Settings(self) -> _ZOSAPI.Analysis.Settings.IAS_:  # noqa: N802
         """Analysis-specific settings."""
-        return self._analysis.GetSettings()
+        return _validated_setter(self._analysis.GetSettings())
 
     @property
     def Results(self) -> _ZOSAPI.Analysis.Data.IAR_:  # noqa: N802
