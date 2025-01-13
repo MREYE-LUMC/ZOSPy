@@ -101,12 +101,12 @@ class SingleRayTraceSettings:
     global_coordinates: bool = Field(default=False, description="Use global coordinates")
 
 
-class SingleRayTrace(BaseAnalysisWrapper[SingleRayTraceResult, SingleRayTraceSettings]):
+class SingleRayTrace(
+    BaseAnalysisWrapper[SingleRayTraceResult, SingleRayTraceSettings],
+    analysis_type="RayTrace",
+    needs_text_output_file=True,
+):
     """Single Ray Trace analysis."""
-
-    TYPE = "RayTrace"
-
-    _needs_text_output_file = True
 
     def __init__(
         self,
@@ -119,9 +119,14 @@ class SingleRayTrace(BaseAnalysisWrapper[SingleRayTraceResult, SingleRayTraceSet
         field: int = 1,
         raytrace_type: constants.Analysis.Settings.Aberrations.RayTraceType | str = "DirectionCosines",
         global_coordinates: bool = False,
-        settings: SingleRayTraceSettings | None = None,
     ):
-        super().__init__(settings or SingleRayTraceSettings(), locals())
+        """Create a new Single Ray Trace analysis.
+
+        See Also
+        --------
+        SingleRayTraceSettings : Settings for the Single Ray Trace analysis.
+        """
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> SingleRayTraceResult:
         """Run the Single Ray Trace analysis."""

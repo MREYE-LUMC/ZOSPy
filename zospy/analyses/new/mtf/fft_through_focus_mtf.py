@@ -55,13 +55,12 @@ class FFTThroughFocusMTFSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
-class FFTThroughFocusMTF(BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughFocusMTFSettings]):
+class FFTThroughFocusMTF(
+    BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughFocusMTFSettings],
+    analysis_type="FftThroughFocusMtf",
+    needs_config_file=True,
+):
     """FFT Through Focus MTF analysis."""
-
-    TYPE = "FftThroughFocusMtf"
-
-    _needs_config_file = True
-    _needs_text_output_file = False
 
     def __init__(
         self,
@@ -75,7 +74,6 @@ class FFTThroughFocusMTF(BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughF
         mtf_type: constants.Analysis.Settings.Mtf.MtfTypes | str = "Modulation",
         use_polarization: bool = False,
         use_dashes: bool = False,
-        settings: FFTThroughFocusMTFSettings | None = None,
     ):
         """Create a new FFT Through Focus MTF analysis.
 
@@ -83,7 +81,7 @@ class FFTThroughFocusMTF(BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughF
         --------
         FFTThroughFocusMTFSettings : Settings for the FFT Through Focus MTF analysis.
         """
-        super().__init__(settings or FFTThroughFocusMTFSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> DataFrame | None:
         """Run the FFT Through Focus MTF analysis."""

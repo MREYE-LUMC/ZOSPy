@@ -18,6 +18,7 @@ from zospy.analyses.new.base import (
     AnalysisData,
     AnalysisMetadata,
     AnalysisResult,
+    AnalysisSettings,
     BaseAnalysisWrapper,
 )
 from zospy.analyses.new.decorators import analysis_settings
@@ -25,7 +26,12 @@ from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.analyses.new.reports.surface_data import SurfaceDataSettings
 from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
 
-analysis_wrapper_classes = BaseAnalysisWrapper.__subclasses__()
+
+def all_subclasses(cls):
+    return set(cls.__subclasses__()).union([s for c in cls.__subclasses__() for s in all_subclasses(c)])
+
+
+analysis_wrapper_classes = all_subclasses(BaseAnalysisWrapper)
 analysis_wrapper_classes.remove(SystemViewerWrapper)
 
 
@@ -49,13 +55,12 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
 
     def __init__(
         self,
+        *,
         int_setting: int = 1,
         string_setting: str = "a",
-        settings: MockAnalysisSettings | None = None,
-        *,
         block_remove_temp_files: bool = False,
     ):
-        super().__init__(settings or MockAnalysisSettings(), locals())
+        super().__init__(settings_kws=locals())
 
         self.block_remove_temp_files = block_remove_temp_files
 
@@ -91,6 +96,12 @@ class TestAnalysisWrapper:
 
         return result
 
+    def test_get_settings_type(self):
+        assert MockAnalysis._settings_type == MockAnalysisSettings  # noqa: SLF001
+
+    def test_settings_type_is_specified(self):
+        assert MockAnalysis._settings_type is not AnalysisSettings  # noqa: SLF001
+
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_analyses_correct_analysis_name(self, cls):
         assert cls.TYPE is not None
@@ -118,25 +129,25 @@ class TestAnalysisWrapper:
             assert field_name in init_signature.parameters
             assert init_signature.parameters[field_name].default == default_value
 
-    def test_update_settings_from_parameters(self):
+    def test_change_settings_from_parameters(self):
         analysis = MockAnalysis(int_setting=2, string_setting="b")
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
-    def test_update_settings_from_object(self):
+    def test_change_settings_from_object(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = MockAnalysis(settings=settings)
+        analysis = MockAnalysis.from_settings(settings)
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
-    def test_update_settings_from_parameters_and_object(self):
+    def test_settings_object_is_copied(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = MockAnalysis(int_setting=3, settings=settings)
+        analysis = MockAnalysis.from_settings(settings)
 
-        assert analysis.settings.int_setting == 3
-        assert analysis.settings.string_setting == "b"
+        assert analysis.settings is not settings
+        assert analysis.settings == settings
 
     @pytest.mark.parametrize(
         "temp_file_type,filename",

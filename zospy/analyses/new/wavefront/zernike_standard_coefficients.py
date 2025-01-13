@@ -89,13 +89,11 @@ class ZernikeStandardCoefficientsSettings:
 
 
 class ZernikeStandardCoefficients(
-    BaseAnalysisWrapper[ZernikeStandardCoefficientsResult, ZernikeStandardCoefficientsSettings]
+    BaseAnalysisWrapper[ZernikeStandardCoefficientsResult, ZernikeStandardCoefficientsSettings],
+    analysis_type="ZernikeStandardCoefficients",
+    needs_text_output_file=True,
 ):
     """Zernike Standard Coefficients analysis."""
-
-    TYPE = "ZernikeStandardCoefficients"
-
-    _needs_text_output_file = True
 
     def __init__(
         self,
@@ -109,9 +107,8 @@ class ZernikeStandardCoefficients(
         sx: float = 0.0,
         sy: float = 0.0,
         sr: float = 0.0,
-        settings: ZernikeStandardCoefficientsSettings | None = None,
     ):
-        super().__init__(settings or ZernikeStandardCoefficientsSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> ZernikeStandardCoefficientsResult:
         """Run the Zernike Standard Coefficients analysis."""

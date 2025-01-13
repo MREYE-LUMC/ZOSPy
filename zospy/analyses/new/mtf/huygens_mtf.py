@@ -59,13 +59,8 @@ class HuygensMtfSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
-class HuygensMTF(BaseAnalysisWrapper[DataFrame, HuygensMtfSettings]):
+class HuygensMTF(BaseAnalysisWrapper[DataFrame, HuygensMtfSettings], analysis_type="HuygensMtf"):
     """Huygens Modulation Transfer Function (MTF) analysis."""
-
-    TYPE = "HuygensMtf"
-
-    _needs_config_file = False
-    _needs_text_output_file = False
 
     def __init__(
         self,
@@ -79,10 +74,14 @@ class HuygensMTF(BaseAnalysisWrapper[DataFrame, HuygensMtfSettings]):
         maximum_frequency: float = 150.0,
         use_polarization: bool = False,
         use_dashes: bool = False,
-        settings: HuygensMtfSettings | None = None,
     ):
-        """Create a new Huygens MTF analysis."""
-        super().__init__(settings or HuygensMtfSettings(), locals())
+        """Create a new Huygens MTF analysis.
+
+        See Also
+        --------
+        HuygensMtfSettings : Settings for the Huygens MTF analysis.
+        """
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> DataFrame | None:
         """Run the Huygens MTF analysis."""

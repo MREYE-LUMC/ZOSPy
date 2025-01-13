@@ -9,7 +9,7 @@ from __future__ import annotations
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from typing import TYPE_CHECKING, Annotated, Generic, Literal
+from typing import TYPE_CHECKING, Annotated, Generic, Literal, get_args
 from warnings import warn
 
 import numpy as np
@@ -35,10 +35,21 @@ class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSetting
 
     ALLOWED_IMAGE_EXTENSIONS: tuple[str, ...] = ("bmp", "jpeg", "png")
 
-    def __init__(self, settings: AnalysisSettings, settings_arguments: dict[str, any]):
-        super().__init__(settings, settings_arguments)
+    def __init__(self, settings_kws: dict[str, any]):
+        super().__init__(settings_kws=settings_kws)
 
         self._image_output_file = None
+
+    def __init_subclass__(cls, **kwargs):
+        """Determine the settings type of the viewer."""
+        if cls._settings_type is AnalysisSettings:
+            if hasattr(cls, "__orig_bases__"):
+                base = cls.__orig_bases__[0]
+                cls._settings_type: type[AnalysisSettings] = get_args(base)[0]
+            else:
+                cls._settings_type = None
+
+        super().__init_subclass__(**kwargs)
 
     @property
     def image_output_file(self) -> str | Path | None:

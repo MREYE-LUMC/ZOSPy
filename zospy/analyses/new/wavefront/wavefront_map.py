@@ -75,13 +75,8 @@ class WavefrontMapSettings:
     contour_format: str = Field(default="", description="Contour format")
 
 
-class WavefrontMap(BaseAnalysisWrapper[DataFrame, WavefrontMapSettings]):
+class WavefrontMap(BaseAnalysisWrapper[DataFrame, WavefrontMapSettings], analysis_type="WavefrontMap"):
     """Wavefront Map analysis."""
-
-    TYPE = "WavefrontMap"
-
-    _needs_config_file = False
-    _needs_text_output_file = False
 
     def __init__(
         self,
@@ -101,9 +96,8 @@ class WavefrontMap(BaseAnalysisWrapper[DataFrame, WavefrontMapSettings]):
         sub_aperture_y: float = 0.0,
         sub_aperture_r: float = 1.0,
         contour_format: str = "",
-        settings: WavefrontMapSettings | None = None,
     ):
-        super().__init__(settings or WavefrontMapSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> DataFrame:
         """Run the Wavefront Map analysis.

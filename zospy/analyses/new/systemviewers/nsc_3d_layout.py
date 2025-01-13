@@ -25,20 +25,17 @@ class NSC3DLayoutSettings:
     image_size: ImageSize = Field(default=(800, 600), description="Image size")
 
 
-class NSC3DLayout(SystemViewerWrapper[NSC3DLayoutSettings]):
+class NSC3DLayout(SystemViewerWrapper[NSC3DLayoutSettings], analysis_type="NSC3DLayout", mode="Nonsequential"):
     """3D Layout viewer for Non-Sequential systems."""
 
-    TYPE = "NSC3DLayout"
-    MODE = "Nonsequential"
-
-    def __init__(self, *, image_size: tuple[int, int] = (800, 600), settings: NSC3DLayoutSettings | None = None):
+    def __init__(self, *, image_size: tuple[int, int] = (800, 600)):
         """Create a new nonsequential 3D Layout viewer.
 
         See Also
         --------
         NSC3DLayoutSettings : Settings for the NSC 3D Layout viewer
         """
-        super().__init__(settings or NSC3DLayoutSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def configure_layout_tool(
         self,

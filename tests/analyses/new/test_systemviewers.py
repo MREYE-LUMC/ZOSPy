@@ -27,7 +27,7 @@ class TestBase:
 
     class MockSystemViewer(SystemViewerWrapper[MockSystemViewerSettings]):
         def __init__(self, *, number: int = 5, settings: TestBase.MockSystemViewerSettings | None = None):
-            super().__init__(settings or TestBase.MockSystemViewerSettings(), locals())
+            super().__init__(locals())
 
         def _create_analysis(self, *, settings_first=True):  # noqa: ARG002
             self._analysis = SimpleNamespace(

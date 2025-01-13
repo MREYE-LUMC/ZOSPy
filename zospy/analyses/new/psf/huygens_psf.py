@@ -60,7 +60,7 @@ class HuygensPSFSettings:
     normalize: bool = Field(default=False, description="Normalize")
 
 
-class HuygensPSF(BaseAnalysisWrapper[DataFrame | None, HuygensPSFSettings]):
+class HuygensPSF(BaseAnalysisWrapper[DataFrame | None, HuygensPSFSettings], analysis_type="HuygensPsf"):
     """Huygens Point Spread Function (PSF) analysis."""
 
     def __init__(
@@ -77,7 +77,6 @@ class HuygensPSF(BaseAnalysisWrapper[DataFrame | None, HuygensPSFSettings]):
         use_polarization: bool = False,
         use_centroid: bool = False,
         normalize: bool = False,
-        settings: HuygensPSFSettings | None = None,
     ):
         """Create a new Huygens PSF analysis.
 
@@ -85,7 +84,7 @@ class HuygensPSF(BaseAnalysisWrapper[DataFrame | None, HuygensPSFSettings]):
         --------
         HuygensPSFSettings : Settings for the Huygens PSF analysis.
         """
-        super().__init__(settings or HuygensPSFSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> DataFrame | None:
         """Run the Huygens PSF analysis."""
