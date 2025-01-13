@@ -9,6 +9,7 @@ from pydantic import Field
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
+from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
@@ -50,7 +51,7 @@ class FFTThroughFocusMTFSettings:
         default="All", description="Wavelength number or 'All'"
     )
     field: Literal["All"] | Annotated[int, Field(gt=0)] = Field(default="All", description="Field number or 'All'")
-    mtf_type: str = Field(default="Modulation", description="MTF type")
+    mtf_type: ZOSAPIConstant("Analysis.Settings.Mtf.MtfTypes") = Field(default="Modulation", description="MTF type")
     use_polarization: bool = Field(default=False, description="Use polarization")
     use_dashes: bool = Field(default=False, description="Use dashes")
 
@@ -93,7 +94,7 @@ class FFTThroughFocusMTF(
         self.analysis.Settings.NumberOfSteps = self.settings.number_of_steps
         self.analysis.wavelength = self.settings.wavelength
         self.analysis.field = self.settings.field
-        self.analysis.Settings.MtfType = constants.process_constant(
+        self.analysis.Settings.Type = constants.process_constant(
             constants.Analysis.Settings.Mtf.MtfTypes, self.settings.mtf_type
         )
         self.analysis.Settings.UsePolarization = self.settings.use_polarization
