@@ -108,6 +108,10 @@ class TestAnalysisWrapper:
         assert hasattr(constants.Analysis.AnalysisIDM, cls.TYPE)
 
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
+    def test_init_all_keyword_only_parameters(self, cls):
+        all(p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(cls).parameters.items())
+
+    @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_init_contains_all_settings(self, cls):
         if cls().settings is None:
             return

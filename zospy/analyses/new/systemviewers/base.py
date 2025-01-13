@@ -9,7 +9,7 @@ from __future__ import annotations
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from typing import TYPE_CHECKING, Annotated, Generic, Literal, get_args
+from typing import TYPE_CHECKING, Annotated, Generic, Literal, Optional, get_args
 from warnings import warn
 
 import numpy as np
@@ -30,7 +30,7 @@ if TYPE_CHECKING:
 __all__ = ("SystemViewerWrapper", "ImageSize")
 
 
-class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSettings], ABC, Generic[AnalysisSettings]):
+class SystemViewerWrapper(BaseAnalysisWrapper[Optional[np.ndarray], AnalysisSettings], ABC, Generic[AnalysisSettings]):
     """Base class for SystemViewer analyses."""
 
     ALLOWED_IMAGE_EXTENSIONS: tuple[str, ...] = ("bmp", "jpeg", "png")
