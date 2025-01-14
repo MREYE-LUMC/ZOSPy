@@ -15,6 +15,8 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- `zospy.analyses.new.base.Analysis` now raises an `AttributeError` when trying to set an attribute that is not present in the OpticStudio analysis object (#106).
+
 ### Changed
 
 - `zospy.zpcore.ZOS` now uses a singleton pattern to ensure only one instance of `ZOS` is created. If a second instance is created, the existing instance is returned instead and a warning is raised (#107)
