@@ -332,7 +332,7 @@ def physical_optics_propagation(
     if start_surface == "Ent. Pupil":
         analysis.Settings.StartSurface.SetSurfaceNumber(0)
     elif isinstance(start_surface, int):
-        analysis.Settings.StartSurface.SetSurfaceNumber(1)
+        analysis.Settings.StartSurface.SetSurfaceNumber(start_surface)
     else:
         raise ValueError(f'start_surface value should be "Ent. Pupil" or an integer, got {start_surface}')
 
