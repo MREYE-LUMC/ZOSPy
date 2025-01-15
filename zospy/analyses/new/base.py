@@ -36,7 +36,6 @@ from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from types import NoneType
 from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast, get_args
 
 import numpy as np
@@ -593,7 +592,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
                 base = cls.__orig_bases__[0]
                 cls._settings_type: type[AnalysisSettings] = get_args(base)[1]
             else:
-                cls._settings_type = NoneType
+                cls._settings_type = type(None)  # TODO: change to NoneType when dropping support for Python 3.9
 
         super().__init_subclass__(**kwargs)
 

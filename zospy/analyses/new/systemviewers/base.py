@@ -9,7 +9,6 @@ from __future__ import annotations
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from types import NoneType
 from typing import TYPE_CHECKING, Annotated, Generic, Literal, Optional, get_args
 from warnings import warn
 
@@ -48,7 +47,7 @@ class SystemViewerWrapper(BaseAnalysisWrapper[Optional[np.ndarray], AnalysisSett
                 base = cls.__orig_bases__[0]
                 cls._settings_type: type[AnalysisSettings] = get_args(base)[0]
             else:
-                cls._settings_type = NoneType
+                cls._settings_type = type(None)  # TODO: Replace with NoneType when dropping support for Python 3.9
 
         super().__init_subclass__(**kwargs)
 
