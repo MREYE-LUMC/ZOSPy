@@ -184,6 +184,36 @@ class TestAnalysisWrapper:
         assert analysis.settings is not settings
         assert analysis.settings == settings
 
+    def test_update_settings_object(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
+
+        analysis.update_settings(settings=MockAnalysisSettings(int_setting=2, string_setting="b"))
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_dictionary(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
+
+        analysis.update_settings(settings_kws={"int_setting": 2, "string_setting": "b"})
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_object_and_dictionary(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
+
+        analysis.update_settings(
+            settings=MockAnalysisSettings(int_setting=2, string_setting="a"), settings_kws={"string_setting": "b"}
+        )
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_no_dataclass_raises_type_error(self):
+        with pytest.raises(TypeError, match="settings should be a dataclass"):
+            MockAnalysis().update_settings(settings=123)
+
     @pytest.mark.parametrize(
         "temp_file_type,filename",
         [

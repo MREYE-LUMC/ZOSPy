@@ -36,6 +36,7 @@ from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
+from types import NoneType
 from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast, get_args
 
 import numpy as np
@@ -561,7 +562,8 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         ValueError
             If `settings` is not a dataclass.
         """
-        self._copy_settings(settings_kws=settings_kws)
+        self._settings = self._default_settings()
+        self.update_settings(settings_kws=settings_kws)
 
         self._config_file = None
         self._text_output_file = None
@@ -591,17 +593,19 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
                 base = cls.__orig_bases__[0]
                 cls._settings_type: type[AnalysisSettings] = get_args(base)[1]
             else:
-                cls._settings_type = None
+                cls._settings_type = NoneType
 
         super().__init_subclass__(**kwargs)
 
-    def _copy_settings(
+    def update_settings(
         self, *, settings: AnalysisSettings | None = None, settings_kws: dict[str, any] | None = None
     ) -> None:
-        """Copy settings to the settings object of the analysis.
+        """Update the settings of the analysis using a settings object or keyword arguments.
 
-        Settings should be specified using either the `settings` argument or the `parameters` dictionary. An error is
-        raised if both are specified. If no settings are specified, the settings object is set to the default settings.
+        Settings can be specified as an object and as keyword arguments. If both are specified, the keyword arguments
+        take precedence. If no settings are specified, the default settings are used. Furthermore, instead of using
+        a reference to the settings object, a new settings object is created with the specified parameters. This is done
+        to avoid modifying the original settings object.
 
         Parameters
         ----------
@@ -613,27 +617,32 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         Raises
         ------
         ValueError
-            If both `settings` and `parameters` are specified.
             If `settings` is not a dataclass.
         """
-        if settings is not None and settings_kws is not None:
-            raise ValueError(
-                "Settings should either be specified as a settings object or as keyword arguments, not both."
-            )
+        # Use the existing settings if no settings are specified
+        settings = settings or self.settings
 
         if settings is None:
-            settings = None if self._settings_type is None else self._settings_type()
-
-        if settings is None:
-            self._settings = None
+            # Analysis does not have settings
             return
 
         if not is_dataclass(settings):
-            raise ValueError("settings should be a dataclass.")
+            raise TypeError("settings should be a dataclass.")
 
         # Create a new settings object with the specified parameters. If no parameters are specified, this creates a
         # copy of the settings object. This is done to avoid modifying the original settings object.
         self._settings = dataclasses.replace(settings, **(settings_kws or {}))
+
+    @classmethod
+    def _default_settings(cls) -> AnalysisSettings:
+        """Get the default settings of the analysis.
+
+        Returns
+        -------
+        AnalysisSettings
+            The default settings.
+        """
+        return cls._settings_type() if cls._settings_type is not None else None
 
     @classmethod
     def from_settings(cls, settings: AnalysisSettings):
@@ -650,7 +659,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
             The analysis wrapper.
         """
         instance = cls()
-        instance._copy_settings(settings=settings)  # noqa: SLF001
+        instance.update_settings(settings=settings)
 
         return instance
 

@@ -59,6 +59,8 @@ path = "zospy/__init__.py"
 python = "3.12"
 installer = "uv"
 path = ".venv"
+dependencies = ["pytest"]
+
 
 [tool.hatch.envs.default.scripts]
 test-extension = "hatch test --extension {args}"
