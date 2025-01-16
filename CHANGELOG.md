@@ -19,6 +19,12 @@ ZOS-API can also be added in patch releases.
 
 ### Removed
 
+## [[1.3.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.3.1) - 2025-01-16
+
+### Fixed
+
+- Physical optics analysis start surface was hardcoded to 1 (#111, #112)
+
 ## [[1.3.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.3.0) - 2024-10-30
 
 ### Added
