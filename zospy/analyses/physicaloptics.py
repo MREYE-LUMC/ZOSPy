@@ -378,7 +378,7 @@ def physical_optics_propagation(
 
     if beam_file != "":
         if str(analysis.Settings.BeamType) in ("File", "DLL", "Multimode"):
-            analysis.Settings.BeamFile = beam_file
+            analysis.Settings.BeamTypeFilename = beam_file
         else:
             raise ValueError(f"Beam type {str(beam_type)} does not allow specification of beam_file.")
 
@@ -431,7 +431,7 @@ def physical_optics_propagation(
 
         if fiber_type_file != "":
             if str(analysis.Settings.FiberType) in ("File", "DLL"):
-                analysis.Settings.FiberTypeFile = fiber_type_file
+                analysis.Settings.FiberTypeFilename = fiber_type_file
             else:
                 raise ValueError(
                     f"Beam type {str(analysis.Settings.FiberType)} does not allow specification of fiber_type_file."
@@ -483,7 +483,7 @@ def physical_optics_propagation(
         settings.loc["PeakIrradiance"] = analysis.Settings.PeakIrradiance
 
     if str(analysis.Settings.BeamType) in ("File", "DLL", "Multimode"):
-        settings.loc["BeamFile"] = analysis.Settings.BeamFile
+        settings.loc["BeamTypeFilename"] = analysis.Settings.BeamTypeFilename
 
     for i in range(analysis.Settings.NumberOfParameters):
         key = "Beam" + "".join(analysis.Settings.GetParameterName(i).split(" "))
@@ -522,7 +522,7 @@ def physical_optics_propagation(
         settings.loc["TiltAboutY"] = analysis.Settings.TiltAboutY
 
         if str(analysis.Settings.FiberType) in ("File", "DLL"):
-            settings.loc["FiberTypeFile"] = analysis.Settings.FiberTypeFile
+            settings.loc["FiberTypeFilename"] = analysis.Settings.FiberTypeFilename
 
         for i in range(analysis.Settings.NumberOfFiberParameters):
             key = "Fiber" + "".join(analysis.Settings.GetFiberParameterName(i).split(" "))
