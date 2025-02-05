@@ -9,7 +9,7 @@ from pydantic import Field
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import ZOSAPIConstant, WavelengthNumber  # noqa: TCH001
+from zospy.analyses.new.parsers.types import WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 
 __all__ = ("GeometricImageAnalysis", "GeometricImageAnalysisSettings")
@@ -81,9 +81,7 @@ class GeometricImageAnalysisSettings:
         used when show_as is set to 'SpotDiagram.  Defaults to ''.
     """
 
-    wavelength: WavelengthNumber = Field(
-        default="All", description="Wavelength number or 'All'"
-    )
+    wavelength: WavelengthNumber = Field(default="All", description="Wavelength number or 'All'")
     field: int = Field(default=1, gt=0, description="Field number")
     surface: Literal["Image", "Object"] | Annotated[int, Field(gt=0)] = Field(default="Image", description="Surface")
     field_size: float = Field(default=0, description="Field size")
