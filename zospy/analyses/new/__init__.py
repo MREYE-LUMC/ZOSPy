@@ -20,24 +20,17 @@ Open an analysis for which a wrapper function is not yet available:
 ... )
 """
 
-from zospy.analyses.new import (
-    extendedscene,
-    mtf,
-    polarization,
-    raysandspots,
-    reports,
-    surface,
-    systemviewers,
-    wavefront,
-)
+from zospy.analyses.new import extendedscene, mtf, polarization, raysandspots, reports, surface, systemviewers, wavefront
+from zospy.analyses.new.base import new_analysis
 
 __all__ = (
-    "mtf",
     "extendedscene",
+    "mtf",
     "polarization",
     "raysandspots",
     "reports",
     "surface",
     "systemviewers",
     "wavefront",
+    "new_analysis",
 )

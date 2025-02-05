@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import dataclasses
+from typing import dataclass_transform
+
 import pydantic
-from pydantic import ConfigDict
+from pydantic import ConfigDict, Field, PrivateAttr
 
 
+@dataclass_transform(field_specifiers=(dataclasses.field, Field, PrivateAttr))
 def analysis_result(cls=None, config: ConfigDict | None = None, **kwargs):
     """Pydantic dataclass with default configuration for analysis results."""
     default_config = ConfigDict(populate_by_name=True)
@@ -18,6 +22,7 @@ def analysis_result(cls=None, config: ConfigDict | None = None, **kwargs):
     return pydantic.dataclasses.dataclass(config=config, **kwargs)(cls)
 
 
+@dataclass_transform(field_specifiers=(dataclasses.field, Field, PrivateAttr))
 def analysis_settings(cls=None, config: ConfigDict | None = None, **kwargs):
     """Pydantic dataclass with default configuration for analysis settings."""
     default_config = ConfigDict(validate_assignment=True)
