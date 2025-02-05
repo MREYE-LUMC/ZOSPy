@@ -9,13 +9,15 @@ from pydantic import Field
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.new.parsers.types import ZOSAPIConstant, WavelengthNumber  # noqa: TCH001
 from zospy.api import constants
+
+__all__ = ("GeometricImageAnalysis", "GeometricImageAnalysisSettings")
 
 
 @analysis_settings
 class GeometricImageAnalysisSettings:
-    """Settings for the FFT Through Focus MTF analysis.
+    """Settings for the Geometric Image Analysis.
 
     For an in depth explanation of the parameters, see the OpticStudio user manual.
 
@@ -79,7 +81,7 @@ class GeometricImageAnalysisSettings:
         used when show_as is set to 'SpotDiagram.  Defaults to ''.
     """
 
-    wavelength: Literal["All"] | Annotated[int, Field(gt=0)] = Field(
+    wavelength: WavelengthNumber = Field(
         default="All", description="Wavelength number or 'All'"
     )
     field: int = Field(default=1, gt=0, description="Field number")
@@ -169,14 +171,14 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
             constants.Analysis.Settings.SourceGia, self.settings.source
         )
 
-        if str(self.settings.show_as) in ("CrossX", "CrossY"):
+        if str(self.analysis.Settings.ShowAs) in ("CrossX", "CrossY"):
             if self.settings.row_column_number == "Center":
                 self.analysis.Settings.UseColumnRowCenter()
             else:
                 self.analysis.Settings.RowColumnNumber = self.settings.row_column_number
-        if str(self.settings.show_as) != "SpotDiagram":
+        if str(self.analysis.Settings.ShowAs) != "SpotDiagram":
             self.analysis.Settings.NumberOfPixels = self.settings.number_of_pixels
-        if str(self.settings.show_as) == "SpotDiagram":
+        if str(self.analysis.Settings.ShowAs) == "SpotDiagram":
             self.analysis.Settings.UseSymbols = self.settings.use_symbols
 
         self.analysis.Settings.NA = self.settings.na
