@@ -199,4 +199,4 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
         self.analysis.ApplyAndWaitForCompletion()
 
         # Get results
-        return self.get_data_series()
+        return self.get_data_grid()
