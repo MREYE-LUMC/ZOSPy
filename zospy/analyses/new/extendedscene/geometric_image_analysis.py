@@ -150,7 +150,7 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
 
         See Also
         --------
-        GeometricImageAnalysisSettings : Settings for the FFT Through Focus MTF analysis.
+        GeometricImageAnalysisSettings : Settings for the Geometric Image Analysis analysis.
         """
         super().__init__(settings or GeometricImageAnalysisSettings(), locals())
 
