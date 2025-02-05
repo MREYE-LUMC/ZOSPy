@@ -91,7 +91,7 @@ class GeometricImageAnalysisSettings:
     rays_x_1000: int = Field(default=10, gt=1, description="Approximate number of traced rays (x 1000)")
     show_as: ZOSAPIConstant("Analysis.GiaShowAsTypes") = Field(default="Surface", description="Show As")
     source: ZOSAPIConstant("Analysis.Settings.SourceGia") = Field(default="Uniform", description="Source")
-    number_of_pixels: int = Field(default=100, gt=1, description="Number of pixels")
+    number_of_pixels: int = Field(default=100, ge=1, description="Number of pixels")
     row_column_number: Literal["Center"] | Annotated[int, Field(gt=0)] = Field(
         default="Center", description="Row or column number"
     )
