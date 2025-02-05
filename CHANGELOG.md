@@ -13,6 +13,8 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- Setting beam and fiber type with external files in PhysicalOpticsPropagation (#105)
+
 ### Changed
 
 ### Deprecated
