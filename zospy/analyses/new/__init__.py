@@ -23,6 +23,7 @@ Open an analysis for which a wrapper function is not yet available:
 from zospy.analyses.new import (
     extendedscene,
     mtf,
+    physicaloptics,
     polarization,
     raysandspots,
     reports,
@@ -35,6 +36,7 @@ from zospy.analyses.new.base import new_analysis
 __all__ = (
     "extendedscene",
     "mtf",
+    "physicaloptics",
     "polarization",
     "raysandspots",
     "reports",
