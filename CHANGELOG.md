@@ -13,6 +13,8 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- `zospy.analyses.new.base.Analysis` now raises an `AttributeError` when trying to set an attribute that is not present in the OpticStudio analysis object (#106).
+
 ### Changed
 
 - `zospy.analyses.new.new_analysis`: `settings_first` is now a keyword-only argument.
