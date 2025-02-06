@@ -109,8 +109,7 @@ class GeometricImageAnalysisSettings:
 
 
 class GeometricImageAnalysis(
-    BaseAnalysisWrapper[Union[DataFrame, None], GeometricImageAnalysisSettings],
-    analysis_type="GeometricImageAnalysis"
+    BaseAnalysisWrapper[Union[DataFrame, None], GeometricImageAnalysisSettings], analysis_type="GeometricImageAnalysis"
 ):
     """Geometric Image Analysis."""
 

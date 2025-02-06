@@ -17,7 +17,12 @@ from zospy.utils.zputils import standardize_sampling
 if TYPE_CHECKING:
     from zospy.zpcore import OpticStudioSystem
 
-__all__ = ("PhysicalOpticsPropagation", "PhysicalOpticsPropagationSettings", "create_beam_parameter_dict", "create_fiber_parameter_dict")
+__all__ = (
+    "PhysicalOpticsPropagation",
+    "PhysicalOpticsPropagationSettings",
+    "create_beam_parameter_dict",
+    "create_fiber_parameter_dict",
+)
 
 
 @analysis_settings
@@ -240,7 +245,7 @@ class PhysicalOpticsPropagationSettings:
 class PhysicalOpticsPropagation(
     BaseAnalysisWrapper[Union[DataFrame, None], PhysicalOpticsPropagationSettings],
     analysis_type="PhysicalOpticsPropagation",
-    mode="Sequential"
+    mode="Sequential",
 ):
     """Physical Optics Propagation analysis."""
 

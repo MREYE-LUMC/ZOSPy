@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 import numpy as np
 import pandas as pd

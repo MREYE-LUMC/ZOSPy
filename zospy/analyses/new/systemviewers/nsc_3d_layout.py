@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 __all__ = ("NSC3DLayout", "NSC3DLayoutSettings")
 
+
 @analysis_settings
 class NSC3DLayoutSettings:
     """Settings for the nonsequential 3D Layout viewer.
