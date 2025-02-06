@@ -375,7 +375,7 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
             )
 
         self.analysis.Settings.PlotScale = self.settings.plot_scale
-        self.analysis.Settings.ScaleType = constants.process_constant(
+        self.analysis.Settings.LogScale = constants.process_constant(
             constants.Analysis.PhysicalOptics.POPScaleTypes, self.settings.scale_type
         )
         self.analysis.Settings.ZoomIn = constants.process_constant(
