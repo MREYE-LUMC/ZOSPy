@@ -10,7 +10,7 @@ from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import SimpleField, ZospyTransformer
 
-__all__ = ("SurfaceData", "SurfaceDataSettings", "SurfaceDataResult")
+__all__ = ("SurfaceData", "SurfaceDataSettings")
 
 
 class SurfaceDataTransformer(ZospyTransformer):
@@ -97,16 +97,16 @@ class SurfaceDataSettings:
     surface: int = Field(default=1, ge=0, description="Surface number to analyze.")
 
 
-class SurfaceData(BaseAnalysisWrapper[SurfaceDataResult, SurfaceDataSettings]):
+class SurfaceData(
+    BaseAnalysisWrapper[SurfaceDataResult, SurfaceDataSettings],
+    analysis_type="SurfaceDataSettings",
+    needs_text_output_file=True,
+    needs_config_file=True,
+):
     """Surface Data analysis."""
 
-    TYPE = "SurfaceDataSettings"
-
-    _needs_config_file = True
-    _needs_text_output_file = True
-
-    def __init__(self, surface: int = 1, settings: SurfaceDataSettings | None = None):
-        super().__init__(settings or SurfaceDataSettings(), locals())
+    def __init__(self, surface: int = 1):
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> SurfaceDataResult:
         """Run the Surface Data analysis."""

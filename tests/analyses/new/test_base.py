@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import inspect
 import json
 from dataclasses import fields
@@ -7,6 +9,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 from pandas import DataFrame
+from pydantic import Field
 from pydantic.dataclasses import dataclass
 from pydantic.fields import FieldInfo
 
@@ -15,12 +18,22 @@ from zospy.analyses.new.base import (
     AnalysisData,
     AnalysisMetadata,
     AnalysisResult,
+    AnalysisSettings,
     BaseAnalysisWrapper,
     _validated_setter,
 )
+from zospy.analyses.new.decorators import analysis_settings
 from zospy.analyses.new.parsers.types import ValidatedDataFrame
 from zospy.analyses.new.reports.surface_data import SurfaceDataSettings
 from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
+
+
+def all_subclasses(cls):
+    return set(cls.__subclasses__()).union([s for c in cls.__subclasses__() for s in all_subclasses(c)])
+
+
+analysis_wrapper_classes = all_subclasses(BaseAnalysisWrapper)
+analysis_wrapper_classes.remove(SystemViewerWrapper)
 
 
 class TestValidatedSetter:
@@ -53,20 +66,16 @@ class TestValidatedSetter:
             settings.non_existing = 2
 
 
-analysis_wrapper_classes = BaseAnalysisWrapper.__subclasses__()
-analysis_wrapper_classes.remove(SystemViewerWrapper)
-
-
 @dataclass
 class MockAnalysisData:
     int_data: int = 1
     string_data: str = "a"
 
 
-@dataclass
+@analysis_settings
 class MockAnalysisSettings:
-    int_setting: int = 1
-    string_setting: str = "a"
+    int_setting: int = Field(default=1, description="An integer setting")
+    string_setting: str = Field(default="a", description="A string setting")
 
 
 class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
@@ -75,8 +84,14 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
     _needs_config_file = False
     _needs_text_output_file = False
 
-    def __init__(self, int_setting: int = 1, string_setting: str = "a", *, block_remove_temp_files: bool = False):
-        super().__init__(MockAnalysisSettings(), locals())
+    def __init__(
+        self,
+        *,
+        int_setting: int = 1,
+        string_setting: str = "a",
+        block_remove_temp_files: bool = False,
+    ):
+        super().__init__(settings_kws=locals())
 
         self.block_remove_temp_files = block_remove_temp_files
 
@@ -112,10 +127,20 @@ class TestAnalysisWrapper:
 
         return result
 
+    def test_get_settings_type(self):
+        assert MockAnalysis._settings_type == MockAnalysisSettings  # noqa: SLF001
+
+    def test_settings_type_is_specified(self):
+        assert MockAnalysis._settings_type is not AnalysisSettings  # noqa: SLF001
+
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_analyses_correct_analysis_name(self, cls):
         assert cls.TYPE is not None
         assert hasattr(constants.Analysis.AnalysisIDM, cls.TYPE)
+
+    @pytest.mark.parametrize("cls", analysis_wrapper_classes)
+    def test_init_all_keyword_only_parameters(self, cls):
+        all(p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(cls).parameters.items())
 
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_init_contains_all_settings(self, cls):
@@ -138,6 +163,56 @@ class TestAnalysisWrapper:
         for field_name, default_value in settings_defaults.items():
             assert field_name in init_signature.parameters
             assert init_signature.parameters[field_name].default == default_value
+
+    def test_change_settings_from_parameters(self):
+        analysis = MockAnalysis(int_setting=2, string_setting="b")
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_change_settings_from_object(self):
+        settings = MockAnalysisSettings(int_setting=2, string_setting="b")
+        analysis = MockAnalysis.with_settings(settings)
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_settings_object_is_copied(self):
+        settings = MockAnalysisSettings(int_setting=2, string_setting="b")
+        analysis = MockAnalysis.with_settings(settings)
+
+        assert analysis.settings is not settings
+        assert analysis.settings == settings
+
+    def test_update_settings_object(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
+
+        analysis.update_settings(settings=MockAnalysisSettings(int_setting=2, string_setting="b"))
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_dictionary(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
+
+        analysis.update_settings(settings_kws={"int_setting": 2, "string_setting": "b"})
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_object_and_dictionary(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
+
+        analysis.update_settings(
+            settings=MockAnalysisSettings(int_setting=2, string_setting="a"), settings_kws={"string_setting": "b"}
+        )
+
+        assert analysis.settings.int_setting == 2
+        assert analysis.settings.string_setting == "b"
+
+    def test_update_settings_no_dataclass_raises_type_error(self):
+        with pytest.raises(TypeError, match="settings should be a dataclass"):
+            MockAnalysis().update_settings(settings=123)
 
     @pytest.mark.parametrize(
         "temp_file_type,filename",

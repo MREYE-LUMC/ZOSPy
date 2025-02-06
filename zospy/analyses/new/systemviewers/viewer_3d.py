@@ -133,11 +133,8 @@ class Viewer3DSettings:
     image_size: ImageSize = Field(default=(800, 600), description="Image size")
 
 
-class Viewer3D(SystemViewerWrapper[Viewer3DSettings]):
+class Viewer3D(SystemViewerWrapper[Viewer3DSettings], analysis_type="Draw3D", mode="Sequential"):
     """3D system viewer."""
-
-    TYPE = "Draw3D"
-    MODE = "Sequential"
 
     def __init__(
         self,
@@ -170,7 +167,6 @@ class Viewer3D(SystemViewerWrapper[Viewer3DSettings]):
         camera_viewpoint_angle_y: float = 0,
         camera_viewpoint_angle_z: float = 0,
         image_size: tuple[int, int] = (800, 600),
-        settings: Viewer3DSettings | None = None,
     ):
         """Create a new 3D system viewer.
 
@@ -178,7 +174,7 @@ class Viewer3D(SystemViewerWrapper[Viewer3DSettings]):
         --------
         Viewer3DSettings : Settings for the 3D system viewer.
         """
-        super().__init__(settings or Viewer3DSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def configure_layout_tool(
         self,

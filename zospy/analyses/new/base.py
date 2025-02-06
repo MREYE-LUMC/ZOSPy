@@ -26,16 +26,17 @@ new_analysis(oss, analysis_type, settings_first=True)
 
 from __future__ import annotations
 
+import dataclasses
 import os
 import weakref
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, fields, is_dataclass
+from dataclasses import dataclass, is_dataclass
 from datetime import datetime  # noqa: TCH003 Pydantic needs datetime to be present at runtime
 from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast
+from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast, get_args
 
 import numpy as np
 import pandas as pd
@@ -544,8 +545,24 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     _needs_config_file: bool = False
     _needs_text_output_file: bool = False
 
-    def __init__(self, settings: AnalysisSettings, settings_arguments: dict[str, any]):
-        self._init_settings(settings, settings_arguments)
+    def __init__(self, *, settings_kws: dict[str, any] | None = None):
+        """Create a new analysis wrapper.
+
+        Settings can be changed by passing the settings as keyword arguments. Use the `with_settings` method to specify
+        the settings using a settings object.
+
+        Parameters
+        ----------
+        settings_kws : dict[str, any]
+            Arguments to set the settings of the analysis.
+
+        Raises
+        ------
+        ValueError
+            If `settings` is not a dataclass.
+        """
+        self._settings = self._default_settings()
+        self.update_settings(settings_kws=settings_kws)
 
         self._config_file = None
         self._text_output_file = None
@@ -555,18 +572,95 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         self._remove_config_file = False
         self._remove_text_output_file = False
 
-    def _init_settings(self, settings: AnalysisSettings, parameters: dict[str, any]):
-        self._settings = settings
+    def __init_subclass__(
+        cls,
+        *,
+        analysis_type: str | None = None,
+        mode: Literal["Sequential", "Nonsequential"] | None = None,
+        needs_config_file: bool = False,
+        needs_text_output_file: bool = False,
+        **kwargs,
+    ):
+        """Determine the settings type and class-level configuration of the analysis."""
+        cls.TYPE = analysis_type
+        cls.MODE = mode
+        cls._needs_config_file = needs_config_file
+        cls._needs_text_output_file = needs_text_output_file
+
+        if not hasattr(cls, "_settings_type"):
+            if hasattr(cls, "__orig_bases__"):
+                base = cls.__orig_bases__[0]
+                cls._settings_type: type[AnalysisSettings] = get_args(base)[1]
+            else:
+                cls._settings_type = type(None)  # TODO: change to NoneType when dropping support for Python 3.9
+
+        super().__init_subclass__(**kwargs)
+
+    def update_settings(
+        self, *, settings: AnalysisSettings | None = None, settings_kws: dict[str, any] | None = None
+    ) -> None:
+        """Update the settings of the analysis using a settings object or keyword arguments.
+
+        Settings can be specified as an object and as keyword arguments. If both are specified, the keyword arguments
+        take precedence. If no settings are specified, the default settings are used. Furthermore, instead of using
+        a reference to the settings object, a new settings object is created with the specified parameters. This is done
+        to avoid modifying the original settings object.
+
+        Parameters
+        ----------
+        settings : AnalysisSettings
+            Analysis settings object.
+        settings_kws
+            Dictionary with the settings parameters.
+
+        Raises
+        ------
+        ValueError
+            If `settings` is not a dataclass.
+        """
+        # Use the existing settings if no settings are specified
+        settings = settings or self.settings
 
         if settings is None:
+            # Analysis does not have settings
             return
 
         if not is_dataclass(settings):
-            raise ValueError("settings should be a dataclass.")
+            raise TypeError("settings should be a dataclass.")
 
-        for field in fields(settings):
-            if field.name in parameters:
-                setattr(self.settings, field.name, parameters[field.name])
+        # Create a new settings object with the specified parameters. If no parameters are specified, this creates a
+        # copy of the settings object. This is done to avoid modifying the original settings object.
+        self._settings = dataclasses.replace(settings, **(settings_kws or {}))
+
+    @classmethod
+    def _default_settings(cls) -> AnalysisSettings:
+        """Get the default settings of the analysis.
+
+        Returns
+        -------
+        AnalysisSettings
+            The default settings.
+        """
+        return cls._settings_type() if cls._settings_type is not None else None
+
+    @classmethod
+    def with_settings(cls, settings: AnalysisSettings):
+        """Create a new analysis with the specified settings.
+
+        Parameters
+        ----------
+        settings : AnalysisSettings
+            Settings of the analysis.
+
+        Returns
+        -------
+        BaseAnalysisWrapper
+            The analysis wrapper.
+        """
+        instance = cls()
+        instance.update_settings(settings=settings)
+
+        return instance
 
     @property
     def settings(self) -> AnalysisSettings:

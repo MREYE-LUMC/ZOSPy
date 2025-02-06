@@ -180,19 +180,15 @@ class SystemDataResult:
     abcd_matrix: ABCDMatrix = Field(alias="Predicted coordinate ABCD matrix")
 
 
-class SystemData(BaseAnalysisWrapper[SystemDataResult, None]):
+class SystemData(BaseAnalysisWrapper[SystemDataResult, None], analysis_type="SystemData", needs_text_output_file=True):
     """System Data analysis."""
-
-    TYPE = "SystemData"
-
-    _needs_text_output_file = True
 
     def __init__(self):
         """Create a new System Data analysis.
 
         This analysis does not require any settings.
         """
-        super().__init__(None, {})
+        super().__init__()
 
     def run_analysis(self) -> SystemDataResult:
         """Run the System Data analysis."""
