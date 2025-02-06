@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Union
 
 from pandas import DataFrame
 from pydantic import Field
@@ -108,13 +108,11 @@ class GeometricImageAnalysisSettings:
     save_as_bim_file: str = Field(default="", description="Filename used to save output as BIM file")
 
 
-class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImageAnalysisSettings]):
+class GeometricImageAnalysis(
+    BaseAnalysisWrapper[Union[DataFrame, None], GeometricImageAnalysisSettings],
+    analysis_type="GeometricImageAnalysis"
+):
     """Geometric Image Analysis."""
-
-    TYPE = "GeometricImageAnalysis"
-
-    _needs_config_file = False
-    _needs_text_output_file = False
 
     def __init__(
         self,
@@ -150,7 +148,7 @@ class GeometricImageAnalysis(BaseAnalysisWrapper[DataFrame | None, GeometricImag
         --------
         GeometricImageAnalysisSettings : Settings for the Geometric Image Analysis analysis.
         """
-        super().__init__(settings or GeometricImageAnalysisSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> DataFrame | None:
         """Run the FFT Through Focus MTF analysis."""

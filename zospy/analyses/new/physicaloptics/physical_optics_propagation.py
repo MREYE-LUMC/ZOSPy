@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Literal
+from typing import TYPE_CHECKING, Annotated, Literal, Union
 from warnings import warn
 
 from pandas import DataFrame
@@ -16,6 +16,8 @@ from zospy.utils.zputils import standardize_sampling
 
 if TYPE_CHECKING:
     from zospy.zpcore import OpticStudioSystem
+
+__all__ = ("PhysicalOpticsPropagation", "PhysicalOpticsPropagationSettings", "create_beam_parameter_dict", "create_fiber_parameter_dict")
 
 
 @analysis_settings
@@ -235,11 +237,12 @@ class PhysicalOpticsPropagationSettings:
         return self
 
 
-class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSettings, DataFrame]):
+class PhysicalOpticsPropagation(
+    BaseAnalysisWrapper[Union[DataFrame, None], PhysicalOpticsPropagationSettings],
+    analysis_type="PhysicalOpticsPropagation",
+    mode="Sequential"
+):
     """Physical Optics Propagation analysis."""
-
-    TYPE = "PhysicalOpticsPropagation"
-    MODE = "Sequential"
 
     def __init__(
         self,
@@ -292,7 +295,7 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
         --------
         PhysicalOpticsPropagationSettings : Settings for the Physical Optics Propagation analysis.
         """
-        super().__init__(settings or PhysicalOpticsPropagationSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> DataFrame:
         """Run the Physical Optics Propagation analysis."""
