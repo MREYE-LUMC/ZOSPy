@@ -352,7 +352,7 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
             self.analysis.Settings.PeakIrradiance = self.settings.peak_irradiance
 
         if self.settings.beam_file != "":
-            self.analysis.Settings.BeamFile = self.settings.beam_file
+            self.analysis.Settings.BeamTypeFilename = self.settings.beam_file
 
         self._set_pop_parameters("beam", self.settings.beam_parameters)
 
@@ -403,7 +403,7 @@ class PhysicalOpticsPropagation(BaseAnalysisWrapper[PhysicalOpticsPropagationSet
             self.analysis.Settings.TiltAboutY = self.settings.tilt_about_y
 
             if self.settings.fiber_type_file != "":
-                self.analysis.Settings.FiberTypeFile = self.settings.fiber_type_file
+                self.analysis.Settings.FiberTypeFilename = self.settings.fiber_type_file
 
             self._set_pop_parameters("fiber", self.settings.fiber_parameters)
 
