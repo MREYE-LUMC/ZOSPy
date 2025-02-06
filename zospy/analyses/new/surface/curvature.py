@@ -121,7 +121,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
                 constants.Analysis.BestFitSphereOptions, self.settings.bfs_criterion
             )
             if self.analysis.Settings.BestFitSphereOption == constants.Analysis.BestFitSphereOptions.MinimumVolume:
-                self.analysis.Settings.BFSReverseDirection = self.settings.bfs_reverse_direction
+                self.analysis.Settings.ReverseDirection = self.settings.bfs_reverse_direction
 
         # Run analysis
         self.analysis.ApplyAndWaitForCompletion()

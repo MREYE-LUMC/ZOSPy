@@ -153,6 +153,12 @@ extend-ignore = [
 
 [tool.ruff.lint.extend-per-file-ignores]
 "examples/**" = [
+    "D", # pydocstyle
+    "FBT002", # Allow positional boolean arguments
+    "INP001", # Do not require __init__.py
+    "RET504",
+    "S101", # Allow use of assert
+    "TCH", # Do not require type checking blocks
     "T201", # Allow use of print
 ]
 "**/tests/**" = [

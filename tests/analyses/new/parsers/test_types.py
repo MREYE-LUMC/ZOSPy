@@ -1,3 +1,4 @@
+import gc
 import json
 
 import numpy as np
@@ -6,7 +7,8 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 from pydantic import TypeAdapter, ValidationError
 
-from zospy.analyses.new.parsers.types import ValidatedDataFrame, ValidatedNDArray
+from zospy.analyses.new.parsers.types import ValidatedDataFrame, ValidatedNDArray, ZOSAPIConstantAnnotation
+from zospy.api import constants
 
 validated_dataframe = TypeAdapter(ValidatedDataFrame)
 validated_ndarray = TypeAdapter(ValidatedNDArray)
@@ -78,3 +80,23 @@ class TestValidatedNDArray:
         with pytest.raises(ValidationError, match="type=invalid_ndarray"):
             # List is formatted incorrectly
             validated_ndarray.validate_python([[1, 2, 3], [4, 5]])
+
+
+class TestZOSAPIConstant:
+    @staticmethod
+    def _get_instances():
+        return [obj for obj in gc.get_objects() if isinstance(obj, ZOSAPIConstantAnnotation)]
+
+    @staticmethod
+    def _hasattr(obj, attr):
+        for name in attr.split("."):
+            if not hasattr(obj, name):
+                return False
+
+            obj = getattr(obj, name)
+
+        return True
+
+    @pytest.mark.parametrize("annotation", _get_instances())
+    def test_constant_exists(self, zos, annotation):  # noqa: ARG002
+        assert self._hasattr(constants, annotation.enum)
