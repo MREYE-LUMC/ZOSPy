@@ -172,14 +172,14 @@ class TestAnalysisWrapper:
 
     def test_change_settings_from_object(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = MockAnalysis.from_settings(settings)
+        analysis = MockAnalysis.with_settings(settings)
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
     def test_settings_object_is_copied(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = MockAnalysis.from_settings(settings)
+        analysis = MockAnalysis.with_settings(settings)
 
         assert analysis.settings is not settings
         assert analysis.settings == settings

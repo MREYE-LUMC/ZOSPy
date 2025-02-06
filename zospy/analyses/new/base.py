@@ -548,7 +548,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     def __init__(self, *, settings_kws: dict[str, any] | None = None):
         """Create a new analysis wrapper.
 
-        Settings can be changed by passing the settings as keyword arguments. Use the `from_settings` method to specify
+        Settings can be changed by passing the settings as keyword arguments. Use the `with_settings` method to specify
         the settings using a settings object.
 
         Parameters
@@ -644,7 +644,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         return cls._settings_type() if cls._settings_type is not None else None
 
     @classmethod
-    def from_settings(cls, settings: AnalysisSettings):
+    def with_settings(cls, settings: AnalysisSettings):
         """Create a new analysis with the specified settings.
 
         Parameters
