@@ -31,9 +31,7 @@ from zospy.analyses.new import (
     systemviewers,
     wavefront,
 )
-
 from zospy.analyses.new.base import new_analysis
-
 
 __all__ = (
     "extendedscene",
