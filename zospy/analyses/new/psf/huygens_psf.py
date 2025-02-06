@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Union
 
 from pandas import DataFrame
 from pydantic import Field
@@ -13,6 +13,7 @@ from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber  # no
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
+__all__ = ("HuygensPSF", "HuygensPSFSettings")
 
 @analysis_settings
 class HuygensPSFSettings:
@@ -60,7 +61,7 @@ class HuygensPSFSettings:
     normalize: bool = Field(default=False, description="Normalize")
 
 
-class HuygensPSF(BaseAnalysisWrapper[DataFrame | None, HuygensPSFSettings], analysis_type="HuygensPsf"):
+class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings], analysis_type="HuygensPsf"):
     """Huygens Point Spread Function (PSF) analysis."""
 
     def __init__(

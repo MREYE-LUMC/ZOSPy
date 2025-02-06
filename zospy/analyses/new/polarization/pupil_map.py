@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, Union
 
 import pandas as pd
 from pydantic import Field
@@ -85,7 +85,7 @@ class PolarizationPupilMapSettings:
 
 
 class PolarizationPupilMap(
-    BaseAnalysisWrapper[None, PolarizationPupilMapSettings],
+    BaseAnalysisWrapper[Union[PolarizationPupilMapResult, None], PolarizationPupilMapSettings],
     analysis_type="PolarizationPupilMap",
     needs_config_file=True,
     needs_text_output_file=True,

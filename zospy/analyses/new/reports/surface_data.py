@@ -10,7 +10,7 @@ from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.transformers import SimpleField, ZospyTransformer
 
-__all__ = ("SurfaceData", "SurfaceDataSettings", "SurfaceDataResult")
+__all__ = ("SurfaceData", "SurfaceDataSettings")
 
 
 class SurfaceDataTransformer(ZospyTransformer):

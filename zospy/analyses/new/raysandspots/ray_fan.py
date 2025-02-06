@@ -124,7 +124,7 @@ class RayFanSettings:
     check_apertures: bool = Field(default=True, description="Only draw rays that pass all surface apertures")
 
 
-class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings], analysis_type="RayFan"):
+class RayFan(BaseAnalysisWrapper[RayFanResult, RayFanSettings], analysis_type="RayFan"):
     """Ray Fan analysis."""
 
     def __init__(
@@ -149,7 +149,7 @@ class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings], analys
         """
         super().__init__(settings_kws=locals())
 
-    def run_analysis(self) -> RayFanResult | None:
+    def run_analysis(self) -> RayFanResult:
         """Run the Ray Fan analysis."""
         self.analysis.field = self.settings.field
         self.analysis.set_surface(self.settings.surface)

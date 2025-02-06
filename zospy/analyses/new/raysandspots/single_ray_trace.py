@@ -14,7 +14,7 @@ from zospy.analyses.new.parsers.transformers import ZospyTransformer
 from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame  # noqa: TCH001
 from zospy.api import constants
 
-__all__ = ("SingleRayTrace", "SingleRayTraceSettings", "SingleRayTraceResult")
+__all__ = ("SingleRayTrace", "SingleRayTraceSettings")
 
 
 class SingleRayTraceTransformer(ZospyTransformer):

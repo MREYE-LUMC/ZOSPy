@@ -12,6 +12,7 @@ from zospy.analyses.new.systemviewers.base import ImageSize, SystemViewerWrapper
 if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
 
+__all__ = ("NSC3DLayout", "NSC3DLayoutSettings")
 
 @analysis_settings
 class NSC3DLayoutSettings:

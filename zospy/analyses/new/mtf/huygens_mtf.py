@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, Union
 
 from pandas import DataFrame
 from pydantic import Field
@@ -61,7 +61,7 @@ class HuygensMtfSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
-class HuygensMTF(BaseAnalysisWrapper[DataFrame, HuygensMtfSettings], analysis_type="HuygensMtf"):
+class HuygensMTF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensMtfSettings], analysis_type="HuygensMtf"):
     """Huygens Modulation Transfer Function (MTF) analysis."""
 
     def __init__(

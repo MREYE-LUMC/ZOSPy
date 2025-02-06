@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Union
 
 from pandas import DataFrame
 from pydantic import Field
@@ -12,6 +12,8 @@ from zospy.analyses.new.decorators import analysis_settings
 from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
+
+__all__ = ("WavefrontMap", "WavefrontMapSettings")
 
 
 @analysis_settings
@@ -75,7 +77,7 @@ class WavefrontMapSettings:
     contour_format: str = Field(default="", description="Contour format")
 
 
-class WavefrontMap(BaseAnalysisWrapper[DataFrame, WavefrontMapSettings], analysis_type="WavefrontMap"):
+class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSettings], analysis_type="WavefrontMap"):
     """Wavefront Map analysis."""
 
     def __init__(
