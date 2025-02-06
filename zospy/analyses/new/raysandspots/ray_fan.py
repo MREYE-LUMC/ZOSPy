@@ -14,10 +14,9 @@ from zospy.analyses.new.base import BaseAnalysisWrapper
 from zospy.analyses.new.decorators import analysis_result, analysis_settings
 from zospy.analyses.new.parsers.types import FieldNumber, UnitField, ValidatedDataFrame, WavelengthNumber
 from zospy.api import config, constants
+from zospy.utils.pyutils import atox
 
 __all__ = ("RayFan", "RayFanSettings")
-
-from zospy.utils.pyutils import atox
 
 
 @analysis_result

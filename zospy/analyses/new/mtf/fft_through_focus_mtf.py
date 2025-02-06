@@ -13,6 +13,8 @@ from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
+__all__ = ("FFTThroughFocusMTF", "FFTThroughFocusMTFSettings")
+
 
 @analysis_settings
 class FFTThroughFocusMTFSettings:
@@ -120,7 +122,7 @@ class FFTThroughFocusMTF(BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughF
         -------
         None
         """
-        if self.oss._ZOS.version < "21.2.0":  # noqa: SLF001
+        if self.oss.ZOS.version < "21.2.0":
             config_file = str(self.config_file)
 
             self.analysis.Settings.SaveTo(config_file)

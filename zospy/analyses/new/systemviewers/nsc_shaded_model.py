@@ -12,6 +12,8 @@ from zospy.analyses.new.systemviewers.base import ImageSize, SystemViewerWrapper
 if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
 
+__all__ = ("NSCShadedModel", "NSCShadedModelSettings")
+
 
 @analysis_settings
 class NSCShadedModelSettings:

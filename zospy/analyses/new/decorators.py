@@ -8,11 +8,12 @@ from typing import dataclass_transform
 import pydantic
 from pydantic import ConfigDict, Field, PrivateAttr
 
+__all__ = ("analysis_result", "analysis_settings")
 
-@dataclass_transform(field_specifiers=(dataclasses.field, Field, PrivateAttr))
-def analysis_result(cls=None, config: ConfigDict | None = None, **kwargs):
-    """Pydantic dataclass with default configuration for analysis results."""
-    default_config = ConfigDict(populate_by_name=True)
+    """Pydantic dataclass with default configuration."""
+
+def _default_config_dataclass(default_config: ConfigDict, cls=None, config: ConfigDict | None = None, **kwargs):
+    """Pydantic dataclass with default configuration."""
     config = default_config if config is None else default_config.update(config)
 
     if cls is None:
@@ -20,16 +21,17 @@ def analysis_result(cls=None, config: ConfigDict | None = None, **kwargs):
         return pydantic.dataclasses.dataclass(config=config, **kwargs)
 
     return pydantic.dataclasses.dataclass(config=config, **kwargs)(cls)
+
+
+@dataclass_transform(field_specifiers=(dataclasses.field, Field, PrivateAttr))
+def analysis_result(cls=None, config: ConfigDict | None = None, **kwargs):
+    """Pydantic dataclass with default configuration for analysis results."""
+    default_config = ConfigDict(populate_by_name=True)
+    return _default_config_dataclass(default_config, cls, config, **kwargs)
 
 
 @dataclass_transform(field_specifiers=(dataclasses.field, Field, PrivateAttr))
 def analysis_settings(cls=None, config: ConfigDict | None = None, **kwargs):
     """Pydantic dataclass with default configuration for analysis settings."""
     default_config = ConfigDict(validate_assignment=True)
-    config = default_config if config is None else default_config.update(config)
-
-    if cls is None:
-        # Called with parentheses
-        return pydantic.dataclasses.dataclass(config=config, **kwargs)
-
-    return pydantic.dataclasses.dataclass(config=config, **kwargs)(cls)
+    return _default_config_dataclass(default_config, cls, config, **kwargs)

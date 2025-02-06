@@ -13,6 +13,8 @@ from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
+__all__ = ("WavefrontMap", "WavefrontMapSettings")
+
 
 @analysis_settings
 class WavefrontMapSettings:
