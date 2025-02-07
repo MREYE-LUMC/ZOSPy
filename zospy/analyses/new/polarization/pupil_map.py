@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, Union
 
 import pandas as pd
 from pydantic import Field
@@ -84,13 +84,13 @@ class PolarizationPupilMapSettings:
     sub_configs: str = Field(default="", description="Subtract configurations")
 
 
-class PolarizationPupilMap(BaseAnalysisWrapper[None, PolarizationPupilMapSettings]):
+class PolarizationPupilMap(
+    BaseAnalysisWrapper[Union[PolarizationPupilMapResult, None], PolarizationPupilMapSettings],
+    analysis_type="PolarizationPupilMap",
+    needs_config_file=True,
+    needs_text_output_file=True,
+):
     """Polarization pupil map analysis."""
-
-    TYPE = "PolarizationPupilMap"
-
-    _needs_config_file = True
-    _needs_text_output_file = True
 
     def __init__(
         self,
@@ -105,7 +105,6 @@ class PolarizationPupilMap(BaseAnalysisWrapper[None, PolarizationPupilMapSetting
         sampling: str | int = "11x11",
         add_configs: str = "",
         sub_configs: str = "",
-        settings: PolarizationPupilMapSettings | None = None,
     ):
         """Create a new polarization pupil map analysis.
 
@@ -113,7 +112,7 @@ class PolarizationPupilMap(BaseAnalysisWrapper[None, PolarizationPupilMapSetting
         --------
         PolarizationPupilMapSettings : Settings for the polarization pupil map analysis.
         """
-        super().__init__(settings or PolarizationPupilMapSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> PolarizationPupilMapResult:
         """Run the polarization pupil map analysis."""

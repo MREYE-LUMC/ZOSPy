@@ -27,20 +27,17 @@ class ShadedModelSettings:
     image_size: ImageSize = Field(default=(800, 600), description="Image size")
 
 
-class ShadedModel(SystemViewerWrapper[ShadedModelSettings]):
+class ShadedModel(SystemViewerWrapper[ShadedModelSettings], analysis_type="ShadedModel", mode="Sequential"):
     """Shaded Model viewer."""
 
-    TYPE = "ShadedModel"
-    MODE = "Sequential"
-
-    def __init__(self, *, image_size: tuple[int, int] = (800, 600), settings: ShadedModelSettings | None = None):
+    def __init__(self, *, image_size: tuple[int, int] = (800, 600)):
         """Initialize the Shaded Model viewer.
 
         See Also
         --------
         ShadedModelSettings : Settings for the Shaded Model viewer.
         """
-        super().__init__(settings or ShadedModelSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def configure_layout_tool(
         self,

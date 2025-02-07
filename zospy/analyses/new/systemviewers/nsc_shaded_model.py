@@ -12,6 +12,8 @@ from zospy.analyses.new.systemviewers.base import ImageSize, SystemViewerWrapper
 if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
 
+__all__ = ("NSCShadedModel", "NSCShadedModelSettings")
+
 
 @analysis_settings
 class NSCShadedModelSettings:
@@ -25,20 +27,17 @@ class NSCShadedModelSettings:
     image_size: ImageSize = Field(default=(800, 600), description="Image size")
 
 
-class NSCShadedModel(SystemViewerWrapper[NSCShadedModelSettings]):
+class NSCShadedModel(SystemViewerWrapper[NSCShadedModelSettings], analysis_type="NSCShadedModel", mode="Nonsequential"):
     """Nonsequential Shaded Model viewer."""
 
-    TYPE = "NSCShadedModel"
-    MODE = "Nonsequential"
-
-    def __init__(self, *, image_size: ImageSize = (800, 600), settings: NSCShadedModelSettings | None = None):
+    def __init__(self, *, image_size: ImageSize = (800, 600)):
         """Create a new nonsequential shaded model viewer.
 
         See Also
         --------
         NSCShadedModelSettings : Settings for the nonsequential shaded model viewer.
         """
-        super().__init__(settings or NSCShadedModelSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def configure_layout_tool(self) -> _ZOSAPI.Tools.Layouts.IShadedModelExport:
         """Configure the nonsequential shaded model viewer."""

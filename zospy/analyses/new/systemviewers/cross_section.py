@@ -79,11 +79,8 @@ class CrossSectionSettings:
     )
 
 
-class CrossSection(SystemViewerWrapper[CrossSectionSettings]):
+class CrossSection(SystemViewerWrapper[CrossSectionSettings], analysis_type="Draw2D", mode="Sequential"):
     """Cross section viewer."""
-
-    TYPE = "Draw2D"
-    MODE = "Sequential"
 
     def __init__(
         self,
@@ -103,7 +100,6 @@ class CrossSection(SystemViewerWrapper[CrossSectionSettings]):
         image_size: tuple[int, int] = (800, 600),
         rays_line_thickness: constants.Tools.Layouts.LineThicknessOptions | str = "Standard",
         surface_line_thickness: constants.Tools.Layouts.LineThicknessOptions | str = "Standard",
-        settings: CrossSectionSettings | None = None,
     ):
         """Create a new cross section viewer.
 
@@ -111,7 +107,7 @@ class CrossSection(SystemViewerWrapper[CrossSectionSettings]):
         --------
         CrossSectionSettings : Settings for the cross section viewer.
         """
-        super().__init__(settings or CrossSectionSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def configure_layout_tool(self) -> _ZOSAPI.Tools.Layouts.ICrossSectionExport:
         """Configure the cross section viewer."""
