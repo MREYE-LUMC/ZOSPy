@@ -7,7 +7,6 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 from pydantic import TypeAdapter, ValidationError
 
-from tests.conftest import optic_studio_version
 from zospy.analyses.new.parsers.types import ValidatedDataFrame, ValidatedNDArray, ZOSAPIConstantAnnotation
 from zospy.api import constants
 
