@@ -82,11 +82,11 @@ class TestValidatedNDArray:
             validated_ndarray.validate_python([[1, 2, 3], [4, 5]])
 
 
-class TestZOSAPIConstant:
-    @staticmethod
-    def _get_instances():
-        return [obj for obj in gc.get_objects() if isinstance(obj, ZOSAPIConstantAnnotation)]
+def _get_zosapi_constant_instances():
+    return [obj for obj in gc.get_objects() if isinstance(obj, ZOSAPIConstantAnnotation)]
 
+
+class TestZOSAPIConstant:
     @staticmethod
     def _hasattr(obj, attr):
         for name in attr.split("."):
@@ -97,7 +97,7 @@ class TestZOSAPIConstant:
 
         return True
 
-    @pytest.mark.parametrize("annotation", _get_instances())
+    @pytest.mark.parametrize("annotation", _get_zosapi_constant_instances())
     def test_constant_exists(self, zos, annotation, optic_studio_version):  # noqa: ARG002
         if annotation.enum.startswith("Tools.Layouts") and optic_studio_version < "24.1.0":
             pytest.skip(f"{annotation.enum} is only available from OpticStudio 24.1 onwards")

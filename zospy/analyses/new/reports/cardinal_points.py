@@ -95,12 +95,13 @@ class CardinalPointsSettings:
         return self
 
 
-class CardinalPoints(BaseAnalysisWrapper[CardinalPointsResult, CardinalPointsSettings]):
+class CardinalPoints(
+    BaseAnalysisWrapper[CardinalPointsResult, CardinalPointsSettings],
+    analysis_type="CardinalPoints",
+    needs_text_output_file=True,
+    needs_config_file=True,
+):
     """Cardinal points analysis."""
-
-    TYPE = "CardinalPoints"
-    _needs_text_output_file = True
-    _needs_config_file = True
 
     def __init__(
         self,
@@ -109,7 +110,6 @@ class CardinalPoints(BaseAnalysisWrapper[CardinalPointsResult, CardinalPointsSet
         surface_2: int | Literal["Image"] = "Image",
         wavelength: int = 1,
         orientation: Literal["Y-Z", "X-Z"] = "Y-Z",
-        settings: CardinalPointsSettings | None = None,
     ):
         """Create a new Cardinal Points analysis.
 
@@ -117,7 +117,7 @@ class CardinalPoints(BaseAnalysisWrapper[CardinalPointsResult, CardinalPointsSet
         --------
         CardinalPointsSettings : Settings for the Cardinal Points analysis.
         """
-        super().__init__(settings or CardinalPointsSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> CardinalPointsResult:
         """Run the Cardinal Points analysis."""
