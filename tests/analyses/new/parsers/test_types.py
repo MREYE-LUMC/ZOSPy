@@ -7,6 +7,7 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 from pydantic import TypeAdapter, ValidationError
 
+from tests.conftest import optic_studio_version
 from zospy.analyses.new.parsers.types import ValidatedDataFrame, ValidatedNDArray, ZOSAPIConstantAnnotation
 from zospy.api import constants
 
@@ -98,5 +99,7 @@ class TestZOSAPIConstant:
         return True
 
     @pytest.mark.parametrize("annotation", _get_instances())
-    def test_constant_exists(self, zos, annotation):  # noqa: ARG002
+    def test_constant_exists(self, zos, annotation, optic_studio_version):  # noqa: ARG002
+        if annotation.enum.startswith("Tools.Layouts") and optic_studio_version < "24.1.0":
+            pytest.skip(f"{annotation.enum} is only available from OpticStudio 24.1 onwards")
         assert self._hasattr(constants, annotation.enum)
