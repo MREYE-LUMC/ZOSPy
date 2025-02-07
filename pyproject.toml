@@ -140,6 +140,7 @@ exclude = [
 extend-select = [
     "D", # pydocstyle
     "NPY", # numpy-specific
+    "RUF", # ruff-specific
 ]
 extend-ignore = [
     "B028",

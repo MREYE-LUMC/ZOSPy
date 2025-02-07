@@ -91,9 +91,14 @@ class SurfaceDataResult:
 
 @analysis_settings
 class SurfaceDataSettings:
-    """Settings for the Surface Data analysis."""
+    """Settings for the Surface Data analysis.
 
-    # TODO: document the fields
+    Attributes
+    ----------
+    surface : int
+        The surface number that is to be analyzed
+    """
+
     surface: int = Field(default=1, ge=0, description="Surface number to analyze.")
 
 
@@ -105,7 +110,13 @@ class SurfaceData(
 ):
     """Surface Data analysis."""
 
-    def __init__(self, surface: int = 1):
+    def __init__(self, *, surface: int = 1):
+        """Create a new Surface Data analysis.
+
+        See Also
+        --------
+        SurfaceDataSettings : Settings for the Surface Data analysis.
+        """
         super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> SurfaceDataResult:
