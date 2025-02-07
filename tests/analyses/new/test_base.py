@@ -81,9 +81,6 @@ class MockAnalysisSettings:
 class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
     TYPE = "MockAnalysis"
 
-    _needs_config_file = False
-    _needs_text_output_file = False
-
     def __init__(
         self,
         *,
@@ -140,7 +137,7 @@ class TestAnalysisWrapper:
 
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_init_all_keyword_only_parameters(self, cls):
-        all(p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(cls).parameters.items())
+        assert all(p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(cls).parameters.items())
 
     @pytest.mark.parametrize("cls", analysis_wrapper_classes)
     def test_init_contains_all_settings(self, cls):

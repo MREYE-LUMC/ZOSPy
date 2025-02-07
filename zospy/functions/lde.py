@@ -11,6 +11,8 @@ from zospy.api import _ZOSAPI, constants
 if TYPE_CHECKING:
     from zospy.zpcore import OpticStudioSystem
 
+__all__ = ("get_pupil", "surface_change_type", "find_surface_by_comment", "surface_change_aperturetype")
+
 
 @dataclass(frozen=True)
 class PupilData:

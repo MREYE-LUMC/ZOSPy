@@ -58,7 +58,7 @@ class TestViewers:
         ],
     )
     def test_old_opticstudio_version_raises_warning(self, simple_system, analysis, parameters, monkeypatch):
-        monkeypatch.setattr(simple_system, "_ZOS", SimpleNamespace(version=Version(20, 1, 0)))
+        monkeypatch.setattr(simple_system, "ZOS", SimpleNamespace(version=Version(20, 1, 0)))
 
         with pytest.warns(UserWarning, match=", ".join(parameters.keys())):
             analysis(simple_system, **parameters, oncomplete="Close")

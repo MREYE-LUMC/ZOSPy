@@ -31,7 +31,7 @@ def _correct_fft_through_focus_mtftype_api_bug(oss, analysis, mtftype) -> None:
     -------
     None
     """
-    if oss._ZOS.version < "21.2.0":
+    if oss.ZOS.version < "21.2.0":
         fd, cfgoutfile = mkstemp(suffix=".CFG", prefix="zospy_")
         os.close(fd)
         analysis.Settings.SaveTo(cfgoutfile)

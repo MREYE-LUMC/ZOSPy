@@ -726,7 +726,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         """Get the text output of the analysis."""
         self.analysis.Results.GetTextFile(str(self.text_output_file))
 
-        with open(self._text_output_file, encoding=self.oss._ZOS.get_txtfile_encoding()) as f:  # noqa: SLF001
+        with open(self._text_output_file, encoding=self.oss.ZOS.get_txtfile_encoding()) as f:
             return f.read()
 
     def _create_analysis(self, *, settings_first=True):

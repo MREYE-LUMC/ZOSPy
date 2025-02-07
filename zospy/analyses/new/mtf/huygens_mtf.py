@@ -13,7 +13,7 @@ from zospy.analyses.new.parsers.types import FieldNumber, WavelengthNumber, ZOSA
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
-__all__ = ("HuygensMtfSettings", "HuygensMTF")
+__all__ = ("HuygensMTF", "HuygensMtfSettings")
 
 
 @analysis_settings

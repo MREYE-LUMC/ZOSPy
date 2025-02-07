@@ -43,7 +43,7 @@ def _warn_specified_parameters(
     >>> def test_func(a=1, b=2, c=3):
     ...     _warn_specified_parameters(oss, locals(), test_func)
     """
-    if oss._ZOS.version >= (24, 1, 0):
+    if oss.ZOS.version >= (24, 1, 0):
         return
 
     changed_parameters = []
@@ -218,7 +218,7 @@ def cross_section(
 
     analysis = new_analysis(oss, analysis_type, settings_first=False)
 
-    if oss._ZOS.version >= (24, 1, 0):
+    if oss.ZOS.version >= (24, 1, 0):
         _close_current_tool(oss)
 
         layout_tool = oss.Tools.Layouts.OpenCrossSectionExport()
@@ -408,7 +408,7 @@ def viewer_3d(
 
     analysis = new_analysis(oss, analysis_type, settings_first=False)
 
-    if oss._ZOS.version >= (24, 1, 0):
+    if oss.ZOS.version >= (24, 1, 0):
         _close_current_tool(oss)
 
         layout_tool = oss.Tools.Layouts.Open3DViewerExport()
