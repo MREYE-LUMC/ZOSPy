@@ -5,17 +5,17 @@ build-backend = "hatchling.build"
 [project]
 name = "zospy"
 authors = [
-    {name = "Luc van Vught"},
-    {name = "Jan-Willem Beenakker"},
-    {name = "Corné Haasjes"}
+    { name = "Luc van Vught" },
+    { name = "Jan-Willem Beenakker" },
+    { name = "Corné Haasjes" }
 ]
 maintainers = [
-    {name = "MReye research group", email = "zospy@mreye.nl"}
+    { name = "MReye research group", email = "zospy@mreye.nl" }
 ]
 
 description = "A Python package used to communicate with Zemax OpticStudio through the API"
 readme = "README.md"
-license = {file = "LICENSE.txt"}
+license = { file = "LICENSE.txt" }
 keywords = ["Zemax", "OpticStudio", "API", "ZOSAPI"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -30,7 +30,8 @@ dependencies = [
     "pydantic >= 2.4.0",
     "numpy",
     "semver >= 3.0.0,<4",
-    "eval_type_backport", # TODO: Remove when dropping support for Python 3.9
+    "eval_type_backport; python_version <= '3.9'", # TODO: Remove when dropping support for Python 3.9
+    "typing_extensions; python_version <= '3.10'"
 ]
 dynamic = ["version"]
 
@@ -57,6 +58,9 @@ path = "zospy/__init__.py"
 [tool.hatch.envs.default]
 python = "3.12"
 installer = "uv"
+path = ".venv"
+dependencies = ["pytest"]
+
 
 [tool.hatch.envs.default.scripts]
 test-extension = "hatch test --extension {args}"
@@ -118,7 +122,6 @@ extend-include = [
 exclude = [
     "zospy/api/_ZOSAPI",
     "zospy/api/_ZOSAPI_constants",
-
     # TODO: Change this when movind the old analyses to zospy.analyses.old
     "zospy/analyses/base.py",
     "zospy/analyses/extendedscene.py",
@@ -150,6 +153,12 @@ extend-ignore = [
 
 [tool.ruff.lint.extend-per-file-ignores]
 "examples/**" = [
+    "D", # pydocstyle
+    "FBT002", # Allow positional boolean arguments
+    "INP001", # Do not require __init__.py
+    "RET504",
+    "S101", # Allow use of assert
+    "TCH", # Do not require type checking blocks
     "T201", # Allow use of print
 ]
 "**/tests/**" = [

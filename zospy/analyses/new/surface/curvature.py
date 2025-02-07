@@ -74,10 +74,8 @@ class CurvatureSettings:
     bfs_reverse_direction: bool = Field(default=False, description="Reverse BFS radius sign")
 
 
-class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings]):
+class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysis_type="SurfaceCurvature"):
     """Surface Curvature analysis."""
-
-    TYPE = "SurfaceCurvature"
 
     def __init__(
         self,
@@ -91,7 +89,6 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings]):
         contour_format: str = "",
         bfs_criterion: str | constants.Analysis.BestFitSphereOptions = "MinimumVolume",
         bfs_reverse_direction: bool = False,
-        settings: CurvatureSettings | None = None,
     ):
         """Create a new Curvature analysis.
 
@@ -99,7 +96,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings]):
         --------
         CurvatureSettings : Settings for the Curvature analysis.
         """
-        super().__init__(settings or CurvatureSettings(), locals())
+        super().__init__(settings_kws=locals())
 
     def run_analysis(self) -> list[CurvatureResult] | None:
         """Run the Curvature analysis."""
@@ -124,7 +121,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings]):
                 constants.Analysis.BestFitSphereOptions, self.settings.bfs_criterion
             )
             if self.analysis.Settings.BestFitSphereOption == constants.Analysis.BestFitSphereOptions.MinimumVolume:
-                self.analysis.Settings.BFSReverseDirection = self.settings.bfs_reverse_direction
+                self.analysis.Settings.ReverseDirection = self.settings.bfs_reverse_direction
 
         # Run analysis
         self.analysis.ApplyAndWaitForCompletion()

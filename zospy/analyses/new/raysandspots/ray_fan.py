@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 import numpy as np
 import pandas as pd
@@ -123,10 +123,8 @@ class RayFanSettings:
     check_apertures: bool = Field(default=True, description="Only draw rays that pass all surface apertures")
 
 
-class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings]):
+class RayFan(BaseAnalysisWrapper[RayFanResult, RayFanSettings], analysis_type="RayFan"):
     """Ray Fan analysis."""
-
-    TYPE = "RayFan"
 
     def __init__(
         self,
@@ -141,7 +139,6 @@ class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings]):
         use_dashes: bool = False,
         vignetted_pupil: bool = True,
         check_apertures: bool = True,
-        settings: RayFanSettings | None = None,
     ):
         """Create a new Ray Fan analysis.
 
@@ -149,9 +146,9 @@ class RayFan(BaseAnalysisWrapper[Union[DataFrame, None], RayFanSettings]):
         --------
         RayFanSettings : Settings for the Ray Fan analysis.
         """
-        super().__init__(settings or RayFanSettings(), locals())
+        super().__init__(settings_kws=locals())
 
-    def run_analysis(self) -> RayFanResult | None:
+    def run_analysis(self) -> RayFanResult:
         """Run the Ray Fan analysis."""
         self.analysis.field = self.settings.field
         self.analysis.set_surface(self.settings.surface)
