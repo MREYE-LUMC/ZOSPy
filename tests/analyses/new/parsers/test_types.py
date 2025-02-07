@@ -98,5 +98,7 @@ class TestZOSAPIConstant:
         return True
 
     @pytest.mark.parametrize("annotation", _get_zosapi_constant_instances())
-    def test_constant_exists(self, zos, annotation):  # noqa: ARG002
+    def test_constant_exists(self, zos, annotation, optic_studio_version):  # noqa: ARG002
+        if annotation.enum.startswith("Tools.Layouts") and optic_studio_version < "24.1.0":
+            pytest.skip(f"{annotation.enum} is only available from OpticStudio 24.1 onwards")
         assert self._hasattr(constants, annotation.enum)
