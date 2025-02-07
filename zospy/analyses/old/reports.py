@@ -10,7 +10,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
+from zospy.analyses.old.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.zpcore import OpticStudioSystem
 

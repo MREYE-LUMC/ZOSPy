@@ -10,7 +10,7 @@ from warnings import warn
 import numpy as np
 from System import Array
 
-from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
+from zospy.analyses.old.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import _ZOSAPI, constants
 from zospy.utils.pyutils import abspath
 from zospy.zpcore import OpticStudioSystem

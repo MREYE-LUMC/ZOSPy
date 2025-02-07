@@ -9,7 +9,7 @@ Examples
 --------
 Run a Single Ray Trace analysis:
 
->>> from zospy.analyses.wavefront import zernike_standard_coefficients
+>>> from zospy.analyses.old.wavefront import zernike_standard_coefficients
 >>> zernike_standard_coefficients(oss, sampling="32x32", maximum_term=15)
 
 Open an analysis for which a wrapper function is not yet available:
@@ -20,10 +20,9 @@ Open an analysis for which a wrapper function is not yet available:
 ... )
 """
 
-from zospy.analyses import (
+from zospy.analyses.old import (
     extendedscene,
     mtf,
-    new,
     physicaloptics,
     polarization,
     psf,
@@ -33,12 +32,11 @@ from zospy.analyses import (
     systemviewers,
     wavefront,
 )
-from zospy.analyses.base import OnComplete, new_analysis
+from zospy.analyses.old.base import OnComplete, new_analysis
 
 __all__ = (
     "extendedscene",
     "mtf",
-    "new",
     "physicaloptics",
     "psf",
     "reports",

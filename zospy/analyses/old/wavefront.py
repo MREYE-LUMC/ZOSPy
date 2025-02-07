@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 import zospy.api.config as _config
-from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
+from zospy.analyses.old.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling, unpack_datagrid

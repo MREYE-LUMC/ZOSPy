@@ -7,7 +7,7 @@ from typing import Literal
 import pandas as pd
 
 from zospy import utils
-from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
+from zospy.analyses.old.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.zpcore import OpticStudioSystem
 

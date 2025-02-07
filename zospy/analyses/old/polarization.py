@@ -12,7 +12,7 @@ import pandas as pd
 
 import zospy.api.config as _config
 from zospy import utils
-from zospy.analyses.base import AnalysisResult, OnComplete, new_analysis
+from zospy.analyses.old.base import AnalysisResult, OnComplete, new_analysis
 from zospy.api import constants
 from zospy.utils.zputils import _get_number_field
 from zospy.zpcore import OpticStudioSystem

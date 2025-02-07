@@ -5,7 +5,7 @@ from __future__ import annotations
 import pandas as pd
 
 from zospy import utils
-from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analysis
+from zospy.analyses.old.base import AnalysisResult, AttrDict, OnComplete, new_analysis
 from zospy.api import constants
 
 
