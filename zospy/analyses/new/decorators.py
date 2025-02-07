@@ -10,7 +10,6 @@ from pydantic import ConfigDict, Field, PrivateAttr
 
 __all__ = ("analysis_result", "analysis_settings")
 
-    """Pydantic dataclass with default configuration."""
 
 def _default_config_dataclass(default_config: ConfigDict, cls=None, config: ConfigDict | None = None, **kwargs):
     """Pydantic dataclass with default configuration."""
