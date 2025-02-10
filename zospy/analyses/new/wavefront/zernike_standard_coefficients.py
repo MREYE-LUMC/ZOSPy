@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, TypedDict
 
+import pandas as pd
 from pydantic import Field
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
@@ -71,6 +72,11 @@ class ZernikeStandardCoefficientsResult:
     maximum_fit_error: UnitField = Field(alias="Maximum fit error")
 
     coefficients: dict[int, ZernikeStandardCoefficient] = Field(alias="Coefficients")
+
+    def coefficients_as_dataframe(self):
+        df = pd.DataFrame(self.coefficients.values(), index=self.coefficients.keys())
+        df.index.name = "Coefficient"
+        return df
 
 
 @analysis_settings
