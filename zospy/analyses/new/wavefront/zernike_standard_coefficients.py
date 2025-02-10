@@ -73,7 +73,8 @@ class ZernikeStandardCoefficientsResult:
 
     coefficients: dict[int, ZernikeStandardCoefficient] = Field(alias="Coefficients")
 
-    def coefficients_as_dataframe(self):
+    @property
+    def coefficients_dataframe(self):
         df = pd.DataFrame(self.coefficients.values(), index=self.coefficients.keys())
         df.index.name = "Coefficient"
         return df
