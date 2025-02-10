@@ -730,7 +730,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
             return f.read()
 
     def _create_analysis(self, *, settings_first=True):
-        if self.analysis is not None and self.analysis.TypeName == self.TYPE:
+        if self.analysis is not None and str(self.analysis.AnalysisType) == self.TYPE:
             return
 
         analysis_type = constants.process_constant(constants.Analysis.AnalysisIDM, self.TYPE)
