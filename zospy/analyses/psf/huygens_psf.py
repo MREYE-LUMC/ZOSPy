@@ -115,4 +115,4 @@ class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings]
         # Run analysis
         self.analysis.ApplyAndWaitForCompletion()
 
-        return NotImplemented
+        return self.get_data_grid()
