@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from zospy.analyses.new.parsers import base
+from zospy.analyses.parsers import base
 
 available_grammars = [
     g.stem for g in Path(base.__file__).parent.joinpath("grammars").glob("*.lark") if g.stem != "zospy"

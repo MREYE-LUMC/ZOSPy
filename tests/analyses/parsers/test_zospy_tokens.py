@@ -5,10 +5,10 @@ from lark import Lark
 from lark.load_grammar import FromPackageLoader
 from lark.visitors import merge_transformers
 
-from zospy.analyses.new.parsers.transformers import ParametricField, SimpleField, UnitField, ZospyTransformer
+from zospy.analyses.parsers.transformers import ParametricField, SimpleField, UnitField, ZospyTransformer
 from zospy.api import config
 
-zospy_grammar_loader = FromPackageLoader("zospy", ["analyses/new/parsers/grammars"])
+zospy_grammar_loader = FromPackageLoader("zospy", ["analyses/parsers/grammars"])
 
 
 class SingleTokenZospyTransformer(ZospyTransformer):

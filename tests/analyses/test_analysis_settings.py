@@ -3,8 +3,8 @@ from inspect import getsource
 
 import pytest
 
-from zospy.analyses.new.base import BaseAnalysisWrapper, new_analysis
-from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
+from zospy.analyses.base import BaseAnalysisWrapper, new_analysis
+from zospy.analyses.systemviewers.base import SystemViewerWrapper
 from zospy.api import constants
 from zospy.api.constants import process_constant
 

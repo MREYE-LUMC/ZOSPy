@@ -1,4 +1,7 @@
-"""OpticStudio Analyses.
+"""Old-style OpticStudio Analyses.
+
+.. deprecated:: 2.0.0
+    The `zospy.analyses.old` contains the deprecated analysis API. Migrate your analyses to the new format.
 
 Analyses in OpticStudio are available through `zospy.analyses`.
 This module provides basic classes and functions for interacting with
@@ -19,6 +22,8 @@ Open an analysis for which a wrapper function is not yet available:
 ...     oss, zp.constants.Analysis.AnalysisIDM.ImageSimulation
 ... )
 """
+
+from warnings import warn
 
 from zospy.analyses.old import (
     extendedscene,
@@ -48,3 +53,5 @@ __all__ = (
     "new_analysis",
     "OnComplete",
 )
+
+warn("The `zospy.analyses.old` module contains the deprecated analysis API. Migrate your analyses to the new format.", DeprecationWarning)

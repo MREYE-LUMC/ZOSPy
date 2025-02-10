@@ -8,7 +8,7 @@ from zospy.analyses.parsers import ZospyTransformer
 
 __all__ = ("SystemData",)
 
-from zospy.analyses.new.parsers.transformers import SimpleField
+from zospy.analyses.parsers.transformers import SimpleField
 
 
 class SystemDataTransformer(ZospyTransformer):

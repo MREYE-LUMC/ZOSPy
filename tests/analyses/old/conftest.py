@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from tests.config import CONFIG_DATA_FOLDER, REFERENCE_DATA_FOLDER, REFERENCE_VERSION
-from zospy.analyses.base import AnalysisResult
+from zospy.analyses.old.base import AnalysisResult
 
 
 def pytest_make_parametrize_id(config, val, argname):  # noqa: ARG001

@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import pytest
 from semver import Version
 
-from zospy.analyses.systemviewers import (
+from zospy.analyses.old.systemviewers import (
     cross_section,
     nsc_3d_layout,
     nsc_shaded_model,

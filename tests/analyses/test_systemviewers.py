@@ -6,10 +6,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from zospy.analyses.new.base import AnalysisMetadata
-from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.systemviewers import CrossSection, NSC3DLayout, NSCShadedModel, ShadedModel, Viewer3D
-from zospy.analyses.new.systemviewers.base import SystemViewerWrapper
+from zospy.analyses.base import AnalysisMetadata
+from zospy.analyses.decorators import analysis_settings
+from zospy.analyses.systemviewers import CrossSection, NSC3DLayout, NSCShadedModel, ShadedModel, Viewer3D
+from zospy.analyses.systemviewers.base import SystemViewerWrapper
 
 
 def assert_systemviewer_result(result, minimal_version):
