@@ -169,7 +169,6 @@ class RayFan(BaseAnalysisWrapper[RayFanResult, RayFanSettings], analysis_type="R
         self.analysis.ApplyAndWaitForCompletion()
 
         # Get results
-
         return self.get_data_series()
 
     def get_data_series(self) -> RayFanResult | None:
