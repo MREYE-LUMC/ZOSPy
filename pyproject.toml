@@ -7,11 +7,9 @@ name = "zospy"
 authors = [
     { name = "Luc van Vught" },
     { name = "Jan-Willem Beenakker" },
-    { name = "Corné Haasjes" }
+    { name = "Corné Haasjes" },
 ]
-maintainers = [
-    { name = "MReye research group", email = "zospy@mreye.nl" }
-]
+maintainers = [{ name = "MReye research group", email = "zospy@mreye.nl" }]
 
 description = "A Python package used to communicate with Zemax OpticStudio through the API"
 readme = "README.md"
@@ -20,7 +18,7 @@ keywords = ["Zemax", "OpticStudio", "API", "ZOSAPI"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Typing :: Typed"
+    "Typing :: Typed",
 ]
 requires-python = ">=3.9,<3.13"
 dependencies = [
@@ -31,7 +29,7 @@ dependencies = [
     "numpy",
     "semver >= 3.0.0,<4",
     "eval_type_backport; python_version <= '3.9'", # TODO: Remove when dropping support for Python 3.9
-    "typing_extensions; python_version <= '3.10'"
+    "typing_extensions; python_version <= '3.10'",
 ]
 dynamic = ["version"]
 
@@ -66,10 +64,7 @@ dependencies = ["pytest"]
 test-extension = "hatch test --extension {args}"
 
 # Build and serve documentation
-docs = [
-    "hatch run docs:build",
-    "hatch run docs:serve"
-]
+docs = ["hatch run docs:build", "hatch run docs:serve"]
 
 # Run examples using the development version of ZOSPy
 example = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_single_example.py {args} --zospy-location ."
@@ -100,6 +95,11 @@ build = "sphinx-build -M {args:html} ./docs ./docs/_build"
 # Serve documentation locally; run as hatch run docs:serve
 serve = "python -m http.server -d ./docs/_build/html {args:8888}"
 
+## Examples
+[tool.hatch.envs.examples]
+installer = "uv"
+dependencies = ["jupyter", "matplotlib", "numpy", "pandas", "pip"]
+
 ## Test reference data generation
 [tool.hatch.envs.reference-data]
 dependencies = ["pyyaml"]
@@ -116,9 +116,7 @@ config-path = "ruff_defaults.toml"
 extend = "ruff_defaults.toml"
 
 line-length = 120
-extend-include = [
-    "*.ipynb",
-]
+extend-include = ["*.ipynb"]
 exclude = [
     "zospy/api/_ZOSAPI",
     "zospy/api/_ZOSAPI_constants",
@@ -138,42 +136,34 @@ exclude = [
 
 [tool.ruff.lint]
 extend-select = [
-    "D", # pydocstyle
+    "D",   # pydocstyle
     "NPY", # numpy-specific
     "RUF", # ruff-specific
 ]
-extend-ignore = [
-    "B028",
-    "EM101",
-    "EM102",
-    "G004",
-    "PLR2004",
-    "TD004",
-    "TRY003"
-]
+extend-ignore = ["B028", "EM101", "EM102", "G004", "PLR2004", "TD004", "TRY003"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "examples/**" = [
-    "D", # pydocstyle
+    "D",      # pydocstyle
     "FBT002", # Allow positional boolean arguments
     "INP001", # Do not require __init__.py
     "RET504",
-    "S101", # Allow use of assert
-    "TCH", # Do not require type checking blocks
-    "T201", # Allow use of print
+    "S101",   # Allow use of assert
+    "TCH",    # Do not require type checking blocks
+    "T201",   # Allow use of print
 ]
 "**/tests/**" = [
-    "D", # pydocstyle
+    "D",   # pydocstyle
     "DTZ", # Datetime timezones
 ]
 "scripts/**" = [
-    "D", # pydocstyle
+    "D",    # pydocstyle
     "S101", # Use of assert
 ]
 "docs/conf.py" = [
     "INP001", # Missing __init__.py
-    "D100", # Missing docstring in public module
-    "D103", # Missing docstring in public function
+    "D100",   # Missing docstring in public module
+    "D103",   # Missing docstring in public function
 ]
 
 [tool.ruff.lint.flake8-pytest-style]
@@ -194,18 +184,13 @@ markers = [
     "must_pass: test must pass, otherwise all other tests will be skipped",
     "require_mode: requires the specified connection mode, otherwise the test will be skipped",
     "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions",
-    "skip_for_opticstudio_versions: test is skipped for specific OpticStudio versions"
+    "skip_for_opticstudio_versions: test is skipped for specific OpticStudio versions",
 ]
 
 [tool.mypy]
-files = [
-    "zospy"
-]
+files = ["zospy"]
 pretty = true
 
 [[tool.mypy.overrides]]
-module = [
-    "zospy.api._ZOSAPI",
-    "zospy.api._ZOSAPI_constants"
-]
+module = ["zospy.api._ZOSAPI", "zospy.api._ZOSAPI_constants"]
 ignore_errors = "True"
