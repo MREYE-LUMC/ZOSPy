@@ -88,15 +88,37 @@ class SingleRayTraceResult:
 
 @analysis_settings
 class SingleRayTraceSettings:
-    """Settings for the Single Ray Trace analysis."""
+    """Settings for the Single Ray Trace analysis.
+
+    Attributes
+    ----------
+    hx : float
+        Normalized X field coordinate. Defaults to 0.
+    hy : float
+        Normalized Y field coordinate. Defaults to 0.
+    px : float
+        Normalized X pupil coordinate. Defaults to 0.
+    py : float
+        Normalized Y pupil coordinate. Defaults to 1.
+    wavelength : int
+        The wavelength number that is to be used. Must be an integer specifying the wavelength number.
+        Defaults to 1.
+    field : int
+        The field number that is to be used. Must be an integer specifying the field number. "Arbitrary" is 0. Defaults
+        to 0.
+    raytrace_type : zospy.api.constants.Analysis.Settings.Aberrations.RayTraceType
+        The Ray Trace type (e.g. 'DirectionCosines') that is calculated. Defaults to 'DirectionCosines'.
+    global_coordinates : bool
+        Defines if global coordinates are used. Defaults to `False`.
+    """
 
     # TODO: document the fields
     hx: float = Field(ge=-1, le=1, default=0, description="Normalized X field coordinate")
     hy: float = Field(ge=-1, le=1, default=0, description="Normalized Y field coordinate")
     px: float = Field(ge=-1, le=1, default=0, description="Normalized X pupil coordinate")
     py: float = Field(ge=-1, le=1, default=0, description="Normalized Y pupil coordinate")
-    wavelength: Literal["All"] | int = Field(gt=0, default=1, description="Wavelength number or 'All'")
-    field: Literal["All"] | int = Field(gt=0, default=1, description="Field number or 'All'")
+    wavelength: int = Field(gt=0, default=1, description="Wavelength number")
+    field: int = Field(ge=0, default=0, description="Field number")
     raytrace_type: Literal["DirectionCosines", "TangentAngle", "YmUmYcUc"] = Field(default="DirectionCosines")
     global_coordinates: bool = Field(default=False, description="Use global coordinates")
 
@@ -116,7 +138,7 @@ class SingleRayTrace(
         px: float = 0,
         py: float = 0,
         wavelength: int = 1,
-        field: int = 1,
+        field: int = 0,
         raytrace_type: constants.Analysis.Settings.Aberrations.RayTraceType | str = "DirectionCosines",
         global_coordinates: bool = False,
     ):
