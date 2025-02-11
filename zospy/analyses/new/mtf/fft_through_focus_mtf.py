@@ -2,15 +2,19 @@
 
 from __future__ import annotations
 
+import re
 from typing import Annotated, Literal, Union
 
+import numpy as np
+import pandas as pd
 from pandas import DataFrame
-from pydantic import Field
+from pydantic import Field, RootModel
 
 from zospy.analyses.new.base import BaseAnalysisWrapper
-from zospy.analyses.new.decorators import analysis_settings
-from zospy.analyses.new.parsers.types import ZOSAPIConstant  # noqa: TCH001
-from zospy.api import constants
+from zospy.analyses.new.decorators import analysis_result, analysis_settings
+from zospy.analyses.new.parsers.types import UnitField, ValidatedDataFrame, ZOSAPIConstant
+from zospy.api import config, constants
+from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling
 
 __all__ = ("FFTThroughFocusMTF", "FFTThroughFocusMTFSettings")
@@ -58,8 +62,65 @@ class FFTThroughFocusMTFSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
+@analysis_result
+class FFTThroughFocusMTFData:
+    field_coordinate: UnitField[float | tuple[float, float]]
+    data: ValidatedDataFrame
+
+    def to_dataframe(self) -> DataFrame:
+        """Convert the data to a Pandas DataFrame.
+
+        In addition to the columns from FFTThroughFocusMTFData.data, the returned DataFrame has the following columns:
+
+        - FieldX: The field x coordinate
+        - FieldY: The field y coordinate
+
+        Returns
+        -------
+        DataFrame
+            The data in long format.
+        """
+        df: DataFrame = self.data.copy().reset_index()
+
+        df.insert(0, "FieldX", self.field_coordinate.value[0])
+        df.insert(1, "FieldY", self.field_coordinate.value[0])
+
+        return df
+
+
+class FFTThroughFocusMTFResult(RootModel[list[FFTThroughFocusMTFData]]):
+    def __iter__(self):
+        return iter(self.root)
+
+    def __getitem__(self, item):
+        return self.root[item]
+
+    def to_dataframe(self) -> DataFrame:
+        """Convert the data to a Pandas DataFrame.
+
+        The separate dataframes for each field are combined in a DataFrame in long format.
+        In addition to the columns for each wavelength, the returned DataFrame has the following columns:
+
+        - Direction: The direction of the fan, either 'Tangential' or 'Sagittal'.
+        - Field Number: The field number.
+        - Field: The field coordinate.
+
+        Returns
+        -------
+        DataFrame
+            The data in long format.
+        """
+        dataframes = []
+
+        for fft in self:
+            df = fft.to_dataframe()
+            dataframes.append(df)  # Move the index to a separate column to prevent overlap
+
+        return pd.concat(dataframes, ignore_index=True).reset_index(drop=True)
+
+
 class FFTThroughFocusMTF(
-    BaseAnalysisWrapper[Union[DataFrame, None], FFTThroughFocusMTFSettings],
+    BaseAnalysisWrapper[Union[FFTThroughFocusMTFResult, None], FFTThroughFocusMTFSettings],
     analysis_type="FftThroughFocusMtf",
     needs_config_file=True,
 ):
@@ -86,7 +147,7 @@ class FFTThroughFocusMTF(
         """
         super().__init__(settings_kws=locals())
 
-    def run_analysis(self) -> DataFrame | None:
+    def run_analysis(self) -> FFTThroughFocusMTFResult | None:
         """Run the FFT Through Focus MTF analysis."""
         self.analysis.Settings.SampleSize = getattr(
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.sampling)
@@ -109,6 +170,50 @@ class FFTThroughFocusMTF(
 
         # Get results
         return self.get_data_series()
+
+    def get_data_series(self) -> FFTThroughFocusMTFResult | None:
+        """Get the data series from the FFT Through Focus MTF analysis."""
+        re_float = rf"\d+\{config.DECIMAL_POINT}\d+"
+        fft_through_focus_mtf_description_regex = re.compile(
+            rf"Field: "
+            rf"(?P<field_1>{re_float})(?:, (?P<field_2>{re_float}))? "
+            r"(?P<unit>\(.+?\)|\S.*)?",  # unit can, but might not have parentheses
+            re.IGNORECASE,
+        )
+
+        if self.analysis.Results.NumberOfDataSeries <= 0:
+            return None
+
+        fft_results = []
+        for i in range(self.analysis.Results.NumberOfDataSeries):
+            data_series = self.analysis.Results.GetDataSeries(i)
+
+            match = fft_through_focus_mtf_description_regex.match(data_series.Description)
+
+            if match is None:
+                raise ValueError(f"Could not parse description: {data_series.Description}")
+
+            index = pd.Index(data_series.XData.Data, name=data_series.XLabel)
+            columns = data_series.SeriesLabels
+            data = np.array(data_series.YData.Data)
+
+            if match.group("field_2"):
+                field_x = atox(match.group("field_1"), float)
+                field_y = atox(match.group("field_2"), float)
+            else:  # field 1 corresponds to y
+                field_x = 0.0
+                field_y = atox(match.group("field_1"), float)
+
+            coordinate = (field_x, field_y)
+
+            fft_data = FFTThroughFocusMTFData(
+                field_coordinate=UnitField(value=coordinate, unit=match.group("unit")),
+                data=DataFrame(index=index, columns=columns, data=data),
+            )
+
+            fft_results.append(fft_data)
+
+        return FFTThroughFocusMTFResult.model_validate(fft_results)
 
     def _correct_mtf_type_api_bug(self) -> None:
         """Correction for an API bug in OpticStudio versions < 21.2.
