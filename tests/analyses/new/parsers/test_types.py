@@ -1,5 +1,6 @@
 import gc
 import json
+from typing import ClassVar
 
 import numpy as np
 import pytest
@@ -87,6 +88,12 @@ def _get_zosapi_constant_instances():
 
 
 class TestZOSAPIConstant:
+    CONSTANT_MINIMUM_ZOS_VERSIONS: ClassVar[dict] = {
+        "Tools": {
+            "Layouts": "24.1.0",
+        }
+    }
+
     @staticmethod
     def _hasattr(obj, attr):
         for name in attr.split("."):
@@ -97,6 +104,22 @@ class TestZOSAPIConstant:
 
         return True
 
+    def _constant_exists_in_version(self, constant: str, version) -> bool:
+        _minimum_zos_version = self.CONSTANT_MINIMUM_ZOS_VERSIONS
+
+        for namespace in constant.split("."):
+            _minimum_zos_version = _minimum_zos_version.get(namespace)
+
+            if _minimum_zos_version is None:
+                return True
+            if isinstance(_minimum_zos_version, str):
+                return version >= _minimum_zos_version
+
+        return True
+
     @pytest.mark.parametrize("annotation", _get_zosapi_constant_instances())
-    def test_constant_exists(self, zos, annotation):  # noqa: ARG002
+    def test_constant_exists(self, zos, annotation, optic_studio_version):  # noqa: ARG002
+        if not self._constant_exists_in_version(annotation.enum, optic_studio_version):
+            pytest.skip(f"{annotation.enum} is not available in OpticStudio {optic_studio_version}")
+
         assert self._hasattr(constants, annotation.enum)
