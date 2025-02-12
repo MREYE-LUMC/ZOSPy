@@ -42,6 +42,7 @@ import numpy as np
 import pandas as pd
 import pydantic
 from pydantic import (
+    ConfigDict,
     RootModel,
     TypeAdapter,
     field_serializer,
@@ -145,7 +146,7 @@ def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> Analys
     raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
 
 
-@pydantic.dataclasses.dataclass(frozen=True)
+@pydantic.dataclasses.dataclass(frozen=True, config=ConfigDict(ser_json_inf_nan="strings"))
 class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     """Zemax OpticStudio analysis result.
 
