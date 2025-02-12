@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from pathlib import Path  # noqa: TCH003
+from pathlib import Path
+from typing import Annotated, Any  # noqa: TCH003
 
-from pydantic import AliasChoices, Field
+from pydantic import AliasChoices, BeforeValidator, Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
@@ -56,15 +57,31 @@ class RefractiveIndex:
 class MaterialData:
     indices: list[RefractiveIndex] = Field(alias="Refractive Indices")
     best_fit_glass: str | None = Field(alias="Best Fit Glass", default=None)
-    glass: str | ModelGlass | None = Field(alias=AliasChoices("Model glass", "Glass"), default=None)
+    glass: str | ModelGlass | None = Field(
+        alias=AliasChoices("Model glass", "Glass"), default=None
+    )
+
+
+def _deserialize_tuple(value: Any) -> tuple[float, ...] | Any:
+    """Deserialize a tuple from a string.
+
+    Used for deserialization of JSON-serialized analysis results.
+    """
+    if isinstance(value, str):
+        return tuple(map(float, value.split(",")))
+
+    return value
+
+
+TupleKey = Annotated[tuple[float, float], BeforeValidator(_deserialize_tuple)]
 
 
 @analysis_result
 class SurfacePower:
     surf: dict[int, float] = Field(alias="Surf")
-    power: dict[tuple[float, float], float] | None = Field(alias="Power", default=None)
-    efl: dict[tuple[float, float], float] | None = Field(alias="EFL", default=None)
-    f_number: dict[tuple[float, float], float] | None = Field(alias="F/#", default=None)
+    power: dict[TupleKey, float] | None = Field(alias="Power", default=None)
+    efl: dict[TupleKey, float] | None = Field(alias="EFL", default=None)
+    f_number: dict[TupleKey, float] | None = Field(alias="F/#", default=None)
 
 
 @analysis_result
@@ -126,7 +143,9 @@ class SurfaceData(
 
         settings_bytestring = self.config_file.read_bytes()
         settings_bytearray = bytearray(settings_bytestring)
-        settings_bytearray[20] = self.settings.surface  # 20 maps to the selected surface
+        settings_bytearray[20] = (
+            self.settings.surface
+        )  # 20 maps to the selected surface
 
         self.config_file.write_bytes(settings_bytearray)
 
@@ -136,4 +155,8 @@ class SurfaceData(
         self.analysis.ApplyAndWaitForCompletion()
 
         # Read text file and parse to object
-        return self.parse_output("surface_data", transformer=SurfaceDataTransformer, result_type=SurfaceDataResult)
+        return self.parse_output(
+            "surface_data",
+            transformer=SurfaceDataTransformer,
+            result_type=SurfaceDataResult,
+        )
