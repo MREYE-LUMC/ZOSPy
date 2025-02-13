@@ -110,12 +110,6 @@ class FFTThroughFocusMTFResult(RootModel[list[FFTThroughFocusMTFData]]):
         DataFrame
             The data in long format.
         """
-        dataframes = []
-
-        for fft in self:
-            df = fft.to_dataframe()
-            dataframes.append(df)  # Move the index to a separate column to prevent overlap
-
         return pd.concat([fft.to_dataframe() for fft in self], ignore_index=True).reset_index(drop=True)
 
 
