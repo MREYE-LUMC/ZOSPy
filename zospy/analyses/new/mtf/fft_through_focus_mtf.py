@@ -167,7 +167,7 @@ class FFTThroughFocusMTF(
 
     def get_data_series(self) -> FFTThroughFocusMTFResult | None:
         """Get the data series from the FFT Through Focus MTF analysis."""
-        re_float = rf"\d+\{config.DECIMAL_POINT}\d+"
+        re_float = rf"-?\d+\{config.DECIMAL_POINT}\d+"
         fft_through_focus_mtf_description_regex = re.compile(
             rf"Field: "
             rf"(?P<field_1>{re_float})(?:, (?P<field_2>{re_float}))? "
