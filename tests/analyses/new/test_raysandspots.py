@@ -1,3 +1,6 @@
+import pytest
+from pandas._testing import assert_frame_equal
+
 from zospy.analyses.new.raysandspots import RayFan, SingleRayTrace
 
 
@@ -19,3 +22,17 @@ class TestRayFan:
     def test_to_json(self, simple_system):
         result = RayFan().run(simple_system)
         assert result.from_json(result.to_json()).to_json() == result.to_json()
+
+    @pytest.mark.parametrize(
+        "fieldx,fieldy", [(0, 0), (5.5, 0), (0, 5.5), (5.5, 5.5), (-5.5, 0), (0, -5.5), (-5.5, -5.5)]
+    )
+    def test_field_parsing(self, fieldx, fieldy, simple_system):
+        field1 = simple_system.SystemData.Fields.GetField(1)
+        field1.X = fieldx
+        field1.Y = fieldy
+        result = RayFan().run(simple_system)
+
+        assert result.data.tangential[0].field_coordinate.value[0] == fieldx
+        assert result.data.tangential[0].field_coordinate.value[1] == fieldy
+        assert result.data.sagittal[0].field_coordinate.value[0] == fieldx
+        assert result.data.sagittal[0].field_coordinate.value[1] == fieldy
