@@ -7,7 +7,7 @@ class TestSurfaceData:
         assert result.data is not None
 
     def test_to_json(self, simple_system):
-        result = SurfaceData().run(simple_system)
+        result = SurfaceData(surface=2).run(simple_system)
         assert result.from_json(result.to_json()).to_json() == result.to_json()
 
 
