@@ -12,6 +12,7 @@ from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers.types import ValidatedDataFrame  # noqa: TCH001
 from zospy.api import config, constants
+from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling, unpack_datagrid
 
 __all__ = ("Curvature", "CurvatureSettings")
@@ -159,7 +160,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
             raise ValueError(f"Could not parse description: {datagrid.Description}")
 
         return CurvatureResult(
-            width=match.group("width"),
+            width=atox(match.group("width"), float),
             decenter_x=match.group("decenter_x"),
             decenter_y=match.group("decenter_y"),
             decenter_unit=match.group("decenter_unit"),
