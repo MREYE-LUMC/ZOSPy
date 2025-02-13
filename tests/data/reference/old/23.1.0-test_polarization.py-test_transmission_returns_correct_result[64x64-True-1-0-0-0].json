@@ -1,0 +1,103 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "Transmission",
+        "Data": {
+            "__type__": "dataclass",
+            "__type_name__": "TransmissionData",
+            "__type_module__": "zospy.analyses.polarization",
+            "data": {
+                "Header": "Polarization Transmission Data",
+                "FieldPos": 0.0,
+                "TotalTransmission": 0.460799917,
+                "Wavelength": 0.543,
+                "Table": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            0
+                        ],
+                        "columns": [
+                            "3",
+                            "0,460800",
+                            "0,960000"
+                        ],
+                        "data": [
+                            [
+                                4,
+                                0.4608,
+                                1.0
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                }
+            }
+        },
+        "Settings": {
+            "__type__": "Series",
+            "data": {
+                "Sampling": "64x64",
+                "Unpolarized": true,
+                "Jx": 1,
+                "Jy": 0,
+                "X-Phase": 0,
+                "Y-Phase": 0
+            }
+        },
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2023-06-21T11:24:42.013000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffPolarization Transmission Data",
+            "",
+            "File : REDACTED",
+            "Title: ",
+            "Date : 21-06-2023",
+            "",
+            "",
+            "Field is unpolarized.",
+            "",
+            "Grid Size : 64 x 64",
+            "",
+            "Aperture, Fresnel, coating, vignetting, and internal transmittance effects are considered.",
+            "",
+            "Field Pos : 0,0000 (deg)",
+            "  Transmission at    0,5430:\t    0,460799917",
+            "  Total Transmission       :\t    0,460799917",
+            "",
+            "",
+            "Chief Ray Transmission Surface By Surface:",
+            "",
+            "Field Pos : 0,0000 (deg)",
+            "Wavelength 1: 0,543 \u00b5m",
+            "",
+            " Surf    \tTot. Tran    \tRel. Tran",
+            "   1 \t    1,000000 \t    1,000000",
+            "   2 \t    0,480000 \t    0,480000",
+            "   3 \t    0,460800 \t    0,960000",
+            "   4 \t    0,460800 \t    1,000000",
+            ""
+        ],
+        "CgfOutFile": "REDACTED",
+        "TxtOutFile": "REDACTED"
+    }
+}
