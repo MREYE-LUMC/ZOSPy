@@ -1,3 +1,12 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "jsonata-python",
+#   "pydantic",
+#   "zospy @ file://${PROJECT_ROOT}",
+# ]
+# ///
+
 import json
 from pathlib import Path
 
