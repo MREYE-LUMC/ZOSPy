@@ -64,7 +64,7 @@ class FFTThroughFocusMTFSettings:
 
 @analysis_result
 class FFTThroughFocusMTFData:
-    field_coordinate: UnitField[float | tuple[float, float]]
+    field_coordinate: UnitField[tuple[float, float]]
     data: ValidatedDataFrame
 
     def to_dataframe(self) -> DataFrame:
