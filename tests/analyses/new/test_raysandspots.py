@@ -1,5 +1,5 @@
 import pytest
-from pandas._testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.new.raysandspots import RayFan, SingleRayTrace
 
