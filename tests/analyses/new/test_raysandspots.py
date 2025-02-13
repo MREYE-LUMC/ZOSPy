@@ -36,3 +36,44 @@ class TestRayFan:
         assert result.data.tangential[0].field_coordinate.value[1] == fieldy
         assert result.data.sagittal[0].field_coordinate.value[0] == fieldx
         assert result.data.sagittal[0].field_coordinate.value[1] == fieldy
+
+    @pytest.mark.parametrize("fields", [[(5.5, -5.5)], [(0, 0), (0.0, 5.5), (5.5, 0.0), (5.5, -5.5)]])
+    def test_to_dataframe(self, fields, simple_system):
+        field1 = simple_system.SystemData.Fields.GetField(1)
+        field1.X = fields[0][0]
+        field1.Y = fields[0][1]
+
+        for f in fields[1:]:
+            simple_system.SystemData.Fields.AddField(f[0], f[1], 1.0)
+
+        result = RayFan().run(simple_system)
+
+        df = result.data.to_dataframe()
+
+        for r in result.data.tangential:
+            for wl in r.data.columns:
+                assert_frame_equal(
+                    df.loc[
+                        (df["Direction"] == "Tangential")
+                        & (df["Field Number"] == r.field_number)
+                        & (df["FieldX"] == r.field_coordinate.value[0])
+                        & (df["FieldY"] == r.field_coordinate.value[1])
+                        & (df["Wavelength"] == wl),
+                        ["Pupil", "Aberration"],
+                    ].set_index("Pupil"),
+                    r.data[wl].to_frame("Aberration"),
+                )
+
+        for r in result.data.sagittal:
+            for wl in r.data.columns:
+                assert_frame_equal(
+                    df.loc[
+                        (df["Direction"] == "Sagittal")
+                        & (df["Field Number"] == r.field_number)
+                        & (df["FieldX"] == r.field_coordinate.value[0])
+                        & (df["FieldY"] == r.field_coordinate.value[1])
+                        & (df["Wavelength"] == wl),
+                        ["Pupil", "Aberration"],
+                    ].set_index("Pupil"),
+                    r.data[wl].to_frame("Aberration"),
+                )
