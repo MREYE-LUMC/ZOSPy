@@ -1,0 +1,239 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "RayTrace",
+        "Data": {
+            "__type__": "AttrDict",
+            "data": {
+                "Header": "Ray Trace Data",
+                "RealRayTraceData": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "columns": [
+                            "Surf",
+                            "X-coordinate",
+                            "Y-coordinate",
+                            "Z-coordinate",
+                            "X-tangent",
+                            "Y-tangent",
+                            "Comment",
+                            "Unnamed: 7"
+                        ],
+                        "data": [
+                            [
+                                "OBJ",
+                                Infinity,
+                                Infinity,
+                                Infinity,
+                                0.0,
+                                0.0,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "1",
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "2",
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                "lensfront",
+                                NaN
+                            ],
+                            [
+                                "3",
+                                0.0,
+                                0.0,
+                                1.0,
+                                0.0,
+                                0.0,
+                                "lensback",
+                                NaN
+                            ],
+                            [
+                                "4",
+                                0.0,
+                                0.0,
+                                20.792,
+                                0.0,
+                                0.0,
+                                NaN,
+                                NaN
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                },
+                "ParaxialRayTraceData": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "columns": [
+                            "Surf",
+                            "X-coordinate",
+                            "Y-coordinate",
+                            "Z-coordinate",
+                            "X-tangent",
+                            "Y-tangent",
+                            "Comment",
+                            "Unnamed: 7"
+                        ],
+                        "data": [
+                            [
+                                "OBJ",
+                                Infinity,
+                                Infinity,
+                                Infinity,
+                                0.0,
+                                0.0,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "1",
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "2",
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                "lensfront",
+                                NaN
+                            ],
+                            [
+                                "3",
+                                0.0,
+                                0.0,
+                                1.0,
+                                0.0,
+                                0.0,
+                                "lensback",
+                                NaN
+                            ],
+                            [
+                                "4",
+                                0.0,
+                                0.0,
+                                20.792,
+                                0.0,
+                                0.0,
+                                NaN,
+                                NaN
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                }
+            }
+        },
+        "Settings": {
+            "__type__": "Series",
+            "data": {
+                "Hx": 1.0,
+                "Hy": 1.0,
+                "Px": 0.0,
+                "Py": 0.0,
+                "Wavelength": 1.0,
+                "Field": "All",
+                "Type": "TangentAngle",
+                "GlobalCoordinates": true
+            }
+        },
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2024-01-15T11:16:55.006000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffRay Trace Data\n",
+            "\n",
+            "File : REDACTED\n",
+            "Title: \n",
+            "Date : 15-01-2024\n",
+            "\n",
+            "\n",
+            "Units       :\t Millimeters\t\n",
+            "Wavelength  :\t 0,543000\t \u00b5m\t\n",
+            "Coordinates :\t Global coordinates relative to surface\t 1\t\n",
+            "Direction cosines are after refraction or reflection from the surface or object.\n",
+            "Angles are in degrees.\n",
+            "\n",
+            "Normalized X Field Coord (Hx) :\t     1,0000000000\t\n",
+            "Normalized Y Field Coord (Hy) :\t     1,0000000000\t\n",
+            "Normalized X Pupil Coord (Px) :\t     0,0000000000\t\n",
+            "Normalized Y Pupil Coord (Py) :\t     0,0000000000\t\n",
+            "\n",
+            "Real Ray Trace Data:\n",
+            "\n",
+            "Surf\t       X-coordinate\t       Y-coordinate\t       Z-coordinate\t      X-tangent\t      Y-tangent\t Comment\t\n",
+            "OBJ\t            Infinity\t           Infinity\t           Infinity\t   0,0000000000\t   0,0000000000\t \n",
+            "  1\t    0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000\t   0,0000000000\t \n",
+            "  2\t    0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000\t   0,0000000000\t lens front\n",
+            "  3\t    0,0000000000E+00\t   0,0000000000E+00\t   1,0000000000E+00\t   0,0000000000\t   0,0000000000\t lens back\n",
+            "  4\t    0,0000000000E+00\t   0,0000000000E+00\t   2,0792000000E+01\t   0,0000000000\t   0,0000000000\t \n",
+            "\n",
+            "Paraxial Ray Trace Data:\n",
+            "\n",
+            "Surf\t       X-coordinate\t       Y-coordinate\t       Z-coordinate\t      X-tangent\t      Y-tangent\t Comment\t\n",
+            "OBJ\t            Infinity\t           Infinity\t           Infinity\t   0,0000000000\t   0,0000000000\t \n",
+            "  1\t    0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000\t   0,0000000000\t \n",
+            "  2\t    0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000E+00\t   0,0000000000\t   0,0000000000\t lens front\n",
+            "  3\t    0,0000000000E+00\t   0,0000000000E+00\t   1,0000000000E+00\t   0,0000000000\t   0,0000000000\t lens back\n",
+            "  4\t    0,0000000000E+00\t   0,0000000000E+00\t   2,0792000000E+01\t   0,0000000000\t   0,0000000000\t \n"
+        ],
+        "TxtOutFile": "REDACTED"
+    }
+}

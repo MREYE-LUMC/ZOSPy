@@ -1,0 +1,124 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "Transmission",
+        "Data": {
+            "__type__": "dataclass",
+            "__type_name__": "TransmissionData",
+            "__type_module__": "zospy.analyses.polarization",
+            "data": {
+                "Header": "Polarization Transmission Data",
+                "FieldPos": 0.0,
+                "TotalTransmission": 0.921599837,
+                "Wavelength": 0.543,
+                "Table": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            0,
+                            1,
+                            2,
+                            3
+                        ],
+                        "columns": [
+                            "Surf",
+                            "Tot. Tran",
+                            "Rel. Tran"
+                        ],
+                        "data": [
+                            [
+                                1,
+                                1.0,
+                                1.0
+                            ],
+                            [
+                                2,
+                                0.96,
+                                0.96
+                            ],
+                            [
+                                3,
+                                0.9216,
+                                0.96
+                            ],
+                            [
+                                4,
+                                0.9216,
+                                1.0
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                }
+            }
+        },
+        "Settings": {
+            "__type__": "Series",
+            "data": {
+                "Sampling": "32x32",
+                "Unpolarized": false,
+                "Jx": 1,
+                "Jy": 0,
+                "X-Phase": 0,
+                "Y-Phase": 0
+            }
+        },
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2023-12-07T13:24:53.947000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffPolarization Transmission Data",
+            "",
+            "File : REDACTED",
+            "Title: ",
+            "Date : 07-12-2023",
+            "",
+            "",
+            "X-Field     :\t 1,0000",
+            "Y-Field     :\t 0,0000",
+            "X-Phase     :\t   0,00",
+            "Y-Phase     :\t   0,00",
+            "",
+            "Grid Size : 32 x 32",
+            "",
+            "Aperture, Fresnel, coating, vignetting, and internal transmittance effects are considered.",
+            "",
+            "Field Pos : 0,0000 (deg)",
+            "  Transmission at    0,5430:\t    0,921599837",
+            "  Total Transmission       :\t    0,921599837",
+            "",
+            "",
+            "Chief Ray Transmission Surface By Surface:",
+            "",
+            "Field Pos : 0,0000 (deg)",
+            "Wavelength 1: 0,543 \u00b5m",
+            "",
+            " Surf    \tTot. Tran    \tRel. Tran",
+            "   1 \t    1,000000 \t    1,000000",
+            "   2 \t    0,960000 \t    0,960000",
+            "   3 \t    0,921600 \t    0,960000",
+            "   4 \t    0,921600 \t    1,000000",
+            ""
+        ],
+        "CgfOutFile": "REDACTED",
+        "TxtOutFile": "REDACTED"
+    }
+}

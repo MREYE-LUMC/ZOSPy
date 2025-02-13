@@ -1,0 +1,648 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "ZernikeStandardCoefficients",
+        "Data": {
+            "__type__": "AttrDict",
+            "data": {
+                "GeneralData": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            "File",
+                            "Title",
+                            "Date",
+                            "Surface",
+                            "Field",
+                            "Wavelength",
+                            "PeakToValley(ToChief)",
+                            "PeakToValley(ToCentroid)",
+                            "FromIntegrationOfTheRays",
+                            "Rms(ToChief)",
+                            "Rms(ToCentroid)",
+                            "Variance",
+                            "StrehlRatio(Est)",
+                            "FromIntegrationOfTheFittedCoefficients",
+                            "RmsFitError",
+                            "MaximumFitError"
+                        ],
+                        "columns": [
+                            "Value",
+                            "Unit"
+                        ],
+                        "data": [
+                            [
+                                "REDACTED",
+                                ""
+                            ],
+                            [
+                                "",
+                                ""
+                            ],
+                            [
+                                "21-06-2023",
+                                ""
+                            ],
+                            [
+                                "Image",
+                                ""
+                            ],
+                            [
+                                0.0,
+                                "(deg)"
+                            ],
+                            [
+                                0.543,
+                                "\u00b5m"
+                            ],
+                            [
+                                0.02350575,
+                                "waves"
+                            ],
+                            [
+                                0.02350575,
+                                "waves"
+                            ],
+                            [
+                                "",
+                                ""
+                            ],
+                            [
+                                0.00684787,
+                                "waves"
+                            ],
+                            [
+                                0.00684787,
+                                "waves"
+                            ],
+                            [
+                                4.689e-05,
+                                "waves squared"
+                            ],
+                            [
+                                0.99815044,
+                                ""
+                            ],
+                            [
+                                "",
+                                ""
+                            ],
+                            [
+                                0.0,
+                                "waves"
+                            ],
+                            [
+                                0.0,
+                                "waves"
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                },
+                "Coefficients": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            "Z1",
+                            "Z2",
+                            "Z3",
+                            "Z4",
+                            "Z5",
+                            "Z6",
+                            "Z7",
+                            "Z8",
+                            "Z9",
+                            "Z10",
+                            "Z11",
+                            "Z12",
+                            "Z13",
+                            "Z14",
+                            "Z15",
+                            "Z16",
+                            "Z17",
+                            "Z18",
+                            "Z19",
+                            "Z20",
+                            "Z21",
+                            "Z22",
+                            "Z23",
+                            "Z24",
+                            "Z25",
+                            "Z26",
+                            "Z27",
+                            "Z28",
+                            "Z29",
+                            "Z30",
+                            "Z31",
+                            "Z32",
+                            "Z33",
+                            "Z34",
+                            "Z35",
+                            "Z36",
+                            "Z37",
+                            "Z38",
+                            "Z39",
+                            "Z40",
+                            "Z41",
+                            "Z42",
+                            "Z43",
+                            "Z44",
+                            "Z45",
+                            "Z46",
+                            "Z47",
+                            "Z48",
+                            "Z49",
+                            "Z50",
+                            "Z51",
+                            "Z52",
+                            "Z53",
+                            "Z54",
+                            "Z55",
+                            "Z56",
+                            "Z57",
+                            "Z58",
+                            "Z59",
+                            "Z60",
+                            "Z61",
+                            "Z62",
+                            "Z63",
+                            "Z64"
+                        ],
+                        "columns": [
+                            "Value",
+                            "Unit",
+                            "Function"
+                        ],
+                        "data": [
+                            [
+                                -0.01473686,
+                                "waves",
+                                "1"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "4^(1/2)(p)*COS(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "4^(1/2)(p)*SIN(A)"
+                            ],
+                            [
+                                0.00031809,
+                                "waves",
+                                "3^(1/2)(2p^2-1)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "6^(1/2)(p^2)*SIN(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "6^(1/2)(p^2)*COS(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "8^(1/2)(3p^3-2p)*SIN(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "8^(1/2)(3p^3-2p)*COS(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "8^(1/2)(p^3)*SIN(3A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "8^(1/2)(p^3)*COS(3A)"
+                            ],
+                            [
+                                0.00684048,
+                                "waves",
+                                "5^(1/2)(6p^4-6p^2+1)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "10^(1/2)(4p^4-3p^2)*COS(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "10^(1/2)(4p^4-3p^2)*SIN(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "10^(1/2)(p^4)*COS(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "10^(1/2)(p^4)*SIN(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "12^(1/2)(10p^5-12p^3+3p)*COS(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "12^(1/2)(10p^5-12p^3+3p)*SIN(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "12^(1/2)(5p^5-4p^3)*COS(3A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "12^(1/2)(5p^5-4p^3)*SIN(3A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "12^(1/2)(p^5)*COS(5A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "12^(1/2)(p^5)*SIN(5A)"
+                            ],
+                            [
+                                3.01e-06,
+                                "waves",
+                                "7^(1/2)(20p^6-30p^4+12p^2-1)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "14^(1/2)(15p^6-20p^4+6p^2)*SIN(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "14^(1/2)(15p^6-20p^4+6p^2)*COS(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "14^(1/2)(6p^6-5p^4)*SIN(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "14^(1/2)(6p^6-5p^4)*COS(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "14^(1/2)(p^6)*SIN(6A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "14^(1/2)(p^6)*COS(6A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(35p^7-60p^5+30p^3-4p)*SIN(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(35p^7-60p^5+30p^3-4p)*COS(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(21p^7-30p^5+10p^3)*SIN(3A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(21p^7-30p^5+10p^3)*COS(3A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(7p^7-6p^5)*SIN(5A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(7p^7-6p^5)*COS(5A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(p^7)*SIN(7A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "16^(1/2)(p^7)*COS(7A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "9^(1/2)(70p^8-140p^6+90p^4-20p^2+1)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(56p^8-105p^6+60p^4-10p^2)*COS(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(56p^8-105p^6+60p^4-10p^2)*SIN(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(28p^8-42p^6+15p^4)*COS(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(28p^8-42p^6+15p^4)*SIN(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(8p^8-7p^6)*COS(6A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(8p^8-7p^6)*SIN(6A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(p^8)*COS(8A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "18^(1/2)(p^8)*SIN(8A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(126p^9-280p^7+210p^5-60p^3+5p)*COS(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(126p^9-280p^7+210p^5-60p^3+5p)*SIN(A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(84p^9-168p^7+105p^5-20p^3)*COS(3A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(84p^9-168p^7+105p^5-20p^3)*SIN(3A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(36p^9-56p^7+21p^5)*COS(5A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(36p^9-56p^7+21p^5)*SIN(5A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(9p^9-8p^7)*COS(7A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(9p^9-8p^7)*SIN(7A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(p^9)*COS(9A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "20^(1/2)(p^9)*SIN(9A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "11^(1/2)(252p^10-630p^8+560p^6-210p^4+30p^2-1)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(210p^10-504p^8+420p^6-140p^4+15p^2)*SIN(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(210p^10-504p^8+420p^6-140p^4+15p^2)*COS(2A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(120p^10-252p^8+168p^6-35p^4)*SIN(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(120p^10-252p^8+168p^6-35p^4)*COS(4A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(45p^10-72p^8+28p^6)*SIN(6A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(45p^10-72p^8+28p^6)*COS(6A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(10p^10-9p^8)*SIN(8A)"
+                            ],
+                            [
+                                0.0,
+                                "waves",
+                                "22^(1/2)(10p^10-9p^8)*COS(8A)"
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                }
+            }
+        },
+        "Settings": {
+            "__type__": "Series",
+            "data": {
+                "SampleSize": "S_128x128",
+                "MaximumNumberOfTerms": 64,
+                "Wavelength": 1,
+                "Field": 1,
+                "ReferenceOBDToVertex": 0,
+                "Sx": 0.0,
+                "Sy": 0.0,
+                "Sr": 0.0
+            }
+        },
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2023-06-21T11:18:12.145000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffListing of Zernike Standard Coefficient Data\n",
+            "\n",
+            "File : REDACTED\n",
+            "Title: \n",
+            "Date : 21-06-2023\n",
+            "\n",
+            "\n",
+            "Note that RMS (to chief) is the RMS of the OPD after subtracting out piston.\n",
+            "The RMS (to centroid) is the RMS after subtracting out both piston and tilt.\n",
+            "The RMS (to centroid) is most physically significant and is generally what\n",
+            "is meant by 'the RMS'. Although OpticStudio uses the term 'centroid' for brevity,\n",
+            "the reference point is not the diffraction intensity centroid, but the reference\n",
+            "point which minimizes the variance of the wavefront.\n",
+            "\n",
+            "Using Zernike Standard polynomials.\n",
+            "OPD referenced to chief ray.\n",
+            "\n",
+            "Surface                      :\tImage\n",
+            "Field                        :\t0,0000 (deg)\n",
+            "Wavelength                   :\t0,5430 \u00b5m\n",
+            "Peak to Valley (to chief)    :\t    0,02350575 waves\n",
+            "Peak to Valley (to centroid) :\t    0,02350575 waves\n",
+            "\n",
+            "From integration of the rays:\n",
+            "RMS (to chief)               :\t    0,00683005 waves\n",
+            "RMS (to centroid)            :\t    0,00683005 waves\n",
+            "Variance                     :\t    0,00004665 waves squared\n",
+            "Strehl Ratio (Est)           :\t    0,99816004\n",
+            "\n",
+            "From integration of the fitted coefficients:\n",
+            "RMS (to chief)               :\t    0,00684787 waves\n",
+            "RMS (to centroid)            :\t    0,00684787 waves\n",
+            "Variance                     :\t    0,00004689 waves squared\n",
+            "Strehl Ratio (Est)           :\t    0,99815044\n",
+            "\n",
+            "RMS fit error                :\t    0,00000000 waves\n",
+            "Maximum fit error            :\t    0,00000000 waves\n",
+            "\n",
+            "Z   1\t   -0,01473686\t:\t  1\n",
+            "Z   2\t    0,00000000\t:\t   4^(1/2) (p) * COS (A)\n",
+            "Z   3\t    0,00000000\t:\t   4^(1/2) (p) * SIN (A)\n",
+            "Z   4\t    0,00031809\t:\t   3^(1/2) (2p^2 - 1)\n",
+            "Z   5\t    0,00000000\t:\t   6^(1/2) (p^2) * SIN (2A)\n",
+            "Z   6\t    0,00000000\t:\t   6^(1/2) (p^2) * COS (2A)\n",
+            "Z   7\t    0,00000000\t:\t   8^(1/2) (3p^3 - 2p) * SIN (A)\n",
+            "Z   8\t    0,00000000\t:\t   8^(1/2) (3p^3 - 2p) * COS (A)\n",
+            "Z   9\t    0,00000000\t:\t   8^(1/2) (p^3) * SIN (3A)\n",
+            "Z  10\t    0,00000000\t:\t   8^(1/2) (p^3) * COS (3A)\n",
+            "Z  11\t    0,00684048\t:\t   5^(1/2) (6p^4 - 6p^2 + 1)\n",
+            "Z  12\t    0,00000000\t:\t  10^(1/2) (4p^4 - 3p^2) * COS (2A)\n",
+            "Z  13\t    0,00000000\t:\t  10^(1/2) (4p^4 - 3p^2) * SIN (2A)\n",
+            "Z  14\t    0,00000000\t:\t  10^(1/2) (p^4) * COS (4A)\n",
+            "Z  15\t    0,00000000\t:\t  10^(1/2) (p^4) * SIN (4A)\n",
+            "Z  16\t    0,00000000\t:\t  12^(1/2) (10p^5 - 12p^3 + 3p) * COS (A)\n",
+            "Z  17\t    0,00000000\t:\t  12^(1/2) (10p^5 - 12p^3 + 3p) * SIN (A)\n",
+            "Z  18\t    0,00000000\t:\t  12^(1/2) (5p^5 - 4p^3) * COS (3A)\n",
+            "Z  19\t    0,00000000\t:\t  12^(1/2) (5p^5 - 4p^3) * SIN (3A)\n",
+            "Z  20\t    0,00000000\t:\t  12^(1/2) (p^5) * COS (5A)\n",
+            "Z  21\t    0,00000000\t:\t  12^(1/2) (p^5) * SIN (5A)\n",
+            "Z  22\t    0,00000301\t:\t   7^(1/2) (20p^6 - 30p^4 + 12p^2 - 1)\n",
+            "Z  23\t    0,00000000\t:\t  14^(1/2) (15p^6 - 20p^4 + 6p^2) * SIN (2A)\n",
+            "Z  24\t    0,00000000\t:\t  14^(1/2) (15p^6 - 20p^4 + 6p^2) * COS (2A)\n",
+            "Z  25\t    0,00000000\t:\t  14^(1/2) (6p^6 - 5p^4) * SIN (4A)\n",
+            "Z  26\t    0,00000000\t:\t  14^(1/2) (6p^6 - 5p^4) * COS (4A)\n",
+            "Z  27\t    0,00000000\t:\t  14^(1/2) (p^6) * SIN (6A)\n",
+            "Z  28\t    0,00000000\t:\t  14^(1/2) (p^6) * COS (6A)\n",
+            "Z  29\t    0,00000000\t:\t  16^(1/2) (35p^7 - 60p^5 + 30p^3 - 4p) * SIN (A)\n",
+            "Z  30\t    0,00000000\t:\t  16^(1/2) (35p^7 - 60p^5 + 30p^3 - 4p) * COS (A)\n",
+            "Z  31\t    0,00000000\t:\t  16^(1/2) (21p^7 - 30p^5 + 10p^3) * SIN (3A)\n",
+            "Z  32\t    0,00000000\t:\t  16^(1/2) (21p^7 - 30p^5 + 10p^3) * COS (3A)\n",
+            "Z  33\t    0,00000000\t:\t  16^(1/2) (7p^7 - 6p^5) * SIN (5A)\n",
+            "Z  34\t    0,00000000\t:\t  16^(1/2) (7p^7 - 6p^5) * COS (5A)\n",
+            "Z  35\t    0,00000000\t:\t  16^(1/2) (p^7) * SIN (7A)\n",
+            "Z  36\t    0,00000000\t:\t  16^(1/2) (p^7) * COS (7A)\n",
+            "Z  37\t    0,00000000\t:\t   9^(1/2) (70p^8 - 140p^6 + 90p^4 - 20p^2 + 1)\n",
+            "Z  38\t    0,00000000\t:\t  18^(1/2) (56p^8 - 105p^6 + 60p^4 - 10p^2) * COS (2A)\n",
+            "Z  39\t    0,00000000\t:\t  18^(1/2) (56p^8 - 105p^6 + 60p^4 - 10p^2) * SIN (2A)\n",
+            "Z  40\t    0,00000000\t:\t  18^(1/2) (28p^8 - 42p^6 + 15p^4) * COS (4A)\n",
+            "Z  41\t    0,00000000\t:\t  18^(1/2) (28p^8 - 42p^6 + 15p^4) * SIN (4A)\n",
+            "Z  42\t    0,00000000\t:\t  18^(1/2) (8p^8 - 7p^6) * COS (6A)\n",
+            "Z  43\t    0,00000000\t:\t  18^(1/2) (8p^8 - 7p^6) * SIN (6A)\n",
+            "Z  44\t    0,00000000\t:\t  18^(1/2) (p^8) * COS (8A)\n",
+            "Z  45\t    0,00000000\t:\t  18^(1/2) (p^8) * SIN (8A)\n",
+            "Z  46\t    0,00000000\t:\t  20^(1/2) (126p^9 - 280p^7 + 210p^5 - 60p^3 + 5p) * COS (A)\n",
+            "Z  47\t    0,00000000\t:\t  20^(1/2) (126p^9 - 280p^7 + 210p^5 - 60p^3 + 5p) * SIN (A)\n",
+            "Z  48\t    0,00000000\t:\t  20^(1/2) (84p^9 - 168p^7 + 105p^5 - 20p^3) * COS (3A)\n",
+            "Z  49\t    0,00000000\t:\t  20^(1/2) (84p^9 - 168p^7 + 105p^5 - 20p^3) * SIN (3A)\n",
+            "Z  50\t    0,00000000\t:\t  20^(1/2) (36p^9 - 56p^7 + 21p^5) * COS (5A)\n",
+            "Z  51\t    0,00000000\t:\t  20^(1/2) (36p^9 - 56p^7 + 21p^5) * SIN (5A)\n",
+            "Z  52\t    0,00000000\t:\t  20^(1/2) (9p^9 - 8p^7) * COS (7A)\n",
+            "Z  53\t    0,00000000\t:\t  20^(1/2) (9p^9 - 8p^7) * SIN (7A)\n",
+            "Z  54\t    0,00000000\t:\t  20^(1/2) (p^9) * COS (9A)\n",
+            "Z  55\t    0,00000000\t:\t  20^(1/2) (p^9) * SIN (9A)\n",
+            "Z  56\t    0,00000000\t:\t  11^(1/2) (252p^10 - 630p^8 + 560p^6 - 210p^4 + 30p^2 - 1)\n",
+            "Z  57\t    0,00000000\t:\t  22^(1/2) (210p^10 - 504p^8 + 420p^6 - 140p^4 + 15p^2) * SIN (2A)\n",
+            "Z  58\t    0,00000000\t:\t  22^(1/2) (210p^10 - 504p^8 + 420p^6 - 140p^4 + 15p^2) * COS (2A)\n",
+            "Z  59\t    0,00000000\t:\t  22^(1/2) (120p^10 - 252p^8 + 168p^6 - 35p^4) * SIN (4A)\n",
+            "Z  60\t    0,00000000\t:\t  22^(1/2) (120p^10 - 252p^8 + 168p^6 - 35p^4) * COS (4A)\n",
+            "Z  61\t    0,00000000\t:\t  22^(1/2) (45p^10 - 72p^8 + 28p^6) * SIN (6A)\n",
+            "Z  62\t    0,00000000\t:\t  22^(1/2) (45p^10 - 72p^8 + 28p^6) * COS (6A)\n",
+            "Z  63\t    0,00000000\t:\t  22^(1/2) (10p^10 - 9p^8) * SIN (8A)\n",
+            "Z  64\t    0,00000000\t:\t  22^(1/2) (10p^10 - 9p^8) * COS (8A)\n"
+        ],
+        "TxtOutFile": "REDACTED~1REDACTED"
+    }
+}

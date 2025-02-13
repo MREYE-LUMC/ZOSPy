@@ -1,0 +1,269 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "SurfaceDataSettings",
+        "Data": {
+            "__type__": "Series",
+            "data": {
+                "index": [
+                    [
+                        "General",
+                        "File"
+                    ],
+                    [
+                        "General",
+                        "Title"
+                    ],
+                    [
+                        "General",
+                        "Date"
+                    ],
+                    [
+                        "General",
+                        "Comment"
+                    ],
+                    [
+                        "General",
+                        "Lens units"
+                    ],
+                    [
+                        "Surface",
+                        "Thickness"
+                    ],
+                    [
+                        "Surface",
+                        "Diameter"
+                    ],
+                    [
+                        "Surface",
+                        "Y Edge Thick"
+                    ],
+                    [
+                        "Surface",
+                        "X Edge Thick"
+                    ],
+                    [
+                        "IndexOfRefraction",
+                        "nd"
+                    ],
+                    [
+                        "IndexOfRefraction",
+                        "Abbe"
+                    ],
+                    [
+                        "IndexOfRefraction",
+                        "dPgF"
+                    ],
+                    [
+                        "IndexOfRefraction",
+                        "Best Fit Glass"
+                    ],
+                    [
+                        "IndexOfRefractionPerWavelength",
+                        0.543
+                    ],
+                    [
+                        "SurfacePowerAsSituated",
+                        "Surf 2"
+                    ],
+                    [
+                        "SurfacePowerAsSituated",
+                        "Surf 3"
+                    ],
+                    [
+                        "SurfacePowerAsSituated",
+                        "Power 2 3"
+                    ],
+                    [
+                        "SurfacePowerAsSituated",
+                        "EFL 2 3"
+                    ],
+                    [
+                        "SurfacePowerAsSituated",
+                        "F/# 2 3"
+                    ],
+                    [
+                        "SurfacePowerInAir",
+                        "Surf 2"
+                    ],
+                    [
+                        "SurfacePowerInAir",
+                        "Surf 3"
+                    ],
+                    [
+                        "SurfacePowerInAir",
+                        "Power 2 3"
+                    ],
+                    [
+                        "SurfacePowerInAir",
+                        "EFL 2 3"
+                    ],
+                    [
+                        "SurfacePowerInAir",
+                        "F/# 2 3"
+                    ],
+                    [
+                        "Other",
+                        "Shape Factor"
+                    ]
+                ],
+                "columns": [
+                    0
+                ],
+                "data": [
+                    [
+                        "REDACTED"
+                    ],
+                    [
+                        ""
+                    ],
+                    [
+                        "20-06-2023"
+                    ],
+                    [
+                        "lens front"
+                    ],
+                    [
+                        "Millimeters"
+                    ],
+                    [
+                        1.0
+                    ],
+                    [
+                        2.0
+                    ],
+                    [
+                        0.950756
+                    ],
+                    [
+                        0.950756
+                    ],
+                    [
+                        1.5
+                    ],
+                    [
+                        0.0
+                    ],
+                    [
+                        0.0
+                    ],
+                    [
+                        "TIF6"
+                    ],
+                    [
+                        1.5
+                    ],
+                    [
+                        0.025
+                    ],
+                    [
+                        0.025
+                    ],
+                    [
+                        0.049583
+                    ],
+                    [
+                        20.168
+                    ],
+                    [
+                        10.084
+                    ],
+                    [
+                        0.025
+                    ],
+                    [
+                        0.025
+                    ],
+                    [
+                        0.049583
+                    ],
+                    [
+                        20.168
+                    ],
+                    [
+                        10.084
+                    ],
+                    [
+                        0.0
+                    ]
+                ],
+                "index_names": [
+                    null,
+                    null
+                ],
+                "column_names": [
+                    null
+                ]
+            },
+            "__multi_index__": true
+        },
+        "Settings": {
+            "__type__": "Series",
+            "data": {
+                "Surface": 2
+            }
+        },
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2023-06-20T17:10:37.347000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffSurface 2 Data Summary\n",
+            "\n",
+            "File : REDACTED\n",
+            "Title: \n",
+            "Date : 20-06-2023\n",
+            "\n",
+            "\n",
+            "Comment: lens front\n",
+            "\n",
+            "Lens units: \t   Millimeters\n",
+            "\n",
+            "Thickness : \t             1\n",
+            "Diameter  : \t             2\n",
+            "\n",
+            "Edge Thickness:\n",
+            "Y Edge Thick: \t      0,950756\n",
+            "X Edge Thick: \t      0,950756\n",
+            "\n",
+            "Index of Refraction:\n",
+            "Model glass:\n",
+            "  nd  :   1,50000000\n",
+            "  Abbe:   0,00000000\n",
+            "  dPgF:   0,00000000\n",
+            "Best Fit Glass: TIF6\n",
+            "#  \t    Wavelength   \t Index\n",
+            "1    \t 0,54300   \t    1,5000000000\n",
+            "\n",
+            "Surface Powers (as situated):\n",
+            "Surf   2    : \t         0,025\n",
+            "Surf   3    : \t         0,025\n",
+            "Power  2  3 : \t      0,049583\n",
+            "EFL    2  3 : \t        20,168\n",
+            "F/#    2  3 : \t        10,084\n",
+            "\n",
+            "Surface Powers (in air):\n",
+            "Surf   2    : \t         0,025\n",
+            "Surf   3    : \t         0,025\n",
+            "Power  2  3 : \t      0,049583\n",
+            "EFL    2  3 : \t        20,168\n",
+            "F/#    2  3 : \t        10,084\n",
+            "\n",
+            "Shape Factor: \t             0\n"
+        ],
+        "CgfOutFile": "REDACTED",
+        "TxtOutFile": "REDACTED"
+    }
+}

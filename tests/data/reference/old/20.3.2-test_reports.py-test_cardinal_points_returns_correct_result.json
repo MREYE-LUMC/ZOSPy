@@ -1,0 +1,224 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "CardinalPoints",
+        "Data": {
+            "__type__": "Series",
+            "data": {
+                "index": [
+                    [
+                        "General",
+                        "File"
+                    ],
+                    [
+                        "General",
+                        "Title"
+                    ],
+                    [
+                        "General",
+                        "Date"
+                    ],
+                    [
+                        "General",
+                        "Wavelength"
+                    ],
+                    [
+                        "General",
+                        "Orientation"
+                    ],
+                    [
+                        "General",
+                        "Lens units"
+                    ],
+                    [
+                        "General",
+                        "Info"
+                    ],
+                    [
+                        "Surface",
+                        "Starting surface"
+                    ],
+                    [
+                        "Surface",
+                        "Ending surface"
+                    ],
+                    [
+                        "Object Space",
+                        "Focal Length"
+                    ],
+                    [
+                        "Object Space",
+                        "Focal Planes"
+                    ],
+                    [
+                        "Object Space",
+                        "Principal Planes"
+                    ],
+                    [
+                        "Object Space",
+                        "Anti-Principal Planes"
+                    ],
+                    [
+                        "Object Space",
+                        "Nodal Planes"
+                    ],
+                    [
+                        "Object Space",
+                        "Anti-Nodal Planes"
+                    ],
+                    [
+                        "Image Space",
+                        "Focal Length"
+                    ],
+                    [
+                        "Image Space",
+                        "Focal Planes"
+                    ],
+                    [
+                        "Image Space",
+                        "Principal Planes"
+                    ],
+                    [
+                        "Image Space",
+                        "Anti-Principal Planes"
+                    ],
+                    [
+                        "Image Space",
+                        "Nodal Planes"
+                    ],
+                    [
+                        "Image Space",
+                        "Anti-Nodal Planes"
+                    ]
+                ],
+                "columns": [
+                    0
+                ],
+                "data": [
+                    [
+                        "REDACTED"
+                    ],
+                    [
+                        ""
+                    ],
+                    [
+                        "21-06-2023"
+                    ],
+                    [
+                        0.543
+                    ],
+                    [
+                        "Y-Z"
+                    ],
+                    [
+                        "Millimeters"
+                    ],
+                    [
+                        "Object space positions are measured with respect to surface 2.\nImage space positions are measured with respect to surface 3.\nThe index in both the object space and image space is considered."
+                    ],
+                    [
+                        2.0
+                    ],
+                    [
+                        3.0
+                    ],
+                    [
+                        -20.168067
+                    ],
+                    [
+                        -19.831933
+                    ],
+                    [
+                        0.336134
+                    ],
+                    [
+                        -40.0
+                    ],
+                    [
+                        0.336134
+                    ],
+                    [
+                        -40.0
+                    ],
+                    [
+                        20.168067
+                    ],
+                    [
+                        19.831933
+                    ],
+                    [
+                        -0.336134
+                    ],
+                    [
+                        40.0
+                    ],
+                    [
+                        -0.336134
+                    ],
+                    [
+                        40.0
+                    ]
+                ],
+                "index_names": [
+                    null,
+                    null
+                ],
+                "column_names": [
+                    null
+                ]
+            },
+            "__multi_index__": true
+        },
+        "Settings": {
+            "__type__": "Series",
+            "data": {
+                "Surface1": 2,
+                "Surface2": 3
+            }
+        },
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2023-06-21T11:18:14.375000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffCardinal Point Data Summary\n",
+            "\n",
+            "File : REDACTED\n",
+            "Title: \n",
+            "Date : 21-06-2023\n",
+            "\n",
+            "\n",
+            "Starting surface  :\t2\n",
+            "Ending surface    :\t3\n",
+            "Wavelength        :\t0,543000\n",
+            "Orientation       :\tY-Z\n",
+            "Lens units        :\tMillimeters\n",
+            "\n",
+            "Object space positions are measured with respect to surface 2.\n",
+            "Image space positions are measured with respect to surface 3.\n",
+            "The index in both the object space and image space is considered.\n",
+            "\n",
+            "                               \tObject Space         \tImage Space\n",
+            "Focal Length          :\t         -20,168067\t          20,168067\n",
+            "Focal Planes          :\t         -19,831933\t          19,831933\n",
+            "Principal Planes      :\t           0,336134\t          -0,336134\n",
+            "Anti-Principal Planes :\t         -40,000000\t          40,000000\n",
+            "Nodal Planes          :\t           0,336134\t          -0,336134\n",
+            "Anti-Nodal Planes     :\t         -40,000000\t          40,000000\n"
+        ],
+        "CgfOutFile": "REDACTED~1REDACTED",
+        "TxtOutFile": "REDACTED~1REDACTED"
+    }
+}

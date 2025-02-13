@@ -1,0 +1,311 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "RayTrace",
+        "Data": {
+            "__type__": "AttrDict",
+            "data": {
+                "Header": "Ray Trace Data",
+                "RealRayTraceData": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "columns": [
+                            "Surf",
+                            "X-coordinate",
+                            "Y-coordinate",
+                            "Z-coordinate",
+                            "X-cosine",
+                            "Y-cosine",
+                            "Z-cosine",
+                            "X-normal",
+                            "Y-normal",
+                            "Z-normal",
+                            "Anglein",
+                            "Pathlength",
+                            "Comment",
+                            "Unnamed: 13"
+                        ],
+                        "data": [
+                            [
+                                "OBJ",
+                                Infinity,
+                                Infinity,
+                                Infinity,
+                                0.0,
+                                0.0,
+                                1.0,
+                                "-----",
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "1",
+                                1.0,
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0,
+                                "0,0000000000",
+                                0.0,
+                                -1.0,
+                                0.0,
+                                -0.0,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "2",
+                                1.0,
+                                1.0,
+                                0.05006265674,
+                                -0.016694518,
+                                -0.016694518,
+                                0.9997212542,
+                                "0,0500000000",
+                                0.05,
+                                -0.9974968672,
+                                4.054807228,
+                                0.05006265674,
+                                "lensfront",
+                                NaN
+                            ],
+                            [
+                                "3",
+                                0.98494782874,
+                                0.98494782874,
+                                0.95143492457,
+                                -0.04982749,
+                                -0.04982749,
+                                0.9975141315,
+                                "-0,0492473914",
+                                -0.0492473914,
+                                -0.9975717462,
+                                5.346530705,
+                                0.9016235916,
+                                "lensback",
+                                NaN
+                            ],
+                            [
+                                "4",
+                                -0.0061213962872,
+                                -0.0061213962872,
+                                20.792,
+                                -0.04982749,
+                                -0.04982749,
+                                0.9975141315,
+                                "0,0000000000",
+                                0.0,
+                                -1.0,
+                                4.040794048,
+                                19.890009023,
+                                NaN,
+                                NaN
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                },
+                "ParaxialRayTraceData": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "columns": [
+                            "Surf",
+                            "X-coordinate",
+                            "Y-coordinate",
+                            "Z-coordinate",
+                            "X-cosine",
+                            "Y-cosine",
+                            "Z-cosine",
+                            "X-normal",
+                            "Y-normal",
+                            "Z-normal",
+                            "Anglein",
+                            "Pathlength",
+                            "Comment",
+                            "Unnamed: 13"
+                        ],
+                        "data": [
+                            [
+                                "OBJ",
+                                Infinity,
+                                Infinity,
+                                Infinity,
+                                0.0,
+                                0.0,
+                                1.0,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "1",
+                                1.0,
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "2",
+                                1.0,
+                                1.0,
+                                0.0,
+                                -0.016662039,
+                                -0.016662039,
+                                0.9997223379,
+                                "lensfront",
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "3",
+                                0.98333333333,
+                                0.98333333333,
+                                1.0,
+                                -0.0494618801,
+                                -0.0494618801,
+                                0.9975505224,
+                                "lensback",
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN
+                            ],
+                            [
+                                "4",
+                                0.00198,
+                                0.00198,
+                                20.792,
+                                -0.0494618801,
+                                -0.0494618801,
+                                0.9975505224,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN,
+                                NaN
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                }
+            }
+        },
+        "Settings": {
+            "__type__": "Series",
+            "data": {
+                "Hx": 0.0,
+                "Hy": 0.0,
+                "Px": 1.0,
+                "Py": 1.0,
+                "Wavelength": 1.0,
+                "Field": "All",
+                "Type": "DirectionCosines",
+                "GlobalCoordinates": true
+            }
+        },
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2024-10-25T17:00:56.299000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffRay Trace Data\n",
+            "\n",
+            "File : REDACTED\n",
+            "Title: \n",
+            "Date : 25-10-2024\n",
+            "\n",
+            "\n",
+            "Units       :\t Millimeters\t\n",
+            "Wavelength  :\t 0,543000\t \u00b5m\t\n",
+            "Coordinates :\t Global coordinates relative to surface\t 1\t\n",
+            "Direction cosines are after refraction or reflection from the surface or object.\n",
+            "Angles are in degrees.\n",
+            "\n",
+            "Normalized X Field Coord (Hx) :\t     0,0000000000\t\n",
+            "Normalized Y Field Coord (Hy) :\t     0,0000000000\t\n",
+            "Normalized X Pupil Coord (Px) :\t     1,0000000000\t\n",
+            "Normalized Y Pupil Coord (Py) :\t     1,0000000000\t\n",
+            "\n",
+            "Real Ray Trace Data:\n",
+            "\n",
+            "Surf\t       X-coordinate\t       Y-coordinate\t       Z-coordinate\t       X-cosine\t       Y-cosine\t       Z-cosine\t       X-normal\t       Y-normal\t       Z-normal\t       Angle in\t        Path length\t Comment\t\n",
+            "OBJ\t            Infinity\t           Infinity\t           Infinity\t   0,0000000000\t   0,0000000000\t   1,0000000000\t              -              -              -              -                  - \n",
+            "  1\t    1,0000000000E+00\t   1,0000000000E+00\t   0,0000000000E+00\t   0,0000000000\t   0,0000000000\t   1,0000000000\t   0,0000000000\t   0,0000000000\t  -1,0000000000\t    0,000000000\t  -0,0000000000E+00\t \n",
+            "  2\t    1,0000000000E+00\t   1,0000000000E+00\t   5,0062656740E-02\t  -0,0166945180\t  -0,0166945180\t   0,9997212542\t   0,0500000000\t   0,0500000000\t  -0,9974968672\t    4,054807228\t   5,0062656740E-02\t lens front\n",
+            "  3\t    9,8494782874E-01\t   9,8494782874E-01\t   9,5143492457E-01\t  -0,0498274900\t  -0,0498274900\t   0,9975141315\t  -0,0492473914\t  -0,0492473914\t  -0,9975717462\t    5,346530705\t   9,0162359160E-01\t lens back\n",
+            "  4\t   -6,1213962872E-03\t  -6,1213962872E-03\t   2,0792000000E+01\t  -0,0498274900\t  -0,0498274900\t   0,9975141315\t   0,0000000000\t   0,0000000000\t  -1,0000000000\t    4,040794048\t   1,9890009023E+01\t \n",
+            "\n",
+            "Paraxial Ray Trace Data:\n",
+            "\n",
+            "Surf\t       X-coordinate\t       Y-coordinate\t       Z-coordinate\t       X-cosine\t       Y-cosine\t       Z-cosine\t       X-normal\t       Y-normal\t       Z-normal\t       Angle in\t        Path length\t Comment\t\n",
+            "OBJ\t            Infinity\t           Infinity\t           Infinity\t   0,0000000000\t   0,0000000000\t   1,0000000000\t \n",
+            "  1\t    1,0000000000E+00\t   1,0000000000E+00\t   0,0000000000E+00\t   0,0000000000\t   0,0000000000\t   1,0000000000\t \n",
+            "  2\t    1,0000000000E+00\t   1,0000000000E+00\t   0,0000000000E+00\t  -0,0166620390\t  -0,0166620390\t   0,9997223379\t lens front\n",
+            "  3\t    9,8333333333E-01\t   9,8333333333E-01\t   1,0000000000E+00\t  -0,0494618801\t  -0,0494618801\t   0,9975505224\t lens back\n",
+            "  4\t    1,9800000000E-03\t   1,9800000000E-03\t   2,0792000000E+01\t  -0,0494618801\t  -0,0494618801\t   0,9975505224\t \n"
+        ],
+        "TxtOutFile": "REDACTED"
+    }
+}

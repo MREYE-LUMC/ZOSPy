@@ -10,8 +10,8 @@ from zospy.analyses.base import AnalysisResult
 # Initialize ZOS instance, to check constants existence
 zos = ZOS()
 
-INPUT_FOLDER = Path("tests/data/reference")
-OUTPUT_FOLDER = Path("tests/data/reference_new")
+INPUT_FOLDER = Path("tests/data/reference/old")
+OUTPUT_FOLDER = Path("tests/data/reference")
 
 CONVERTERS: list[AnalysisDataConverter] = [
     AnalysisDataConverter(
@@ -291,7 +291,7 @@ $map(["Tangential", "Sagittal"], function($d) {
         "abcd_matrix": PredictedCoordinateABCDMatrix.data
 })
 """,
-    settings_conversion="$.data.Settings"
+        settings_conversion="$.data.Settings",
     ),
     AnalysisDataConverter(
         old_analysis="curvature",
@@ -303,8 +303,8 @@ $map(["Tangential", "Sagittal"], function($d) {
             "remove_option": "remove",
             "consider_off_axis_aperture": "off_axis_coordinates",
             "best_fit_sphere_options": "bfs_criterion",
-            "reverse_direction": "bfs_reverse_direction"
-        }
+            "reverse_direction": "bfs_reverse_direction",
+        },
     ),
     AnalysisDataConverter(
         old_analysis="wavefront_map",
@@ -312,7 +312,7 @@ $map(["Tangential", "Sagittal"], function($d) {
         settings_class="WavefrontMapSettings",
         module="zospy.analyses.wavefront.wavefront_map",
         data_type="dataframe",
-        settings_conversion=r'$each($.data.Settings.data, function($v, $k) {{ $camelToSnake($k): $v}}) ~> | $ | {"surface": surface = 0 ? "Image" } | ~> $merge'
+        settings_conversion=r'$each($.data.Settings.data, function($v, $k) {{ $camelToSnake($k): $v}}) ~> | $ | {"surface": surface = 0 ? "Image" } | ~> $merge',
     ),
     AnalysisDataConverter(
         old_analysis="zernike_standard_coefficients",
@@ -349,8 +349,8 @@ $map(["Tangential", "Sagittal"], function($d) {
         settings_replace_keys={
             "sample_size": "sampling",
             "maximum_number_of_terms": "maximum_terms",
-        }
-    )
+        },
+    ),
 ]
 
 

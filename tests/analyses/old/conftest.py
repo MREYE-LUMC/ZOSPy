@@ -42,7 +42,7 @@ def reference_data(request) -> AnalysisResult:
     filename = f"{REFERENCE_VERSION}-{request.fspath.basename}-{request.node.name}"
     filename = filename.replace("matches_reference_data", "returns_correct_result")
 
-    data_file = request.config.rootpath / REFERENCE_DATA_FOLDER / f"{filename}.json"
+    data_file = request.config.rootpath / REFERENCE_DATA_FOLDER / "old" / f"{filename}.json"
 
     if not data_file.exists():
         pytest.skip(f"Data file {data_file} does not exist")

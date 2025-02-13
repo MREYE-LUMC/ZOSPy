@@ -1,0 +1,280 @@
+{
+    "__type__": "AnalysisResult",
+    "data": {
+        "AnalysisType": "SystemData",
+        "Data": {
+            "__type__": "AttrDict",
+            "data": {
+                "Header": "System/Prescription Data",
+                "GeneralLensData": {
+                    "__type__": "Series",
+                    "data": {
+                        "Surfaces": 4,
+                        "Stop": 1,
+                        "System Aperture": "Float By Stop Size = 1",
+                        "Fast Semi-Diameters": "On",
+                        "Field Unpolarized": "On",
+                        "Convert thin film phase to ray equivalent": "On",
+                        "J/E Conversion Method": "X Axis Reference",
+                        "Glass Catalogs": "SCHOTT",
+                        "Ray Aiming": "Off",
+                        "Apodization": "Uniform, factor = 0.00000E+00",
+                        "Reference OPD": "Exit Pupil",
+                        "Paraxial Rays Setting": "Ignore Coordinate Breaks",
+                        "Method to Compute F/#": "Tracing Rays",
+                        "Method to Compute Huygens Integral": "Auto",
+                        "Print Coordinate Breaks": "On",
+                        "Multi-Threading": "On",
+                        "OPD Modulo 2 Pi": "Off",
+                        "Temperature (C)": 20.0,
+                        "Pressure (ATM)": 1.0,
+                        "Adjust Index Data To Environment": "Off",
+                        "Effective Focal Length": "20.16807 (in air at system temperature and pressure)",
+                        "Effective Focal Length 1": "20.16807 (in image space)",
+                        "Back Focal Length": 19.83193,
+                        "Total Track": 20.792,
+                        "Image Space F/#": 10.08403,
+                        "Paraxial Working F/#": 10.08403,
+                        "Working F/#": 10.05939,
+                        "Image Space NA": 0.0495225,
+                        "Object Space NA": 1e-10,
+                        "Stop Radius": 1,
+                        "Paraxial Image Height": 0,
+                        "Paraxial Magnification": 0,
+                        "Entrance Pupil Diameter": 2,
+                        "Entrance Pupil Position": 0,
+                        "Exit Pupil Diameter": 2.033898,
+                        "Exit Pupil Position": -20.46997,
+                        "Field Type": "Angle in degrees",
+                        "Maximum Radial Field": 0,
+                        "Primary Wavelength [\u00b5m]": 0.543,
+                        "Angular Magnification": 0.9833333,
+                        "Lens Units": "Millimeters",
+                        "Source Units": "Watts",
+                        "Analysis Units": "Watts/cm^2",
+                        "Afocal Mode Units": "milliradians",
+                        "MTF Units": "cycles/millimeter",
+                        "Include Calculated Data in Session File": "On",
+                        "Include Calculated Data in Session File 1": "On"
+                    }
+                },
+                "Fields": {
+                    "__type__": "AttrDict",
+                    "data": {
+                        "Info": {
+                            "__type__": "Series",
+                            "data": {
+                                "Fields": 1,
+                                "Field Type 1": "Angle in degrees"
+                            }
+                        },
+                        "Data": {
+                            "__type__": "DataFrame",
+                            "data": {
+                                "index": [
+                                    0
+                                ],
+                                "columns": [
+                                    "#",
+                                    "X-Value",
+                                    "Y-Value",
+                                    "Weight"
+                                ],
+                                "data": [
+                                    [
+                                        1,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ]
+                                ],
+                                "index_names": [
+                                    null
+                                ],
+                                "column_names": [
+                                    null
+                                ]
+                            }
+                        }
+                    }
+                },
+                "Wavelengths": {
+                    "__type__": "AttrDict",
+                    "data": {
+                        "Info": {
+                            "__type__": "Series",
+                            "data": {
+                                "Wavelengths": 1,
+                                "Units": "\u00b5m"
+                            }
+                        },
+                        "Data": {
+                            "__type__": "DataFrame",
+                            "data": {
+                                "index": [
+                                    0
+                                ],
+                                "columns": [
+                                    "#",
+                                    "Value",
+                                    "Weight"
+                                ],
+                                "data": [
+                                    [
+                                        1,
+                                        0.543,
+                                        1.0
+                                    ]
+                                ],
+                                "index_names": [
+                                    null
+                                ],
+                                "column_names": [
+                                    null
+                                ]
+                            }
+                        }
+                    }
+                },
+                "VignettingFactors": {
+                    "__type__": "DataFrame",
+                    "data": {
+                        "index": [
+                            0
+                        ],
+                        "columns": [
+                            "#",
+                            "VDX",
+                            "VDY",
+                            "VCX",
+                            "VCY",
+                            "VAN"
+                        ],
+                        "data": [
+                            [
+                                1,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ]
+                        ],
+                        "index_names": [
+                            null
+                        ],
+                        "column_names": [
+                            null
+                        ]
+                    }
+                },
+                "PredictedCoordinateABCDMatrix": {
+                    "__type__": "Series",
+                    "data": {
+                        "A": 20.13,
+                        "B": 0.0,
+                        "C": 0.0,
+                        "D": 20.13
+                    }
+                }
+            }
+        },
+        "Settings": null,
+        "MetaData": {
+            "__type__": "dataclass",
+            "__type_name__": "AnalysisMetadata",
+            "__type_module__": "zospy.analyses.base",
+            "data": {
+                "DateTime": {
+                    "__type__": "datetime",
+                    "data": "2023-06-20T17:10:37.462000"
+                },
+                "FeatureDescription": "",
+                "LensFile": "REDACTED",
+                "LensTitle": ""
+            }
+        },
+        "HeaderData": [],
+        "Messages": [],
+        "RawTextData": [
+            "\ufeffSystem/Prescription Data\n",
+            "\n",
+            "File : REDACTED\n",
+            "Title: \n",
+            "Date : 20-06-2023\n",
+            "\n",
+            "\n",
+            "GENERAL LENS DATA:\n",
+            "\n",
+            "Surfaces                : \t               4\n",
+            "Stop                    : \t               1\n",
+            "System Aperture         : \tFloat By Stop Size = \t1\n",
+            "Fast Semi-Diameters     :\tOn \n",
+            "Field Unpolarized       :\tOn\n",
+            "Convert thin film phase to ray equivalent :\tOn \n",
+            "J/E Conversion Method   :\tX Axis Reference  \n",
+            "Glass Catalogs          : \tSCHOTT \n",
+            "Ray Aiming              :\tOff\n",
+            "Apodization             : \tUniform, factor = \t   0,00000E+00\n",
+            "Reference OPD           :\tExit Pupil  \n",
+            "Paraxial Rays Setting   :\tIgnore Coordinate Breaks  \n",
+            "Method to Compute F/#   :\tTracing Rays  \n",
+            "Method to Compute Huygens Integral   : Auto\n",
+            "Print Coordinate Breaks :\tOn\n",
+            "Multi-Threading         :\tOn\n",
+            "OPD Modulo 2 Pi         :\tOff\n",
+            "Temperature (C)         : \t    2,00000E+01\n",
+            "Pressure (ATM)          : \t    1,00000E+00\n",
+            "Adjust Index Data To Environment  :\tOff\n",
+            "Effective Focal Length  :\t        20,16807\t(in air at system temperature and pressure)\n",
+            "Effective Focal Length  :\t        20,16807\t(in image space)\n",
+            "Back Focal Length       :\t        19,83193\n",
+            "Total Track             :\t          20,792\n",
+            "Image Space F/#         :\t        10,08403\n",
+            "Paraxial Working F/#    :\t        10,08403\n",
+            "Working F/#             :\t        10,05939\n",
+            "Image Space NA          :\t       0,0495225\n",
+            "Object Space NA         :\t           1e-10\n",
+            "Stop Radius             :\t               1\n",
+            "Paraxial Image Height   :\t               0\n",
+            "Paraxial Magnification  :\t               0\n",
+            "Entrance Pupil Diameter :\t               2\n",
+            "Entrance Pupil Position :\t               0\n",
+            "Exit Pupil Diameter     :\t        2,033898\n",
+            "Exit Pupil Position     :\t       -20,46997\n",
+            "Field Type              : \tAngle in degrees\n",
+            "Maximum Radial Field    :\t               0\n",
+            "Primary Wavelength [\u00b5m] :\t           0,543\n",
+            "Angular Magnification   :\t       0,9833333\n",
+            "Lens Units              :\t   Millimeters\n",
+            "Source Units            :\t   Watts \n",
+            "Analysis Units          :\t   Watts/cm^2 \n",
+            "Afocal Mode Units       :\t   milliradians\n",
+            "MTF Units               :\t   cycles/millimeter \n",
+            "Include Calculated Data in Session File  :\tOn \n",
+            "Include Calculated Data in Session File  :\tOn \n",
+            " \n",
+            "Fields          : 1\n",
+            "Field Type              : \tAngle in degrees\n",
+            " #  \t   X-Value     \t  Y-Value     \t   Weight\n",
+            " 1 \t      0,000000 \t      0,000000 \t      1,000000\n",
+            " \n",
+            "Vignetting Factors\n",
+            " #     \tVDX     \tVDY     \tVCX     \tVCY     \tVAN\n",
+            " 1 \t 0,000000 \t 0,000000 \t 0,000000 \t 0,000000 \t 0,000000\n",
+            " \n",
+            "Wavelengths     : 1\n",
+            "Units: \u00b5m\n",
+            " #       \tValue       \tWeight\n",
+            " 1 \t      0,543000 \t      1,000000\n",
+            " \n",
+            "Predicted coordinate ABCD matrix:\n",
+            "A = \t       20,13\n",
+            "B = \t           0\n",
+            "C = \t           0\n",
+            "D = \t       20,13\n",
+            " "
+        ],
+        "TxtOutFile": "REDACTED"
+    }
+}
