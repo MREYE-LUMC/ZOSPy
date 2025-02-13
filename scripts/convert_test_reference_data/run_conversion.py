@@ -186,7 +186,7 @@ $map(["Tangential", "Sagittal"], function($d) {
         module="zospy.analyses.reports.cardinal_points",
         data_type="dataclass",
         data_class="CardinalPointsResult",
-        data_conversion="""
+        data_conversion=r"""
 (
     $series := $.data.Data.data.$map($zip(index, data), function($v, $i) {{"group": $v[0][0], "property": $v[0][1], "value": $v[1][0]}}){group: {property: value}};
     $series{
@@ -294,7 +294,7 @@ $map(["Tangential", "Sagittal"], function($d) {
     settings_conversion="$.data.Settings"
     ),
     AnalysisDataConverter(
-        old_analysis="surface_curvature",
+        old_analysis="curvature",
         new_analysis="Curvature",
         settings_class="CurvatureSettings",
         module="zospy.analyses.surface.curvature",
@@ -303,6 +303,52 @@ $map(["Tangential", "Sagittal"], function($d) {
             "remove_option": "remove",
             "consider_off_axis_aperture": "off_axis_coordinates",
             "best_fit_sphere_options": "bfs_criterion",
+            "reverse_direction": "bfs_reverse_direction"
+        }
+    ),
+    AnalysisDataConverter(
+        old_analysis="wavefront_map",
+        new_analysis="WavefrontMap",
+        settings_class="WavefrontMapSettings",
+        module="zospy.analyses.wavefront.wavefront_map",
+        data_type="dataframe",
+        settings_conversion=r'$each($.data.Settings.data, function($v, $k) {{ $camelToSnake($k): $v}}) ~> | $ | {"surface": surface = 0 ? "Image" } | ~> $merge'
+    ),
+    AnalysisDataConverter(
+        old_analysis="zernike_standard_coefficients",
+        new_analysis="ZernikeStandardCoefficients",
+        settings_class="ZernikeStandardCoefficientsSettings",
+        module="zospy.analyses.zernike.zernike_standard_coefficients",
+        data_type="dataclass",
+        data_class="ZernikeStandardCoefficientsResult",
+        data_conversion=r"""
+[
+    $.data.Settings.data{
+        "subaperture_decenter_sx": Sx,
+        "subaperture_decenter_sy": Sy,
+        "subaperture_radius_sr": Sr
+    },
+    $.data.Data.data.GeneralData.data.$map($zip(index, data), function($v, $i) {{$camelToSnake($v[0]):  {"value": $v[1][0], "unit": $v[1][1]}}}){
+        "surface": surface.value,
+        "field": field{"value": value, "unit": unit.$replace(/[\(\)]/, "")},
+        "wavelength": wavelength,
+        "peak_to_valley_to_chief": peak_to_valley_to_chief,
+        "peak_to_valley_to_centroid": peak_to_valley_to_centroid,
+        "from_integration_of_the_fitted_coefficients": $merge([
+            $map(["rms_to_chief", "rms_to_centroid", "variance"], function($v){ {$v: $lookup($, $v)} }),
+            {"strehl_ratio": $.strehl_ratio_est.value }
+        ]),
+        "rms_fit_error": rms_fit_error,
+        "maximum_fit_error": maximum_fit_error
+    },
+    $.data.Data.data.Coefficients.data{
+        "coefficients": $map(data, function($v, $i){ {$i.$string(): {"value": $v[0], "formula": $v[2] }}}) ~> $merge
+    }
+] ~> $merge
+""",
+        settings_replace_keys={
+            "sample_size": "sampling",
+            "maximum_number_of_terms": "maximum_terms",
         }
     )
 ]
