@@ -83,7 +83,7 @@ class FFTThroughFocusMTFData:
         df: DataFrame = self.data.copy().reset_index()
 
         df.insert(0, "FieldX", self.field_coordinate.value[0])
-        df.insert(1, "FieldY", self.field_coordinate.value[0])
+        df.insert(1, "FieldY", self.field_coordinate.value[1])
 
         return df
 
