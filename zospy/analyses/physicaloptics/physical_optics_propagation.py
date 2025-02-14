@@ -209,7 +209,7 @@ class PhysicalOpticsPropagationSettings:
     @model_validator(mode="after")
     def _validate_total_power_peak_irradiance(self):
         if not (self.use_total_power ^ self.use_peak_irradiance):
-            ValueError(
+            raise ValueError(
                 "Either use_total_power or use_peak_irradiance should be True, they cannot both be True or False."
             )
 
@@ -218,14 +218,14 @@ class PhysicalOpticsPropagationSettings:
     @model_validator(mode="after")
     def _validate_beam_file(self):
         if str(self.beam_type) not in ("File", "DLL", "Multimode") and self.beam_file != "":
-            ValueError(f"Beam type {self.beam_type!s} does not allow specification of beam_file.")
+            raise ValueError(f"Beam type {self.beam_type!s} does not allow specification of beam_file.")
 
         return self
 
     @model_validator(mode="after")
     def _validate_output_beam_file(self):
         if self.save_output_beam and self.output_beam_file == "":
-            ValueError("output_beam_file should be specified when save_output_beam is True.")
+            raise ValueError("output_beam_file should be specified when save_output_beam is True.")
         if not self.save_output_beam:
             if self.output_beam_file != "":
                 warn("output_beam_file is ignored when save_output_beam is False.")
@@ -237,7 +237,7 @@ class PhysicalOpticsPropagationSettings:
     @model_validator(mode="after")
     def _validate_fiber_type_file(self):
         if str(self.fiber_type) not in ("File", "DLL") and self.fiber_type_file != "":
-            ValueError(f"Fiber type {self.fiber_type!s} does not allow specification of fiber_type_file.")
+            raise ValueError(f"Fiber type {self.fiber_type!s} does not allow specification of fiber_type_file.")
 
         return self
 
@@ -400,7 +400,7 @@ class PhysicalOpticsPropagation(
         self.analysis.Settings.ComputeFiberCouplingIntegral = self.settings.compute_fiber_coupling_integral
 
         if self.settings.compute_fiber_coupling_integral:
-            self.analysis.Settings.IgnoreFiberPolarization = self.settings.ignore_fibre_polarization
+            self.analysis.Settings.IgnoreFiberPolarization = self.settings.ignore_fiber_polarization
             self.analysis.Settings.FiberType = constants.process_constant(
                 constants.Analysis.PhysicalOptics.POPFiberTypes, self.settings.fiber_type
             )

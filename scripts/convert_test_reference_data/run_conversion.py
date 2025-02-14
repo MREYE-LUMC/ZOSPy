@@ -8,6 +8,7 @@
 # ///
 
 import json
+from math import isnan
 from pathlib import Path
 
 from converter import AnalysisDataConverter
@@ -16,11 +17,60 @@ from pydantic_core import ValidationError
 from zospy import ZOS
 from zospy.analyses.base import AnalysisResult
 
-# Initialize ZOS instance, to check constants existence
-zos = ZOS()
-
 INPUT_FOLDER = Path("tests/data/reference/old")
 OUTPUT_FOLDER = Path("tests/data/reference")
+
+
+def _list_replace_values(data: list, old_values, new_values):
+    for old_value, new_value in zip(old_values, new_values):
+        if old_value in data:
+            data[data.index(old_value)] = new_value
+
+
+def postprocess_polarization_pupil_map(data: dict):
+    columns = data["data"]["pupil_map"]["columns"]
+    _list_replace_values(columns, "Phase(Deg)", "Phase (Deg)")
+
+
+def postprocess_polarization_transmission(data: dict):
+    # Remove fields that are not present in the unpolarized case
+    if data["settings"]["unpolarized"]:
+        data["data"].pop("x_field")
+        data["data"].pop("y_field")
+        data["data"].pop("x_phase")
+        data["data"].pop("y_phase")
+
+
+def postprocess_single_ray_trace(data: dict):
+    for ray_trace_type in ("real_ray_trace_data", "paraxial_ray_trace_data"):
+        ray_trace_data = data["data"][ray_trace_type]
+
+        # Rename columns
+        _list_replace_values(ray_trace_data["columns"], ("Anglein", "Pathlength"), ("Angle in", "Path length"))
+
+        # Remove last column, which is empty
+        ray_trace_data["columns"].pop()
+        for row in ray_trace_data["data"]:
+            row.pop()
+            _list_replace_values(row, ("lensfront", "lensback"), ("lens front", "lens back"))
+
+    # Move the comment for paraxial ray trace data to the last column
+    max_row_length = max(len(row) for row in data["data"]["paraxial_ray_trace_data"]["data"])
+
+    # Convert the X-normal column to floats
+    if len(data["data"]["real_ray_trace_data"]["columns"]) > 8:
+        for row in data["data"]["real_ray_trace_data"]["data"]:
+            row[7] = float(row[7].replace(",", ".")) if set(row[7]) != {"-"} else float("nan")
+
+    for row in data["data"]["paraxial_ray_trace_data"]["data"]:
+        row.extend([float("nan")] * (max_row_length - len(row)))
+
+        # Get the index of the value before a tail of NaNs
+        *_, (last_value_index, last_value) = ((i, value) for i, value in enumerate(row) if not (isinstance(value, float) and isnan(value)))
+
+        if isinstance(last_value, str) and last_value_index < len(row) - 1:
+            row.append(row.pop(last_value_index))
+
 
 CONVERTERS: list[AnalysisDataConverter] = [
     AnalysisDataConverter(
@@ -58,7 +108,7 @@ CONVERTERS: list[AnalysisDataConverter] = [
         old_analysis="polarization_pupil_map",
         new_analysis="PolarizationPupilMap",
         settings_class="PolarizationPupilMapSettings",
-        module="zospy.analyses.polarization.polarization_pupil_map",
+        module="zospy.analyses.polarization.pupil_map",
         data_type="dataclass",
         data_class="PolarizationPupilMapResult",
         data_conversion=r"""
@@ -74,12 +124,13 @@ $.data.Data.data{
     "transmission": { "value": Transmission, "unit": "%" },
     "pupil_map": Table.data
 }""",
+        postprocess=postprocess_polarization_pupil_map,
     ),
     AnalysisDataConverter(
         old_analysis="transmission",
         new_analysis="PolarizationTransmission",
         settings_class="PolarizationTransmissionSettings",
-        module="zospy.analyses.polarization.polarization_transmission",
+        module="zospy.analyses.polarization.transmission",
         data_type="dataclass",
         data_class="PolarizationTransmissionResult",
         data_conversion=r"""
@@ -102,7 +153,7 @@ $.data.Data.data{
                 "transmissions": { $string(Wavelength): TotalTransmission }
             }
         ],
-        "chief_ray_transmissions": {
+        "chief_ray_transmissions": [{
             "field_pos": {
                 "value": FieldPos,
                 "unit": "deg"
@@ -114,10 +165,11 @@ $.data.Data.data{
                 }
             },
             "transmissions": Table.data
-        }
+        }]
     }
 ] ~> $merge
 """,
+        postprocess=postprocess_polarization_transmission,
     ),
     AnalysisDataConverter(
         old_analysis="huygens_psf",
@@ -149,7 +201,13 @@ $map(["Tangential", "Sagittal"], function($d) {
                     "value": $number($replace(groups[0], ",", ".")),
                     "unit": groups[1]
                 },
-                "data": $v.data
+                "data": $v.data{
+                    "index": data.($[0]),
+                    "columns": [$filter(columns, function($v, $i) { $i != 0 }).($replace($, ",", ".").$number())],
+                    "data": $map(data, function($v){ $filter($v, function($vv, $i) { $i != 0}) }),
+                    "index_names": [columns[0]],
+                    "column_names": column_names
+                }
             }
         })]
     }
@@ -187,6 +245,7 @@ $map(["Tangential", "Sagittal"], function($d) {
 ] ~> $merge
 """,
         settings_conversion='$each($.data.Settings.data, function($v, $k) {{ $camelToSnake($k): $v}}) ~> $merge ~> | $ | { "field": $.field = "All" ? 0 } |',
+        postprocess=postprocess_single_ray_trace,
     ),
     AnalysisDataConverter(
         old_analysis="cardinal_points",
@@ -307,7 +366,17 @@ $map(["Tangential", "Sagittal"], function($d) {
         new_analysis="Curvature",
         settings_class="CurvatureSettings",
         module="zospy.analyses.surface.curvature",
-        data_type="dataframe",
+        data_type="dataclass",
+        data_class="CurvatureResult",
+        data_conversion=r"""
+{
+    "width": 0,
+    "decenter_x": 0,
+    "decenter_y": 0,
+    "decenter_unit": "Millimeters",
+    "data": $.data.Data.data
+}
+""",
         settings_replace_keys={
             "remove_option": "remove",
             "consider_off_axis_aperture": "off_axis_coordinates",
@@ -327,7 +396,7 @@ $map(["Tangential", "Sagittal"], function($d) {
         old_analysis="zernike_standard_coefficients",
         new_analysis="ZernikeStandardCoefficients",
         settings_class="ZernikeStandardCoefficientsSettings",
-        module="zospy.analyses.zernike.zernike_standard_coefficients",
+        module="zospy.analyses.wavefront.zernike_standard_coefficients",
         data_type="dataclass",
         data_class="ZernikeStandardCoefficientsResult",
         data_conversion=r"""
@@ -347,11 +416,16 @@ $map(["Tangential", "Sagittal"], function($d) {
             $map(["rms_to_chief", "rms_to_centroid", "variance"], function($v){ {$v: $lookup($, $v)} }),
             {"strehl_ratio": $.strehl_ratio_est.value }
         ]),
+        "from_integration_of_the_rays": $merge([
+            $map(["rms_to_chief", "rms_to_centroid", "variance"], function($v){ {$v: $lookup($, $v)} }),
+            {"strehl_ratio": $.strehl_ratio_est.value }
+        ]),
         "rms_fit_error": rms_fit_error,
         "maximum_fit_error": maximum_fit_error
     },
     $.data.Data.data.Coefficients.data{
-        "coefficients": $map(data, function($v, $i){ {$i.$string(): {"value": $v[0], "formula": $v[2] }}}) ~> $merge
+        "coefficients": $map(data, function($v, $i){ {($i + 1).$string(): {"value": $v[0], "formula": $v[2] }}}) ~> 
+        $merge
     }
 ] ~> $merge
 """,
@@ -380,5 +454,8 @@ def convert_reference_data_files(converter: AnalysisDataConverter):
 
 
 if __name__ == "__main__":
+    # Initialize ZOS instance, to check constants existence
+    zos = ZOS()
+
     for converter in CONVERTERS:
         convert_reference_data_files(converter)

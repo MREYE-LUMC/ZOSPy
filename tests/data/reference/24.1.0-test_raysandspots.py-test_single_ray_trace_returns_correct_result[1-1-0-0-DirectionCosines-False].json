@@ -29,10 +29,9 @@
                 "X-normal",
                 "Y-normal",
                 "Z-normal",
-                "Anglein",
-                "Pathlength",
-                "Comment",
-                "Unnamed: 13"
+                "Angle in",
+                "Path length",
+                "Comment"
             ],
             "data": [
                 [
@@ -43,7 +42,6 @@
                     0.0,
                     0.0,
                     1.0,
-                    "-----",
                     NaN,
                     NaN,
                     NaN,
@@ -59,12 +57,11 @@
                     0.0,
                     0.0,
                     1.0,
-                    "0,0000000000",
+                    0.0,
                     0.0,
                     -1.0,
                     0.0,
                     -0.0,
-                    NaN,
                     NaN
                 ],
                 [
@@ -75,13 +72,12 @@
                     0.0,
                     0.0,
                     1.0,
-                    "0,0000000000",
+                    0.0,
                     0.0,
                     -1.0,
                     0.0,
                     0.0,
-                    "lensfront",
-                    NaN
+                    "lens front"
                 ],
                 [
                     "3",
@@ -91,13 +87,12 @@
                     0.0,
                     0.0,
                     1.0,
-                    "-0,0000000000",
+                    -0.0,
                     -0.0,
                     -1.0,
                     0.0,
                     1.0,
-                    "lensback",
-                    NaN
+                    "lens back"
                 ],
                 [
                     "4",
@@ -107,12 +102,11 @@
                     0.0,
                     0.0,
                     1.0,
-                    "0,0000000000",
+                    0.0,
                     0.0,
                     -1.0,
                     0.0,
                     19.792,
-                    NaN,
                     NaN
                 ]
             ],
@@ -142,10 +136,9 @@
                 "X-normal",
                 "Y-normal",
                 "Z-normal",
-                "Anglein",
-                "Pathlength",
-                "Comment",
-                "Unnamed: 13"
+                "Angle in",
+                "Path length",
+                "Comment"
             ],
             "data": [
                 [
@@ -156,7 +149,6 @@
                     0.0,
                     0.0,
                     1.0,
-                    NaN,
                     NaN,
                     NaN,
                     NaN,
@@ -177,7 +169,6 @@
                     NaN,
                     NaN,
                     NaN,
-                    NaN,
                     NaN
                 ],
                 [
@@ -188,13 +179,12 @@
                     0.0,
                     0.0,
                     1.0,
-                    "lensfront",
                     NaN,
                     NaN,
                     NaN,
                     NaN,
                     NaN,
-                    NaN
+                    "lens front"
                 ],
                 [
                     "3",
@@ -204,13 +194,12 @@
                     0.0,
                     0.0,
                     1.0,
-                    "lensback",
                     NaN,
                     NaN,
                     NaN,
                     NaN,
                     NaN,
-                    NaN
+                    "lens back"
                 ],
                 [
                     "4",
@@ -220,7 +209,6 @@
                     0.0,
                     0.0,
                     1.0,
-                    NaN,
                     NaN,
                     NaN,
                     NaN,
