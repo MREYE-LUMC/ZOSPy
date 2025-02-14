@@ -23,6 +23,7 @@ from pydantic import (
 from pydantic_core import PydanticCustomError
 
 import zospy as zp
+import zospy.analyses.old
 
 logger = logging.getLogger("generate_test_reference_data")
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -47,7 +48,7 @@ class TestConfiguration(BaseModel):
     @field_validator("analysis", mode="before")
     @classmethod
     def validate_analysis(cls, v: str):
-        return attrgetter(v)(zp.analyses)
+        return attrgetter(v)(zospy.analyses.old)
 
     @field_validator("model", mode="before")
     @classmethod

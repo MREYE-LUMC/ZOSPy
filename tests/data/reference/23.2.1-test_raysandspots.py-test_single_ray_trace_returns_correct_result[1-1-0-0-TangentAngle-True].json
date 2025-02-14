@@ -25,8 +25,7 @@
                 "Z-coordinate",
                 "X-tangent",
                 "Y-tangent",
-                "Comment",
-                "Unnamed: 7"
+                "Comment"
             ],
             "data": [
                 [
@@ -36,7 +35,6 @@
                     Infinity,
                     0.0,
                     0.0,
-                    NaN,
                     NaN
                 ],
                 [
@@ -46,7 +44,6 @@
                     0.0,
                     0.0,
                     0.0,
-                    NaN,
                     NaN
                 ],
                 [
@@ -56,8 +53,7 @@
                     0.0,
                     0.0,
                     0.0,
-                    "lensfront",
-                    NaN
+                    "lens front"
                 ],
                 [
                     "3",
@@ -66,8 +62,7 @@
                     1.0,
                     0.0,
                     0.0,
-                    "lensback",
-                    NaN
+                    "lens back"
                 ],
                 [
                     "4",
@@ -76,7 +71,6 @@
                     20.792,
                     0.0,
                     0.0,
-                    NaN,
                     NaN
                 ]
             ],
@@ -102,8 +96,7 @@
                 "Z-coordinate",
                 "X-tangent",
                 "Y-tangent",
-                "Comment",
-                "Unnamed: 7"
+                "Comment"
             ],
             "data": [
                 [
@@ -113,7 +106,6 @@
                     Infinity,
                     0.0,
                     0.0,
-                    NaN,
                     NaN
                 ],
                 [
@@ -123,7 +115,6 @@
                     0.0,
                     0.0,
                     0.0,
-                    NaN,
                     NaN
                 ],
                 [
@@ -133,8 +124,7 @@
                     0.0,
                     0.0,
                     0.0,
-                    "lensfront",
-                    NaN
+                    "lens front"
                 ],
                 [
                     "3",
@@ -143,8 +133,7 @@
                     1.0,
                     0.0,
                     0.0,
-                    "lensback",
-                    NaN
+                    "lens back"
                 ],
                 [
                     "4",
@@ -153,7 +142,6 @@
                     20.792,
                     0.0,
                     0.0,
-                    NaN,
                     NaN
                 ]
             ],

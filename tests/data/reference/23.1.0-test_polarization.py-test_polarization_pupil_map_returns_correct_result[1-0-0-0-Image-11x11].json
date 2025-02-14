@@ -870,11 +870,11 @@
     "__analysis_data__": {
         "data_type": "dataclass",
         "name": "PolarizationPupilMapResult",
-        "module": "zospy.analyses.polarization.polarization_pupil_map"
+        "module": "zospy.analyses.polarization.pupil_map"
     },
     "__analysis_settings__": {
         "data_type": "dataclass",
         "name": "PolarizationPupilMapSettings",
-        "module": "zospy.analyses.polarization.polarization_pupil_map"
+        "module": "zospy.analyses.polarization.pupil_map"
     }
 }

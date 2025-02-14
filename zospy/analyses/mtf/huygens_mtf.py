@@ -72,7 +72,7 @@ class HuygensMTF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensMtfSettings]
         image_delta: float = 0.0,
         wavelength: int | str = "All",
         field: int | str = "All",
-        mtf_type: constants.Analysis.Settings.Mtf.HuygensMtfTypes = "Modulation",
+        mtf_type: str | constants.Analysis.Settings.Mtf.HuygensMtfTypes = "Modulation",
         maximum_frequency: float = 150.0,
         use_polarization: bool = False,
         use_dashes: bool = False,

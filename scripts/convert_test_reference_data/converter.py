@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from operator import attrgetter
 from string import Template
-from typing import Literal
+from typing import Callable, Literal
 
 from jsonata import Jsonata
+
 import zospy as zp
 
 
@@ -27,9 +28,9 @@ class ConversionExpression(Jsonata):
     /* Convert CamelCase variables to snake_case */
     $camelToSnake := function($s) {(
         /* Split groups and separate with underscore */
-        $snake := $replace($s, /(?<!^)((?<=[a-z])[A-Z]|[A-Z](?=[a-z])|(?<=[A-Z])[0-9])/, "_$1");
+        $snake := $replace($s, /(?<!^)((?<=[a-z])[A-Z]|[A-Z](?=[a-z])|(?<=[A-Z])[0-9])/, "_$1").$lowercase();
         /* Remove dashes, spaces, and make lowercase */
-        $lowercase($replace($replace($snake, /[\-\s]/, "_"), "__", "_"))
+        $snake.$replace(/[\(\)]/, "").$replace(/[\-\s]/, "_").$replace(/_+/, "_")
     )};
 
     {
@@ -44,9 +45,7 @@ class ConversionExpression(Jsonata):
 )
 """)
 
-    def __init__(
-        self, *, data=DataConversion.DEFAULT, settings=SettingsConversion.DEFAULT
-    ):
+    def __init__(self, *, data=DataConversion.DEFAULT, settings=SettingsConversion.DEFAULT):
         super().__init__(self.EXPRESSION.substitute(data=data, settings=settings))
 
 
@@ -63,6 +62,7 @@ class AnalysisDataConverter:
         settings_conversion: str = SettingsConversion.DEFAULT,
         settings_replace_keys: dict[str, str] | None = None,
         settings_convert_constants: dict[str, str] | None = None,
+        postprocess: Callable[[dict], None] | None = None,
     ):
         """Initialize a converter for analysis data.
 
@@ -70,7 +70,7 @@ class AnalysisDataConverter:
         ----------
         old_analysis : str
             The name of the old analysis.
-        analysis : str
+        new_analysis : str
             The name of the new analysis.
         settings_class : str
             The name of the settings class.
@@ -101,6 +101,7 @@ class AnalysisDataConverter:
         self.settings_conversion = settings_conversion
         self.settings_replace_keys = settings_replace_keys
         self.settings_convert_constants = settings_convert_constants
+        self.postprocess = postprocess
 
     def add_metadata(self, data: dict):
         metadata = {
@@ -134,9 +135,7 @@ class AnalysisDataConverter:
                 zospy_constant = attrgetter(constant)(zp.constants)
 
                 try:
-                    settings[key] = zp.constants.get_constantname_by_value(
-                        zospy_constant, int(settings[key])
-                    )
+                    settings[key] = zp.constants.get_constantname_by_value(zospy_constant, int(settings[key]))
                 except ValueError as e:
                     print(f"Error converting constant {key}: {e}")
 
@@ -146,5 +145,8 @@ class AnalysisDataConverter:
         self.replace_settings_keys(converted_data["settings"])
         # self.convert_settings_constants(converted_data["settings"])
         self.add_metadata(converted_data)
+
+        if self.postprocess is not None:
+            self.postprocess(converted_data)
 
         return converted_data
