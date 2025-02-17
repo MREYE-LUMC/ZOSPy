@@ -41,8 +41,7 @@ def postprocess_fft_through_focus_mtf(data: dict):
 
 
 def postprocess_polarization_pupil_map(data: dict):
-    columns = data["data"]["pupil_map"]["columns"]
-    _list_replace_values(columns, "Phase(Deg)", "Phase (Deg)")
+    _list_replace_values(data["data"]["pupil_map"]["columns"], ["Phase(Deg)"], ["Phase (Deg)"])
 
 
 def postprocess_polarization_transmission(data: dict):
