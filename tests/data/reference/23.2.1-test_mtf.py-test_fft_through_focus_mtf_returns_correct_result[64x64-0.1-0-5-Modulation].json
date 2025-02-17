@@ -1530,7 +1530,7 @@
         "use_polarization": false,
         "use_dashes": false,
         "sampling": "S_64x64",
-        "mtf_type": "5"
+        "mtf_type": "Modulation"
     },
     "metadata": {
         "DateTime": "2023-12-07T13:24:53.260000",

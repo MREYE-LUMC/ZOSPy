@@ -1530,7 +1530,7 @@
         "use_polarization": false,
         "use_dashes": false,
         "sampling": "S_128x128",
-        "mtf_type": "7"
+        "mtf_type": "Imaginary"
     },
     "metadata": {
         "DateTime": "2024-10-25T17:00:54.286000",

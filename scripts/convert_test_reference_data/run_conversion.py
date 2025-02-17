@@ -27,6 +27,19 @@ def _list_replace_values(data: list, old_values, new_values):
             data[data.index(old_value)] = new_value
 
 
+def postprocess_fft_through_focus_mtf(data: dict):
+    # Old analyses store enum indices with an offset of 5
+    index_to_string = {
+        "5": "Modulation",
+        "6": "Real",
+        "7": "Imaginary",
+        "8": "Phase",
+        "9": "SquareWave",
+    }
+
+    data["settings"]["mtf_type"] = index_to_string[data["settings"]["mtf_type"]]
+
+
 def postprocess_polarization_pupil_map(data: dict):
     columns = data["data"]["pupil_map"]["columns"]
     _list_replace_values(columns, "Phase(Deg)", "Phase (Deg)")
@@ -66,7 +79,9 @@ def postprocess_single_ray_trace(data: dict):
         row.extend([float("nan")] * (max_row_length - len(row)))
 
         # Get the index of the value before a tail of NaNs
-        *_, (last_value_index, last_value) = ((i, value) for i, value in enumerate(row) if not (isinstance(value, float) and isnan(value)))
+        *_, (last_value_index, last_value) = (
+            (i, value) for i, value in enumerate(row) if not (isinstance(value, float) and isnan(value))
+        )
 
         if isinstance(last_value, str) and last_value_index < len(row) - 1:
             row.append(row.pop(last_value_index))
@@ -88,6 +103,7 @@ CONVERTERS: list[AnalysisDataConverter] = [
         data_type="dataframe",
         settings_replace_keys={"sample_size": "sampling", "type": "mtf_type"},
         settings_convert_constants={"mtf_type": "Analysis.Settings.Mtf.MtfTypes"},
+        postprocess=postprocess_fft_through_focus_mtf,
     ),
     AnalysisDataConverter(
         old_analysis="huygens_mtf",
