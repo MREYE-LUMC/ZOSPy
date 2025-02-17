@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Annotated, Any  # noqa: TCH003
+from typing import TYPE_CHECKING, Annotated, Any
 
 from pydantic import AliasChoices, BeforeValidator, Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers.transformers import SimpleField, ZospyTransformer
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 __all__ = ("SurfaceData", "SurfaceDataSettings")
 
@@ -57,9 +59,7 @@ class RefractiveIndex:
 class MaterialData:
     indices: list[RefractiveIndex] = Field(alias="Refractive Indices")
     best_fit_glass: str | None = Field(alias="Best Fit Glass", default=None)
-    glass: str | ModelGlass | None = Field(
-        alias=AliasChoices("Model glass", "Glass"), default=None
-    )
+    glass: str | ModelGlass | None = Field(alias=AliasChoices("Model glass", "Glass"), default=None)
 
 
 def _deserialize_tuple(value: Any) -> tuple[float, ...] | Any:
@@ -143,9 +143,7 @@ class SurfaceData(
 
         settings_bytestring = self.config_file.read_bytes()
         settings_bytearray = bytearray(settings_bytestring)
-        settings_bytearray[20] = (
-            self.settings.surface
-        )  # 20 maps to the selected surface
+        settings_bytearray[20] = self.settings.surface  # 20 maps to the selected surface
 
         self.config_file.write_bytes(settings_bytearray)
 

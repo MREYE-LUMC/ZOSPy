@@ -156,9 +156,7 @@ def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> Analys
     raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
 
 
-@pydantic.dataclasses.dataclass(
-    frozen=True, config=ConfigDict(ser_json_inf_nan="strings")
-)
+@pydantic.dataclasses.dataclass(frozen=True, config=ConfigDict(ser_json_inf_nan="strings"))
 class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     """Zemax OpticStudio analysis result.
 
@@ -194,12 +192,15 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
 
     @field_serializer("data", mode="wrap", when_used="json")
     def _serialize_data(
-        self, value: AnalysisData, nxt: SerializerFunctionWrapHandler, info
-    ):  # noqa: ARG002
+        self,
+        value: AnalysisData,
+        nxt: SerializerFunctionWrapHandler,
+        info,  # noqa: ARG002
+    ):
         if isinstance(value, pd.DataFrame):
-            return TypeAdapter(
-                ValidatedDataFrame, config=ConfigDict(ser_json_inf_nan="strings")
-            ).dump_python(value, mode="json")
+            return TypeAdapter(ValidatedDataFrame, config=ConfigDict(ser_json_inf_nan="strings")).dump_python(
+                value, mode="json"
+            )
 
         if isinstance(value, np.ndarray):
             return value.tolist()
@@ -223,13 +224,9 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     def _deserialize_types(cls, data: any, handler):
         if isinstance(data, dict):
             if "__analysis_data__" in data:
-                data["data"] = _deserialize_analysis_data(
-                    data["data"], data.pop("__analysis_data__")
-                )
+                data["data"] = _deserialize_analysis_data(data["data"], data.pop("__analysis_data__"))
             if "__analysis_settings__" in data:
-                data["settings"] = _deserialize_dataclass(
-                    data["settings"], data.pop("__analysis_settings__")
-                )
+                data["settings"] = _deserialize_dataclass(data["settings"], data.pop("__analysis_settings__"))
 
         return handler(data)
 
@@ -284,9 +281,7 @@ class _ValidatedSetter:
         elif hasattr(self._obj, name):
             setattr(self._obj, name, value)
         else:
-            raise AttributeError(
-                f"'{type(self._obj).__name__}' object has no attribute '{name}'"
-            )
+            raise AttributeError(f"'{type(self._obj).__name__}' object has no attribute '{name}'")
 
 
 _ValidatedSetterType = TypeVar("_ValidatedSetterType")
@@ -484,9 +479,7 @@ class Analysis:
         elif isinstance(value, int):
             self.Settings.Surface.SetSurfaceNumber(value)
         else:
-            raise ValueError(
-                f'Surface value should be "Image", "Objective" or an integer, got {value}'
-            )
+            raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
 
     def get_text_output(self, txtoutfile: str, encoding: str):
         """Get the text output of the analysis.
@@ -620,9 +613,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
                 base = cls.__orig_bases__[0]
                 cls._settings_type: type[AnalysisSettings] = get_args(base)[1]
             else:
-                cls._settings_type = type(
-                    None
-                )  # TODO: change to NoneType when dropping support for Python 3.9
+                cls._settings_type = type(None)  # TODO: change to NoneType when dropping support for Python 3.9
 
         super().__init_subclass__(**kwargs)
 
@@ -759,21 +750,15 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         """Get the text output of the analysis."""
         self.analysis.Results.GetTextFile(str(self.text_output_file))
 
-        with open(
-            self._text_output_file, encoding=self.oss.ZOS.get_txtfile_encoding()
-        ) as f:
+        with open(self._text_output_file, encoding=self.oss.ZOS.get_txtfile_encoding()) as f:
             return f.read()
 
     def _create_analysis(self, *, settings_first=True):
         if self.analysis is not None and str(self.analysis.AnalysisType) == self.TYPE:
             return
 
-        analysis_type = constants.process_constant(
-            constants.Analysis.AnalysisIDM, self.TYPE
-        )
-        self._analysis = new_analysis(
-            self.oss, analysis_type, settings_first=settings_first
-        )
+        analysis_type = constants.process_constant(constants.Analysis.AnalysisIDM, self.TYPE)
+        self._analysis = new_analysis(self.oss, analysis_type, settings_first=settings_first)
 
     @abstractmethod
     def run_analysis(self, *args, **kwargs) -> AnalysisData:
@@ -784,9 +769,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
             return
 
         if self.oss.Mode != self.MODE:
-            raise ValueError(
-                f"The analysis requires {self.MODE} mode, got {self.oss.Mode}."
-            )
+            raise ValueError(f"The analysis requires {self.MODE} mode, got {self.oss.Mode}.")
 
     @staticmethod
     def _create_tempfile(path: Path | None, suffix: str) -> (Path, bool):
@@ -813,9 +796,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         elif oncomplete == OnComplete.Sustain:
             return
         else:
-            raise ValueError(
-                f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}"
-            )
+            raise ValueError(f"oncomplete should be a member of zospy.analyses.base.OnComplete, got {oncomplete}")
 
     def run(
         self,
@@ -854,14 +835,10 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         self._create_analysis()
 
         if self._needs_config_file:
-            self._config_file, self._remove_config_file = self._create_tempfile(
-                config_file, ".CFG"
-            )
+            self._config_file, self._remove_config_file = self._create_tempfile(config_file, ".CFG")
 
         if self._needs_text_output_file:
-            self._text_output_file, self._remove_text_output_file = (
-                self._create_tempfile(text_output_file, ".txt")
-            )
+            self._text_output_file, self._remove_text_output_file = self._create_tempfile(text_output_file, ".txt")
 
         data = self.run_analysis()
 

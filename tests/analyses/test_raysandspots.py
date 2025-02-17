@@ -1,8 +1,9 @@
 import numpy as np
+import pytest
 
 from tests.helpers import assert_dataclass_equal
 from zospy.analyses.raysandspots import RayFan, SingleRayTrace
-import pytest
+
 
 class TestSingleRayTrace:
     def test_can_run(self, simple_system):
@@ -33,7 +34,9 @@ class TestSingleRayTrace:
             global_coordinates=global_coordinates,
         ).run(simple_system)
 
-        assert_dataclass_equal(result.data, expected_data.data, ignore_fields=["real_ray_trace_data", "paraxial_ray_trace_data"])
+        assert_dataclass_equal(
+            result.data, expected_data.data, ignore_fields=["real_ray_trace_data", "paraxial_ray_trace_data"]
+        )
         assert np.allclose(
             result.data.real_ray_trace_data.select_dtypes(float),
             expected_data.data.real_ray_trace_data.select_dtypes(float),
@@ -65,7 +68,9 @@ class TestSingleRayTrace:
             global_coordinates=global_coordinates,
         ).run(simple_system)
 
-        assert_dataclass_equal(result.data, reference_data.data, ignore_fields=["real_ray_trace_data", "paraxial_ray_trace_data"])
+        assert_dataclass_equal(
+            result.data, reference_data.data, ignore_fields=["real_ray_trace_data", "paraxial_ray_trace_data"]
+        )
         assert np.allclose(
             result.data.real_ray_trace_data.select_dtypes(float),
             reference_data.data.real_ray_trace_data.select_dtypes(float),

@@ -1,9 +1,8 @@
 import numpy as np
 import pytest
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.mtf import FFTThroughFocusMTF, HuygensMTF
-
-from pandas.testing import assert_frame_equal
 
 _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN = {
     # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf

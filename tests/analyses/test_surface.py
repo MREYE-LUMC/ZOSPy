@@ -75,10 +75,10 @@ class TestCurvature:
         data,
         remove,
         surface,
-            show_as,
-            contour_format,
+        show_as,
+        contour_format,
         bfs_criterion,
-            bfs_reverse_direction,
+        bfs_reverse_direction,
         expected_data,
     ):
         result = Curvature(

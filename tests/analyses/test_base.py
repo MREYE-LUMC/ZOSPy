@@ -50,7 +50,7 @@ class TestValidatedSetter:
         settings = _validated_setter(self.MockSettings())
 
         with pytest.raises(AttributeError):
-            assert settings.non_existing # type: ignore
+            assert settings.non_existing  # type: ignore
 
     def test_set_existing(self):
         settings = _validated_setter(self.MockSettings())
@@ -63,7 +63,7 @@ class TestValidatedSetter:
         settings = _validated_setter(self.MockSettings())
 
         with pytest.raises(AttributeError, match="'MockSettings' object has no attribute 'non_existing'"):
-            settings.non_existing = 2 # type: ignore
+            settings.non_existing = 2  # type: ignore
 
 
 @dataclass

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import fields, is_dataclass
 
 import numpy as np
@@ -5,7 +7,9 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 
 
-def assert_dataclass_equal(a, b, *, return_bool: bool = False, tolerance: float = 1e-5, ignore_fields: list[str] | None = None) -> None | bool:
+def assert_dataclass_equal(
+    a, b, *, return_bool: bool = False, tolerance: float = 1e-5, ignore_fields: list[str] | None = None
+) -> None | bool:
     if not is_dataclass(a) and not is_dataclass(b):
         raise ValueError("Both result and expected must be dataclasses")
 

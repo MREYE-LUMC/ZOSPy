@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from operator import attrgetter
-from typing import Optional, TYPE_CHECKING, Annotated, Any, Generic, Literal, TypeVar, Union
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, Optional, TypeVar, Union
 
 from numpy import array, ndarray
 from pandas import DataFrame

@@ -1,4 +1,3 @@
-
 import pytest
 
 from tests.helpers import assert_dataclass_equal
@@ -30,8 +29,9 @@ class TestPolarizationTransmission:
     def test_transmission_returns_correct_result(
         self, polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase, expected_data
     ):
-        result = PolarizationTransmission(sampling=sampling, unpolarized=unpolarized, jx=jx, jy=jy, x_phase=x_phase,
-                                          y_phase=y_phase).run(polarized_system)
+        result = PolarizationTransmission(
+            sampling=sampling, unpolarized=unpolarized, jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase
+        ).run(polarized_system)
 
         assert_dataclass_equal(result.data, expected_data.data)
 

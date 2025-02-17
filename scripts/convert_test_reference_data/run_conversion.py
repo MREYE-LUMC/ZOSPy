@@ -439,7 +439,7 @@ $map(["Tangential", "Sagittal"], function($d) {
         "maximum_fit_error": maximum_fit_error
     },
     $.data.Data.data.Coefficients.data{
-        "coefficients": $map(data, function($v, $i){ {($i + 1).$string(): {"value": $v[0], "formula": $v[2] }}}) ~> 
+        "coefficients": $map(data, function($v, $i){ {($i + 1).$string(): {"value": $v[0], "formula": $v[2] }}}) ~>
         $merge
     }
 ] ~> $merge
