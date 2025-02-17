@@ -34,9 +34,7 @@ def load_grammar(name: str) -> Lark:
         If the grammar file is not found.
     """
     try:
-        return Lark.open_from_package(
-            "zospy.analyses.parsers.grammars", f"{name}.lark", parser="earley", start="start"
-        )
+        return Lark.open_from_package("zospy.analyses.parsers.grammars", f"{name}.lark", parser="earley", start="start")
     except (FileNotFoundError, OSError) as e:
         raise FileNotFoundError(f"Grammar file {name}.lark not found") from e
 
