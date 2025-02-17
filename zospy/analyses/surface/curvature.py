@@ -114,7 +114,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
         self.analysis.Settings.RemoveOption = constants.process_constant(
             constants.Analysis.RemoveOptions, self.settings.remove
         )
-        self.analysis.surface = self.settings.surface
+        self.analysis.set_surface(self.settings.surface)
         self.analysis.Settings.ShowAs = constants.process_constant(constants.Analysis.ShowAs, self.settings.show_as)
         self.analysis.Settings.ConsiderOffAxisAperture = self.settings.off_axis_coordinates
 
@@ -165,8 +165,8 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
 
         return CurvatureResult(
             width=atox(match.group("width"), float),
-            decenter_x=match.group("decenter_x"),
-            decenter_y=match.group("decenter_y"),
+            decenter_x=atox(match.group("decenter_x"), float),
+            decenter_y=atox(match.group("decenter_y"), float),
             decenter_unit=match.group("decenter_unit"),
             data=unpack_datagrid(datagrid),
         )
