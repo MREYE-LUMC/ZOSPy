@@ -1,8 +1,11 @@
-import numpy as np
-import pytest
+from zospy.analyses.extendedscene import GeometricImageAnalysis
 
 from zospy.analyses.extendedscene import GeometricImageAnalysis
 
+class TestPolarizationTransmission:
+    def test_can_run(self, simple_system):
+        result = GeometricImageAnalysis().run(simple_system)
+        assert result.data is not None
 
 class TestGeometricImageAnalysis:
     def test_can_run(self, simple_system):

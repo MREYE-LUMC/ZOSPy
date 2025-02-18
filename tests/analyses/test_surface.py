@@ -1,11 +1,11 @@
-import pytest
-from pandas.testing import assert_frame_equal
+from zospy.analyses.surface import Curvature
 
 from zospy.analyses.surface import Curvature
 
-
 class TestCurvature:
-    SKIP_SAGITTAL_CURVATURE = "SagitalCurvature is renamed to SagittalCurvature in OpticStudio 24.1.2 and higher"
+    def test_can_run(self, simple_system):
+        result = Curvature().run(simple_system)
+        assert result.data is not None
 
     def test_can_run(self, simple_system):
         result = Curvature(surface=2).run(simple_system)
