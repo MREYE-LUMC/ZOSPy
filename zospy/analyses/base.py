@@ -42,6 +42,7 @@ import numpy as np
 import pandas as pd
 import pydantic
 from pydantic import (
+    ConfigDict,
     RootModel,
     TypeAdapter,
     field_serializer,
@@ -69,7 +70,13 @@ if TYPE_CHECKING:
         from typing import NotRequired
 
 
-__all__ = ("Analysis", "AnalysisResult", "BaseAnalysisWrapper", "OnComplete", "new_analysis")
+__all__ = (
+    "Analysis",
+    "AnalysisResult",
+    "BaseAnalysisWrapper",
+    "OnComplete",
+    "new_analysis",
+)
 
 
 @dataclass(frozen=True)
@@ -111,7 +118,11 @@ def _serialize_analysis_data_type(data: AnalysisData) -> _TypeInfo:
         return {"data_type": "ndarray"}
 
     if is_dataclass(data):
-        return {"data_type": "dataclass", "name": type(data).__name__, "module": type(data).__module__}
+        return {
+            "data_type": "dataclass",
+            "name": type(data).__name__,
+            "module": type(data).__module__,
+        }
 
     raise ValueError(f"Cannot serialize data type: {type(data)}")
 
@@ -145,7 +156,7 @@ def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> Analys
     raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
 
 
-@pydantic.dataclasses.dataclass(frozen=True)
+@pydantic.dataclasses.dataclass(frozen=True, config=ConfigDict(ser_json_inf_nan="strings"))
 class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     """Zemax OpticStudio analysis result.
 
@@ -180,9 +191,16 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
         return TypeAdapter(cls).validate_json(data)
 
     @field_serializer("data", mode="wrap", when_used="json")
-    def _serialize_data(self, value: AnalysisData, nxt: SerializerFunctionWrapHandler, info):  # noqa: ARG002
+    def _serialize_data(
+        self,
+        value: AnalysisData,
+        nxt: SerializerFunctionWrapHandler,
+        info,  # noqa: ARG002
+    ):
         if isinstance(value, pd.DataFrame):
-            return TypeAdapter(ValidatedDataFrame).dump_python(value, mode="json")
+            return TypeAdapter(ValidatedDataFrame, config=ConfigDict(ser_json_inf_nan="strings")).dump_python(
+                value, mode="json"
+            )
 
         if isinstance(value, np.ndarray):
             return value.tolist()
@@ -492,7 +510,10 @@ class Analysis:
 
 
 def new_analysis(
-    oss: OpticStudioSystem, analysis_type: constants.Analysis.AnalysisIDM, *, settings_first: bool = True
+    oss: OpticStudioSystem,
+    analysis_type: constants.Analysis.AnalysisIDM,
+    *,
+    settings_first: bool = True,
 ) -> Analysis:
     """Create a new analysis in OpticStudio.
 
@@ -597,7 +618,10 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         super().__init_subclass__(**kwargs)
 
     def update_settings(
-        self, *, settings: AnalysisSettings | None = None, settings_kws: dict[str, any] | None = None
+        self,
+        *,
+        settings: AnalysisSettings | None = None,
+        settings_kws: dict[str, any] | None = None,
     ) -> None:
         """Update the settings of the analysis using a settings object or keyword arguments.
 
@@ -837,7 +861,10 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         return result
 
     def parse_output(
-        self, grammar: str, transformer: type[Transformer], result_type: type[AnalysisData]
+        self,
+        grammar: str,
+        transformer: type[Transformer],
+        result_type: type[AnalysisData],
     ) -> AnalysisData:
         """Parse the text output of the analysis."""
         parser = load_grammar(grammar)

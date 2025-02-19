@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from operator import attrgetter
-from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, TypeVar, Union
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, Optional, TypeVar, Union
 
 from numpy import array, ndarray
 from pandas import DataFrame
@@ -151,7 +151,7 @@ class ZOSAPIConstantAnnotation:
 
 def ZOSAPIConstant(enum: str) -> type[str]:  # noqa: N802
     """Pydantic validation and serialization for ZOSAPI constants."""
-    return Annotated[str, ZOSAPIConstantAnnotation(enum)]
+    return Annotated[Optional[str], ZOSAPIConstantAnnotation(enum)]
 
 
 WavelengthNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]

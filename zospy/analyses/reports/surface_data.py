@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from pathlib import Path  # noqa: TCH003
+from typing import Annotated, Any
 
-from pydantic import AliasChoices, Field
+from pydantic import AliasChoices, BeforeValidator, Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
@@ -59,12 +60,26 @@ class MaterialData:
     glass: str | ModelGlass | None = Field(alias=AliasChoices("Model glass", "Glass"), default=None)
 
 
+def _deserialize_tuple(value: Any) -> tuple[float, ...] | Any:
+    """Deserialize a tuple from a string.
+
+    Used for deserialization of JSON-serialized analysis results.
+    """
+    if isinstance(value, str):
+        return tuple(map(float, value.split(",")))
+
+    return value
+
+
+TupleKey = Annotated[tuple[float, float], BeforeValidator(_deserialize_tuple)]
+
+
 @analysis_result
 class SurfacePower:
     surf: dict[int, float] = Field(alias="Surf")
-    power: dict[tuple[float, float], float] | None = Field(alias="Power", default=None)
-    efl: dict[tuple[float, float], float] | None = Field(alias="EFL", default=None)
-    f_number: dict[tuple[float, float], float] | None = Field(alias="F/#", default=None)
+    power: dict[TupleKey, float] | None = Field(alias="Power", default=None)
+    efl: dict[TupleKey, float] | None = Field(alias="EFL", default=None)
+    f_number: dict[TupleKey, float] | None = Field(alias="F/#", default=None)
 
 
 @analysis_result
@@ -136,4 +151,8 @@ class SurfaceData(
         self.analysis.ApplyAndWaitForCompletion()
 
         # Read text file and parse to object
-        return self.parse_output("surface_data", transformer=SurfaceDataTransformer, result_type=SurfaceDataResult)
+        return self.parse_output(
+            "surface_data",
+            transformer=SurfaceDataTransformer,
+            result_type=SurfaceDataResult,
+        )

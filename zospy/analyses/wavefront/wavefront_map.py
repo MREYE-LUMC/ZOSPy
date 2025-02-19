@@ -109,26 +109,26 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
         WavefrontMapSettings : Settings for the Wavefront Map analysis.
         """
         self.analysis.field = self.settings.field
-        self.analysis.surface = self.settings.surface
+        self.analysis.set_surface(self.settings.surface)
         self.analysis.wavelength = self.settings.wavelength
-        self.analysis.ShowAs = constants.process_constant(constants.Analysis.ShowAs, self.settings.show_as)
-        self.analysis.Rotation = constants.process_constant(
+        self.analysis.Settings.ShowAs = constants.process_constant(constants.Analysis.ShowAs, self.settings.show_as)
+        self.analysis.Settings.Rotation = constants.process_constant(
             constants.Analysis.Settings.Rotations, self.settings.rotation
         )
-        self.analysis.Sampling = constants.process_constant(
+        self.analysis.Settings.Sampling = constants.process_constant(
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.sampling)
         )
-        self.analysis.Polarization = constants.process_constant(
+        self.analysis.Settings.Polarization = constants.process_constant(
             constants.Analysis.Settings.Polarizations, self.settings.polarization
         )
-        self.analysis.ReferenceToPrimary = self.settings.reference_to_primary
-        self.analysis.UseExitPupil = self.settings.use_exit_pupil
-        self.analysis.RemoveTilt = self.settings.remove_tilt
-        self.analysis.Scale = self.settings.scale
-        self.analysis.Subaperture_X = self.settings.sub_aperture_x
-        self.analysis.Subaperture_Y = self.settings.sub_aperture_y
-        self.analysis.Subaperture_R = self.settings.sub_aperture_r
-        self.analysis.ContourFormat = self.settings.contour_format
+        self.analysis.Settings.ReferenceToPrimary = self.settings.reference_to_primary
+        self.analysis.Settings.UseExitPupil = self.settings.use_exit_pupil
+        self.analysis.Settings.RemoveTilt = self.settings.remove_tilt
+        self.analysis.Settings.Scale = self.settings.scale
+        self.analysis.Settings.Subaperture_X = self.settings.sub_aperture_x
+        self.analysis.Settings.Subaperture_Y = self.settings.sub_aperture_y
+        self.analysis.Settings.Subaperture_R = self.settings.sub_aperture_r
+        self.analysis.Settings.ContourFormat = self.settings.contour_format
 
         self.analysis.ApplyAndWaitForCompletion()
 

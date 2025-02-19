@@ -37,7 +37,7 @@ class SingleRayTraceTransformer(ZospyTransformer):
 
                 # Check if the last row value is a comment
                 if isinstance(row[-1], str):
-                    row[-2:-2] = [float("nan")] * (header_length - row_length)
+                    row[-1:-1] = [float("nan")] * (header_length - row_length)
                 else:
                     # Insert empty columns at the end of the row
                     row.extend([float("nan")] * (header_length - row_length))

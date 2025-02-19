@@ -53,10 +53,11 @@ class ChiefRayTransmission:
 class PolarizationTransmissionResult:
     """Data for the Polarization Transmission analysis."""
 
-    x_field: float = Field(alias="X-Field")
-    y_field: float = Field(alias="Y-Field")
-    x_phase: float = Field(alias="X-Phase")
-    y_phase: float = Field(alias="Y-Phase")
+    # x_field, y_field, x_phase, y_phase are only defined if the system is polarized
+    x_field: float | None = Field(default=None, alias="X-Field")
+    y_field: float | None = Field(default=None, alias="Y-Field")
+    x_phase: float | None = Field(default=None, alias="X-Phase")
+    y_phase: float | None = Field(default=None, alias="Y-Phase")
 
     grid_size: str = Field(alias="Grid Size")
 

@@ -10,8 +10,9 @@ from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
-from zospy.analyses.parsers.types import ValidatedDataFrame  # noqa: TCH001
+from zospy.analyses.parsers.types import ValidatedDataFrame, ZOSAPIConstant  # noqa: TCH001
 from zospy.api import config, constants
+from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling, unpack_datagrid
 
 __all__ = ("Curvature", "CurvatureSettings")
@@ -64,13 +65,17 @@ class CurvatureSettings:
     """
 
     sampling: str | Annotated[int, Field(ge=0)] = Field(default="65x65", description="Sampling grid size")
-    data: str = Field(default="TangentialCurvature", description="Data type")
-    remove: str = Field(default="None_", description="Reference volume removal")
+    data: ZOSAPIConstant("Analysis.SurfaceCurvatureData") = Field(
+        default="TangentialCurvature", description="Data type"
+    )
+    remove: ZOSAPIConstant("Analysis.RemoveOptions") = Field(default="None_", description="Reference volume removal")
     surface: int = Field(default=1, description="Surface number")
-    show_as: str = Field(default="Contour", description="Data display in OpticStudio")
+    show_as: ZOSAPIConstant("Analysis.ShowAs") = Field(default="Contour", description="Data display in OpticStudio")
     off_axis_coordinates: bool = Field(default=False, description="Consider apertures defined in surface properties")
     contour_format: str = Field(default="", description="Contour format")
-    bfs_criterion: str = Field(default="MinimumVolume", description="BFS removal criterion")
+    bfs_criterion: ZOSAPIConstant("Analysis.BestFitSphereOptions") = Field(
+        default="MinimumVolume", description="BFS removal criterion"
+    )
     bfs_reverse_direction: bool = Field(default=False, description="Reverse BFS radius sign")
 
 
@@ -109,7 +114,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
         self.analysis.Settings.RemoveOption = constants.process_constant(
             constants.Analysis.RemoveOptions, self.settings.remove
         )
-        self.analysis.surface = self.settings.surface
+        self.analysis.set_surface(self.settings.surface)
         self.analysis.Settings.ShowAs = constants.process_constant(constants.Analysis.ShowAs, self.settings.show_as)
         self.analysis.Settings.ConsiderOffAxisAperture = self.settings.off_axis_coordinates
 
@@ -159,9 +164,9 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
             raise ValueError(f"Could not parse description: {datagrid.Description}")
 
         return CurvatureResult(
-            width=match.group("width"),
-            decenter_x=match.group("decenter_x"),
-            decenter_y=match.group("decenter_y"),
+            width=atox(match.group("width"), float),
+            decenter_x=atox(match.group("decenter_x"), float),
+            decenter_y=atox(match.group("decenter_y"), float),
             decenter_unit=match.group("decenter_unit"),
             data=unpack_datagrid(datagrid),
         )
