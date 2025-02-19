@@ -3,7 +3,7 @@ redact_patterns:
   - '(?:[a-z]:)?(?:\\\\[\w\s.]+)+'
 tests:
   - model: simple_system
-    analysis: wavefront.zernike_standard_coefficients
+    analysis: wavefront.ZernikeStandardCoefficients
     file: test_wavefront.py
     test: test_zernike_standard_coefficients_returns_correct_result
     parametrized: [sampling, maximum_term]
@@ -13,49 +13,49 @@ tests:
       - sampling: 128x128
         maximum_term: 64
   - model: simple_system
-    analysis: mtf.fft_through_focus_mtf
+    analysis: mtf.FFTThroughFocusMTF
     file: test_mtf.py
     test: test_fft_through_focus_mtf_returns_correct_result
-    parametrized: [sampling, deltafocus, frequency, numberofsteps, mtftype]
+    parametrized: [sampling, delta_focus, frequency, number_of_steps, mtf_type]
     parameters:
       - sampling: 64x64
-        deltafocus: 0.1
+        delta_focus: 0.1
         frequency: 0
-        numberofsteps: 5
-        mtftype: Modulation
+        number_of_steps: 5
+        mtf_type: Modulation
       - sampling: 128x128
-        deltafocus: 0.3
+        delta_focus: 0.3
         frequency: 3
-        numberofsteps: 10
-        mtftype: Imaginary
+        number_of_steps: 10
+        mtf_type: Imaginary
   - model: simple_system
-    analysis: mtf.huygens_mtf
+    analysis: mtf.HuygensMTF
     file: test_mtf.py
     test: test_huygens_mtf_returns_correct_result
-    parametrized: [pupil_sampling, image_sampling, image_delta, mtftype, maximum_frequency]
+    parametrized: [pupil_sampling, image_sampling, image_delta, mtf_type, maximum_frequency]
     parameters:
       - pupil_sampling: 64x64
         image_sampling: 64x64
         image_delta: 0.0
-        mtftype: Modulation
+        mtf_type: Modulation
         maximum_frequency: 150.0
       - pupil_sampling: 32x32
         image_sampling: 64x64
         image_delta: 1.0
-        mtftype: Modulation
+        mtf_type: Modulation
         maximum_frequency: 450.0
       - pupil_sampling: 128x128
         image_sampling: 128x128
         image_delta: 0.0
-        mtftype: Modulation
+        mtf_type: Modulation
         maximum_frequency: 314.5
       - pupil_sampling: 32x32
         image_sampling: 32x32
         image_delta: 0.0
-        mtftype: Modulation
+        mtf_type: Modulation
         maximum_frequency: 150.0
   - model: polarized_system
-    analysis: polarization.polarization_pupil_map
+    analysis: polarization.PolarizationPupilMap
     file: test_polarization.py
     test: test_polarization_pupil_map_returns_correct_result
     parametrized: [jx, jy, x_phase, y_phase, surface, sampling]
@@ -85,7 +85,7 @@ tests:
         surface: Image
         sampling: 17x17
   - model: polarized_system
-    analysis: polarization.transmission
+    analysis: polarization.PolarizationTransmission
     file: test_polarization.py
     test: test_transmission_returns_correct_result
     parametrized: [sampling, unpolarized, jx, jy, x_phase, y_phase]
@@ -127,15 +127,15 @@ tests:
         x_phase: 0
         y_phase: 0
   - model: simple_system
-    analysis: psf.huygens_psf
+    analysis: psf.HuygensPSF
     file: test_psf.py
     test: test_huygens_psf_returns_correct_result
   - model: decentered_system
-    analysis: psf.huygens_psf
+    analysis: psf.HuygensPSF
     file: test_psf.py
     test: test_huygens_psf_asymmetric_returns_correct_result
   - model: simple_system
-    analysis: raysandspots.single_ray_trace
+    analysis: raysandspots.SingleRayTrace
     file: test_raysandspots.py
     test: test_single_ray_trace_returns_correct_result
     parametrized: [hx, hy, px, py, raytrace_type, global_coordinates]
@@ -159,7 +159,7 @@ tests:
         raytrace_type: TangentAngle
         global_coordinates: true
   - model: simple_system
-    analysis: raysandspots.ray_fan
+    analysis: raysandspots.RayFan
     file: test_raysandspots.py
     test: test_ray_fan_returns_correct_result
     parametrized: [plot_scale, number_of_rays, tangential, sagittal]
@@ -177,102 +177,102 @@ tests:
         tangential: Aberration_X
         sagittal: Aberration_Y
   - model: simple_system
-    analysis: reports.surface_data
+    analysis: reports.SurfaceData
     file: test_reports.py
     test: test_surface_data_returns_correct_result
     parameters:
       - surface: 2
   - model: simple_system
-    analysis: reports.system_data
+    analysis: reports.SystemData
     file: test_reports.py
     test: test_system_data_returns_correct_result
   - model: simple_system
-    analysis: reports.cardinal_points
+    analysis: reports.CardinalPoints
     file: test_reports.py
     test: test_cardinal_points_returns_correct_result
     parameters:
       - surface_1: 2
         surface_2: 3
   - model: simple_system
-    analysis: surface.curvature
+    analysis: surface.Curvature
     file: test_surface.py
     test: test_curvature_returns_correct_result
-    parametrized: [sampling, data, remove, surface, showas, contourformat, bfs_criterion, bfs_reversedirection]
+    parametrized: [sampling, data, remove, surface, show_as, contour_format, bfs_criterion, bfs_reverse_direction]
     parameters:
       - sampling: 65x65
         data: TangentialCurvature
         remove: null
         surface: 2
-        showas: Surface
-        contourformat: ""
+        show_as: Surface
+        contour_format: ""
         bfs_criterion: MinimumVolume
-        bfs_reversedirection: false
+        bfs_reverse_direction: false
       - opticstudio: "<24.1.2"
         parameters:
           sampling: 129x129
           data: SagitalCurvature
           remove: null
           surface: 2
-          showas: Contour
-          contourformat: ""
+          show_as: Contour
+          contour_format: ""
           bfs_criterion: MinimumVolume
-          bfs_reversedirection: false
+          bfs_reverse_direction: false
       - opticstudio: "<24.1.2"
         parameters:
           sampling: 129x129
           data: SagitalCurvature
           remove: BaseROC
           surface: 2
-          showas: Contour
-          contourformat: "0.1"
+          show_as: Contour
+          contour_format: "0.1"
           bfs_criterion: MinimumVolume
-          bfs_reversedirection: false
+          bfs_reverse_direction: false
       - opticstudio: ">=24.1.2"
         parameters:
           sampling: 129x129
           data: SagittalCurvature
           remove: null
           surface: 2
-          showas: Contour
-          contourformat: ""
+          show_as: Contour
+          contour_format: ""
           bfs_criterion: MinimumVolume
-          bfs_reversedirection: false
+          bfs_reverse_direction: false
       - opticstudio: ">=24.1.2"
         parameters:
           sampling: 129x129
           data: SagittalCurvature
           remove: BaseROC
           surface: 2
-          showas: Contour
-          contourformat: "0.1"
+          show_as: Contour
+          contour_format: "0.1"
           bfs_criterion: MinimumVolume
-          bfs_reversedirection: false
+          bfs_reverse_direction: false
       - sampling: 33x33
         data: X_Curvature
         remove: BestFitSphere
         surface: 3
-        showas: Contour
-        contourformat: ""
+        show_as: Contour
+        contour_format: ""
         bfs_criterion: MinimumRMS
-        bfs_reversedirection: false
+        bfs_reverse_direction: false
       - sampling: 33x33
         data: X_Curvature
         remove: BestFitSphere
         surface: 3
-        showas: Contour
-        contourformat: ""
+        show_as: Contour
+        contour_format: ""
         bfs_criterion: MinimumVolume
-        bfs_reversedirection: false
+        bfs_reverse_direction: false
       - sampling: 33x33
         data: X_Curvature
         remove: BestFitSphere
         surface: 3
-        showas: Contour
-        contourformat: "0.2"
+        show_as: Contour
+        contour_format: "0.2"
         bfs_criterion: MinimumVolume
-        bfs_reversedirection: true
+        bfs_reverse_direction: true
   - model: simple_system
-    analysis: wavefront.wavefront_map
+    analysis: wavefront.WavefrontMap
     file: test_wavefront.py
     test: test_wavefront_map_returns_correct_result
     parametrized: [sampling, use_exit_pupil]
@@ -286,7 +286,7 @@ tests:
       - sampling: 128x128
         use_exit_pupil: false
   - model: simple_system
-    analysis: extendedscene.geometric_image_analysis
+    analysis: extendedscene.GeometricImageAnalysis
     file: test_extendedscene.py
     test: test_geometric_image_analysis_returns_correct_result
     parametrized: [show_as, field_size, total_watts, rays_x_1000]
@@ -324,7 +324,7 @@ tests:
         total_watts: 100
         rays_x_1000: 100000
   - model: simple_system
-    analysis: physicaloptics.physical_optics_propagation
+    analysis: physicaloptics.PhysicalOpticsPropagation
     file: test_physicaloptics.py
     test: test_physical_optics_propagation_returns_correct_result
     parametrized: [surface_to_beam, data_type, use_total_power, use_peak_irradiance,beam_type,beam_parameters,auto_calculate_beam_sampling,compute_fiber_coupling_integral,fiber_type,fiber_parameters]
