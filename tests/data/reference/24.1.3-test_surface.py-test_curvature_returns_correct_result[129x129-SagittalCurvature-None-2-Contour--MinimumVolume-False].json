@@ -1,8 +1,8 @@
 {
     "data": {
-        "width": 0,
-        "decenter_x": 0,
-        "decenter_y": 0,
+        "width": 2.0,
+        "decenter_x": 0.0,
+        "decenter_y": 0.0,
         "decenter_unit": "Millimeters",
         "data": {
             "index": [
@@ -17177,16 +17177,18 @@
         }
     },
     "settings": {
-        "sampling": "S_129x129",
+        "sampling": "129x129",
         "data": "SagittalCurvature",
+        "remove": "None",
         "surface": 2,
         "show_as": "Contour",
-        "contourformat": "",
-        "remove": "None",
-        "off_axis_coordinates": false
+        "off_axis_coordinates": false,
+        "contour_format": "",
+        "bfs_criterion": "MinimumVolume",
+        "bfs_reverse_direction": false
     },
     "metadata": {
-        "DateTime": "2024-10-29T17:03:10.133000",
+        "DateTime": "2025-02-19T14:37:48.375000",
         "FeatureDescription": "Listing of Surface Curvature Map Data\n\n",
         "LensFile": "REDACTED",
         "LensTitle": ""

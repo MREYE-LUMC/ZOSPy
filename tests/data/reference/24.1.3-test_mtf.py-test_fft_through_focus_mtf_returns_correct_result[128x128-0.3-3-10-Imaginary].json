@@ -1523,23 +1523,24 @@
         ]
     },
     "settings": {
+        "sampling": "128x128",
         "delta_focus": 0.3,
         "frequency": 3.0,
+        "number_of_steps": 10,
         "wavelength": "All",
         "field": "All",
+        "mtf_type": "Imaginary",
         "use_polarization": false,
-        "use_dashes": false,
-        "sampling": "S_128x128",
-        "mtf_type": "Imaginary"
+        "use_dashes": false
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:54.286000",
+        "DateTime": "2025-02-19T14:37:43.013000",
         "FeatureDescription": "Polychromatic Diffraction Through Focus Imaginary part of OTF\n\n",
         "LensFile": "REDACTED",
         "LensTitle": ""
     },
     "header": [
-        "Data for 0,5430 to 0,5430 \u00b5m.",
+        "Data for 0,5430 to 0,5430 µm.",
         "Spatial frequency: 3,0000 cycles per mm.",
         "Defocus Units    : Millimeters."
     ],

@@ -1,9 +1,9 @@
 {
     "data": {
         "x_field": 0.001,
-        "y_field": 1,
-        "x_phase": 0,
-        "y_phase": 0,
+        "y_field": 1.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0,
         "grid_size": "32 x 32",
         "field_transmissions": [
             {
@@ -11,9 +11,9 @@
                     "value": 0.0,
                     "unit": "deg"
                 },
-                "total_transmission": 9.216e-07,
+                "total_transmission": 9.216e-7,
                 "transmissions": {
-                    "0.543": 9.216e-07
+                    "0.543": 9.216e-7
                 }
             }
         ],
@@ -26,7 +26,7 @@
                 "wavelength": {
                     "1": {
                         "value": 0.543,
-                        "unit": "\u00b5m"
+                        "unit": "µm"
                     }
                 },
                 "transmissions": {
@@ -49,17 +49,17 @@
                         ],
                         [
                             2,
-                            1e-06,
-                            1e-06
+                            1e-6,
+                            1e-6
                         ],
                         [
                             3,
-                            1e-06,
+                            1e-6,
                             0.96
                         ],
                         [
                             4,
-                            1e-06,
+                            1e-6,
                             1.0
                         ]
                     ],
@@ -77,12 +77,12 @@
         "sampling": "32x32",
         "unpolarized": false,
         "jx": 0.001,
-        "jy": 1,
-        "x_phase": 0,
-        "y_phase": 0
+        "jy": 1.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:55.667000",
+        "DateTime": "2025-02-19T14:37:46.077000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""

@@ -1,11 +1,11 @@
 {
     "data": {
         "units": "Millimeters",
+        "coordinates": "Global coordinates relative to surface 1",
         "wavelength": {
             "value": 0.543,
-            "unit": "\u00b5m"
+            "unit": "µm"
         },
-        "coordinates": "Global coordinates relative to surface 1",
         "normalized_x_field_coord": 1.0,
         "normalized_y_field_coord": 1.0,
         "normalized_x_pupil_coord": 0.0,
@@ -38,7 +38,7 @@
                     NaN
                 ],
                 [
-                    "1",
+                    1,
                     0.0,
                     0.0,
                     0.0,
@@ -47,7 +47,7 @@
                     NaN
                 ],
                 [
-                    "2",
+                    2,
                     0.0,
                     0.0,
                     0.0,
@@ -56,7 +56,7 @@
                     "lens front"
                 ],
                 [
-                    "3",
+                    3,
                     0.0,
                     0.0,
                     1.0,
@@ -65,7 +65,7 @@
                     "lens back"
                 ],
                 [
-                    "4",
+                    4,
                     0.0,
                     0.0,
                     20.792,
@@ -109,7 +109,7 @@
                     NaN
                 ],
                 [
-                    "1",
+                    1,
                     0.0,
                     0.0,
                     0.0,
@@ -118,7 +118,7 @@
                     NaN
                 ],
                 [
-                    "2",
+                    2,
                     0.0,
                     0.0,
                     0.0,
@@ -127,7 +127,7 @@
                     "lens front"
                 ],
                 [
-                    "3",
+                    3,
                     0.0,
                     0.0,
                     1.0,
@@ -136,7 +136,7 @@
                     "lens back"
                 ],
                 [
-                    "4",
+                    4,
                     0.0,
                     0.0,
                     20.792,
@@ -159,13 +159,13 @@
         "hy": 1.0,
         "px": 0.0,
         "py": 0.0,
-        "wavelength": 1.0,
+        "wavelength": 1,
         "field": 0,
-        "type": "TangentAngle",
+        "raytrace_type": "TangentAngle",
         "global_coordinates": true
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:56.401000",
+        "DateTime": "2025-02-19T14:37:47.225000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""

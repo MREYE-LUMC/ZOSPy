@@ -1,9 +1,9 @@
 {
     "data": {
-        "x_field": 0,
-        "y_field": 1,
-        "x_phase": 0,
-        "y_phase": 0,
+        "x_field": 0.0,
+        "y_field": 1.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0,
         "grid_size": "32 x 32",
         "field_transmissions": [
             {
@@ -26,7 +26,7 @@
                 "wavelength": {
                     "1": {
                         "value": 0.543,
-                        "unit": "\u00b5m"
+                        "unit": "µm"
                     }
                 },
                 "transmissions": {
@@ -76,13 +76,13 @@
     "settings": {
         "sampling": "32x32",
         "unpolarized": false,
-        "jx": 0,
-        "jy": 1,
-        "x_phase": 0,
-        "y_phase": 0
+        "jx": 0.0,
+        "jy": 1.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:55.476000",
+        "DateTime": "2025-02-19T14:37:45.828000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""

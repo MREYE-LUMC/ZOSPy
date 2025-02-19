@@ -1,5 +1,9 @@
 {
     "data": {
+        "x_field": null,
+        "y_field": null,
+        "x_phase": null,
+        "y_phase": null,
         "grid_size": "64 x 64",
         "field_transmissions": [
             {
@@ -22,19 +26,37 @@
                 "wavelength": {
                     "1": {
                         "value": 0.543,
-                        "unit": "\u00b5m"
+                        "unit": "µm"
                     }
                 },
                 "transmissions": {
                     "index": [
-                        0
+                        0,
+                        1,
+                        2,
+                        3
                     ],
                     "columns": [
-                        "3",
-                        "0,460800",
-                        "0,960000"
+                        "Surf",
+                        "Tot. Tran",
+                        "Rel. Tran"
                     ],
                     "data": [
+                        [
+                            1,
+                            1.0,
+                            1.0
+                        ],
+                        [
+                            2,
+                            0.48,
+                            0.48
+                        ],
+                        [
+                            3,
+                            0.4608,
+                            0.96
+                        ],
                         [
                             4,
                             0.4608,
@@ -54,13 +76,13 @@
     "settings": {
         "sampling": "64x64",
         "unpolarized": true,
-        "jx": 1,
-        "jy": 0,
-        "x_phase": 0,
-        "y_phase": 0
+        "jx": 1.0,
+        "jy": 0.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:55.877000",
+        "DateTime": "2025-02-19T14:37:46.375000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""

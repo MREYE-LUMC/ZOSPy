@@ -5253,8 +5253,8 @@
                 0.0,
                 0.0,
                 0.0,
-                0.9998455200185375,
-                1.0002397599712287,
+                0.9999191600097008,
+                0.999973400003192,
                 0.0,
                 0.0,
                 0.0,
@@ -5355,8 +5355,8 @@
                 0.0,
                 0.0,
                 0.0,
-                0.9997709200274896,
-                1.000143799982744,
+                0.9999381200074255,
+                1.0001693199796815,
                 0.0,
                 0.0,
                 0.0,
@@ -10414,9 +10414,9 @@
         ]
     },
     "settings": {
-        "field": 1,
         "wavelength": "All",
-        "surface": -1,
+        "field": 1,
+        "surface": "Image",
         "field_size": 0.0,
         "image_size": 50.0,
         "file": "LETTERF.IMA",
@@ -10425,10 +10425,12 @@
         "show_as": "Surface",
         "source": "Uniform",
         "number_of_pixels": 100,
+        "row_column_number": "Center",
         "na": 0.0,
         "total_watts": 1.0,
         "parity": "Even",
         "reference": "ChiefRay",
+        "use_symbols": false,
         "use_polarization": false,
         "remove_vignetting_factors": true,
         "scatter_rays": false,
@@ -10437,7 +10439,7 @@
         "save_as_bim_file": ""
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:01:13.415000",
+        "DateTime": "2025-02-19T14:38:05.973000",
         "FeatureDescription": "Image analysis histogram listing\n\n",
         "LensFile": "REDACTED",
         "LensTitle": ""
@@ -10458,7 +10460,7 @@
     },
     "__analysis_settings__": {
         "data_type": "dataclass",
-        "name": "GeometricImageSettings",
+        "name": "GeometricImageAnalysisSettings",
         "module": "zospy.analyses.extendedscene.geometric_image_analysis"
     }
 }

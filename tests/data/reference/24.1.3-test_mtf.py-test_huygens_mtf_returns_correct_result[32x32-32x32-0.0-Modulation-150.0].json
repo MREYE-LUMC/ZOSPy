@@ -1523,24 +1523,24 @@
         ]
     },
     "settings": {
-        "pupil_sampling": "S_32x32",
-        "image_sampling": "S_32x32",
+        "pupil_sampling": "32x32",
+        "image_sampling": "32x32",
         "image_delta": 0.0,
         "wavelength": "All",
         "field": "All",
-        "use_polarization": false,
-        "use_dashes": false,
+        "mtf_type": "Modulation",
         "maximum_frequency": 150.0,
-        "mtf_type": "Modulation"
+        "use_polarization": false,
+        "use_dashes": false
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:54.771000",
+        "DateTime": "2025-02-19T14:37:43.536000",
         "FeatureDescription": "Polychromatic Huygens MTF",
         "LensFile": "REDACTED",
         "LensTitle": ""
     },
     "header": [
-        "Data for 0,5430 to 0,5430 \u00b5m.",
+        "Data for 0,5430 to 0,5430 µm.",
         "Spatial Frequency units are cycles per mm."
     ],
     "messages": [],
@@ -1549,7 +1549,7 @@
     },
     "__analysis_settings__": {
         "data_type": "dataclass",
-        "name": "HuygensMTFSettings",
+        "name": "HuygensMtfSettings",
         "module": "zospy.analyses.mtf.huygens_mtf"
     }
 }

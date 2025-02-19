@@ -4,7 +4,7 @@
             {
                 "field_number": 1,
                 "field_coordinate": {
-                    "value": 0,
+                    "value": 0.0,
                     "unit": "deg"
                 },
                 "data": {
@@ -192,7 +192,7 @@
             {
                 "field_number": 1,
                 "field_coordinate": {
-                    "value": 0,
+                    "value": 0.0,
                     "unit": "deg"
                 },
                 "data": {
@@ -378,26 +378,26 @@
         ]
     },
     "settings": {
-        "field": "All",
-        "surface": 0,
-        "wavelength": "All",
-        "number_of_rays": 20,
         "plot_scale": 0.0,
-        "check_apertures": true,
-        "vignetted_pupil": true,
-        "use_dashes": false,
+        "number_of_rays": 20,
+        "field": "All",
+        "wavelength": "All",
+        "tangential": "Aberration_Y",
         "sagittal": "Aberration_X",
-        "tangential": "Aberration_Y"
+        "surface": "Image",
+        "use_dashes": false,
+        "vignetted_pupil": true,
+        "check_apertures": true
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:56.504000",
+        "DateTime": "2025-02-19T14:37:47.381000",
         "FeatureDescription": "Listing of Ray Fan Data\n\n",
         "LensFile": "REDACTED",
         "LensTitle": ""
     },
     "header": [
         "Surface: Image",
-        "Units are \u00b5m.",
+        "Units are µm.",
         "Aberration data is measured in image plane local coordinates.",
         "Tangential data is y aberration as a function of Py.",
         "Sagittal data is x aberration as a function of Px."
