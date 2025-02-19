@@ -31,7 +31,7 @@ def _default_config_dataclass(default_config: ConfigDict, cls=None, config: Conf
 @dataclass_transform(field_specifiers=(dataclasses.field, Field, PrivateAttr))
 def analysis_result(cls=None, config: ConfigDict | None = None, **kwargs):
     """Pydantic dataclass with default configuration for analysis results."""
-    default_config = ConfigDict(populate_by_name=True, ser_json_inf_nan="strings")
+    default_config = ConfigDict(populate_by_name=True, ser_json_inf_nan="constants")
     return _default_config_dataclass(default_config, cls, config, **kwargs)
 
 

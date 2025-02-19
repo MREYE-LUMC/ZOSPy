@@ -105,7 +105,7 @@ dependencies = ["jupyter", "matplotlib", "numpy", "pandas", "pip"]
 dependencies = ["pyyaml"]
 
 [tool.hatch.envs.reference-data.scripts]
-generate = "python scripts/generate_test_reference_data"
+generate = "python scripts/generate_test_reference_data {args}"
 
 ## Formatting using hatch fmt
 [tool.hatch.envs.hatch-static-analysis]

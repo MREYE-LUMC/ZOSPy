@@ -1,13 +1,7 @@
-import numpy as np
 import pytest
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.extendedscene import GeometricImageAnalysis
-
-
-class TestPolarizationTransmission:
-    def test_can_run(self, simple_system):
-        result = GeometricImageAnalysis().run(simple_system)
-        assert result.data is not None
 
 
 class TestGeometricImageAnalysis:
@@ -41,9 +35,7 @@ class TestGeometricImageAnalysis:
 
         # Data in result.Data
         # rtol lower than normal due to randomness in calculated rays
-        assert np.allclose(
-            result.data.to_numpy(dtype=float), expected_data.data.to_numpy(dtype=float), equal_nan=True, rtol=1e-2
-        )
+        assert_frame_equal(result.data, expected_data.data, rtol=1e-2)
 
     @pytest.mark.parametrize(
         "show_as,field_size,total_watts,rays_x_1000",
@@ -67,6 +59,4 @@ class TestGeometricImageAnalysis:
 
         # Data in result.Data
         # rtol lower than normal due to randomness in calculated rays
-        assert np.allclose(
-            result.data.to_numpy(dtype=float), reference_data.data.to_numpy(dtype=float), equal_nan=True, rtol=1e-2
-        )
+        assert_frame_equal(result.data, reference_data.data, rtol=1e-2)

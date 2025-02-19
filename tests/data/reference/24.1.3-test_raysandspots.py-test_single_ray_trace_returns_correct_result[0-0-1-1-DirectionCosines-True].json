@@ -1,11 +1,11 @@
 {
     "data": {
         "units": "Millimeters",
+        "coordinates": "Global coordinates relative to surface 1",
         "wavelength": {
             "value": 0.543,
-            "unit": "\u00b5m"
+            "unit": "µm"
         },
-        "coordinates": "Global coordinates relative to surface 1",
         "normalized_x_field_coord": 0.0,
         "normalized_y_field_coord": 0.0,
         "normalized_x_pupil_coord": 1.0,
@@ -50,7 +50,7 @@
                     NaN
                 ],
                 [
-                    "1",
+                    1,
                     1.0,
                     1.0,
                     0.0,
@@ -65,7 +65,7 @@
                     NaN
                 ],
                 [
-                    "2",
+                    2,
                     1.0,
                     1.0,
                     0.05006265674,
@@ -80,7 +80,7 @@
                     "lens front"
                 ],
                 [
-                    "3",
+                    3,
                     0.98494782874,
                     0.98494782874,
                     0.95143492457,
@@ -95,7 +95,7 @@
                     "lens back"
                 ],
                 [
-                    "4",
+                    4,
                     -0.0061213962872,
                     -0.0061213962872,
                     20.792,
@@ -157,7 +157,7 @@
                     NaN
                 ],
                 [
-                    "1",
+                    1,
                     1.0,
                     1.0,
                     0.0,
@@ -172,7 +172,7 @@
                     NaN
                 ],
                 [
-                    "2",
+                    2,
                     1.0,
                     1.0,
                     0.0,
@@ -187,7 +187,7 @@
                     "lens front"
                 ],
                 [
-                    "3",
+                    3,
                     0.98333333333,
                     0.98333333333,
                     1.0,
@@ -202,7 +202,7 @@
                     "lens back"
                 ],
                 [
-                    "4",
+                    4,
                     0.00198,
                     0.00198,
                     20.792,
@@ -231,13 +231,13 @@
         "hy": 0.0,
         "px": 1.0,
         "py": 1.0,
-        "wavelength": 1.0,
+        "wavelength": 1,
         "field": 0,
-        "type": "DirectionCosines",
+        "raytrace_type": "DirectionCosines",
         "global_coordinates": true
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:56.299000",
+        "DateTime": "2025-02-19T14:37:47.055000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""

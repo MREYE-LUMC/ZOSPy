@@ -848,10 +848,10 @@
         }
     },
     "settings": {
-        "jx": 0,
-        "jy": 1,
-        "x_phase": 0,
-        "y_phase": 0,
+        "jx": 0.0,
+        "jy": 1.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0,
         "wavelength": 1,
         "field": 1,
         "surface": "Image",
@@ -860,7 +860,7 @@
         "sub_configs": ""
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:55.146000",
+        "DateTime": "2025-02-19T14:37:44.531000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""

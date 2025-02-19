@@ -41,18 +41,7 @@ class TestZernikeStandardCoefficients:
         assert_dataclass_equal(
             result.data,
             expected_data.data,
-            ignore_fields=[
-                "subaperture_decenter_sx",
-                "subaperture_decenter_sy",
-                "subaperture_radius_sr",
-                "from_integration_of_the_rays",
-                "coefficients",
-            ],
         )
-        for k in result.data.coefficients:
-            assert_dataclass_equal(
-                result.data.coefficients[k], expected_data.data.coefficients[k], ignore_fields=["formula"]
-            )
 
     @pytest.mark.parametrize("sampling,maximum_term", [("64x64", 37), ("128x128", 64)])
     def test_zernike_standard_coefficients_matches_reference_data(
@@ -63,15 +52,4 @@ class TestZernikeStandardCoefficients:
         assert_dataclass_equal(
             result.data,
             reference_data.data,
-            ignore_fields=[
-                "subaperture_decenter_sx",
-                "subaperture_decenter_sy",
-                "subaperture_radius_sr",
-                "from_integration_of_the_rays",
-                "coefficients",
-            ],
         )
-        for k in result.data.coefficients:
-            assert_dataclass_equal(
-                result.data.coefficients[k], reference_data.data.coefficients[k], ignore_fields=["formula"]
-            )

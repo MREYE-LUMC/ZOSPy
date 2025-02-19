@@ -1523,23 +1523,24 @@
         ]
     },
     "settings": {
+        "sampling": "64x64",
         "delta_focus": 0.1,
         "frequency": 0.0,
+        "number_of_steps": 5,
         "wavelength": "All",
         "field": "All",
+        "mtf_type": "Modulation",
         "use_polarization": false,
-        "use_dashes": false,
-        "sampling": "S_64x64",
-        "mtf_type": "Modulation"
+        "use_dashes": false
     },
     "metadata": {
-        "DateTime": "2024-10-25T17:00:54.148000",
+        "DateTime": "2025-02-19T14:37:42.863000",
         "FeatureDescription": "Polychromatic Diffraction Through Focus MTF\n\n",
         "LensFile": "REDACTED",
         "LensTitle": ""
     },
     "header": [
-        "Data for 0,5430 to 0,5430 \u00b5m.",
+        "Data for 0,5430 to 0,5430 µm.",
         "Spatial frequency: 10,0000 cycles per mm.",
         "Defocus Units    : Millimeters."
     ],

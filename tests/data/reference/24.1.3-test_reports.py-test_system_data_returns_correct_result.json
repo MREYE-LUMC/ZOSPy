@@ -5,7 +5,7 @@
             "stop": 1,
             "system_aperture": {
                 "type": "Float By Stop Size",
-                "value": "1"
+                "value": 1.0
             },
             "fast_semi_diameters": true,
             "field_unpolarized": true,
@@ -17,7 +17,7 @@
             "ray_aiming": false,
             "apodization": {
                 "type": "Uniform",
-                "factor": 0
+                "factor": 0.0
             },
             "reference_opd": "Exit Pupil",
             "paraxial_rays_setting": "Ignore Coordinate Breaks",
@@ -38,15 +38,15 @@
             "working_f_number": 10.05939,
             "image_space_na": 0.0495225,
             "object_space_na": 1e-10,
-            "stop_radius": 1,
-            "paraxial_image_height": 0,
-            "paraxial_magnification": 0,
-            "entrance_pupil_diameter": 2,
-            "entrance_pupil_position": 0,
+            "stop_radius": 1.0,
+            "paraxial_image_height": 0.0,
+            "paraxial_magnification": 0.0,
+            "entrance_pupil_diameter": 2.0,
+            "entrance_pupil_position": 0.0,
             "exit_pupil_diameter": 2.033898,
             "exit_pupil_position": -20.46997,
             "field_type": "Angle in degrees",
-            "maximum_radial_field": 0,
+            "maximum_radial_field": 0.0,
             "primary_wavelength": 0.543,
             "angular_magnification": 0.9833333,
             "lens_units": "Millimeters",
@@ -80,7 +80,7 @@
         ],
         "wavelengths": {
             "number_of_wavelengths": 1,
-            "units": "\u00b5m",
+            "units": "µm",
             "wavelengths": [
                 {
                     "number": 1,
@@ -98,7 +98,7 @@
     },
     "settings": null,
     "metadata": {
-        "DateTime": "2024-10-25T17:00:56.899000",
+        "DateTime": "2025-02-19T14:37:47.886000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""
@@ -112,7 +112,7 @@
     },
     "__analysis_settings__": {
         "data_type": "dataclass",
-        "name": "SystemDataSettings",
-        "module": "zospy.analyses.reports.system_data"
+        "name": "NoneType",
+        "module": "builtins"
     }
 }

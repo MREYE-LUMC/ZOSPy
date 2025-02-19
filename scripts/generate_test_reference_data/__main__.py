@@ -23,10 +23,10 @@ from pydantic import (
 from pydantic_core import PydanticCustomError
 
 import zospy as zp
-import zospy.analyses.old
+from zospy.analyses.base import BaseAnalysisWrapper  # noqa: TCH001
 
 logger = logging.getLogger("generate_test_reference_data")
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 TestParameters = dict[str, Any]
@@ -39,7 +39,7 @@ class VersionDependentParameters(BaseModel):
 
 class TestConfiguration(BaseModel):
     model: Callable[[zp.zpcore.OpticStudioSystem], zp.zpcore.OpticStudioSystem]
-    analysis: Callable[[zp.zpcore.OpticStudioSystem, ...], zp.analyses.base.AnalysisResult]
+    analysis: type[BaseAnalysisWrapper]
     file: str
     test: str
     parameters: list[VersionDependentParameters | TestParameters] = [{}]
@@ -48,7 +48,7 @@ class TestConfiguration(BaseModel):
     @field_validator("analysis", mode="before")
     @classmethod
     def validate_analysis(cls, v: str):
-        return attrgetter(v)(zospy.analyses.old)
+        return attrgetter(v)(zp.analyses)
 
     @field_validator("model", mode="before")
     @classmethod
@@ -199,7 +199,7 @@ def process_test(
 
         try:
             # Run analysis
-            result = analysis(oss, **parameters, oncomplete="Release")
+            result = analysis(**parameters).run(oss, oncomplete="Release")
         except Exception:
             logger.exception("Failed to run analysis %s. Traceback: %s", analysis.__name__, traceback.format_exc())
             continue
@@ -211,10 +211,19 @@ def process_test(
             if redacted_strings:
                 logger.warning("\tRedacted strings: %s", "\n\t".join(redacted_strings))
 
-            with open(output_json, "w") as f:
+            with open(output_json, "w", encoding="utf-8") as f:
                 f.write(result_json)
 
-            oss.save_as(str(output_zos.absolute()))
+            try:
+                oss.save_as(str(output_zos.resolve()))
+            except Exception:
+                logger.exception("Failed to save Zemax file %s. Traceback: %s", output_zos, traceback.format_exc())
+                output_zos.with_suffix(".txt").resolve().write_text("Failed to save OpticStudio model.")
+
+                # Reconnect to OpticStudio to avoid potential issues
+                zos = zp.ZOS(opticstudio_directory=args.opticstudio_directory)
+                oss = zos.connect(mode=args.connection_mode)
+
         except TypeError:
             logger.exception("Failed to serialize %s. Traceback: %s", result_file_name, traceback.format_exc())
 
