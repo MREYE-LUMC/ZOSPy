@@ -156,7 +156,7 @@ def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> Analys
     raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
 
 
-@pydantic.dataclasses.dataclass(frozen=True, config=ConfigDict(ser_json_inf_nan="strings"))
+@pydantic.dataclasses.dataclass(frozen=True, config=ConfigDict(ser_json_inf_nan="constants"))
 class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     """Zemax OpticStudio analysis result.
 
@@ -198,7 +198,7 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
         info,  # noqa: ARG002
     ):
         if isinstance(value, pd.DataFrame):
-            return TypeAdapter(ValidatedDataFrame, config=ConfigDict(ser_json_inf_nan="strings")).dump_python(
+            return TypeAdapter(ValidatedDataFrame, config=ConfigDict(ser_json_inf_nan="constants")).dump_python(
                 value, mode="json"
             )
 
