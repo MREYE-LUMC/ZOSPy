@@ -2,7 +2,6 @@
 # dependencies = [
 #   "ipykernel",
 #   "nbconvert",
-#   "zospy",
 # ]
 # ///
 
@@ -110,6 +109,10 @@ def main(args: argparse.Namespace) -> int:
 
 
 if __name__ == "__main__":
+    import zospy as zp
+    print("Running ZOSPy version ", zp.__version__, " from ", zp.__file__)
+
+
     parser = argparse.ArgumentParser("Run a single example")
     parser.add_argument("example", type=Path, help="Path to the example directory")
     parser.add_argument(
