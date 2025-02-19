@@ -9,6 +9,9 @@
 name: Publish to PyPI
 
 on:
+  # Allow manual triggering
+  workflow_dispatch:
+
   release:
     types: [released]
 
