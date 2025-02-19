@@ -47,14 +47,10 @@
 -->
 
 - [ ] I have followed the [contribution guidelines][contribution-guidelines]
-- [ ] The code has been linted, formatted and tested locally using tox.
+- [ ] The code has been linted, formatted and tested locally using hatch.
 - [ ] Local tests pass. **Please fix any problems before opening a PR. If this is not possible, specify what doesn't work and why you can't fix it.**
 - [ ] I added new tests for any features contributed, or updated existing tests.
 - [ ] I updated CHANGELOG.md with my changes (except for refactorings and changes in the documentation).
-
-If you contributed an analysis:
-
-- [ ] I did not use `AttrDict`s for the analysis result data (please use dataclasses instead).
 
 If you contributed an example:
 
