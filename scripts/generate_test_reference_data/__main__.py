@@ -219,6 +219,11 @@ def process_test(
             except Exception:
                 logger.exception("Failed to save Zemax file %s. Traceback: %s", output_zos, traceback.format_exc())
                 output_zos.with_suffix(".txt").resolve().write_text("Failed to save OpticStudio model.")
+
+                # Reconnect to OpticStudio to avoid potential issues
+                zos = zp.ZOS(opticstudio_directory=args.opticstudio_directory)
+                oss = zos.connect(mode=args.connection_mode)
+
         except TypeError:
             logger.exception("Failed to serialize %s. Traceback: %s", result_file_name, traceback.format_exc())
 
