@@ -14,16 +14,12 @@ class TestSurfaceData:
     def test_surface_data_returns_correct_result(self, simple_system, expected_data):
         result = SurfaceData(surface=2).run(simple_system)
 
-        assert_dataclass_equal(result.data, expected_data.data, ignore_fields=["date", "file", "material"])
-        # Glass is not stored in old data
-        assert_dataclass_equal(result.data.material, expected_data.data.material, ignore_fields=["glass"])
+        assert_dataclass_equal(result.data, expected_data.data, ignore_fields=["date", "file"])
 
     def test_surface_data_matches_reference_data(self, simple_system, reference_data):
         result = SurfaceData(surface=2).run(simple_system)
 
-        assert_dataclass_equal(result.data, reference_data.data, ignore_fields=["date", "file", "material"])
-        # Glass is not stored in old data
-        assert_dataclass_equal(result.data.material, reference_data.data.material, ignore_fields=["glass"])
+        assert_dataclass_equal(result.data, reference_data.data, ignore_fields=["date", "file"])
 
 
 class TestSystemData:

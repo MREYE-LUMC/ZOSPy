@@ -1,4 +1,3 @@
-import numpy as np
 import pytest
 
 from tests.helpers import assert_dataclass_equal
@@ -34,19 +33,7 @@ class TestSingleRayTrace:
             global_coordinates=global_coordinates,
         ).run(simple_system)
 
-        assert_dataclass_equal(
-            result.data, expected_data.data, ignore_fields=["real_ray_trace_data", "paraxial_ray_trace_data"]
-        )
-        assert np.allclose(
-            result.data.real_ray_trace_data.select_dtypes(float),
-            expected_data.data.real_ray_trace_data.select_dtypes(float),
-            equal_nan=True,
-        )
-        assert np.allclose(
-            result.data.paraxial_ray_trace_data.select_dtypes(float),
-            expected_data.data.paraxial_ray_trace_data.select_dtypes(float),
-            equal_nan=True,
-        )
+        assert_dataclass_equal(result.data, expected_data.data)
 
     @pytest.mark.parametrize(
         "hx,hy,px,py,raytrace_type,global_coordinates",
@@ -70,16 +57,6 @@ class TestSingleRayTrace:
 
         assert_dataclass_equal(
             result.data, reference_data.data, ignore_fields=["real_ray_trace_data", "paraxial_ray_trace_data"]
-        )
-        assert np.allclose(
-            result.data.real_ray_trace_data.select_dtypes(float),
-            reference_data.data.real_ray_trace_data.select_dtypes(float),
-            equal_nan=True,
-        )
-        assert np.allclose(
-            result.data.paraxial_ray_trace_data.select_dtypes(float),
-            reference_data.data.paraxial_ray_trace_data.select_dtypes(float),
-            equal_nan=True,
         )
 
 

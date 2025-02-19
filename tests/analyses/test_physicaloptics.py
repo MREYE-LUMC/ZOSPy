@@ -1,5 +1,5 @@
-import numpy as np
 import pytest
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.physicaloptics import (
     PhysicalOpticsPropagation,
@@ -151,7 +151,7 @@ class TestPhysicalOpticsPropagation:
             auto_calculate_beam_sampling=auto_calculate_beam_sampling,
         ).run(simple_system)
 
-        assert np.allclose(result.data, expected_data.data, rtol=1e-3)
+        assert_frame_equal(result.data, expected_data.data)
 
     @pytest.mark.parametrize(
         "compute_fiber_coupling_integral,fiber_type,fiber_parameters",
@@ -233,7 +233,7 @@ class TestPhysicalOpticsPropagation:
             auto_calculate_beam_sampling=auto_calculate_beam_sampling,
         ).run(simple_system)
 
-        assert np.allclose(result.data, reference_data.data, rtol=1e-3)
+        assert_frame_equal(result.data, reference_data.data)
 
     @pytest.mark.parametrize(
         "use_total_power,use_peak_irradiance",
