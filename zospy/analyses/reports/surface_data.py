@@ -2,16 +2,14 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Any
+from pathlib import Path
+from typing import Annotated, Any
 
 from pydantic import AliasChoices, BeforeValidator, Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers.transformers import SimpleField, ZospyTransformer
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 __all__ = ("SurfaceData", "SurfaceDataSettings")
 

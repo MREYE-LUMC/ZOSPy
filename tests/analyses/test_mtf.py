@@ -1,6 +1,11 @@
-from zospy.analyses.mtf import FFTThroughFocusMTF, HuygensMTF
+from typing import ClassVar
+
+import numpy as np
+import pytest
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.mtf import FFTThroughFocusMTF, HuygensMTF
+
 
 class TestFFTThroughFocusMTF:
     def test_can_run(self, simple_system):
@@ -45,6 +50,15 @@ class TestFFTThroughFocusMTF:
 
         assert np.allclose(result.data.astype(float), reference_data.data.astype(float), rtol=1e-3)
 
+    _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN: ClassVar = {
+        # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf
+        "Modulation": "5",
+        "Real": "6",
+        "Imaginary": "7",
+        "Phase": "8",
+        "SquareWave": "9",
+    }
+
     @pytest.mark.parametrize(
         "mtf_type",
         ["Modulation", "Real", "Imaginary", "Phase", "SquareWave"],
@@ -53,7 +67,7 @@ class TestFFTThroughFocusMTF:
         analysis = FFTThroughFocusMTF(mtf_type=mtf_type)
         analysis.run(simple_system, oncomplete="Sustain")
 
-        assert str(analysis.analysis.Settings.Type) == _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN[mtf_type]
+        assert str(analysis.analysis.Settings.Type) == self._FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN[mtf_type]
 
 
 class TestHuygensMTF:

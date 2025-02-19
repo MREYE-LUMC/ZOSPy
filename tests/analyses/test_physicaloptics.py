@@ -1,10 +1,12 @@
-from zospy.analyses.physicaloptics import PhysicalOpticsPropagation
+import numpy as np
+import pytest
 
 from zospy.analyses.physicaloptics import (
     PhysicalOpticsPropagation,
     create_beam_parameter_dict,
     create_fiber_parameter_dict,
 )
+
 
 class TestPhysicalOpticsPropagation:
     def test_can_run(self, simple_system):

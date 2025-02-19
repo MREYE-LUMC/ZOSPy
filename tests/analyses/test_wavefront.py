@@ -4,6 +4,7 @@ from pandas.testing import assert_frame_equal
 from tests.helpers import assert_dataclass_equal
 from zospy.analyses.wavefront import WavefrontMap, ZernikeStandardCoefficients
 
+
 class TestWavefrontMap:
     def test_can_run(self, simple_system):
         result = WavefrontMap().run(simple_system)

@@ -3,11 +3,6 @@ import pytest
 from tests.helpers import assert_dataclass_equal
 from zospy.analyses.polarization import PolarizationPupilMap, PolarizationTransmission
 
-class TestPolarizationTransmission:
-    def test_can_run(self, simple_system):
-        result = PolarizationTransmission().run(simple_system)
-        assert result.data is not None
-
 
 class TestPolarizationTransmission:
     def test_can_run(self, simple_system):
@@ -57,6 +52,9 @@ class TestPolarizationTransmission:
         ).run(polarized_system)
 
         assert_dataclass_equal(result.data, reference_data.data)
+
+
+XFAIL_REASON = "Intentionally skipped for this OpticStudio version. See https://zospy.readthedocs.io/compatibility."
 
 
 class TestPolarizationPupilMap:

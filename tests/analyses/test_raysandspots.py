@@ -1,7 +1,9 @@
-from zospy.analyses.raysandspots import RayFan, SingleRayTrace
+import numpy as np
+import pytest
 
 from tests.helpers import assert_dataclass_equal
 from zospy.analyses.raysandspots import RayFan, SingleRayTrace
+
 
 class TestSingleRayTrace:
     def test_can_run(self, simple_system):

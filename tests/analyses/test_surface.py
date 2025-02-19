@@ -1,19 +1,19 @@
-from zospy.analyses.surface import Curvature
+import pytest
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.surface import Curvature
+
 
 class TestCurvature:
     def test_can_run(self, simple_system):
         result = Curvature().run(simple_system)
         assert result.data is not None
 
-    def test_can_run(self, simple_system):
-        result = Curvature(surface=2).run(simple_system)
-        assert result.data is not None
-
     def test_to_json(self, simple_system):
         result = Curvature(surface=2).run(simple_system)
         assert result.from_json(result.to_json()).to_json() == result.to_json()
+
+    SKIP_SAGITTAL_CURVATURE = "SagitalCurvature is renamed to SagittalCurvature in OpticStudio 24.1.2 and higher"
 
     @pytest.mark.parametrize(
         "sampling,data,remove,surface,show_as,contour_format,bfs_criterion,bfs_reverse_direction",
