@@ -12,7 +12,7 @@ from pydantic import Field, RootModel
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
-from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame, ZOSAPIConstant
 from zospy.api import config, constants
 from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling
@@ -94,6 +94,9 @@ class FFTThroughFocusMTFResult(RootModel[list[FFTThroughFocusMTFData]]):
 
     def __getitem__(self, item):
         return self.root[item]
+
+    def __len__(self):
+        return len(self.root)
 
     def to_dataframe(self) -> DataFrame:
         """Convert the data to a Pandas DataFrame.
