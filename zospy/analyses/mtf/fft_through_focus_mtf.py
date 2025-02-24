@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Annotated, Literal, Union, Iterator
+from typing import TYPE_CHECKING, Annotated, Literal, Union
 
 import numpy as np
 import pandas as pd
@@ -16,6 +16,9 @@ from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame, ZOSAPICo
 from zospy.api import config, constants
 from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 __all__ = ("FFTThroughFocusMTF", "FFTThroughFocusMTFSettings")
 
