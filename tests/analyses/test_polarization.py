@@ -1,48 +1,70 @@
-import numpy as np
 import pytest
 
-import zospy.api.config as _config
-from zospy.analyses.polarization import polarization_pupil_map, transmission
-from zospy.utils.zputils import _get_number_field
+from tests.helpers import assert_dataclass_equal
+from zospy.analyses.polarization import PolarizationPupilMap, PolarizationTransmission
+
+
+class TestPolarizationTransmission:
+    def test_can_run(self, simple_system):
+        result = PolarizationTransmission().run(simple_system)
+        assert result.data is not None
+
+    def test_to_json(self, simple_system):
+        result = PolarizationTransmission().run(simple_system)
+        assert result.from_json(result.to_json()).to_json() == result.to_json()
+
+    @pytest.mark.parametrize(
+        "sampling,unpolarized,jx,jy,x_phase,y_phase",
+        [
+            ("32x32", False, 1, 0, 0, 0),
+            ("32x32", False, 0, 1, 0, 0),
+            ("32x32", False, 1, 1, 0, 0),
+            ("32x32", False, 0.001, 1, 0, 0),
+            ("64x64", False, 1, 1, 45, 90),
+            ("64x64", True, 1, 0, 0, 0),
+        ],
+    )
+    def test_transmission_returns_correct_result(
+        self, polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase, expected_data
+    ):
+        result = PolarizationTransmission(
+            sampling=sampling, unpolarized=unpolarized, jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase
+        ).run(polarized_system)
+
+        assert_dataclass_equal(result.data, expected_data.data)
+
+    @pytest.mark.parametrize(
+        "sampling,unpolarized,jx,jy,x_phase,y_phase",
+        [
+            ("32x32", False, 1, 0, 0, 0),
+            ("32x32", False, 0, 1, 0, 0),
+            ("32x32", False, 1, 1, 0, 0),
+            ("32x32", False, 0.001, 1, 0, 0),
+            ("64x64", False, 1, 1, 45, 90),
+            ("64x64", True, 1, 0, 0, 0),
+        ],
+    )
+    def test_transmission_matches_reference_data(
+        self, polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase, reference_data
+    ):
+        result = PolarizationTransmission(
+            sampling=sampling, unpolarized=unpolarized, jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase
+        ).run(polarized_system)
+
+        assert_dataclass_equal(result.data, reference_data.data)
+
 
 XFAIL_REASON = "Intentionally skipped for this OpticStudio version. See https://zospy.readthedocs.io/compatibility."
 
-_signs = ["", "+", "-"]
-_int_numbers = ["1", "123"]
-_float_numbers = [".1", ".123", "1.", "1.2", "1.23", "12.3"]
-_decimal_separators = [",", "."]
-_exponents = ["", "e1", "e123", "e+1", "e+123", "e-1", "e-123", "E1", "E123", "E+1", "E+123", "E-1", "E-123"]
-
-
-class TestGetNumberField:
-    @pytest.mark.parametrize("exp", _exponents)
-    @pytest.mark.parametrize("number", _int_numbers)
-    @pytest.mark.parametrize("sign", _signs)
-    def test_parses_int(self, sign, number, exp):
-        number_string = sign + number + exp
-        res = _get_number_field("Test", f"Test: {number_string}")
-
-        assert res == number_string
-
-    @pytest.mark.parametrize("decimal_separator", _decimal_separators)
-    @pytest.mark.parametrize("exp", _exponents)
-    @pytest.mark.parametrize("number", _float_numbers)
-    @pytest.mark.parametrize("sign", _signs)
-    def test_parses_float(self, sign, number, exp, decimal_separator, monkeypatch: pytest.MonkeyPatch):
-        monkeypatch.setattr(_config, "DECIMAL_POINT", decimal_separator)
-
-        number_string = (sign + number + exp).replace(".", decimal_separator)
-
-        res = _get_number_field("Test", f"Test: {number_string}")
-
-        assert res == number_string
-
 
 class TestPolarizationPupilMap:
-    def test_can_run_polarization_pupil_map(self, polarized_system):
-        result = polarization_pupil_map(polarized_system)
+    def test_can_run(self, simple_system):
+        result = PolarizationPupilMap().run(simple_system)
+        assert result.data is not None
 
-        assert result.Data is not None
+    def test_to_json(self, simple_system):
+        result = PolarizationPupilMap().run(simple_system)
+        assert result.from_json(result.to_json()).to_json() == result.to_json()
 
     @pytest.mark.parametrize(
         "jx,jy,x_phase,y_phase,surface,sampling",
@@ -56,10 +78,11 @@ class TestPolarizationPupilMap:
     def test_polarization_pupil_map_returns_correct_result(
         self, polarized_system, jx, jy, x_phase, y_phase, surface, sampling, expected_data
     ):
-        result = polarization_pupil_map(polarized_system, jx, jy, x_phase, y_phase, surface=surface, sampling=sampling)
+        result = PolarizationPupilMap(
+            jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase, surface=surface, sampling=sampling
+        ).run(polarized_system)
 
-        assert result.Data.Transmission == expected_data.Data.Transmission
-        assert np.allclose(result.Data.Table, expected_data.Data.Table)
+        assert_dataclass_equal(result.data, expected_data.data)
 
     @pytest.mark.parametrize(
         "jx,jy,x_phase,y_phase,surface,sampling",
@@ -89,72 +112,8 @@ class TestPolarizationPupilMap:
     def test_polarization_pupil_map_matches_reference_data(
         self, polarized_system, jx, jy, x_phase, y_phase, surface, sampling, reference_data
     ):
-        result = polarization_pupil_map(polarized_system, jx, jy, x_phase, y_phase, surface=surface, sampling=sampling)
+        result = PolarizationPupilMap(
+            jx=jx, jy=jy, x_phase=x_phase, y_phase=y_phase, surface=surface, sampling=sampling
+        ).run(polarized_system)
 
-        assert result.Data.Transmission == reference_data.Data.Transmission
-        assert np.allclose(result.Data.Table, reference_data.Data.Table)
-
-
-class TestTransmission:
-    def test_can_run_transmission(self, polarized_system):
-        result = transmission(polarized_system)
-
-        assert result.Data is not None
-
-    @pytest.mark.parametrize(
-        "sampling,unpolarized,jx,jy,x_phase,y_phase",
-        [
-            ("32x32", False, 1, 0, 0, 0),
-            ("32x32", False, 0, 1, 0, 0),
-            ("32x32", False, 1, 1, 0, 0),
-            ("32x32", False, 0.001, 1, 0, 0),
-            ("64x64", False, 1, 1, 45, 90),
-            ("64x64", True, 1, 0, 0, 0),
-        ],
-    )
-    def test_transmission_returns_correct_result(
-        self, polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase, expected_data
-    ):
-        result = transmission(polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase)
-
-        assert result.Data.FieldPos == expected_data.Data.FieldPos
-        assert result.Data.Wavelength == expected_data.Data.Wavelength
-        assert result.Data.TotalTransmission == expected_data.Data.TotalTransmission
-        assert np.allclose(result.Data.Table, expected_data.Data.Table)
-
-    @pytest.mark.parametrize(
-        "sampling,unpolarized,jx,jy,x_phase,y_phase",
-        [
-            ("32x32", False, 1, 0, 0, 0),
-            ("32x32", False, 0, 1, 0, 0),
-            ("32x32", False, 1, 1, 0, 0),
-            ("32x32", False, 0.001, 1, 0, 0),
-            ("64x64", False, 1, 1, 45, 90),
-            ("64x64", True, 1, 0, 0, 0),
-        ],
-    )
-    def test_transmission_matches_reference_data(
-        self, polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase, reference_data
-    ):
-        result = transmission(polarized_system, sampling, unpolarized, jx, jy, x_phase, y_phase)
-
-        assert result.Data.FieldPos == reference_data.Data.FieldPos
-        assert result.Data.Wavelength == reference_data.Data.Wavelength
-        assert result.Data.TotalTransmission == reference_data.Data.TotalTransmission
-        assert np.allclose(result.Data.Table, reference_data.Data.Table)
-
-    def test_transmission_multiple_fields_raises_notimplementederror(self, simple_system):
-        simple_system.SystemData.Fields.AddField(1, 1, 1.0)
-
-        assert simple_system.SystemData.Fields.NumberOfFields == 2
-
-        with pytest.raises(NotImplementedError):
-            transmission(simple_system)
-
-    def test_transmission_multiple_wavelengths_raises_notimplementederror(self, simple_system):
-        simple_system.SystemData.Wavelengths.AddWavelength(0.314, 1.0)
-
-        assert simple_system.SystemData.Wavelengths.NumberOfWavelengths == 2
-
-        with pytest.raises(NotImplementedError):
-            transmission(simple_system)
+        assert_dataclass_equal(result.data, reference_data.data)
