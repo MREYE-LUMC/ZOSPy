@@ -1,6 +1,5 @@
 import pytest
 from numpy.testing import assert_almost_equal
-from pandas.testing import assert_frame_equal
 
 from zospy.analyses.physicaloptics import (
     PhysicalOpticsPropagation,
@@ -156,7 +155,6 @@ class TestPhysicalOpticsPropagation:
         assert_almost_equal(result.data.values, expected_data.data.values, decimal=5)
         assert_almost_equal(result.data.index.values, expected_data.data.index.values, decimal=5)
         assert_almost_equal(result.data.columns.values, expected_data.data.columns.values, decimal=5)
-
 
     @pytest.mark.parametrize(
         "compute_fiber_coupling_integral,fiber_type,fiber_parameters",
