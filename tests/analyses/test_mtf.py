@@ -65,7 +65,7 @@ class TestFFTThroughFocusMTF:
         ).run(simple_system)
 
         for i in range(len(result.data)):
-            assert_frame_equal(result.data[i], expected_data.data[i])
+            assert_frame_equal(result.data[i].data, expected_data.data[i].data)
 
     @pytest.mark.parametrize(
         "sampling,delta_focus,frequency,number_of_steps,mtf_type",
@@ -83,7 +83,7 @@ class TestFFTThroughFocusMTF:
         ).run(simple_system)
 
         for i in range(len(result.data)):
-            assert_frame_equal(result.data[i], reference_data.data[i])
+            assert_frame_equal(result.data[i].data, reference_data.data[i].data)
 
     _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN: ClassVar = {
         # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf
