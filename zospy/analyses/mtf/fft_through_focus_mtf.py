@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal, Union, Iterator
 
 import numpy as np
 import pandas as pd
@@ -89,10 +89,10 @@ class FFTThroughFocusMTFData:
 
 
 class FFTThroughFocusMTFResult(RootModel[list[FFTThroughFocusMTFData]]):
-    def __iter__(self):
+    def __iter__(self) -> Iterator[FFTThroughFocusMTFData]:
         return iter(self.root)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> FFTThroughFocusMTFData:
         return self.root[item]
 
     def __len__(self):
