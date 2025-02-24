@@ -33,6 +33,8 @@ ZOS-API can also be added in patch releases.
 - `zospy.zpcore.ZOS.__init__`: all parameters are now keyword-only arguments.
 - Removed `zospy.utils.zputils.rgetattr` because `operator.attrgetter` does the same thing.
 - Replaced `zospy.utils.zputils.rsetattr` with `zospy.utils.zputils.attrsetter`, based on `operator.attrgetter`.
+- `zospy.analyses` now uses a new, object-oriented interface for OpticStudio analyses (#118). The old interface is now deprecated, but still available in `zospy.analyses.old`.
+  See discussion [#87](https://github.com/MREYE-LUMC/ZOSPy/discussions/87) and the release notes for more information.
 
 ### Deprecated
 

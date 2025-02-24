@@ -2,7 +2,6 @@
 # dependencies = [
 #   "ipykernel",
 #   "nbconvert",
-#   "zospy",
 # ]
 # ///
 
