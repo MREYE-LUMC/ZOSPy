@@ -16,6 +16,40 @@ class TestFFTThroughFocusMTF:
         assert result.from_json(result.to_json()).to_json() == result.to_json()
 
     @pytest.mark.parametrize(
+        "fieldx,fieldy", [(0, 0), (5.5, 0), (0, 5.5), (5.5, 5.5), (-5.5, 0), (0, -5.5), (-5.5, -5.5)]
+    )
+    def test_field_parsing(self, fieldx, fieldy, simple_system):
+        field1 = simple_system.SystemData.Fields.GetField(1)
+        field1.X = fieldx
+        field1.Y = fieldy
+        result = FFTThroughFocusMTF().run(simple_system)
+
+        assert result.data[0].field_coordinate.value[0] == fieldx
+        assert result.data[0].field_coordinate.value[1] == fieldy
+
+    @pytest.mark.parametrize("fields", [[(5.5, -5.5)], [(0, 0), (0.0, 5.5), (5.5, 0.0), (5.5, -5.5)]])
+    def test_to_dataframe(self, fields, simple_system):
+        field1 = simple_system.SystemData.Fields.GetField(1)
+        field1.X = fields[0][0]
+        field1.Y = fields[0][1]
+
+        for f in fields[1:]:
+            simple_system.SystemData.Fields.AddField(f[0], f[1], 1.0)
+
+        result = FFTThroughFocusMTF().run(simple_system)
+
+        df = result.data.to_dataframe()
+
+        for r in result.data:
+            assert_frame_equal(
+                df.loc[
+                    (df["FieldX"] == r.field_coordinate.value[0]) & (df["FieldY"] == r.field_coordinate.value[1]),
+                    r.data.reset_index(drop=False).columns,
+                ].reset_index(drop=True),
+                r.data.reset_index(drop=False),
+            )
+
+    @pytest.mark.parametrize(
         "sampling,delta_focus,frequency,number_of_steps,mtf_type",
         [("64x64", 0.1, 0, 5, "Modulation"), ("128x128", 0.3, 3, 10, "Imaginary")],
     )
@@ -30,7 +64,8 @@ class TestFFTThroughFocusMTF:
             mtf_type=mtf_type,
         ).run(simple_system)
 
-        assert_frame_equal(result.data, expected_data.data)
+        for i in range(len(result.data)):
+            assert_frame_equal(result.data[i], expected_data.data[i])
 
     @pytest.mark.parametrize(
         "sampling,delta_focus,frequency,number_of_steps,mtf_type",
@@ -47,7 +82,8 @@ class TestFFTThroughFocusMTF:
             mtf_type=mtf_type,
         ).run(simple_system)
 
-        assert_frame_equal(result.data, reference_data.data)
+        for i in range(len(result.data)):
+            assert_frame_equal(result.data[i], reference_data.data[i])
 
     _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN: ClassVar = {
         # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf
