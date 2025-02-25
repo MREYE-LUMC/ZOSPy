@@ -9,6 +9,9 @@
 name: Publish to PyPI
 
 on:
+  # Allow manual triggering
+  workflow_dispatch:
+
   release:
     types: [released]
 
@@ -56,7 +59,7 @@ jobs:
         name: zospy_dist
         path: dist
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@v1.8.11
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         

@@ -1,6 +1,6 @@
 """Communicate with OpticStudio through the ZOS-API."""
 
-__version__ = "1.3.0"
+__version__ = "2.0.0b0"
 
 import logging
 

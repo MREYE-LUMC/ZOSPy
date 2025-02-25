@@ -1,26 +1,24 @@
-import numpy as np
 import pytest
+from pandas.testing import assert_frame_equal
 
 from zospy.analyses.physicaloptics import (
-    physical_optics_propagation,
-    pop_create_beam_parameter_dict,
-    pop_create_fiber_parameter_dict,
+    PhysicalOpticsPropagation,
+    create_beam_parameter_dict,
+    create_fiber_parameter_dict,
 )
 
 
 class TestPhysicalOpticsPropagation:
-    def test_can_run_physical_optics_propagation(self, simple_system):
-        result = physical_optics_propagation(simple_system)
-
-        assert result.Data is not None
+    def test_can_run(self, simple_system):
+        result = PhysicalOpticsPropagation().run(simple_system)
+        assert result.data is not None
 
     def test_to_json(self, simple_system):
-        result = physical_optics_propagation(simple_system)
-
-        assert result.from_json(result.to_json())
+        result = PhysicalOpticsPropagation().run(simple_system)
+        assert result.from_json(result.to_json()).to_json() == result.to_json()
 
     def test_can_create_beam_parameter_dict(self, simple_system):
-        param_dict = pop_create_beam_parameter_dict(simple_system)
+        param_dict = create_beam_parameter_dict(simple_system)
 
         assert isinstance(param_dict, dict)
 
@@ -41,12 +39,12 @@ class TestPhysicalOpticsPropagation:
         ],
     )
     def test_create_beam_parameter_dict_returns_correct_parameters(self, simple_system, beam_type, expected_parameters):
-        parameter_dict = pop_create_beam_parameter_dict(simple_system, beam_type=beam_type)
+        parameter_dict = create_beam_parameter_dict(simple_system, beam_type=beam_type)
 
         assert set(parameter_dict.keys()) == expected_parameters
 
     def test_can_create_fiber_parameter_dict(self, simple_system):
-        param_dict = pop_create_fiber_parameter_dict(simple_system)
+        param_dict = create_fiber_parameter_dict(simple_system)
 
         assert isinstance(param_dict, dict)
 
@@ -69,7 +67,7 @@ class TestPhysicalOpticsPropagation:
     def test_create_fiber_parameter_dict_returns_correct_parameters(
         self, simple_system, fiber_type, expected_parameters
     ):
-        parameter_dict = pop_create_fiber_parameter_dict(simple_system, fiber_type=fiber_type)
+        parameter_dict = create_fiber_parameter_dict(simple_system, fiber_type=fiber_type)
 
         assert set(parameter_dict.keys()) == expected_parameters
 
@@ -140,8 +138,7 @@ class TestPhysicalOpticsPropagation:
         auto_calculate_beam_sampling,
         expected_data,
     ):
-        result = physical_optics_propagation(
-            simple_system,
+        result = PhysicalOpticsPropagation(
             surface_to_beam=surface_to_beam,
             beam_type=beam_type,
             beam_parameters=beam_parameters,
@@ -152,9 +149,9 @@ class TestPhysicalOpticsPropagation:
             fiber_type=fiber_type,
             fiber_parameters=fiber_parameters,
             auto_calculate_beam_sampling=auto_calculate_beam_sampling,
-        )
+        ).run(simple_system)
 
-        assert np.allclose(result.Data.astype(float), expected_data.Data.astype(float), rtol=1e-3)
+        assert_frame_equal(result.data, expected_data.data)
 
     @pytest.mark.parametrize(
         "compute_fiber_coupling_integral,fiber_type,fiber_parameters",
@@ -223,8 +220,7 @@ class TestPhysicalOpticsPropagation:
         auto_calculate_beam_sampling,
         reference_data,
     ):
-        result = physical_optics_propagation(
-            simple_system,
+        result = PhysicalOpticsPropagation(
             surface_to_beam=surface_to_beam,
             beam_type=beam_type,
             beam_parameters=beam_parameters,
@@ -235,9 +231,9 @@ class TestPhysicalOpticsPropagation:
             fiber_type=fiber_type,
             fiber_parameters=fiber_parameters,
             auto_calculate_beam_sampling=auto_calculate_beam_sampling,
-        )
+        ).run(simple_system)
 
-        assert np.allclose(result.Data.astype(float), reference_data.Data.astype(float), rtol=1e-3)
+        assert_frame_equal(result.data, reference_data.data)
 
     @pytest.mark.parametrize(
         "use_total_power,use_peak_irradiance",
@@ -253,19 +249,18 @@ class TestPhysicalOpticsPropagation:
             ValueError,
             match="Either use_total_power or use_peak_irradiance should be True, they cannot both be True or False",
         ):
-            physical_optics_propagation(
-                simple_system, use_total_power=use_total_power, use_peak_irradiance=use_peak_irradiance
+            PhysicalOpticsPropagation(use_total_power=use_total_power, use_peak_irradiance=use_peak_irradiance).run(
+                simple_system
             )
 
     def test_physical_optics_propagation_with_wrong_beam_parameter_raises_exception(self, simple_system):
         with pytest.raises(ValueError, match="The following .+ parameters are specified but not accepted"):
-            physical_optics_propagation(simple_system, beam_type="GaussianWaist", beam_parameters={"WrongName": 1})
+            PhysicalOpticsPropagation(beam_type="GaussianWaist", beam_parameters={"WrongName": 1}).run(simple_system)
 
     def test_physical_optics_propagation_with_wrong_fiber_parameter_raises_exception(self, simple_system):
         with pytest.raises(ValueError, match="The following .+ parameters are specified but not accepted"):
-            physical_optics_propagation(
-                simple_system,
+            PhysicalOpticsPropagation(
                 compute_fiber_coupling_integral=True,
                 fiber_type="GaussianWaist",
                 fiber_parameters={"WrongName": 1},
-            )
+            ).run(simple_system)
