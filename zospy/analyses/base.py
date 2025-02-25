@@ -42,6 +42,7 @@ import numpy as np
 import pandas as pd
 import pydantic
 from pydantic import (
+    BaseModel,
     ConfigDict,
     RootModel,
     TypeAdapter,
@@ -102,7 +103,7 @@ AnalysisSettings = TypeVar("AnalysisSettings")
 
 
 class _TypeInfo(TypedDict):
-    data_type: Literal["dataframe", "ndarray", "dataclass", "none"]
+    data_type: Literal["dataframe", "ndarray", "zospy_class", "none"]
     name: NotRequired[str | None]
     module: NotRequired[str | None]
 
@@ -117,17 +118,13 @@ def _serialize_analysis_data_type(data: AnalysisData) -> _TypeInfo:
     if isinstance(data, np.ndarray):
         return {"data_type": "ndarray"}
 
-    if is_dataclass(data):
-        return {
-            "data_type": "dataclass",
-            "name": type(data).__name__,
-            "module": type(data).__module__,
-        }
+    if is_dataclass(data) or isinstance(data, BaseModel):
+        return {"data_type": "zospy_class", "name": type(data).__name__, "module": type(data).__module__}
 
     raise ValueError(f"Cannot serialize data type: {type(data)}")
 
 
-def _deserialize_dataclass(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
+def _deserialize_zospy_class(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
     if typeinfo["module"].startswith("zospy.analyses"):
         try:
             m = import_module(typeinfo["module"])
@@ -150,8 +147,8 @@ def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> Analys
     if typeinfo["data_type"] == "ndarray":
         return np.array(data)
 
-    if typeinfo["data_type"] == "dataclass":
-        return _deserialize_dataclass(data, typeinfo)
+    if typeinfo["data_type"] == "zospy_class":
+        return _deserialize_zospy_class(data, typeinfo)
 
     raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
 
@@ -226,7 +223,7 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
             if "__analysis_data__" in data:
                 data["data"] = _deserialize_analysis_data(data["data"], data.pop("__analysis_data__"))
             if "__analysis_settings__" in data:
-                data["settings"] = _deserialize_dataclass(data["settings"], data.pop("__analysis_settings__"))
+                data["settings"] = _deserialize_zospy_class(data["settings"], data.pop("__analysis_settings__"))
 
         return handler(data)
 
