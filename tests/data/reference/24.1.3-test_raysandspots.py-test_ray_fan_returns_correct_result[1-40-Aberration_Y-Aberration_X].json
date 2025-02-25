@@ -4,7 +4,10 @@
             {
                 "field_number": 1,
                 "field_coordinate": {
-                    "value": 0.0,
+                    "value": [
+                        0.0,
+                        0.0
+                    ],
                     "unit": "deg"
                 },
                 "data": {
@@ -352,7 +355,10 @@
             {
                 "field_number": 1,
                 "field_coordinate": {
-                    "value": 0.0,
+                    "value": [
+                        0.0,
+                        0.0
+                    ],
                     "unit": "deg"
                 },
                 "data": {
@@ -710,7 +716,7 @@
         "check_apertures": true
     },
     "metadata": {
-        "DateTime": "2025-02-19T14:37:47.484000",
+        "DateTime": "2025-02-25T16:37:40.317000",
         "FeatureDescription": "Listing of Ray Fan Data\n\n",
         "LensFile": "REDACTED",
         "LensTitle": ""
