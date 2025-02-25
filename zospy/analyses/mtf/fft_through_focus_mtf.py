@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Annotated, Literal, Union
 
 import numpy as np
 import pandas as pd
-from pandas import DataFrame
 from pydantic import Field, RootModel
 
 from zospy.analyses.base import BaseAnalysisWrapper
@@ -70,7 +69,7 @@ class FFTThroughFocusMTFData:
     field_coordinate: UnitField[tuple[float, float]]
     data: ValidatedDataFrame
 
-    def to_dataframe(self) -> DataFrame:
+    def to_dataframe(self) -> pd.DataFrame:
         """Convert the data to a Pandas DataFrame.
 
         In addition to the columns from FFTThroughFocusMTFData.data, the returned DataFrame has the following columns:
@@ -83,7 +82,7 @@ class FFTThroughFocusMTFData:
         DataFrame
             The data in long format.
         """
-        df: DataFrame = self.data.copy().reset_index()
+        df: pd.DataFrame = self.data.copy().reset_index()
 
         df.insert(0, "FieldX", self.field_coordinate.value[0])
         df.insert(1, "FieldY", self.field_coordinate.value[1])
@@ -101,7 +100,7 @@ class FFTThroughFocusMTFResult(RootModel[list[FFTThroughFocusMTFData]]):
     def __len__(self):
         return len(self.root)
 
-    def to_dataframe(self) -> DataFrame:
+    def to_dataframe(self) -> pd.DataFrame:
         """Convert the data to a Pandas DataFrame.
 
         The separate dataframes for each field are combined in a DataFrame in long format.
@@ -208,7 +207,7 @@ class FFTThroughFocusMTF(
 
             fft_data = FFTThroughFocusMTFData(
                 field_coordinate=UnitField(value=coordinate, unit=match.group("unit")),
-                data=DataFrame(index=index, columns=columns, data=data),
+                data=pd.DataFrame(index=index, columns=columns, data=data),
             )
 
             fft_results.append(fft_data)
