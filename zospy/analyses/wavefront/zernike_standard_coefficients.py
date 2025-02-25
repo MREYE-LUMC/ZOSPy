@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Annotated, TypedDict
+from typing import TYPE_CHECKING, Annotated, Any, TypedDict
 
 import pandas as pd
-from pydantic import Field
+from pydantic import Field, RootModel
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
@@ -14,6 +14,9 @@ from zospy.analyses.parsers.transformers import SimpleField
 from zospy.analyses.parsers.types import UnitField  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
+
+if TYPE_CHECKING:
+    from collections.abc import ItemsView, Iterator, KeysView, ValuesView
 
 __all__ = ("ZernikeStandardCoefficients", "ZernikeStandardCoefficientsSettings")
 
@@ -40,6 +43,41 @@ class ZernikeStandardCoefficientsTransformer(ZospyTransformer):
 class ZernikeStandardCoefficient:
     value: float
     formula: str
+
+
+class ZernikeStandardCoefficientsDict(RootModel[dict[int, ZernikeStandardCoefficient]]):
+    def __getitem__(self, key: int) -> ZernikeStandardCoefficient:
+        return self.root[key]
+
+    def __iter__(self) -> Iterator[int]:
+        return self.root.__iter__()
+
+    def __len__(self) -> int:
+        return self.root.__len__()
+
+    def keys(self) -> KeysView[int]:
+        return self.root.keys()
+
+    def values(self) -> ValuesView[ZernikeStandardCoefficient]:
+        return self.root.values()
+
+    def items(self) -> ItemsView[int, ZernikeStandardCoefficient]:
+        return self.root.items()
+
+    def get(self, key: int, default: Any = None) -> ZernikeStandardCoefficient | Any:
+        return self.root.get(key, default)
+
+    def to_dataframe(self) -> pd.DataFrame:
+        """Convert the ZernikeStandardCoefficientsDict into a Pandas DataFrame.
+
+        Returns
+        -------
+        DataFrame
+            The data in long format.
+        """
+        df = pd.DataFrame(self.values(), index=list(self.keys()))
+        df.index.name = "Coefficient"
+        return df
 
 
 @analysis_result
@@ -71,13 +109,7 @@ class ZernikeStandardCoefficientsResult:
     rms_fit_error: UnitField = Field(alias="RMS fit error")
     maximum_fit_error: UnitField = Field(alias="Maximum fit error")
 
-    coefficients: dict[int, ZernikeStandardCoefficient] = Field(alias="Coefficients")
-
-    @property
-    def coefficients_dataframe(self):
-        df = pd.DataFrame(self.coefficients.values(), index=self.coefficients.keys())
-        df.index.name = "Coefficient"
-        return df
+    coefficients: ZernikeStandardCoefficientsDict = Field(alias="Coefficients")
 
 
 @analysis_settings
