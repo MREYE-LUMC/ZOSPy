@@ -209,7 +209,7 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
         data = nxt(self)
         data["__analysis_data__"] = _serialize_analysis_data_type(self.data)
         data["__analysis_settings__"] = {
-            "data_type": "dataclass",
+            "data_type": "zospy_class",
             "name": type(self.settings).__name__,
             "module": type(self.settings).__module__,
         }

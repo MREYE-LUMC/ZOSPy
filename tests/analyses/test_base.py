@@ -322,7 +322,7 @@ class TestAnalysisResultJSONConversion:
 
         assert "__analysis_settings__" in result_dict
         assert result_dict["__analysis_settings__"] == {
-            "data_type": "dataclass",
+            "data_type": "zospy_class",
             "name": "MockAnalysisSettings",
             "module": "tests.analyses.test_base",
         }

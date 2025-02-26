@@ -10459,7 +10459,7 @@
         "data_type": "dataframe"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "GeometricImageAnalysisSettings",
         "module": "zospy.analyses.extendedscene.geometric_image_analysis"
     }

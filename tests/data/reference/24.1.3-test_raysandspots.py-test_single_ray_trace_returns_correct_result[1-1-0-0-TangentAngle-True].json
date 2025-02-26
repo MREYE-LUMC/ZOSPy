@@ -173,12 +173,12 @@
     "header": [],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "SingleRayTraceResult",
         "module": "zospy.analyses.raysandspots.single_ray_trace"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "SingleRayTraceSettings",
         "module": "zospy.analyses.raysandspots.single_ray_trace"
     }
