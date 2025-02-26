@@ -22,7 +22,7 @@ __all__ = ("RayFan", "RayFanSettings")
 @analysis_result
 class FanData:
     field_number: Annotated[int, Field(ge=0)]
-    field_coordinate: UnitField[float | tuple[float, float]]
+    field_coordinate: UnitField[tuple[float, float]]
     data: ValidatedDataFrame
 
     def to_dataframe(self) -> DataFrame:
@@ -34,7 +34,8 @@ class FanData:
         )
 
         stacked_df.insert(0, "Field Number", self.field_number)
-        stacked_df.insert(1, "Field", self.field_coordinate.value)
+        stacked_df.insert(1, "FieldX", self.field_coordinate.value[0])
+        stacked_df.insert(2, "FieldY", self.field_coordinate.value[1])
 
         return stacked_df
 
@@ -173,10 +174,10 @@ class RayFan(BaseAnalysisWrapper[RayFanResult, RayFanSettings], analysis_type="R
 
     def get_data_series(self) -> RayFanResult | None:
         """Get the data series from the Ray Fan analysis."""
-        re_float = rf"\d+\{config.DECIMAL_POINT}\d+"
+        re_float = rf"-?\d+\{config.DECIMAL_POINT}\d+"
         ray_fan_description_regex = re.compile(
             rf"(?P<direction>sagittal|tangential) fan, field number (?P<field>\d+) = "
-            rf"(?P<coordinate_x>{re_float})(?:, (?P<coordinate_y>{re_float}))? "
+            rf"(?P<field_1>{re_float})(?:, (?P<field_2>{re_float}))? "
             r"\((?P<unit>.+)\)",
             re.IGNORECASE,
         )
@@ -199,9 +200,14 @@ class RayFan(BaseAnalysisWrapper[RayFanResult, RayFanSettings], analysis_type="R
             columns = [atox(label, float) for label in data_series.SeriesLabels]
             data = np.array(data_series.YData.Data)
 
-            coordinate_x = atox(match.group("coordinate_x"), float)
-            coordinate_y = atox(match.group("coordinate_y"), float) if match.group("coordinate_y") else None
-            coordinate = (coordinate_x, coordinate_y) if coordinate_y else coordinate_x
+            if match.group("field_2"):
+                field_x = atox(match.group("field_1"), float)
+                field_y = atox(match.group("field_2"), float)
+            else:  # field 1 corresponds to y
+                field_x = 0.0
+                field_y = atox(match.group("field_1"), float)
+
+            coordinate = (field_x, field_y)
 
             fan_data = FanData(
                 field_number=int(match.group("field")),
