@@ -71,12 +71,12 @@
     "header": [],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "SurfaceDataResult",
         "module": "zospy.analyses.reports.surface_data"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "SurfaceDataSettings",
         "module": "zospy.analyses.reports.surface_data"
     }

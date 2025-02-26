@@ -17203,12 +17203,12 @@
     ],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "CurvatureResult",
         "module": "zospy.analyses.surface.curvature"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "CurvatureSettings",
         "module": "zospy.analyses.surface.curvature"
     }

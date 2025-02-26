@@ -1190,7 +1190,7 @@
         "data_type": "dataframe"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "HuygensPSFSettings",
         "module": "zospy.analyses.psf.huygens_psf"
     }

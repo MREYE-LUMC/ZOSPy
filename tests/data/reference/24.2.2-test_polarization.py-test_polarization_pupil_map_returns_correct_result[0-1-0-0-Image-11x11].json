@@ -868,12 +868,12 @@
     "header": [],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "PolarizationPupilMapResult",
         "module": "zospy.analyses.polarization.pupil_map"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "PolarizationPupilMapSettings",
         "module": "zospy.analyses.polarization.pupil_map"
     }

@@ -1548,7 +1548,7 @@
         "data_type": "dataframe"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "HuygensMtfSettings",
         "module": "zospy.analyses.mtf.huygens_mtf"
     }
