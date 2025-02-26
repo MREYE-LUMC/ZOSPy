@@ -337,12 +337,12 @@
     "header": [],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "ZernikeStandardCoefficientsResult",
         "module": "zospy.analyses.wavefront.zernike_standard_coefficients"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "ZernikeStandardCoefficientsSettings",
         "module": "zospy.analyses.wavefront.zernike_standard_coefficients"
     }

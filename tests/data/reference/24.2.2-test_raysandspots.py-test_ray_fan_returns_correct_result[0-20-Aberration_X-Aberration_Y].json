@@ -410,12 +410,12 @@
     ],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "RayFanResult",
         "module": "zospy.analyses.raysandspots.ray_fan"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "RayFanSettings",
         "module": "zospy.analyses.raysandspots.ray_fan"
     }

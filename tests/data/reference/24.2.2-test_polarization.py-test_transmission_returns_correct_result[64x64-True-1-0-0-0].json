@@ -90,12 +90,12 @@
     "header": [],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "PolarizationTransmissionResult",
         "module": "zospy.analyses.polarization.transmission"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "PolarizationTransmissionSettings",
         "module": "zospy.analyses.polarization.transmission"
     }

@@ -47,12 +47,12 @@
     "header": [],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "CardinalPointsResult",
         "module": "zospy.analyses.reports.cardinal_points"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "CardinalPointsSettings",
         "module": "zospy.analyses.reports.cardinal_points"
     }

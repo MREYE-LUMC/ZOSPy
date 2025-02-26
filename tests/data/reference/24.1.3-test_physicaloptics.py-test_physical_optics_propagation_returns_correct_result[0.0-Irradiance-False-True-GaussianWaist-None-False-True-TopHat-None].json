@@ -1228,7 +1228,7 @@
         "data_type": "dataframe"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "PhysicalOpticsPropagationSettings",
         "module": "zospy.analyses.physicaloptics.physical_optics_propagation"
     }

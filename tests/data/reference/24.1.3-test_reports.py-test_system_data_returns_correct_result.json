@@ -106,12 +106,12 @@
     "header": [],
     "messages": [],
     "__analysis_data__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "SystemDataResult",
         "module": "zospy.analyses.reports.system_data"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "NoneType",
         "module": "builtins"
     }

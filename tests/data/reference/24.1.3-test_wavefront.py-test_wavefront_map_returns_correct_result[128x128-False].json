@@ -16943,7 +16943,7 @@
         "data_type": "dataframe"
     },
     "__analysis_settings__": {
-        "data_type": "dataclass",
+        "data_type": "zospy_class",
         "name": "WavefrontMapSettings",
         "module": "zospy.analyses.wavefront.wavefront_map"
     }
