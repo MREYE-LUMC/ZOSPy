@@ -446,12 +446,12 @@ class Analysis:
         else:
             raise ValueError('Wavelength value should be "All" or an integer')
 
-    def set_surface(self, value: int | str):
-        """Set the surface value for the analysis.
+    def set_surface(self, value: int | Literal["Image", "Objective", "Object"]):
+        """Set the surface value in the analysis settings.
 
         Parameters
         ----------
-        value : int | str
+        value : int | Literal["Image", "Objective", "Object"]
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
             string.
 
@@ -467,12 +467,12 @@ class Analysis:
         """
         if value == "Image":
             self.Settings.Surface.UseImageSurface()
-        elif value == "Objective":
+        elif value in ("Object", "Objective"):
             self.Settings.Surface.UseObjectiveSurface()
         elif isinstance(value, int):
             self.Settings.Surface.SetSurfaceNumber(value)
         else:
-            raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
+            raise ValueError(f'Surface value should be "Image", "Objective", "Object" or an integer, got {value}')
 
     def get_text_output(self, txtoutfile: str, encoding: str):
         """Get the text output of the analysis.
