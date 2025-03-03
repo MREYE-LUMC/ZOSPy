@@ -14,6 +14,23 @@ class TestGeometricImageAnalysis:
         assert result.from_json(result.to_json()).to_json() == result.to_json()
 
     @pytest.mark.parametrize(
+        "image_size,expected_minx,expected_miny",
+        [
+            (1, -0.5, -0.5),
+            (1.4, -0.7, -0.7),
+            (2.5, -1.25, -1.25),
+            (20, -10, -10),
+        ],
+    )
+    def test_geometric_image_analysis_returns_correct_origin(
+        self, simple_system, image_size, expected_minx, expected_miny
+    ):
+        result = GeometricImageAnalysis(image_size=image_size).run(simple_system)
+
+        assert result.data.columns[0] == expected_minx
+        assert result.data.index[0] == expected_miny
+
+    @pytest.mark.parametrize(
         "show_as,field_size,total_watts,rays_x_1000",
         [
             ("Surface", 0, 1, 100000),
