@@ -336,7 +336,7 @@ class Analysis:
 
         return "All" if field_number == 0 else field_number
 
-    def set_field(self, value: int | str):
+    def set_field(self, value: int | Literal["All"]):
         """Set the field value for the analysis.
 
         Parameters
