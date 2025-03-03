@@ -325,7 +325,7 @@ class Analysis:
         return self._analysis.GetResults()
 
     def get_field(self) -> int | str:
-        """Get the field value of the analysis.
+        """Get the field value from the analysis settings.
 
         Returns
         -------
