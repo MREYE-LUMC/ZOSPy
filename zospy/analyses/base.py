@@ -324,7 +324,7 @@ class Analysis:
         """Analysis results."""
         return self._analysis.GetResults()
 
-    def get_field(self) -> int | str:
+    def get_field(self) -> int | Literal["All"]:
         """Get the field value from the analysis settings.
 
         Returns
