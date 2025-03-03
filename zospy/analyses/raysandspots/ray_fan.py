@@ -151,9 +151,9 @@ class RayFan(BaseAnalysisWrapper[RayFanResult, RayFanSettings], analysis_type="R
 
     def run_analysis(self) -> RayFanResult:
         """Run the Ray Fan analysis."""
-        self.analysis.field = self.settings.field
+        self.analysis.set_field(self.settings.field)
         self.analysis.set_surface(self.settings.surface)
-        self.analysis.wavelength = self.settings.wavelength
+        self.analysis.set_wavelength(self.settings.wavelength)
         self.analysis.Settings.PlotScale = self.settings.plot_scale
         self.analysis.Settings.NumberOfRays = self.settings.number_of_rays
         self.analysis.Settings.Tangential = constants.process_constant(

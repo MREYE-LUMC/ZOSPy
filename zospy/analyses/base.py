@@ -324,8 +324,7 @@ class Analysis:
         """Analysis results."""
         return self._analysis.GetResults()
 
-    @property
-    def field(self) -> int | str:
+    def get_field(self) -> int | str:
         """Gets the wavelength value of the analysis.
 
         Returns
@@ -337,8 +336,7 @@ class Analysis:
 
         return "All" if field_number == 0 else field_number
 
-    @field.setter
-    def field(self, value: int | str):
+    def set_field(self, value: int | str):
         """Set the field value for the analysis.
 
         Parameters
@@ -411,8 +409,7 @@ class Analysis:
             self.Results.MetaData.LensTitle,
         )
 
-    @property
-    def wavelength(self) -> int | Literal["All"]:
+    def get_wavelength(self) -> int | Literal["All"]:
         """Gets the wavelength value of the analysis.
 
         Returns
@@ -424,8 +421,7 @@ class Analysis:
 
         return "All" if wavelength == 0 else wavelength
 
-    @wavelength.setter
-    def wavelength(self, value: int | Literal["All"]):
+    def set_wavelength(self, value: int | Literal["All"]):
         """Set the wavelength value for the analysis.
 
         Parameters

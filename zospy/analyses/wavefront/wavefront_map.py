@@ -108,9 +108,9 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
         --------
         WavefrontMapSettings : Settings for the Wavefront Map analysis.
         """
-        self.analysis.field = self.settings.field
+        self.analysis.set_field(self.settings.field)
         self.analysis.set_surface(self.settings.surface)
-        self.analysis.wavelength = self.settings.wavelength
+        self.analysis.set_wavelength(self.settings.wavelength)
         self.analysis.Settings.ShowAs = constants.process_constant(constants.Analysis.ShowAs, self.settings.show_as)
         self.analysis.Settings.Rotation = constants.process_constant(
             constants.Analysis.Settings.Rotations, self.settings.rotation

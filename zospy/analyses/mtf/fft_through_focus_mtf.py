@@ -154,8 +154,8 @@ class FFTThroughFocusMTF(
         self.analysis.Settings.DeltaFocus = self.settings.delta_focus
         self.analysis.Settings.Frequency = self.settings.frequency
         self.analysis.Settings.NumberOfSteps = self.settings.number_of_steps
-        self.analysis.wavelength = self.settings.wavelength
-        self.analysis.field = self.settings.field
+        self.analysis.set_wavelength(self.settings.wavelength)
+        self.analysis.set_field(self.settings.field)
         self.analysis.Settings.Type = constants.process_constant(
             constants.Analysis.Settings.Mtf.MtfTypes, self.settings.mtf_type
         )

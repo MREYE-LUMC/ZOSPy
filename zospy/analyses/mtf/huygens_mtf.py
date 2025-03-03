@@ -94,8 +94,8 @@ class HuygensMTF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensMtfSettings]
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.image_sampling)
         )
         self.analysis.Settings.ImageDelta = self.settings.image_delta
-        self.analysis.wavelength = self.settings.wavelength
-        self.analysis.field = self.settings.field
+        self.analysis.set_wavelength(self.settings.wavelength)
+        self.analysis.set_field(self.settings.field)
         self.analysis.Settings.Type = constants.process_constant(
             constants.Analysis.Settings.Mtf.HuygensMtfTypes, self.settings.mtf_type
         )
