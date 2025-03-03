@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, Literal, Union
 
+import pandas as pd
 from pandas import DataFrame
 from pydantic import Field
 
@@ -13,6 +14,8 @@ from zospy.analyses.parsers.types import WavelengthNumber, ZOSAPIConstant  # noq
 from zospy.api import constants
 
 __all__ = ("GeometricImageAnalysis", "GeometricImageAnalysisSettings")
+
+from zospy.utils import zputils
 
 
 @analysis_settings
@@ -148,6 +151,27 @@ class GeometricImageAnalysis(
         GeometricImageAnalysisSettings : Settings for the Geometric Image Analysis analysis.
         """
         super().__init__(settings_kws=locals())
+
+    def get_data_grid(self, minx=None, miny=None) -> pd.DataFrame | None:
+        """Get the data grids from the analysis result.
+
+        Returns
+        -------
+        pd.DataFrame | None
+            The data grids from the analysis result, or None if there are no data grids.
+        """
+        # Obtain correct origin for datagrid as there is a bug in the API
+        # See also https://community.zemax.com/zos-api-12/incorrect-datagrid-miny-for-geometric-image-analysis-5426
+        minx = -self.analysis.Settings.ImageSize / 2
+        miny = -self.analysis.Settings.ImageSize / 2
+
+        # Get data
+        data = [
+            zputils.unpack_datagrid(self.analysis.Results.DataGrids[i], minx=minx, miny=miny)
+            for i in range(self.analysis.Results.NumberOfDataGrids)
+        ]
+
+        return self._process_data_series_or_grid(data)
 
     def run_analysis(self) -> DataFrame | None:
         """Run the FFT Through Focus MTF analysis."""
