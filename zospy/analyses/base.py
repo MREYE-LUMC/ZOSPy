@@ -325,7 +325,7 @@ class Analysis:
         return self._analysis.GetResults()
 
     def get_field(self) -> int | str:
-        """Gets the wavelength value of the analysis.
+        """Get the field value of the analysis.
 
         Returns
         -------
@@ -410,7 +410,7 @@ class Analysis:
         )
 
     def get_wavelength(self) -> int | Literal["All"]:
-        """Gets the wavelength value of the analysis.
+        """Get the wavelength value of the analysis.
 
         Returns
         -------
