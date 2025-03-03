@@ -329,7 +329,7 @@ class Analysis:
 
         Returns
         -------
-        int | str
+        int | Literal["All"]
             Either the field number, or 'All' if field was set to 'All'.
         """
         field_number = self.Settings.Field.GetFieldNumber()
@@ -337,11 +337,11 @@ class Analysis:
         return "All" if field_number == 0 else field_number
 
     def set_field(self, value: int | Literal["All"]):
-        """Set the field value for the analysis.
+        """Set the field value in the analysis settings.
 
         Parameters
         ----------
-        value : int | str
+        value : int | Literal["All"]
             The value to which the field should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
@@ -410,11 +410,11 @@ class Analysis:
         )
 
     def get_wavelength(self) -> int | Literal["All"]:
-        """Get the wavelength value of the analysis.
+        """Get the wavelength value from the analysis settings.
 
         Returns
         -------
-        int | str
+        int | Literal["All"]
             Either the wavelength number, or 'All' if wavelength was set to 'All'.
         """
         wavelength = self.Settings.Wavelength.GetWavelengthNumber()
@@ -422,7 +422,7 @@ class Analysis:
         return "All" if wavelength == 0 else wavelength
 
     def set_wavelength(self, value: int | Literal["All"]):
-        """Set the wavelength value for the analysis.
+        """Set the wavelength value in the analysis settings.
 
         Parameters
         ----------
