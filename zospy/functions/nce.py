@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
-from warnings import warn
-
 from zospy.api import _ZOSAPI, constants
+
+__all__ = (
+    "find_object_by_comment",
+    "object_change_type",
+)
 
 
 def object_change_type(obj: _ZOSAPI.Editors.NCE.INCERow, new_type: constants.Editors.NCE.ObjectType | str):
@@ -105,39 +108,3 @@ def find_object_by_comment(
 
     # Return list of objects with matching comment
     return matching_objects
-
-
-def get_object_data(obj: _ZOSAPI.Editors.NCE.INCERow) -> _ZOSAPI.Editors.NCE.IObject:
-    """Get the object-specific data.
-
-    .. deprecated:: 1.2.0
-            `get_object_data` will be removed in ZOSPy 2.0.0, as this conversion is now implemented in
-            `zospy.api.codecs`.
-
-    Parameters
-    ----------
-    obj : ZOSAPI.Editors.NCE.INCERow
-        The Row/Object for which the data is requested.
-
-    Returns
-    -------
-    ZOSAPI.Editors.NCE.IObject
-        The object-specific data with the inherited implementation.
-
-    Examples
-    --------
-    >>> import zospy as zp
-    >>> zos = zp.ZOS()
-    >>> oss = zos.connect()
-    >>> oss.make_nonsequential()
-    >>> detector_object = oss.NCE.GetObjectAt(1)
-    >>> detector_type = detector_object.GetObjectTypeSettings(
-    ...     zp.constants.Editors.NCE.ObjectType.DetectorRectangle
-    ... )
-    >>> detector_object.ChangeType(detector_type)
-    >>> detector_data = zp.functions.nce.get_object_data(detector_object)
-    >>> number_of_x_pixels = detector_data.NumberXPixels
-    """
-    warn("'get_object_data' is deprecated and will be removed in ZOSPy 2.0.0.", DeprecationWarning, stacklevel=1)
-
-    return obj.ObjectData

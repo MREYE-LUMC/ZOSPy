@@ -41,6 +41,16 @@ def test_load_zos_dlls_with_nethelper_and_opticstudio_directory_raises_valueerro
         zos._load_zos_dlls(zosapi_nethelper="dummy/path", opticstudio_directory="dummy/path")
 
 
+def test_init_second_zos_instance(zos):
+    with pytest.warns(match=r"Only a single instance of ZOS can exist at any time\. Returning existing instance\."):
+        zos2 = zp.ZOS()
+        assert zos2 is zos
+
+
+def test_zos_get_instance(zos):
+    assert zp.ZOS.get_instance() is zos
+
+
 @pytest.mark.must_pass
 def test_can_connect(oss):
     assert oss._System is not None
@@ -188,17 +198,17 @@ class TestTxtFileEncoding:
         else:
             monkeypatch.setattr(locale, "getencoding", getencoding)
 
-        oss_with_modifiable_config._ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
+        oss_with_modifiable_config.ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding
         )
 
-        returned_encoding = oss_with_modifiable_config._ZOS.get_txtfile_encoding()
+        returned_encoding = oss_with_modifiable_config.ZOS.get_txtfile_encoding()
 
         assert returned_encoding == expected_encoding
 
     @pytest.mark.parametrize("txtfile_encoding", ["Unicode", "ANSI"])
     def test_analysis_result_parsed_with_correct_encoding(self, oss_with_modifiable_config, txtfile_encoding, tmp_path):
-        oss_with_modifiable_config._ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
+        oss_with_modifiable_config.ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding
         )
 
@@ -209,5 +219,5 @@ class TestTxtFileEncoding:
         txtoutfile = str(tmp_path / "test_analysis_result_parsed_with_correct_encoding.txt")
         analysis.Results.GetTextFile(txtoutfile)
 
-        with open(txtoutfile, encoding=oss_with_modifiable_config._ZOS.get_txtfile_encoding()) as txtfile:
+        with open(txtoutfile, encoding=oss_with_modifiable_config.ZOS.get_txtfile_encoding()) as txtfile:
             assert "System/Prescription Data" in txtfile.readline()
