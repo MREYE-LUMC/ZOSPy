@@ -9,8 +9,10 @@ from typing import TypeVar
 import numpy as np
 import pandas as pd
 
+from zospy import ZOS
 from zospy.api import _ZOSAPI
 from zospy.api import config as _config
+from zospy.zpcore import OpticStudioSystem
 
 
 def flatten_dict(unflattened_dict, parent_key="", sep=".", *, keep_unflattened=False):
@@ -154,3 +156,26 @@ def _get_number_field(name: str, text: str) -> str:
         rf"{re.escape(name)}\s*:\s*([-+]?(\d+({re.escape(_config.DECIMAL_POINT)}\d*)?|{re.escape(_config.DECIMAL_POINT)}\d+)(?:[Ee][-+]?\d+)?)",
         text,
     ).group(1)
+
+
+def get_primary_system() -> OpticStudioSystem:
+    """Get the primary system from OpticStudio.
+
+    Checks if a connection to OpticStudio has been established and returns the primary system.
+
+    Returns
+    -------
+    OpticStudioSystem
+        The primary system in OpticStudio.
+
+    Raises
+    ------
+    ValueError
+        If a connection to OpticStudio has not been established.
+    """
+    zos = ZOS.get_instance()
+
+    if zos is None or zos.Application is None:
+        raise ValueError("Could not obtain the primary system. Please connect to OpticStudio first.")
+
+    return zos.get_primary_system()

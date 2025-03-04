@@ -56,6 +56,7 @@ from zospy.analyses.parsers.types import ValidatedDataFrame
 from zospy.api import _ZOSAPI, constants
 from zospy.utils import zputils
 from zospy.utils.clrutils import system_datetime_to_datetime
+from zospy.utils.zputils import get_primary_system
 
 if TYPE_CHECKING:
     import sys
@@ -63,7 +64,7 @@ if TYPE_CHECKING:
     from lark import Transformer
     from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
-    from zospy.zpcore import OpticStudioSystem
+    from zospy.zpcore import OpticStudioSystem, ZOS
 
     if sys.version_info <= (3, 11):
         from typing_extensions import NotRequired
@@ -812,8 +813,9 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
         Parameters
         ----------
-        oss : OpticStudioSystem
-            The OpticStudio system.
+        oss : OpticStudioSystem | None
+            The OpticStudio system. If the OpticStudio system is not provided, ZOSPy will attempt to use the primary
+            system. If no primary system is found, an error will be raised.
         config_file : str | Path | None
             Path to the configuration file. If `None`, a temporary file will be created.
         text_output_file : str | Path | None
@@ -826,8 +828,13 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         -------
         AnalysisResult
             The analysis results.
+
+        Raises
+        ------
+        ValueError
+            If `oss` is not provided and the connection to OpticStudio has not been established.
         """
-        self._oss = weakref.proxy(oss)
+        self._oss = weakref.proxy(oss) if oss is not None else weakref.proxy(get_primary_system())
         self._check_mode()
         self._create_analysis()
 
