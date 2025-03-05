@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import inspect
 import json
+from contextlib import nullcontext as does_not_raise
 from dataclasses import fields
 from datetime import datetime
 from types import SimpleNamespace
@@ -21,15 +22,13 @@ from zospy.analyses.base import (
     AnalysisSettings,
     BaseAnalysisWrapper,
     _validated_setter,
+    new_analysis,
 )
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.base import new_analysis
 from zospy.analyses.parsers.types import ValidatedDataFrame
 from zospy.analyses.reports.surface_data import SurfaceDataSettings
 from zospy.analyses.systemviewers.base import SystemViewerWrapper
-from zospy.api import config
 
-from contextlib import nullcontext as does_not_raise
 
 def all_subclasses(cls):
     return set(cls.__subclasses__()).union([s for c in cls.__subclasses__() for s in all_subclasses(c)])
@@ -214,11 +213,14 @@ class TestAnalysisWrapper:
         with pytest.raises(TypeError, match="settings should be a dataclass"):
             MockAnalysis().update_settings(settings=123)
 
-
     @pytest.mark.parametrize(
         "field_specification",
         [
-            "All", 0, 1, 2, 3,
+            "All",
+            0,
+            1,
+            2,
+            3,
         ],
     )
     def test_get_field(self, simple_system, field_specification):
@@ -227,12 +229,12 @@ class TestAnalysisWrapper:
 
         analysis = new_analysis(simple_system, constants.Analysis.AnalysisIDM.RayFan, settings_first=True)
 
-        if field_specification == 'All' or field_specification == 0:
+        if field_specification in ("All", 0):
             analysis.Settings.Field.UseAllFields()
         else:
             analysis.Settings.Field.SetFieldNumber(field_specification)
 
-        assert analysis.get_field() == ('All' if field_specification == 0 else field_specification)
+        assert analysis.get_field() == ("All" if field_specification == 0 else field_specification)
 
     @pytest.mark.parametrize(
         "analysis_type,field_specification,expectation",
@@ -242,11 +244,11 @@ class TestAnalysisWrapper:
             ("RayFan", 1, does_not_raise()),
             ("RayFan", 2, does_not_raise()),
             ("RayFan", 3, does_not_raise()),
-            ("RayFan", 1.0, pytest.raises(ValueError, match=r'^Field value should be')),
-            ("RayFan", 1.5, pytest.raises(ValueError, match=r'^Field value should be')),
-            ("RayFan", "Invalid", pytest.raises(ValueError, match=r'^Field value should be')),
-            ("RayFan", None, pytest.raises(ValueError, match=r'^Field value should be')),
-            ("WavefrontMap", "All", pytest.raises(ValueError, match=r'^Could not set field value to')),
+            ("RayFan", 1.0, pytest.raises(ValueError, match=r"^Field value should be")),
+            ("RayFan", 1.5, pytest.raises(ValueError, match=r"^Field value should be")),
+            ("RayFan", "Invalid", pytest.raises(ValueError, match=r"^Field value should be")),
+            ("RayFan", None, pytest.raises(ValueError, match=r"^Field value should be")),
+            ("WavefrontMap", "All", pytest.raises(ValueError, match=r"^Could not set field value to")),
             ("WavefrontMap", 1, does_not_raise()),
         ],
     )
@@ -254,18 +256,24 @@ class TestAnalysisWrapper:
         for x in (-5, 5):
             simple_system.SystemData.Fields.AddField(x, 0, 1.0)
 
-        analysis = new_analysis(simple_system, getattr(constants.Analysis.AnalysisIDM, analysis_type), settings_first=True)
+        analysis = new_analysis(
+            simple_system, getattr(constants.Analysis.AnalysisIDM, analysis_type), settings_first=True
+        )
 
         with expectation:
             analysis.set_field(field_specification)
-            assert analysis.Settings.Field.GetFieldNumber() == (0 if field_specification == "All" else field_specification)
-
-
+            assert analysis.Settings.Field.GetFieldNumber() == (
+                0 if field_specification == "All" else field_specification
+            )
 
     @pytest.mark.parametrize(
         "wavelength_specification",
         [
-            "All", 0, 1, 2, 3,
+            "All",
+            0,
+            1,
+            2,
+            3,
         ],
     )
     def test_get_wavelength(self, simple_system, wavelength_specification):
@@ -274,12 +282,12 @@ class TestAnalysisWrapper:
 
         analysis = new_analysis(simple_system, constants.Analysis.AnalysisIDM.RayFan, settings_first=True)
 
-        if wavelength_specification == 'All' or wavelength_specification == 0:
+        if wavelength_specification in ("All", 0):
             analysis.Settings.Wavelength.UseAllWavelengths()
         else:
             analysis.Settings.Wavelength.SetWavelengthNumber(wavelength_specification)
 
-        assert analysis.get_wavelength() == ('All' if wavelength_specification == 0 else wavelength_specification)
+        assert analysis.get_wavelength() == ("All" if wavelength_specification == 0 else wavelength_specification)
 
     @pytest.mark.parametrize(
         "analysis_type,wavelength_specification,expectation",
@@ -289,23 +297,27 @@ class TestAnalysisWrapper:
             ("RayFan", 1, does_not_raise()),
             ("RayFan", 2, does_not_raise()),
             ("RayFan", 3, does_not_raise()),
-            ("RayFan", 1.0, pytest.raises(ValueError, match=r'^Wavelength value should be')),
-            ("RayFan", 1.5, pytest.raises(ValueError, match=r'^Wavelength value should be')),
-            ("RayFan", "Invalid", pytest.raises(ValueError, match=r'^Wavelength value should be')),
-            ("RayFan", None, pytest.raises(ValueError, match=r'^Wavelength value should be')),
-            ("WavefrontMap", "All", pytest.raises(ValueError, match=r'^Could not set wavelength value to')),
+            ("RayFan", 1.0, pytest.raises(ValueError, match=r"^Wavelength value should be")),
+            ("RayFan", 1.5, pytest.raises(ValueError, match=r"^Wavelength value should be")),
+            ("RayFan", "Invalid", pytest.raises(ValueError, match=r"^Wavelength value should be")),
+            ("RayFan", None, pytest.raises(ValueError, match=r"^Wavelength value should be")),
+            ("WavefrontMap", "All", pytest.raises(ValueError, match=r"^Could not set wavelength value to")),
             ("WavefrontMap", 1, does_not_raise()),
         ],
     )
     def test_set_wavelength(self, simple_system, analysis_type, wavelength_specification, expectation):
         simple_system.SystemData.Wavelengths.SelectWavelengthPreset(constants.SystemData.WavelengthPreset.FdC_Visible)
 
-        analysis = new_analysis(simple_system, getattr(constants.Analysis.AnalysisIDM, analysis_type), settings_first=True)
+        analysis = new_analysis(
+            simple_system, getattr(constants.Analysis.AnalysisIDM, analysis_type), settings_first=True
+        )
 
         with expectation:
             analysis.set_wavelength(wavelength_specification)
 
-            assert analysis.Settings.Wavelength.GetWavelengthNumber() == (0 if wavelength_specification == "All" else wavelength_specification)
+            assert analysis.Settings.Wavelength.GetWavelengthNumber() == (
+                0 if wavelength_specification == "All" else wavelength_specification
+            )
 
     @pytest.mark.parametrize(
         "analysis_type,surface_specification,expectation",
@@ -313,23 +325,27 @@ class TestAnalysisWrapper:
             ("SurfaceCurvature", 0, does_not_raise()),
             ("SurfaceCurvature", 1, does_not_raise()),
             ("SurfaceCurvature", 2, does_not_raise()),
-            ("SurfaceCurvature", "Image", pytest.raises(ValueError, match=r'^Could not set surface value to')),
-            ("SurfaceCurvature", "Objective", pytest.raises(ValueError, match=r'^Could not set surface value to')),
-            ("SurfaceCurvature", 1.5, pytest.raises(ValueError, match=r'^Surface value should be')),
-            ("SurfaceCurvature", "Invalid", pytest.raises(ValueError, match=r'^Surface value should be')),
-            ("SurfaceCurvature", None, pytest.raises(ValueError, match=r'^Surface value should be')),
+            ("SurfaceCurvature", "Image", pytest.raises(ValueError, match=r"^Could not set surface value to")),
+            ("SurfaceCurvature", "Objective", pytest.raises(ValueError, match=r"^Could not set surface value to")),
+            ("SurfaceCurvature", 1.5, pytest.raises(ValueError, match=r"^Surface value should be")),
+            ("SurfaceCurvature", "Invalid", pytest.raises(ValueError, match=r"^Surface value should be")),
+            ("SurfaceCurvature", None, pytest.raises(ValueError, match=r"^Surface value should be")),
             ("WavefrontMap", 1, does_not_raise()),
             ("WavefrontMap", "Image", does_not_raise()),
-            ("WavefrontMap", "Objective", pytest.raises(ValueError, match=r'^Could not set surface value to')),
-            # ToDo Implement test for Objective that should pass when such a test becomes possible
+            ("WavefrontMap", "Objective", pytest.raises(ValueError, match=r"^Could not set surface value to")),
+            # TODO Implement test for Objective that should pass when such a test becomes possible
         ],
     )
-    def test_set_surface(self, simple_system, analysis_type, surface_specification, expectation, monkeypatch):
-        analysis = new_analysis(simple_system, getattr(constants.Analysis.AnalysisIDM, analysis_type), settings_first=True)
+    def test_set_surface(self, simple_system, analysis_type, surface_specification, expectation):
+        analysis = new_analysis(
+            simple_system, getattr(constants.Analysis.AnalysisIDM, analysis_type), settings_first=True
+        )
 
         with expectation:
             analysis.set_surface(surface_specification)
-            assert analysis.Settings.Surface.GetSurfaceNumber() == (0 if surface_specification == "Image" else surface_specification)
+            assert analysis.Settings.Surface.GetSurfaceNumber() == (
+                0 if surface_specification == "Image" else surface_specification
+            )
 
     @pytest.mark.parametrize(
         "temp_file_type,filename",

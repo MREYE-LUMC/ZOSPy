@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # Reference version of OpticStudio, with which all analysis outputs are compared
-REFERENCE_VERSION: str = "23.1.0"
+REFERENCE_VERSION: str = "24.1.3"
 
 # Folder with configuration files for tests of *_fromcfg analyses
 CONFIG_DATA_FOLDER: Path = Path("tests/data/config")

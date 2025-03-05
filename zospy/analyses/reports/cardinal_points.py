@@ -71,9 +71,7 @@ class CardinalPointsSettings:
         The orientation along which the cardinal points are calculated. Must be one of "X-Z", "Y-Z". Defaults to "Y-Z".
     """
 
-    surface_1: Annotated[int, Field(ge=1)] = Field(
-        default=1, description="First surface of the analyzed system"
-    )
+    surface_1: Annotated[int, Field(ge=1)] = Field(default=1, description="First surface of the analyzed system")
     surface_2: Annotated[int, Field(ge=2)] | Literal["Image"] = Field(
         default="Image", description="Last surface of the analyzed system"
     )

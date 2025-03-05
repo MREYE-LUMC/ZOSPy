@@ -363,7 +363,7 @@ class Analysis:
             raise ValueError(f'Field value should be "All" or an integer, got {value}')
 
         if message is not None:
-            raise ValueError(f'Could not set field value to {value}: {message.Text}')
+            raise ValueError(f"Could not set field value to {value}: {message.Text}")
 
     @property
     def header_data(self) -> list[str]:
@@ -451,7 +451,7 @@ class Analysis:
             raise ValueError('Wavelength value should be "All" or an integer')
 
         if message is not None:
-            raise ValueError(f'Could not set wavelength value to {value}: {message.Text}')
+            raise ValueError(f"Could not set wavelength value to {value}: {message.Text}")
 
     def set_surface(self, value: int | Literal["Image", "Objective"]):
         """Set the surface value in the analysis settings.
@@ -483,7 +483,7 @@ class Analysis:
             raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
 
         if message is not None:
-            raise ValueError(f'Could not set surface value to {value}: {message.Text}')
+            raise ValueError(f"Could not set surface value to {value}: {message.Text}")
 
     def get_text_output(self, txtoutfile: str, encoding: str):
         """Get the text output of the analysis.

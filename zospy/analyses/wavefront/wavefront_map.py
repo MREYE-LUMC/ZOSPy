@@ -57,9 +57,7 @@ class WavefrontMapSettings:
     """
 
     field: int = Field(default=1, ge=1, description="Field number")
-    surface: Literal["Image"] | Annotated[int, Field(ge=1)] = Field(
-        default="Image", description="Surface number"
-    )
+    surface: Literal["Image"] | Annotated[int, Field(ge=1)] = Field(default="Image", description="Surface number")
     wavelength: int = Field(default=1, ge=1, description="Wavelength number")
     show_as: ZOSAPIConstant("Analysis.ShowAs") = Field(default="Surface", description="Show as")
     rotation: ZOSAPIConstant("Analysis.Settings.Rotations") = Field(default="Rotate_0", description="Rotation")
