@@ -151,7 +151,9 @@ class GeometricImageAnalysis(
 
     def run_analysis(self) -> DataFrame | None:
         """Run the FFT Through Focus MTF analysis."""
-        self.analysis.set_wavelength(0 if self.settings.wavelength == "All" else self.settings.wavelength)  # ToDo track with future releases
+        self.analysis.set_wavelength(
+            0 if self.settings.wavelength == "All" else self.settings.wavelength
+        )  # TODO track with future releases
         self.analysis.set_field(self.settings.field)
         self.analysis.set_surface(self.settings.surface)
         self.analysis.Settings.FieldSize = self.settings.field_size
