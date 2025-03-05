@@ -445,12 +445,12 @@ class Analysis:
         else:
             raise ValueError('Wavelength value should be "All" or an integer')
 
-    def set_surface(self, value: int | Literal["Image", "Objective", "Object"]):
+    def set_surface(self, value: int | Literal["Image", "Objective"]):
         """Set the surface value in the analysis settings.
 
         Parameters
         ----------
-        value : int | Literal["Image", "Objective", "Object"]
+        value : int | Literal["Image", "Objective"]
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
             string.
 
@@ -466,7 +466,7 @@ class Analysis:
         """
         if value == "Image":
             self.Settings.Surface.UseImageSurface()
-        elif value in ("Object", "Objective"):
+        elif value == "Objective":
             self.Settings.Surface.UseObjectiveSurface()
         elif isinstance(value, int):
             self.Settings.Surface.SetSurfaceNumber(value)
