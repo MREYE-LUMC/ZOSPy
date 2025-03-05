@@ -83,7 +83,7 @@ class GeometricImageAnalysisSettings:
 
     wavelength: WavelengthNumber = Field(default="All", description="Wavelength number or 'All'")
     field: int = Field(default=1, gt=0, description="Field number")
-    surface: Literal["Image", "Object"] | Annotated[int, Field(gt=0)] = Field(default="Image", description="Surface")
+    surface: Literal["Image"] | Annotated[int, Field(gt=0)] = Field(default="Image", description="Surface")
     field_size: float = Field(default=0, description="Field size")
     image_size: float = Field(default=50, description="Field size")
     file: str = Field(default="LETTERF.IMA", description="Image file used for the analysis")
@@ -118,7 +118,7 @@ class GeometricImageAnalysis(
         *,
         wavelength: Literal["All"] | int = "All",
         field: int = 1,
-        surface: Literal["Image", "Object"] | int = "Image",
+        surface: Literal["Image"] | int = "Image",
         field_size: float = 0,
         image_size: float = 50,
         file: str = "LETTERF.IMA",

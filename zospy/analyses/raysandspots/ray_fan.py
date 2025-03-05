@@ -116,7 +116,7 @@ class RayFanSettings:
     wavelength: WavelengthNumber = Field(default="All", description="Wavelength number or 'All'")
     tangential: str = Field(default="Aberration_Y", description="Tangential aberration to plot")
     sagittal: str = Field(default="Aberration_X", description="Sagittal aberration to plot")
-    surface: Literal["Image", "Object"] | Annotated[int, Field(ge=0)] = Field(
+    surface: Literal["Image"] | Annotated[int, Field(ge=0)] = Field(
         default="Image", description="Surface " "to be analyzed"
     )
     use_dashes: bool = Field(default=False, description="Use dashed lines for the rays")
