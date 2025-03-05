@@ -57,7 +57,7 @@ class WavefrontMapSettings:
     """
 
     field: int = Field(default=1, ge=1, description="Field number")
-    surface: Literal["Object", "Image"] | Annotated[int, Field(ge=1)] = Field(
+    surface: Literal["Image"] | Annotated[int, Field(ge=1)] = Field(
         default="Image", description="Surface number"
     )
     wavelength: int = Field(default=1, ge=1, description="Wavelength number")
@@ -84,7 +84,7 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
         self,
         *,
         field: int = 1,
-        surface: Literal["Object", "Image"] | int = "Image",
+        surface: Literal["Image"] | int = "Image",
         wavelength: int = 1,
         show_as: constants.Analysis.ShowAs | str = "Surface",
         rotation: constants.Analysis.Settings.Rotations | str = "Rotate_0",
