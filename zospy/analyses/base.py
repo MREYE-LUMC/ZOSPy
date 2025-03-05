@@ -354,7 +354,7 @@ class Analysis:
             When 'value' is not integer or string. When it is a string, it also raises an error when the string
             does not equal 'All'.
         """
-        if value == "All" or value == 0:
+        if value == "All":
             self.Settings.Field.UseAllFields()
         elif isinstance(value, int):
             self.Settings.Field.SetFieldNumber(value)
@@ -438,7 +438,7 @@ class Analysis:
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'All'.
         """
-        if value == "All" or value == 0:
+        if value == "All":
             self.Settings.Wavelength.UseAllWavelengths()
         elif isinstance(value, int):
             self.Settings.Wavelength.SetWavelengthNumber(value)
