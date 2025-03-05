@@ -471,7 +471,7 @@ class Analysis:
         elif isinstance(value, int):
             self.Settings.Surface.SetSurfaceNumber(value)
         else:
-            raise ValueError(f'Surface value should be "Image", "Objective", "Object" or an integer, got {value}')
+            raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
 
     def get_text_output(self, txtoutfile: str, encoding: str):
         """Get the text output of the analysis.
