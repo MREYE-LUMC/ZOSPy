@@ -342,7 +342,7 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the field should be set. Either int or str. When value == 0, all fields are used. Accepts only 'All' as string.
+            The value to which the field should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
         -------
@@ -426,7 +426,7 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the wavelength should be set. Either int or str. When value == 0, all wavelengths are used. Accepts only 'All' as string.
+            The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
         -------
