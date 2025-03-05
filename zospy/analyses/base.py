@@ -353,13 +353,17 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string
             does not equal 'All'.
+            When 'value' is not accepted by the analysis as field specification.
         """
         if value == "All":
-            self.Settings.Field.UseAllFields()
+            message = self.Settings.Field.UseAllFields()
         elif isinstance(value, int):
-            self.Settings.Field.SetFieldNumber(value)
+            message = self.Settings.Field.SetFieldNumber(value)
         else:
             raise ValueError(f'Field value should be "All" or an integer, got {value}')
+
+        if message is not None:
+            raise ValueError(f'Could not set field value to {value}: {message.Text}')
 
     @property
     def header_data(self) -> list[str]:
@@ -437,13 +441,17 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'All'.
+            When 'value' is not accepted by the analysis as wavelength specification.
         """
         if value == "All":
-            self.Settings.Wavelength.UseAllWavelengths()
+            message = self.Settings.Wavelength.UseAllWavelengths()
         elif isinstance(value, int):
-            self.Settings.Wavelength.SetWavelengthNumber(value)
+            message = self.Settings.Wavelength.SetWavelengthNumber(value)
         else:
             raise ValueError('Wavelength value should be "All" or an integer')
+
+        if message is not None:
+            raise ValueError(f'Could not set wavelength value to {value}: {message.Text}')
 
     def set_surface(self, value: int | Literal["Image", "Objective"]):
         """Set the surface value in the analysis settings.
@@ -463,15 +471,19 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'Image' or 'Objective'.
+            When 'value' is not accepted by the analysis as surface specification.
         """
         if value == "Image":
-            self.Settings.Surface.UseImageSurface()
+            message = self.Settings.Surface.UseImageSurface()
         elif value == "Objective":
-            self.Settings.Surface.UseObjectiveSurface()
+            message = self.Settings.Surface.UseObjectiveSurface()
         elif isinstance(value, int):
-            self.Settings.Surface.SetSurfaceNumber(value)
+            message = self.Settings.Surface.SetSurfaceNumber(value)
         else:
             raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
+
+        if message is not None:
+            raise ValueError(f'Could not set surface value to {value}: {message.Text}')
 
     def get_text_output(self, txtoutfile: str, encoding: str):
         """Get the text output of the analysis.
