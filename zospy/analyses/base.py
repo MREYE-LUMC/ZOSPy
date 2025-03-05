@@ -342,7 +342,7 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the field should be set. Either int or str. Accepts only 'All' as string.
+            The value to which the field should be set. Either int or str. When value == 0, all fields are used. Accepts only 'All' as string.
 
         Returns
         -------
@@ -352,10 +352,9 @@ class Analysis:
         ------
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string
-            does not
-            equal 'All'.
+            does not equal 'All'.
         """
-        if value == "All":
+        if value == "All" or value == 0:
             self.Settings.Field.UseAllFields()
         elif isinstance(value, int):
             self.Settings.Field.SetFieldNumber(value)
@@ -427,7 +426,7 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string.
+            The value to which the wavelength should be set. Either int or str. When value == 0, all wavelengths are used. Accepts only 'All' as string.
 
         Returns
         -------
@@ -439,7 +438,7 @@ class Analysis:
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'All'.
         """
-        if value == "All":
+        if value == "All" or value == 0:
             self.Settings.Wavelength.UseAllWavelengths()
         elif isinstance(value, int):
             self.Settings.Wavelength.SetWavelengthNumber(value)
