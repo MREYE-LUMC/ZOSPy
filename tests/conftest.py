@@ -35,6 +35,7 @@ def pytest_collection_modifyitems(config, items):
     Customizing test selection allows to hide results from the test output instead of marking them as skipped.
     Current customizations:
     - Skip tests for old analyses if the `--old-analyses` option is not set.
+    - Run must_pass tests first.
     """
     yield
 
@@ -43,6 +44,12 @@ def pytest_collection_modifyitems(config, items):
         deselected = _get_old_analyses(items)
         items[:] = [item for item in items if item not in deselected]
         config.hook.pytest_deselected(items=deselected)
+
+    # Run must_pass tests first
+    must_pass_tests = [item for item in items if item.get_closest_marker("must_pass")]
+    for test in must_pass_tests:
+        items.remove(test)
+        items.insert(0, test)
 
 
 @pytest.fixture(scope="session")
