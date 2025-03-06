@@ -3,6 +3,8 @@ import pytest
 
 from zospy.analyses.old.wavefront import wavefront_map, zernike_standard_coefficients
 
+pytestmark = pytest.mark.old_analyses
+
 
 class TestWavefrontMap:
     def test_can_run_wavefront_map(self, simple_system):

@@ -8,6 +8,8 @@ from zospy.analyses.old.mtf import (
     huygens_mtf,
 )
 
+pytestmark = pytest.mark.old_analyses
+
 _FFT_THROUGH_FOCUS_MTF_MTFTYPE_EXPECTED_RETURN = {
     # The expected return does not match constants.Analysis.Settings.Mtf.MtfTypes for fft_through_focus_mtf
     "Modulation": "5",

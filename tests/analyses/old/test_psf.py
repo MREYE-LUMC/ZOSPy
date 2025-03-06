@@ -1,6 +1,9 @@
+import pytest
 from pandas.testing import assert_frame_equal
 
 from zospy.analyses.old.psf import huygens_psf
+
+pytestmark = pytest.mark.old_analyses
 
 
 class TestHuygensPSF:

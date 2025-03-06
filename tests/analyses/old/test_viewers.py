@@ -13,6 +13,8 @@ from zospy.analyses.old.systemviewers import (
 
 # ruff: noqa: SLF001
 
+pytestmark = pytest.mark.old_analyses
+
 
 class TestViewers:
     def test_can_run_cross_section(self, simple_system):

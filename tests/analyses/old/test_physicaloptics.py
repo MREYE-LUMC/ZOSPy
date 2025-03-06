@@ -7,6 +7,8 @@ from zospy.analyses.old.physicaloptics import (
     pop_create_fiber_parameter_dict,
 )
 
+pytestmark = pytest.mark.old_analyses
+
 
 class TestPhysicalOpticsPropagation:
     def test_can_run_physical_optics_propagation(self, simple_system):

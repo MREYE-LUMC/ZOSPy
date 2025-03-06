@@ -3,6 +3,8 @@ from pandas.testing import assert_frame_equal
 
 from zospy.analyses.old.surface import curvature
 
+pytestmark = pytest.mark.old_analyses
+
 
 class TestCurvature:
     SKIP_SAGITTAL_CURVATURE = "SagitalCurvature is renamed to SagittalCurvature in OpticStudio 24.1.2 and higher"

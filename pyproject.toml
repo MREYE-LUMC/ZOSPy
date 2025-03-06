@@ -171,9 +171,10 @@ linewrap-full-docstring = true
 [tool.pytest.ini_options]
 markers = [
     "must_pass: test must pass, otherwise all other tests will be skipped",
+    "old_analyses: test is part of the old analyses and will be skipped by default",
     "require_mode: requires the specified connection mode, otherwise the test will be skipped",
-    "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions",
     "skip_for_opticstudio_versions: test is skipped for specific OpticStudio versions",
+    "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions",
 ]
 
 [tool.mypy]

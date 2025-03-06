@@ -1,3 +1,5 @@
+import pytest
+
 from zospy.analyses.old.reports import (
     cardinal_points,
     cardinal_points_fromcfg,
@@ -5,6 +7,8 @@ from zospy.analyses.old.reports import (
     surface_data_fromcfg,
     system_data,
 )
+
+pytestmark = pytest.mark.old_analyses
 
 
 class TestSurfaceData:

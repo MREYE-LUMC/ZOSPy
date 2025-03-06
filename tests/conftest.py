@@ -16,11 +16,33 @@ def pytest_addoption(parser):
     parser.addoption(
         "--opticstudio-directory", type=Path, default=None, help="Path to the OpticStudio installation directory"
     )
+    parser.addoption("--old-analyses", action="store_true", help="Run tests for old analyses")
 
 
 def pytest_runtest_makereport(item, call):
     if any(m.name == "must_pass" for m in item.iter_markers()) and call.excinfo is not None:
         pytest.exit(f"Aborting because a must pass test failed: {item.name}", 1)
+
+
+def _get_old_analyses(items):
+    return [item for item in items if item.get_closest_marker("old_analyses")]
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_collection_modifyitems(config, items):
+    """Customize test selection.
+
+    Customizing test selection allows to hide results from the test output instead of marking them as skipped.
+    Current customizations:
+    - Skip tests for old analyses if the `--old-analyses` option is not set.
+    """
+    yield
+
+    # Deselect tests for old analyses if --old-analyses is not set
+    if not config.getoption("--old-analyses"):
+        deselected = _get_old_analyses(items)
+        items[:] = [item for item in items if item not in deselected]
+        config.hook.pytest_deselected(items=deselected)
 
 
 @pytest.fixture(scope="session")
@@ -60,6 +82,12 @@ def xfail_for_opticstudio_versions(request, optic_studio_version):
         for condition in conditions:
             if optic_studio_version.match(condition):
                 request.node.add_marker(pytest.mark.xfail(True, reason=reason, raises=AssertionError))
+
+
+@pytest.fixture(autouse=True)
+def skip_old_analysis_tests(request):
+    if request.node.get_closest_marker("old_analyses") and not request.config.getoption("--old-analyses"):
+        pytest.skip("Skipping tests for old analyses")
 
 
 @pytest.fixture(scope="session")
