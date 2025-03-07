@@ -894,7 +894,9 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
         return self._process_data_series_or_grid(data)
 
-    def get_data_grid(self, content_specification: Literal["pixel_based","coordinate_based"]="pixel_based") -> pd.DataFrame | None:
+    def get_data_grid(
+        self, content_specification: Literal["pixel_based", "coordinate_based"] = "pixel_based"
+    ) -> pd.DataFrame | None:
         """Get the data grids from the analysis result.
 
         Returns

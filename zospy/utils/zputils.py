@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import MutableMapping
-from typing import TypeVar, Literal
+from typing import Literal, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -89,7 +89,12 @@ def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.Da
     return df
 
 
-def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx=None, miny=None, content_specification: Literal["pixel_based","coordinate_based"]="pixel_based") -> pd.DataFrame:
+def unpack_datagrid(
+    datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid,
+    minx=None,
+    miny=None,
+    content_specification: Literal["pixel_based", "coordinate_based"] = "pixel_based",
+) -> pd.DataFrame:
     """Unpack an OpticStudio datagrid to a Pandas DataFrame.
 
     Parameters
@@ -112,7 +117,9 @@ def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx=None, min
     minx = datagrid.MinX if minx is None else minx
     miny = datagrid.MinY if miny is None else miny
 
-    if content_specification == "pixel_based":  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
+    if (
+        content_specification == "pixel_based"
+    ):  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
         minx = minx + 0.5 * datagrid.Dx
         miny = miny + 0.5 * datagrid.Dy
     elif content_specification == "coordinate_based":
