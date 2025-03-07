@@ -89,13 +89,17 @@ def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.Da
     return df
 
 
-def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid) -> pd.DataFrame:
+def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx=None, miny=None) -> pd.DataFrame:
     """Unpack an OpticStudio datagrid to a Pandas DataFrame.
 
     Parameters
     ----------
     datagrid : ZOSAPI.Analysis.Data.IAR_DataGrid
         OpticStudio DataGrid object.
+    minx : Optional[float, int]
+        The MinX coordinate to be used when unpacking the datagrid.
+    miny : Optional[float, int]
+        The MinY coordinate to be used when unpacking the datagrid.
 
     Returns
     -------
@@ -105,8 +109,10 @@ def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid) -> pd.DataFram
     """
     values = np.array(datagrid.Values)
 
-    columns = np.linspace(datagrid.MinX, datagrid.MinX + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
-    rows = np.linspace(datagrid.MinY, datagrid.MinY + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
+    minx = datagrid.MinX if minx is None else minx
+    miny = datagrid.MinY if miny is None else miny
+    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
+    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
 
     df = pd.DataFrame(data=values, index=rows, columns=columns)
     df.index.name = datagrid.YLabel or "y"

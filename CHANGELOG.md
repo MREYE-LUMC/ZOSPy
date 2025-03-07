@@ -16,6 +16,7 @@ ZOS-API can also be added in patch releases.
 ### Fixed
 
 - `zospy.analyses.new.base.Analysis` now raises an `AttributeError` when trying to set an attribute that is not present in the OpticStudio analysis object (#106).
+- Obtain correct minimum x and y values in data grids for `zospy.analyses.extendedscene.geometric_image_analysis` (#103).
 
 ### Changed
 

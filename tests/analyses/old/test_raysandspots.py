@@ -4,6 +4,8 @@ import pytest
 from zospy.analyses.old.raysandspots import ray_fan, single_ray_trace
 from zospy.api.config import DECIMAL_POINT
 
+pytestmark = pytest.mark.old_analyses
+
 
 class TestSingleRayTrace:
     def test_can_run_single_ray_trace(self, simple_system):

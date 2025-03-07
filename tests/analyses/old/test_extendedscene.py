@@ -3,6 +3,8 @@ import pytest
 
 from zospy.analyses.old.extendedscene import geometric_image_analysis
 
+pytestmark = pytest.mark.old_analyses
+
 
 class TestGeometricImageAnalysis:
     def test_can_run_geometric_image_analysis(self, simple_system):

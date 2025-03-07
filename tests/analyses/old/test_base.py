@@ -16,6 +16,8 @@ from zospy.analyses.old.base import (
 )
 from zospy.api import constants
 
+pytestmark = pytest.mark.old_analyses
+
 
 def test_oncomplete():
     assert OnComplete.Close == "Close"

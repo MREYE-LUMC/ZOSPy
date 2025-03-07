@@ -5,6 +5,8 @@ import zospy.api.config as _config
 from zospy.analyses.old.polarization import polarization_pupil_map, transmission
 from zospy.utils.zputils import _get_number_field
 
+pytestmark = pytest.mark.old_analyses
+
 XFAIL_REASON = "Intentionally skipped for this OpticStudio version. See https://zospy.readthedocs.io/compatibility."
 
 _signs = ["", "+", "-"]
