@@ -342,7 +342,12 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the field should be set. Either int or str. Accepts only 'All' as string.
+            The value to which the field should be set. Either int or str. Accepts only 'All' as string. Note that,
+            within the ZOS-API, specifying an integer lower than the first available field within the analysis sets the
+            field to the first available field, and an integer higher than the last available field accepted by the
+            analysis sets the field to the last available field. The behaviour of value=0 changes dependent on the
+            analysis is thus ambiguous, in some it sets the field to 'All'(if allowed), in others, it selects the first
+            field.
 
         Returns
         -------
@@ -430,7 +435,12 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string.
+            The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string. Note that,
+            within the ZOS-API, specifying an integer lower than the first available wavelength within the analysis sets
+            the wavelength to the first available wavelength, and an integer higher than the last available wavelength
+            accepted by the analysis sets the wavelength to the last available field. The behaviour of value=0 changes
+            dependent on the analysis is thus ambiguous, in some it sets the wavelength to 'All'(if allowed), in others,
+            it selects the first wavelength.
 
         Returns
         -------
@@ -460,7 +470,11 @@ class Analysis:
         ----------
         value : int | Literal["Image", "Objective"]
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
-            string.
+            string. Note that, within the ZOS-API, specifying an integer lower than the first available surface within
+            the analysis sets the surface to the first available surface, and an integer higher than the last available
+            surface accepted by the analysis sets the surface to the last available surface. The behaviour of value=0
+            changes dependent on the analysis is thus ambiguous, in some it sets the surface to 'Image' (if allowed), in
+            others, it selects the first surface.
 
         Returns
         -------
