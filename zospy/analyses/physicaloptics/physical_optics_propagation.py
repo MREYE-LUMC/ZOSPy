@@ -426,7 +426,7 @@ class PhysicalOpticsPropagation(
         # Run analysis
         self.analysis.ApplyAndWaitForCompletion()
 
-        return self.get_data_grid()
+        return self.get_data_grid(content_specification="pixel_based")
 
     def _set_pop_parameters(self, which: Literal["beam", "fiber"], parameters: dict) -> None:
         """Set beam or fiber parameters using the provided dictionary.

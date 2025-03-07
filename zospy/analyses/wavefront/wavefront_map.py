@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, Literal, Union
 
+import pandas as pd
 from pandas import DataFrame
 from pydantic import Field
 
@@ -132,4 +133,6 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
 
         self.analysis.ApplyAndWaitForCompletion()
 
-        return self.get_data_grid()
+        datagrid = self.get_data_grid(content_specification="pixel_based")
+        datagrid = pd.DataFrame(datagrid.values[1:, 1:], columns = datagrid.columns[:-1], index=datagrid.index[:-1])
+        return datagrid

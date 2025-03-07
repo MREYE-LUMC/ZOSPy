@@ -168,5 +168,5 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
             decenter_x=atox(match.group("decenter_x"), float),
             decenter_y=atox(match.group("decenter_y"), float),
             decenter_unit=match.group("decenter_unit"),
-            data=unpack_datagrid(datagrid),
+            data=unpack_datagrid(datagrid, content_specification="coordinate_based"),
         )
