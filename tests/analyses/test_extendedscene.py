@@ -28,8 +28,8 @@ class TestGeometricImageAnalysis:
         number_of_pixels = 100
         result = GeometricImageAnalysis(image_size=image_size, number_of_pixels=number_of_pixels).run(simple_system)
 
-        pixel_width = image_size/number_of_pixels
-        pixel_height = image_size/number_of_pixels
+        pixel_width = image_size / number_of_pixels
+        pixel_height = image_size / number_of_pixels
 
         # Adjust expected_minx and expected_miny with respectively 0.5 * pixel_width and 0.5 * pixel_height as the
         # columns and index from result.data provide the pixel center rather than the bottom left corner of the pixel,
