@@ -1,0 +1,118 @@
+{
+    "data": {
+        "general_lens_data": {
+            "surfaces": 4,
+            "stop": 1,
+            "system_aperture": {
+                "type": "Float By Stop Size",
+                "value": 1.0
+            },
+            "fast_semi_diameters": true,
+            "field_unpolarized": true,
+            "convert_thin_film_phase_to_ray_equivalent": true,
+            "j_e_conversion_method": "X Axis Reference",
+            "glass_catalogs": [
+                "SCHOTT"
+            ],
+            "ray_aiming": false,
+            "apodization": {
+                "type": "Uniform",
+                "factor": 0.0
+            },
+            "reference_opd": "Exit Pupil",
+            "paraxial_rays_setting": "Ignore Coordinate Breaks",
+            "method_to_compute_f_number": "Tracing Rays",
+            "method_to_compute_huygens_integral": "Auto",
+            "print_coordinate_breaks": true,
+            "multi_threading": true,
+            "opd_modulo_2_pi": false,
+            "temperature": 20.0,
+            "pressure": 1.0,
+            "adjust_index_data_to_environment": false,
+            "effective_focal_length_air": 20.16807,
+            "effective_focal_length_image": 20.16807,
+            "back_focal_length": 19.83193,
+            "total_track": 20.792,
+            "image_space_f_number": 10.08403,
+            "paraxial_working_f_number": 10.08403,
+            "working_f_number": 10.05939,
+            "image_space_na": 0.0495225,
+            "object_space_na": 1e-10,
+            "stop_radius": 1.0,
+            "paraxial_image_height": 0.0,
+            "paraxial_magnification": 0.0,
+            "entrance_pupil_diameter": 2.0,
+            "entrance_pupil_position": 0.0,
+            "exit_pupil_diameter": 2.033898,
+            "exit_pupil_position": -20.46997,
+            "field_type": "Angle in degrees",
+            "maximum_radial_field": 0.0,
+            "primary_wavelength": 0.543,
+            "angular_magnification": 0.9833333,
+            "lens_units": "Millimeters",
+            "source_units": "Watts",
+            "analysis_units": "Watts/cm^2",
+            "afocal_mode_units": "milliradians",
+            "mtf_units": "cycles/millimeter",
+            "include_calculated_data_in_session_file": true
+        },
+        "fields": {
+            "number_of_fields": 1,
+            "field_type": "Angle in degrees",
+            "fields": [
+                {
+                    "number": 1,
+                    "x_value": 0.0,
+                    "y_value": 0.0,
+                    "weight": 1.0
+                }
+            ]
+        },
+        "vignetting": [
+            {
+                "number": 1,
+                "vdx": 0.0,
+                "vdy": 0.0,
+                "vcx": 0.0,
+                "vcy": 0.0,
+                "van": 0.0
+            }
+        ],
+        "wavelengths": {
+            "number_of_wavelengths": 1,
+            "units": "µm",
+            "wavelengths": [
+                {
+                    "number": 1,
+                    "value": 0.543,
+                    "weight": 1.0
+                }
+            ]
+        },
+        "abcd_matrix": {
+            "A": 20.13,
+            "B": 0.0,
+            "C": 0.0,
+            "D": 20.13
+        }
+    },
+    "settings": null,
+    "metadata": {
+        "DateTime": "2025-03-10T19:21:33.490000",
+        "FeatureDescription": "",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "zospy_class",
+        "name": "SystemDataResult",
+        "module": "zospy.analyses.reports.system_data"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "NoneType",
+        "module": "builtins"
+    }
+}

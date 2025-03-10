@@ -21,7 +21,7 @@ from zospy.zpcore import OpticStudioSystem
 def wavefront_map(
     oss: OpticStudioSystem,
     field: int = 1,
-    surface: Literal["Image", "Object"] | int = "Image",
+    surface: Literal["Image"] | int = "Image",
     wavelength: int = 1,
     show_as: constants.Analysis.ShowAs | str = "Surface",
     rotation: constants.Analysis.Settings.Rotations | str = "Rotate_0",

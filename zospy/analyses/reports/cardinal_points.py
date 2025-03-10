@@ -62,7 +62,7 @@ class CardinalPointsSettings:
     Attributes
     ----------
     surface_1 : int
-        The surface number corresponding to the first surface of the analyzed system, or "Object". Defaults to "Object".
+        The surface number corresponding to the first surface of the analyzed system. Defaults to 1.
     surface_2 : int
         The surface number corresponding to the last surface of the analyzed system, or "Image". Defaults to "Image".
     wavelength : int
@@ -71,9 +71,7 @@ class CardinalPointsSettings:
         The orientation along which the cardinal points are calculated. Must be one of "X-Z", "Y-Z". Defaults to "Y-Z".
     """
 
-    surface_1: Annotated[int, Field(ge=1)] | Literal["Object"] = Field(
-        default="Object", description="First surface of the analyzed system"
-    )
+    surface_1: Annotated[int, Field(ge=1)] = Field(default=1, description="First surface of the analyzed system")
     surface_2: Annotated[int, Field(ge=2)] | Literal["Image"] = Field(
         default="Image", description="Last surface of the analyzed system"
     )
@@ -106,7 +104,7 @@ class CardinalPoints(
     def __init__(
         self,
         *,
-        surface_1: int | Literal["Object"] = "Object",
+        surface_1: int = 1,
         surface_2: int | Literal["Image"] = "Image",
         wavelength: int = 1,
         orientation: Literal["Y-Z", "X-Z"] = "Y-Z",
@@ -121,9 +119,6 @@ class CardinalPoints(
 
     def run_analysis(self) -> CardinalPointsResult:
         """Run the Cardinal Points analysis."""
-        if self.settings.surface_1 == "Object":
-            self.settings.surface_1 = 1
-
         if self.settings.surface_2 == "Image":
             self.settings.surface_2 = self.oss.LDE.NumberOfSurfaces - 1
 

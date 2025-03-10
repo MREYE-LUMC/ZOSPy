@@ -100,8 +100,8 @@ class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings]
         self.analysis.Settings.Rotation = getattr(
             constants.Analysis.Settings.Rotations, f"Rotate_{self.settings.rotation}"
         )
-        self.analysis.wavelength = self.settings.wavelength
-        self.analysis.field = self.settings.field
+        self.analysis.set_wavelength(self.settings.wavelength)
+        self.analysis.set_field(self.settings.field)
         self.analysis.Settings.Type = constants.process_constant(
             constants.Analysis.Settings.HuygensPsfTypes, self.settings.psf_type
         )

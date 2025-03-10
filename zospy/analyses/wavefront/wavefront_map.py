@@ -58,9 +58,7 @@ class WavefrontMapSettings:
     """
 
     field: int = Field(default=1, ge=1, description="Field number")
-    surface: Literal["Object", "Image"] | Annotated[int, Field(ge=1)] = Field(
-        default="Image", description="Surface number"
-    )
+    surface: Literal["Image"] | Annotated[int, Field(ge=1)] = Field(default="Image", description="Surface number")
     wavelength: int = Field(default=1, ge=1, description="Wavelength number")
     show_as: ZOSAPIConstant("Analysis.ShowAs") = Field(default="Surface", description="Show as")
     rotation: ZOSAPIConstant("Analysis.Settings.Rotations") = Field(default="Rotate_0", description="Rotation")
@@ -94,7 +92,7 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
         self,
         *,
         field: int = 1,
-        surface: Literal["Object", "Image"] | int = "Image",
+        surface: Literal["Image"] | int = "Image",
         wavelength: int = 1,
         show_as: constants.Analysis.ShowAs | str = "Surface",
         rotation: constants.Analysis.Settings.Rotations | str = "Rotate_0",
@@ -118,9 +116,9 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
         --------
         WavefrontMapSettings : Settings for the Wavefront Map analysis.
         """
-        self.analysis.field = self.settings.field
+        self.analysis.set_field(self.settings.field)
         self.analysis.set_surface(self.settings.surface)
-        self.analysis.wavelength = self.settings.wavelength
+        self.analysis.set_wavelength(self.settings.wavelength)
         self.analysis.Settings.ShowAs = constants.process_constant(constants.Analysis.ShowAs, self.settings.show_as)
         self.analysis.Settings.Rotation = constants.process_constant(
             constants.Analysis.Settings.Rotations, self.settings.rotation

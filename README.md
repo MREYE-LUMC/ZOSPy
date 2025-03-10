@@ -43,7 +43,7 @@ conda install conda-forge::zospy
 
 ## Dependencies
 
-ZOSPy officially supports Python 3.9 - 3.12. It may work with older Python versions, but support is not provided for
+ZOSPy officially supports Python 3.9 - 3.13. It may work with older Python versions, but support is not provided for
 these versions.
 
 ### Python packages
