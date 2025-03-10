@@ -342,12 +342,7 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the field should be set. Either int or str. Accepts only 'All' as string. Note that,
-            within the ZOS-API, specifying an integer lower than the first available field within the analysis sets the
-            field to the first available field, and an integer higher than the last available field accepted by the
-            analysis sets the field to the last available field. The behaviour of value=0 changes dependent on the
-            analysis is thus ambiguous, in some it sets the field to 'All'(if allowed), in others, it selects the first
-            field.
+            The value to which the field should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
         -------
@@ -359,6 +354,13 @@ class Analysis:
             When 'value' is not integer or string. When it is a string, it also raises an error when the string
             does not equal 'All'.
             When 'value' is not accepted by the analysis as field specification.
+
+        Warnings
+        --------
+        The ZOS-API handles invalid integer values without warning about this:
+
+        - If selecting all fields is not possible, a value of `0` will instead select the first field;
+        - If the value is greater than the number of fields, the last field will be selected.
         """
         if value == "All":
             message = self.Settings.Field.UseAllFields()
@@ -435,12 +437,7 @@ class Analysis:
         Parameters
         ----------
         value : int | Literal["All"]
-            The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string. Note that,
-            within the ZOS-API, specifying an integer lower than the first available wavelength within the analysis sets
-            the wavelength to the first available wavelength, and an integer higher than the last available wavelength
-            accepted by the analysis sets the wavelength to the last available field. The behaviour of value=0 changes
-            dependent on the analysis is thus ambiguous, in some it sets the wavelength to 'All'(if allowed), in others,
-            it selects the first wavelength.
+            The value to which the wavelength should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
         -------
@@ -452,6 +449,13 @@ class Analysis:
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'All'.
             When 'value' is not accepted by the analysis as wavelength specification.
+
+        Warnings
+        --------
+        The ZOS-API handles invalid integer values without warning about this:
+
+        - If selecting all wavelengths is not possible, a value of `0` will instead select the first wavelength;
+        - If the value is greater than the number of wavelengths, the last wavelength will be selected.
         """
         if value == "All":
             message = self.Settings.Wavelength.UseAllWavelengths()
@@ -470,11 +474,7 @@ class Analysis:
         ----------
         value : int | Literal["Image", "Objective"]
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
-            string. Note that, within the ZOS-API, specifying an integer lower than the first available surface within
-            the analysis sets the surface to the first available surface, and an integer higher than the last available
-            surface accepted by the analysis sets the surface to the last available surface. The behaviour of value=0
-            changes dependent on the analysis is thus ambiguous, in some it sets the surface to 'Image' (if allowed), in
-            others, it selects the first surface.
+            string.
 
         Returns
         -------
@@ -486,6 +486,15 @@ class Analysis:
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'Image' or 'Objective'.
             When 'value' is not accepted by the analysis as surface specification.
+
+        Warnings
+        --------
+        The ZOS-API handles invalid integer values without warning about this:
+
+        - If the supplied value is `0`, OpticStudio will base it selection based on the analysis. In some, it will
+          select surface 0. In others, it will select a special surface (e.g. 'Image'). If neither is available, it
+          selects the first available surface;
+        - If the value is greater than the number of surfaces, the last surface will be selected.
         """
         if value == "Image":
             message = self.Settings.Surface.UseImageSurface()
