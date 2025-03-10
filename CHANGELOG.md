@@ -11,7 +11,8 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
-- `zospy.zpcore.ZOS.get_instance` to get the existing `ZOS` instance, if present (#107)
+- `zospy.zpcore.ZOS.get_instance` to get the existing `ZOS` instance, if present (#107).
+- Test reference data for OpticStudio 2025 R1. This is now the reference version for the tests (#127).
 
 ### Fixed
 
