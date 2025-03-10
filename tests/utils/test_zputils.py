@@ -1,6 +1,6 @@
 from types import SimpleNamespace
-from zospy.utils.zputils import unpack_datagrid
 
+from zospy.utils.zputils import unpack_datagrid
 
 mock_datagrid = SimpleNamespace(
     Values=[[1, 2, 3], [4, 5, 6], [7, 8, 9]],
