@@ -16,7 +16,7 @@ def geometric_image_analysis(
     oss: OpticStudioSystem,
     wavelength: Literal["All"] | int = "All",
     field: int = 1,
-    surface: Literal["Image", "Object"] | int = "Image",
+    surface: Literal["Image"] | int = "Image",
     field_size: float = 0,
     image_size: float = 50,
     file: str = "LETTERF.IMA",

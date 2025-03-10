@@ -320,8 +320,8 @@ class PhysicalOpticsPropagation(
         else:
             raise ValueError(f'end_surface value should be "Image" or an integer, got {self.settings.end_surface}')
 
-        self.analysis.wavelength = self.settings.wavelength
-        self.analysis.field = self.settings.field
+        self.analysis.set_wavelength(self.settings.wavelength)
+        self.analysis.set_field(self.settings.field)
         self.analysis.Settings.SurfaceToBeam = self.settings.surface_to_beam
         self.analysis.Settings.UsePolarization = self.settings.use_polarization
         self.analysis.Settings.SeparateXY = self.settings.separate_xy

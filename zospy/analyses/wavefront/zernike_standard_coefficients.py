@@ -116,8 +116,8 @@ class ZernikeStandardCoefficients(
             constants.Analysis.SampleSizes, standardize_sampling(self.settings.sampling)
         )
         self.analysis.Settings.MaximumNumberOfTerms = self.settings.maximum_term
-        self.analysis.wavelength = self.settings.wavelength
-        self.analysis.field = self.settings.field
+        self.analysis.set_wavelength(self.settings.wavelength)
+        self.analysis.set_field(self.settings.field)
         self.analysis.Settings.ReferenceOBDToVertex = (
             self.settings.reference_opd_to_vertex
         )  # TODO: Monitor name with zemax updates

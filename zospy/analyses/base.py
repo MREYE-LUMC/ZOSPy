@@ -324,26 +324,24 @@ class Analysis:
         """Analysis results."""
         return self._analysis.GetResults()
 
-    @property
-    def field(self) -> int | str:
-        """Gets the wavelength value of the analysis.
+    def get_field(self) -> int | Literal["All"]:
+        """Get the field value from the analysis settings.
 
         Returns
         -------
-        int | str
+        int | Literal["All"]
             Either the field number, or 'All' if field was set to 'All'.
         """
         field_number = self.Settings.Field.GetFieldNumber()
 
         return "All" if field_number == 0 else field_number
 
-    @field.setter
-    def field(self, value: int | str):
-        """Set the field value for the analysis.
+    def set_field(self, value: int | Literal["All"]):
+        """Set the field value in the analysis settings.
 
         Parameters
         ----------
-        value : int | str
+        value : int | Literal["All"]
             The value to which the field should be set. Either int or str. Accepts only 'All' as string.
 
         Returns
@@ -354,15 +352,25 @@ class Analysis:
         ------
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string
-            does not
-            equal 'All'.
+            does not equal 'All'.
+            When 'value' is not accepted by the analysis as field specification.
+
+        Warnings
+        --------
+        The ZOS-API handles invalid integer values without warning about this:
+
+        - If selecting all fields is not possible, a value of `0` will instead select the first field;
+        - If the value is greater than the number of fields, the last field will be selected.
         """
         if value == "All":
-            self.Settings.Field.UseAllFields()
+            message = self.Settings.Field.UseAllFields()
         elif isinstance(value, int):
-            self.Settings.Field.SetFieldNumber(value)
+            message = self.Settings.Field.SetFieldNumber(value)
         else:
             raise ValueError(f'Field value should be "All" or an integer, got {value}')
+
+        if message is not None:
+            raise ValueError(f"Could not set field value to {value}: {message.Text}")
 
     @property
     def header_data(self) -> list[str]:
@@ -411,22 +419,20 @@ class Analysis:
             self.Results.MetaData.LensTitle,
         )
 
-    @property
-    def wavelength(self) -> int | Literal["All"]:
-        """Gets the wavelength value of the analysis.
+    def get_wavelength(self) -> int | Literal["All"]:
+        """Get the wavelength value from the analysis settings.
 
         Returns
         -------
-        int | str
+        int | Literal["All"]
             Either the wavelength number, or 'All' if wavelength was set to 'All'.
         """
         wavelength = self.Settings.Wavelength.GetWavelengthNumber()
 
         return "All" if wavelength == 0 else wavelength
 
-    @wavelength.setter
-    def wavelength(self, value: int | Literal["All"]):
-        """Set the wavelength value for the analysis.
+    def set_wavelength(self, value: int | Literal["All"]):
+        """Set the wavelength value in the analysis settings.
 
         Parameters
         ----------
@@ -442,20 +448,31 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'All'.
+            When 'value' is not accepted by the analysis as wavelength specification.
+
+        Warnings
+        --------
+        The ZOS-API handles invalid integer values without warning about this:
+
+        - If selecting all wavelengths is not possible, a value of `0` will instead select the first wavelength;
+        - If the value is greater than the number of wavelengths, the last wavelength will be selected.
         """
         if value == "All":
-            self.Settings.Wavelength.UseAllWavelengths()
+            message = self.Settings.Wavelength.UseAllWavelengths()
         elif isinstance(value, int):
-            self.Settings.Wavelength.SetWavelengthNumber(value)
+            message = self.Settings.Wavelength.SetWavelengthNumber(value)
         else:
             raise ValueError('Wavelength value should be "All" or an integer')
 
-    def set_surface(self, value: int | str):
-        """Set the surface value for the analysis.
+        if message is not None:
+            raise ValueError(f"Could not set wavelength value to {value}: {message.Text}")
+
+    def set_surface(self, value: int | Literal["Image", "Objective"]):
+        """Set the surface value in the analysis settings.
 
         Parameters
         ----------
-        value : int | str
+        value : int | Literal["Image", "Objective"]
             The value to which the surface should be set. Either int or str. Accepts only 'Image' or 'Objective' as
             string.
 
@@ -468,15 +485,28 @@ class Analysis:
         ValueError
             When 'value' is not integer or string. When it is a string, it also raises an error when the string does not
             equal 'Image' or 'Objective'.
+            When 'value' is not accepted by the analysis as surface specification.
+
+        Warnings
+        --------
+        The ZOS-API handles invalid integer values without warning about this:
+
+        - If the supplied value is `0`, OpticStudio will base it selection based on the analysis. In some, it will
+          select surface 0. In others, it will select a special surface (e.g. 'Image'). If neither is available, it
+          selects the first available surface;
+        - If the value is greater than the number of surfaces, the last surface will be selected.
         """
         if value == "Image":
-            self.Settings.Surface.UseImageSurface()
+            message = self.Settings.Surface.UseImageSurface()
         elif value == "Objective":
-            self.Settings.Surface.UseObjectiveSurface()
+            message = self.Settings.Surface.UseObjectiveSurface()
         elif isinstance(value, int):
-            self.Settings.Surface.SetSurfaceNumber(value)
+            message = self.Settings.Surface.SetSurfaceNumber(value)
         else:
             raise ValueError(f'Surface value should be "Image", "Objective" or an integer, got {value}')
+
+        if message is not None:
+            raise ValueError(f"Could not set surface value to {value}: {message.Text}")
 
     def get_text_output(self, txtoutfile: str, encoding: str):
         """Get the text output of the analysis.

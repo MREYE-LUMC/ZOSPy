@@ -156,8 +156,8 @@ class SingleRayTrace(
         self.analysis.Settings.Hy = self.settings.hy
         self.analysis.Settings.Px = self.settings.px
         self.analysis.Settings.Py = self.settings.py
-        self.analysis.wavelength = self.settings.wavelength
-        self.analysis.field = self.settings.field
+        self.analysis.set_wavelength(self.settings.wavelength)
+        self.analysis.set_field(self.settings.field)
         self.analysis.Settings.Type = constants.process_constant(
             constants.Analysis.Settings.Aberrations.RayTraceType, self.settings.raytrace_type
         )

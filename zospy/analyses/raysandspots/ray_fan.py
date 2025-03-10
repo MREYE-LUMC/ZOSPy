@@ -116,7 +116,7 @@ class RayFanSettings:
     wavelength: WavelengthNumber = Field(default="All", description="Wavelength number or 'All'")
     tangential: str = Field(default="Aberration_Y", description="Tangential aberration to plot")
     sagittal: str = Field(default="Aberration_X", description="Sagittal aberration to plot")
-    surface: Literal["Image", "Object"] | Annotated[int, Field(ge=0)] = Field(
+    surface: Literal["Image"] | Annotated[int, Field(ge=0)] = Field(
         default="Image", description="Surface " "to be analyzed"
     )
     use_dashes: bool = Field(default=False, description="Use dashed lines for the rays")
@@ -151,9 +151,9 @@ class RayFan(BaseAnalysisWrapper[RayFanResult, RayFanSettings], analysis_type="R
 
     def run_analysis(self) -> RayFanResult:
         """Run the Ray Fan analysis."""
-        self.analysis.field = self.settings.field
+        self.analysis.set_field(self.settings.field)
         self.analysis.set_surface(self.settings.surface)
-        self.analysis.wavelength = self.settings.wavelength
+        self.analysis.set_wavelength(self.settings.wavelength)
         self.analysis.Settings.PlotScale = self.settings.plot_scale
         self.analysis.Settings.NumberOfRays = self.settings.number_of_rays
         self.analysis.Settings.Tangential = constants.process_constant(
