@@ -133,5 +133,5 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
 
         self.analysis.ApplyAndWaitForCompletion()
 
-        datagrid = self.get_data_grid(content_specification="pixel_based")
+        datagrid = self.get_data_grid(cell_origin="bottom_left")
         return pd.DataFrame(datagrid.values[1:, 1:], columns=datagrid.columns[:-1], index=datagrid.index[:-1])

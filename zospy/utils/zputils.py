@@ -93,7 +93,7 @@ def unpack_datagrid(
     datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid,
     minx=None,
     miny=None,
-    content_specification: Literal["pixel_based", "coordinate_based"] = "pixel_based",
+    cell_origin: Literal["bottom_left", "center"] = "bottom_left",
 ) -> pd.DataFrame:
     """Unpack an OpticStudio datagrid to a Pandas DataFrame.
 
@@ -118,14 +118,14 @@ def unpack_datagrid(
     miny = datagrid.MinY if miny is None else miny
 
     if (
-        content_specification == "pixel_based"
+        cell_origin == "bottom_left"
     ):  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
         minx = minx + 0.5 * datagrid.Dx
         miny = miny + 0.5 * datagrid.Dy
-    elif content_specification == "coordinate_based":
+    elif cell_origin == "center":
         pass  # minx and miny remain equal
     else:
-        raise ValueError(f"Cannot process the content specification '{content_specification}'")
+        raise ValueError(f"Cannot process the cell origin '{cell_origin}'")
 
     columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
     rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
