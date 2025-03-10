@@ -115,4 +115,4 @@ class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings]
         # Run analysis
         self.analysis.ApplyAndWaitForCompletion()
 
-        return self.get_data_grid(content_specification="pixel_based")
+        return self.get_data_grid(cell_origin="bottom_left")
