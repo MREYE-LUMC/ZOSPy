@@ -129,8 +129,8 @@ def unpack_datagrid(
     else:
         raise ValueError(f"Cannot process the cell origin '{cell_origin}'")
 
-    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
-    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
+    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx).round(10)
+    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny).round(10)
 
     df = pd.DataFrame(data=values, index=rows, columns=columns)
     df.index.name = datagrid.YLabel or "y"
