@@ -105,6 +105,10 @@ def unpack_datagrid(
         The MinX coordinate to be used when unpacking the datagrid.
     miny : Optional[float, int]
         The MinY coordinate to be used when unpacking the datagrid.
+    cell_origin: Literal["bottom_left", "center"]
+        Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they are
+        defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the grid cell.
+        Defaults to 'bottom_left'.
 
     Returns
     -------
@@ -117,9 +121,7 @@ def unpack_datagrid(
     minx = datagrid.MinX if minx is None else minx
     miny = datagrid.MinY if miny is None else miny
 
-    if (
-        cell_origin == "bottom_left"
-    ):  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
+    if cell_origin == "bottom_left":  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
         minx = minx + 0.5 * datagrid.Dx
         miny = miny + 0.5 * datagrid.Dy
     elif cell_origin == "center":
