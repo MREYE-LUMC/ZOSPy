@@ -167,9 +167,7 @@ class GeometricImageAnalysis(
 
         # Get data
         data = [
-            zputils.unpack_datagrid(
-                self.analysis.Results.DataGrids[i], minx=minx, miny=miny, cell_origin="bottom_left"
-            )
+            zputils.unpack_datagrid(self.analysis.Results.DataGrids[i], minx=minx, miny=miny, cell_origin="bottom_left")
             for i in range(self.analysis.Results.NumberOfDataGrids)
         ]
 
