@@ -33,10 +33,11 @@ ZOS-API can also be added in patch releases.
 - `zospy.zpcore.OpticStudioSystem.new`: `saveifneeded` is now a keyword-only argument.
 - `zospy.zpcore.OpticStudioSystem.close`: `saveifneeded` is now a keyword-only argument.
 - `zospy.zpcore.ZOS.__init__`: all parameters are now keyword-only arguments.
-- Removed `zospy.utils.zputils.rgetattr` because `operator.attrgetter` does the same thing.
 - Replaced `zospy.utils.zputils.rsetattr` with `zospy.utils.zputils.attrsetter`, based on `operator.attrgetter`.
 - `zospy.analyses` now uses a new, object-oriented interface for OpticStudio analyses (#118). The old interface is now deprecated, but still available in `zospy.analyses.old`.
   See discussion [#87](https://github.com/MREYE-LUMC/ZOSPy/discussions/87) and the release notes for more information.
+- `zospy.utils.zputils.unpack_datagrid` now returns a DataGrid with column and row labels indicating the centers of the cells, instead
+  of the bottom-left corners of the cells (#128).
 
 ### Deprecated
 
@@ -45,6 +46,7 @@ ZOS-API can also be added in patch releases.
 - `zospy.zpcore.ZOS.wakeup` is no longer needed, as the ZOS-API is now loaded in `zospy.zpcore.ZOS.__init__` (#107)
 - `zospy.zpcore.ZOS.connect_as_extension`, `zospy.zpcore.ZOS.create_new_application` and `zospy.zpcore.ZOS.connect_as_standalone` have been removed in favor of `zospy.zpcore.ZOS.connect` (#107)
 - `zospy.functions.nce.get_object_data` has been removed because it implements a conversion that is now done automatically by `zospy.api.codecs.OpticStudioInterfaceEncoder` (#107)
+- Removed `zospy.utils.zputils.rgetattr` because `operator.attrgetter` does the same thing.
 
 ## [[1.3.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.3.0) - 2024-10-30
 
