@@ -5,5 +5,5 @@ myst:
 ---
 
 ```{include} ../CONTRIBUTING.md
-:name: CONTRIBUTING.md
+:name: Contributing guide
 ```

@@ -26,7 +26,7 @@ extensions = [
     "sphinx_design",
 ]
 
-myst_enable_extensions = ["colon_fence", "attrs_block"]
+myst_enable_extensions = ["colon_fence", "attrs_block", "attrs_inline"]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/.conda", "**/.ipynb_checkpoints"]

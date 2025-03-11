@@ -10,6 +10,7 @@
 
    zospy.zpcore
    zospy.analyses
+   zospy.analyses.old
    zospy.api.constants
    zospy.api.codecs
    zospy.functions

@@ -77,7 +77,7 @@ class CardinalPointsSettings:
     )
     wavelength: int = Field(default=1, ge=1, description="Wavelength number")
     orientation: Literal["Y-Z", "X-Z"] = Field(
-        "Y-Z", description="Orientation along which the cardinal points are calculated"
+        default="Y-Z", description="Orientation along which the cardinal points are calculated"
     )
 
     @model_validator(mode="after")
