@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import MutableMapping
-from typing import TypeVar
+from typing import Literal, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -89,7 +89,12 @@ def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.Da
     return df
 
 
-def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx=None, miny=None) -> pd.DataFrame:
+def unpack_datagrid(
+    datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid,
+    minx=None,
+    miny=None,
+    cell_origin: Literal["bottom_left", "center"] = "bottom_left",
+) -> pd.DataFrame:
     """Unpack an OpticStudio datagrid to a Pandas DataFrame.
 
     Parameters
@@ -100,6 +105,10 @@ def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx=None, min
         The MinX coordinate to be used when unpacking the datagrid.
     miny : Optional[float, int]
         The MinY coordinate to be used when unpacking the datagrid.
+    cell_origin : Literal["bottom_left", "center"]
+        Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they are
+        defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the grid cell.
+        Defaults to 'bottom_left'.
 
     Returns
     -------
@@ -111,8 +120,17 @@ def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid, minx=None, min
 
     minx = datagrid.MinX if minx is None else minx
     miny = datagrid.MinY if miny is None else miny
-    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
-    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
+
+    if cell_origin == "bottom_left":  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
+        minx += 0.5 * datagrid.Dx
+        miny += 0.5 * datagrid.Dy
+    elif cell_origin == "center":
+        pass  # minx and miny remain equal
+    else:
+        raise ValueError(f"Cannot process the cell origin '{cell_origin}'")
+
+    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx).round(10)
+    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny).round(10)
 
     df = pd.DataFrame(data=values, index=rows, columns=columns)
     df.index.name = datagrid.YLabel or "y"

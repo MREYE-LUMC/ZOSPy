@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, Literal, Union
 
+import pandas as pd
 from pandas import DataFrame
 from pydantic import Field
 
@@ -76,7 +77,16 @@ class WavefrontMapSettings:
 
 
 class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSettings], analysis_type="WavefrontMap"):
-    """Wavefront Map analysis."""
+    """Wavefront Map analysis.
+
+    Warnings
+    --------
+    The ZOS-API returns a datagrid with an empty first row and first column. Given normalized within the wavefront
+    map, the datagrid should span from x=-1 to x=1, and y=-1 to y=1. The provided datagrid.MinX and .MinY indeed
+    point to (-1, -1), but the provided width the datagrid cells make the width of the entire datagrid 2 +
+    1*cell_width. The same holds for the height. Thus, ZOSPy drops the empty first row and column, resulting in a
+    centered wavefront map ranging from -1 to 1 in both x and y.
+    """
 
     def __init__(
         self,
@@ -130,4 +140,5 @@ class WavefrontMap(BaseAnalysisWrapper[Union[DataFrame, None], WavefrontMapSetti
 
         self.analysis.ApplyAndWaitForCompletion()
 
-        return self.get_data_grid()
+        datagrid = self.get_data_grid(cell_origin="bottom_left")
+        return pd.DataFrame(datagrid.values[1:, 1:], columns=datagrid.columns[:-1], index=datagrid.index[:-1])

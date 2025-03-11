@@ -25,10 +25,17 @@ class TestGeometricImageAnalysis:
     def test_geometric_image_analysis_returns_correct_origin(
         self, simple_system, image_size, expected_minx, expected_miny
     ):
-        result = GeometricImageAnalysis(image_size=image_size).run(simple_system)
+        number_of_pixels = 100
+        result = GeometricImageAnalysis(image_size=image_size, number_of_pixels=number_of_pixels).run(simple_system)
 
-        assert result.data.columns[0] == expected_minx
-        assert result.data.index[0] == expected_miny
+        pixel_width = image_size / number_of_pixels
+        pixel_height = image_size / number_of_pixels
+
+        # Adjust expected_minx and expected_miny with respectively 0.5 * pixel_width and 0.5 * pixel_height as the
+        # columns and index from result.data provide the pixel center rather than the bottom left corner of the pixel,
+        # while expected_minx and expected_miny point to that bottom left corner.
+        assert result.data.columns[0] == (expected_minx + 0.5 * pixel_width)
+        assert result.data.index[0] == (expected_miny + 0.5 * pixel_height)
 
     @pytest.mark.parametrize(
         "show_as,field_size,total_watts,rays_x_1000",

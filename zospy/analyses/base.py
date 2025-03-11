@@ -924,8 +924,15 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
         return self._process_data_series_or_grid(data)
 
-    def get_data_grid(self) -> pd.DataFrame | None:
+    def get_data_grid(self, cell_origin: Literal["bottom_left", "center"] = "bottom_left") -> pd.DataFrame | None:
         """Get the data grids from the analysis result.
+
+        Parameters
+        ----------
+        cell_origin : Literal["bottom_left", "center"]
+            Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they
+            are defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the
+            grid cell. Defaults to 'bottom_left'.
 
         Returns
         -------
@@ -933,7 +940,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
             The data grids from the analysis result, or None if there are no data grids.
         """
         data = [
-            zputils.unpack_datagrid(self.analysis.Results.DataGrids[i])
+            zputils.unpack_datagrid(self.analysis.Results.DataGrids[i], cell_origin=cell_origin)
             for i in range(self.analysis.Results.NumberOfDataGrids)
         ]
 
