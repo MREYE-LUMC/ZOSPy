@@ -32,7 +32,7 @@ myst_enable_extensions = ["colon_fence", "attrs_block", "attrs_inline", "substit
 myst_heading_anchors = 3
 _reference_major, _reference_minor, _reference_patch = REFERENCE_VERSION.split(".")
 myst_substitutions = {
-    "REFERENCE_VERSION": f"20{_reference_major}.{_reference_minor}.{_reference_patch}",
+    "REFERENCE_VERSION": f"20{_reference_major} R{_reference_minor}.{_reference_patch}",
     "PYTHON_VERSIONS": "3.9 - 3.13"
 }
 
