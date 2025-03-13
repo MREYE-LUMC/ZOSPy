@@ -1,0 +1,8 @@
+jupyter
+matplotlib
+numpy
+pandas
+scipy
+seaborn
+sympy
+zospy>=1.1.1

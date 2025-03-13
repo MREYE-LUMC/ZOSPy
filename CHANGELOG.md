@@ -18,6 +18,7 @@ ZOS-API can also be added in patch releases.
 
 - `zospy.analyses.new.base.Analysis` now raises an `AttributeError` when trying to set an attribute that is not present in the OpticStudio analysis object (#106).
 - Obtain correct minimum x and y values in data grids for `zospy.analyses.extendedscene.geometric_image_analysis` (#103).
+- Setting beam and fiber type with external files in `zospy.analyses.physicaloptics.physical_optics_propagation` (#114)
 
 ### Changed
 
@@ -47,6 +48,12 @@ ZOS-API can also be added in patch releases.
 - `zospy.zpcore.ZOS.connect_as_extension`, `zospy.zpcore.ZOS.create_new_application` and `zospy.zpcore.ZOS.connect_as_standalone` have been removed in favor of `zospy.zpcore.ZOS.connect` (#107)
 - `zospy.functions.nce.get_object_data` has been removed because it implements a conversion that is now done automatically by `zospy.api.codecs.OpticStudioInterfaceEncoder` (#107)
 - Removed `zospy.utils.zputils.rgetattr` because `operator.attrgetter` does the same thing.
+
+## [[1.3.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.3.1) - 2025-01-16
+
+### Fixed
+
+- Physical optics analysis start surface was hardcoded to 1 (#111, #112)
 
 ## [[1.3.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.3.0) - 2024-10-30
 

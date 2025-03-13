@@ -15,6 +15,8 @@ docs/examples/
 !docs/examples/introduction.md
 
 # Tool and cache folders
+.conda/
+.ipynb_checkpoints/
 __pycache__/
 .mypy_cache/
 .pytest_cache/
@@ -25,6 +27,7 @@ __pycache__/
 # Editor settings
 .idea/
 .vscode/
+.vs/
 
 # Temporary data files
 scripts/**/*.pickle
