@@ -9,7 +9,7 @@ Older versions of OpticStudio are not tested, but they will likely work with ZOS
 
 :::{dropdown} Table legend
 ✔: This version works without problems.  
-ℹ: The output of all ZOSPy analyses matches the direct OpticStudio output, but the OpticStudio output has shown differences with the output of the reference version (currently **OpticStudio 23 R1.01**).  
+ℹ: The output of all ZOSPy analyses matches the direct OpticStudio output, but the OpticStudio output has shown differences with the output of the reference version (currently **OpticStudio 25 R1.01**).  
 ⚠: ZOSPy does not fully work.  
 ❌: ZOSPy does not work at all.
 :::
