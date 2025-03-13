@@ -94,8 +94,9 @@ advanced/codecs
 :maxdepth: 2
 :caption: Contributing
 
-contributing
-developing_analyses
+contributing/contributing
+contributing/developing_analyses
+contributing/unit_tests
 ```
 
 ```{eval-rst}

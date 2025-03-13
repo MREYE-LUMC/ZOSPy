@@ -74,5 +74,5 @@ analysis.ApplyAndWaitForCompletion()
 If `settings_first=True`, the analysis is created without running it, allowing you to adjust the settings before running it.
 
 :::{tip}
-If you wrote code to access an OpticStudio analysis directly, consider [contributing](../developing_analyses.md) it to ZOSPy.
+If you wrote code to access an OpticStudio analysis directly, consider [contributing](../contributing/developing_analyses.md) it to ZOSPy.
 :::
