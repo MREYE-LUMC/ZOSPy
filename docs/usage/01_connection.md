@@ -78,7 +78,17 @@ The ZOS-API can be thought of as a library that provides access to OpticStudio's
 Loading this library itself does not establish a connection to OpticStudio.
 The `ZOS` class is responsible for loading the ZOS-API assemblies that allow communication with OpticStudio.
 As you can load the ZOS-API only once, the `ZOS` class is a singleton class which can only be instantiated once.
-Creating a second `ZOS` instance will raise a warning, and return the existing instance.
+Creating a second `ZOS` instance will raise a warning, and return the existing instance:
+
+```pycon
+>>> import zospy as zp
+>>> zos = zp.ZOS()
+>>> zos2 = zp.ZOS()
+UserWarning: Only a single instance of ZOS can exist at any time. Returning existing instance.
+>>> zos is zos2
+True
+```
+
 This behavior is similar to the behavior of the ZOS-API itself, which returns the existing `ZOSAPI_Connection` instance
 when creating a new connection.
 However, the ZOS-API will do this silently, while ZOSPy raises a warning.
