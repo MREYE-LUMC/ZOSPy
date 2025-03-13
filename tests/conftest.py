@@ -109,10 +109,10 @@ def system_save_file(request):
 
 @pytest.fixture(scope="session")
 def opticstudio_directory(request) -> Path | None:
-    path = request.config.getoption("--opticstudio-directory")
+    path = Path(request.config.getoption("--opticstudio-directory"))
 
     if path is not None:
-        return path.resolve()
+        return path.resolve(strict=True)
 
     return None
 
