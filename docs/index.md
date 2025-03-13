@@ -123,6 +123,7 @@ contributing/unit_tests
 
 license
 changelog
+contact
 ```
 
 [opticstudio]: https://www.ansys.com/products/optics/ansys-zemax-opticstudio
