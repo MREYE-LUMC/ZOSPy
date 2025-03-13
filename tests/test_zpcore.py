@@ -53,6 +53,16 @@ def test_zos_singleton(zos, oss):
         assert zos2 is zos
 
 
+@pytest.mark.filterwarnings("ignore:Only a single instance of ZOS can exist at any time")
+def test_zos_singleton_logs(zos, caplog):
+    with caplog.at_level("DEBUG"):
+        zos2 = zp.ZOS()
+
+    assert "ZOS instance already initialized" in caplog.text
+    assert "Initializing ZOS instance" not in caplog.text
+    assert zos2 is zos
+
+
 def test_zos_get_instance(zos):
     assert zp.ZOS.get_instance() is zos
 
