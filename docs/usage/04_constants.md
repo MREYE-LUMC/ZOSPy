@@ -1,6 +1,6 @@
 # Using ZOS-API constants
 
-all api constants are available through {py:mod}`zospy.constants <zospy.api.constants>`. 
+All api constants are available through {py:mod}`zospy.constants <zospy.api.constants>`. 
 Note that these are only available after initiating the ZOS-API connection, i.e. an instance of 
 {py:class}`zospy.ZOS <zospy.zpcore.ZOS>` has been created (see [Connecting to OpticStudio](01_connection.md)).
 

@@ -52,7 +52,7 @@ zp.solvers.material_model(surface.MaterialCell, refractive_index=1.5)
 
 ## Contributing solvers
 
-OpticStudio has many solvers, and not all of them are implemented in ZOSPy.
+OpticStudio has many solvers, and not all of them are implemented in ZOSPy (yet).
 If you want to use a solver that is not implemented, consider [contributing](../contributing/contributing.md) it to ZOSPy.
 All solvers follow the same structure, and writing a new one is straightforward.
 Here is an example for a solver that sets the power of an element:

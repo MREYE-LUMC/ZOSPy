@@ -11,7 +11,7 @@ from shutil import copytree
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ZOSPy"
-copyright = "2023, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # noqa: A001
+copyright = "2023-2025, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # noqa: A001
 author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 
 # -- General configuration ---------------------------------------------------
