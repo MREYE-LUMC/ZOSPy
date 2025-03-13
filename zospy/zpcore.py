@@ -397,6 +397,7 @@ class ZOS:
         """
         if cls not in cls._instances:
             instance = super().__new__(cls)
+            instance.__initialized = False
             cls._instances[cls] = instance
         else:
             warnings.warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")
@@ -423,6 +424,10 @@ class ZOS:
             zosapi_nethelper. Note that either the zosapi_nethelper or the opticstudio_directory has to be specified,
             not both.
         """
+        if self.__initialized:
+            logger.debug("ZOS instance already initialized")
+            return
+
         logger.debug("Initializing ZOS instance")
 
         self.ZOSAPI: _ZOSAPI = None
@@ -436,6 +441,8 @@ class ZOS:
         logger.info("ZOS instance initialized")
 
         self._wakeup(preload=preload, zosapi_nethelper=zosapi_nethelper, opticstudio_directory=opticstudio_directory)
+
+        self.__initialized = True
 
     def _wakeup(
         self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
