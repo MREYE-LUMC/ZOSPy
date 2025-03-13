@@ -18,4 +18,3 @@ oss = zos.connect()
 surface = oss.LDE.InsertNewSurfaceAt(1)
 zp.functions.lde.surface_change_type(surface, zp.constants.Editors.LDE.SurfaceType.ZernikeStandardSag)
 ```
-
