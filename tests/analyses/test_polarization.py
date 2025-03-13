@@ -105,7 +105,7 @@ class TestPolarizationPupilMap:
                 90,
                 "Image",
                 "17x17",
-                marks=pytest.mark.xfail_for_opticstudio_versions(["20.3.2", ">=24.1.3"], XFAIL_REASON),
+                marks=pytest.mark.xfail_for_opticstudio_versions(["20.3.2"], XFAIL_REASON),
             ),
         ],
     )
