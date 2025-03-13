@@ -19,9 +19,7 @@ definitely welcome:
 1. Examples of various kinds of optical systems (in `examples/`). These must be supplied as Jupyter Notebooks;
 2. Implementation of additional analyses (in `zospy/analyses`). Please refer to other analyses on how to implement them.
    If you add a new analysis, please include unit tests as well;
-3. Implementation of additional solvers (in `zospy/solvers`);
-4. Compatibility checks. If you are using a version of OpticStudio that is not listed in the [compatibility table](../compatibility.md),
-   please [run the unit tests](#4-test) and update the README accordingly.
+3. Implementation of additional solvers (in `zospy/solvers`).
 
 ## Code style
 
