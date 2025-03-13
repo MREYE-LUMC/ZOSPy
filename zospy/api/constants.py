@@ -7,10 +7,9 @@ available after running the code stated under examples.
 
 Examples
 --------
-import zospy as zp
-zos = zp.ZOS()
-zos.wakeup()
-zp.constants
+>>> import zospy as zp
+>>> zos = zp.ZOS()
+>>> print(zp.constants.Analysis.AnalysisIDM.ImageSimulation)
 """
 
 from __future__ import annotations

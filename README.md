@@ -10,8 +10,8 @@
 
 ## About
 
-Wrapper around the [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) API that provides a more intuitive way to interact with the 
-[ZOS-API](https://www.zemax.com/blogs/free-tutorials/getting-started-with-zos-api) through Python using a .NET connection, as described in [this Journal of Open Source Software paper][joss-paper].
+Wrapper around the [Ansys OpticStudio][opticstudio] API that provides a more intuitive way to interact with the 
+[ZOS-API][zos-api] through Python using a .NET connection, as described in [this Journal of Open Source Software paper][joss-paper].
 It thereby allows you to do more optics modelling with less coding.
 
 In addition to full access to all the OpticStudio fucntions through the ZOS-API, ZOSPy provides the following features:
@@ -20,12 +20,7 @@ In addition to full access to all the OpticStudio fucntions through the ZOS-API,
 - Easy access to solvers in `zospy.solvers`;
 - Easy access to all API constants in `zospy.constants`;
 - Autocomplete for all ZOS-API endpoints and constants;
-- Solves common problems related to Python.NET 3 and interaction with the ZOS-API. 
-
-## Waranty and liability
-
-The code is provided as is, without any warranty. It is solely intended for research purposes. No warranty is given and
-no rights can be derived from it, as is also stated in the [MIT license](LICENSE.txt).
+- Solves common problems related to Python.NET 3 and interaction with the ZOS-API.
 
 ## Installing
 
@@ -41,124 +36,9 @@ And through conda:
 conda install conda-forge::zospy
 ```
 
-## Dependencies
+## Example
 
-ZOSPy officially supports Python 3.9 - 3.13. It may work with older Python versions, but support is not provided for
-these versions.
-
-### Python packages
-
-- [Python for .NET](http://pythonnet.github.io/) 3.0.3
-- [pandas](https://pandas.pydata.org/)
-- [NumPy](https://numpy.org/)
-- [SemVer](https://python-semver.readthedocs.io/en/latest/index.html) 3.0.2
-
-### Software
-
-- [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio)
-
-### Compatibility
-
-ZOSPy is tested with the following versions of Python and Ansys Zemax OpticStudio:
-
-| Zemax       | 20.3.2 | 23.1.0 | 23.2.1 | 24.1.0 | 24.1.3 |
-|-------------|--------|--------|--------|--------|--------|
-| Python 3.9  | ⚠      | ✔      | ✔      | ✔      | ⚠      |
-| Python 3.10 | ⚠      | ✔      | ✔      | ✔      | ⚠      |
-| Python 3.11 | ⚠      | ✔      | ✔      | ✔      | ⚠      |
-| Python 3.12 | ⚠      |        |        | ✔      | ⚠      |
-
-✔: This version works without problems.
-⚠: This version works, but the output of analyses can differ slightly from the used reference version (currently **OpticStudio 23 R1.01**).
-
-## Referencing
-
-When publishing results obtained with this package, please cite [our paper][joss-paper] 
-in the Journal of Open Source Software:  
-
-> Vught, L. van, Haasjes, C. & Beenakker, J.W.M. (2024). 
-> ZOSPy: Optical ray tracing in Python through OpticStudio. 
-> Journal of Open Source Software, 9(96), 5756. 
-> https://doi.org/10.21105/joss.05756
-
-## Contributing
-
-Please read our [contribution guidelines](CONTRIBUTING.md) prior to opening a Pull Request.
-
-## Basic usage
-
-### Initiating connection
-
-The connection as extension to running software OpticStudio is initiated as:
-
-```python
-import zospy as zp
-
-zos = zp.ZOS()
-oss = zos.connect("extension")
-```
-
-Make sure that the OpticStudio software is set up to be connected to as extension through the API. Alternatively, a
-standalone OpticStudio application can be launched by changing the last line to:
-
-```python
-oss = zos.connect("standalone")
-```
-
-### Using solvers
-
-Solvers for the Lens Data Editor are available through `zp.solvers`. Every solver requires a surface as its first
-parameter.
-
-#### Examples
-
-```python
-import zospy.solvers as solvers
-
-surface = oss.LDE.GetSurfaceAt(2)
-solvers.position(surface.ThicknessCell, from_surface=1, length=10)
-```
-
-### Performing analyses
-
-Implemented analyses are available though `zp.analyses`. The available analyses are grouped in files that correspond to
-the analysis groups in OpticStudio (e.g. `zp.analyses.mtf`and `zp.analyses.wavefront`). Every analysis requires the
-OpticStudioSystem `oss` as first parameter.
-
-#### Examples
-
-```python
-from zp.analyses.mtf import fft_through_focus_mtf
-
-mtf = fft_through_focus_mtf(oss, sampling='64x64', deltafocus=0.1, oncomplete='Close')
-```
-
-```python
-from zp.analyses.reports import cardinal_points
-
-cp = cardinal_points(oss, surf1=3, surf2=4, oncomplete='Release')
-```
-
-A full description of the available function parameters is provided in the docstrings.
-
-### Constants
-
-After initiating the connection, all api constants are available through `zp.constants` (
-e.g. `zp.constants.Editors.LDE.SurfaceType`). Note that these are only available after `zos.wakeup()` has been called,
-as explained under **Initiating connection**.
-
-### Convenience functions
-
-Some convenience functions are available through `zp.functions`, e.g. to change a surface to a standard stuface:
-
-```python
-newsurf = oss.LDE.InsertNewSurfaceAt(0)
-zp.functions.lde.surface_change_type(newsurf, 'Standard')
-```
-
-### Full example
-
-This example creates a simple optical system consisting of a single lens.
+Create and draw a simple optical system consisting of a single lens:
 
 ```python
 import matplotlib.pyplot as plt
@@ -200,7 +80,7 @@ lens_back.Radius = -20
 lens_back.Thickness = 19.792  # System is in focus
 
 # Show the system in the 3D viewer
-draw_3d = zp.analyses.systemviewers.viewer_3d(oss, surface_line_thickness="Thick", ray_line_thickness="Thick")
+draw_3d = zp.analyses.systemviewers.Viewer3D(surface_line_thickness="Thick", rays_line_thickness="Thick").run(oss)
 
 plt.imshow(draw_3d.Data)
 plt.axis("off")
@@ -209,35 +89,42 @@ plt.show()
 
 ![Full example system](.github/assets/readme_full_example.png)
 
-### Logging
+Please refer to the [documentation](https://zospy.readthedocs.io) for more information on how to use ZOSPy.
+More elaborate examples can be found in the [example gallery](https://zospy.readthedocs.io/en/latest/examples.html).
 
-Some basic logging is implemented through the
-standard [python logging module](https://docs.python.org/3/library/logging.html) (but still under development). The
-following implementation examples assume that `import logging` has been executed.
+## Warranty and liability
 
-1. To enable logging output from all ZOSPy and other modules using logging.basicConfig:
-    ```python
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ```
-2. To enable logging output from all ZOSPy and other modules using a root logger:
-    ```python
-    fmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    sh = logging.StreamHandler()
-    sh.setFormatter(fmt)
-    sh.setLevel(logging.DEBUG)
+The code is provided as is, without any warranty. It is solely intended for research purposes. No warranty is given and
+no rights can be derived from it, as is also stated in the [MIT license](LICENSE.txt).
 
-    logger = logging.getLogger()
-    logger.addHandler(sh)
-    ```
-3. To enable logging output from only ZOSPy
-    ```python
-    logging.getLogger('zospy').addHandler(logging.StreamHandler())
-    logging.getLogger('zospy').setLevel(logging.INFO)
-    ```
+## Dependencies
+
+ZOSPy officially supports Python 3.9 - 3.13. It may work with older Python versions, but support is not provided for
+these versions. Furthermore, a working installation of [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) is required.
+
+## Compatibility
+
+See the [documentation](https://zospy.readthedocs.io/compatibility) for the most up-to-date compatibility information.
+
+## Referencing
+
+When publishing results obtained with this package, please cite [our paper][joss-paper] 
+in the Journal of Open Source Software:  
+
+> Vught, L. van, Haasjes, C. & Beenakker, J.W.M. (2024). 
+> ZOSPy: Optical ray tracing in Python through OpticStudio. 
+> Journal of Open Source Software, 9(96), 5756. 
+> https://doi.org/10.21105/joss.05756
+
+## Contributing
+
+Please read our [contribution guidelines](CONTRIBUTING.md) prior to opening a Pull Request.
 
 ## Contact
 
 Feel free to contact us via e-mail at [zospy@mreye.nl](mailto:zospy@mreye.nl) for any inquiries,
 or visit [mreye.nl](https://mreye.nl) to discover our research.
 
+[opticstudio]: https://www.ansys.com/products/optics/ansys-zemax-opticstudio
+[zos-api]: https://support.zemax.com/hc/en-us/articles/1500005578742-Basic-method-of-performing-system-analysis-in-ZOS-API
 [joss-paper]: https://joss.theoj.org/papers/10.21105/joss.05756

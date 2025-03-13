@@ -3,10 +3,8 @@
 .. deprecated:: 2.0.0
     The `zospy.analyses.old` contains the deprecated analysis API. Migrate your analyses to the new format.
 
-Analyses in OpticStudio are available through `zospy.analyses`.
-This module provides basic classes and functions for interacting with
-analyses (in `zospy.analyses.base`), as well as a procedural interface
-to several analyses.
+Analyses in OpticStudio are available through `zospy.analyses.old`.
+These analyses are present for compatibility reasons. It is recommended to use the new analysis API.
 
 Examples
 --------
