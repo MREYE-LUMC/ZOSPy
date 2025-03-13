@@ -4,6 +4,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import importlib.metadata
+from datetime import datetime
 from pathlib import Path
 from shutil import copytree
 
@@ -11,7 +12,7 @@ from shutil import copytree
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ZOSPy"
-copyright = "2023-2025, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # noqa: A001
+copyright = f"2023-{datetime.now().year}, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # noqa: A001, DTZ005
 author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 
 # -- General configuration ---------------------------------------------------
@@ -42,7 +43,6 @@ html_theme_options = {
     "use_repository_button": True,
 }
 
-
 # -- Options for Sphinx autodoc and numpydoc ---------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
 # https://numpydoc.readthedocs.io/en/latest/install.html
@@ -63,7 +63,6 @@ numpydoc_show_inherited_class_members = {
     "zospy.analyses.base.AnalysisResult": False,
     "zospy.analyses.base.OnComplete": False,
 }
-
 
 # -- Options for nbsphinx (example notebooks) --------------------------------
 # https://nbsphinx.readthedocs.io/
