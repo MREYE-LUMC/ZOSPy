@@ -22,10 +22,10 @@ In addition to full access to all the OpticStudio functions through the ZOS-API,
 
 ## Compatibility
 
-ZOSPy officially supports Python 3.9 - 3.13. It may work with older Python versions, but support is not provided for
+ZOSPy officially supports Python {{ PYTHON_VERSIONS }}. It may work with older Python versions, but support is not provided for
 these versions. Furthermore, a working installation of [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) is required.
 
-See the below table for compatibility with different versions of Python and Ansys Zemax OpticStudio.
+See the below table for compatibility with different versions of Ansys Zemax OpticStudio.
 More information on compatibility can be found in the [compatibility](compatibility.md) section.
 
 ```{include} compatibility_table.md

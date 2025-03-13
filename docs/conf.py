@@ -7,6 +7,7 @@ import importlib.metadata
 from datetime import datetime
 from pathlib import Path
 from shutil import copytree
+from tests.config import REFERENCE_VERSION
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -27,8 +28,13 @@ extensions = [
     "sphinx_design",
 ]
 
-myst_enable_extensions = ["colon_fence", "attrs_block", "attrs_inline"]
+myst_enable_extensions = ["colon_fence", "attrs_block", "attrs_inline", "substitution"]
 myst_heading_anchors = 3
+_reference_major, _reference_minor, _reference_patch = REFERENCE_VERSION.split(".")
+myst_substitutions = {
+    "REFERENCE_VERSION": f"20{_reference_major}.{_reference_minor}.{_reference_patch}",
+    "PYTHON_VERSIONS": "3.9 - 3.13"
+}
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/.conda", "**/.ipynb_checkpoints"]
