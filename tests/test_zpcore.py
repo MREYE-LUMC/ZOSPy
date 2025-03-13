@@ -42,7 +42,7 @@ def test_load_zos_dlls_with_nethelper_and_opticstudio_directory_raises_valueerro
 
 
 @pytest.mark.must_pass  # Other tests will fail if this one does
-def test_zos_singleton(zos, oss):
+def test_zos_singleton(zos, oss):  # noqa: ARG001
     assert zos.Application is not None
 
     with pytest.warns(match=r"Only a single instance of ZOS can exist at any time\. Returning existing instance\."):

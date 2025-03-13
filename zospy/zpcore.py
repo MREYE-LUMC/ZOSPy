@@ -397,7 +397,7 @@ class ZOS:
         """
         if cls not in cls._instances:
             instance = super().__new__(cls)
-            instance.__initialized = False
+            instance.__initialized = False  # noqa: SLF001
             cls._instances[cls] = instance
         else:
             warnings.warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")
