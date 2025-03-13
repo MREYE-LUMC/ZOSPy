@@ -7,6 +7,7 @@ import importlib.metadata
 from datetime import datetime
 from pathlib import Path
 from shutil import copytree
+
 from tests.config import REFERENCE_VERSION
 
 # -- Project information -----------------------------------------------------
@@ -33,7 +34,7 @@ myst_heading_anchors = 3
 _reference_major, _reference_minor, _reference_patch = REFERENCE_VERSION.split(".")
 myst_substitutions = {
     "REFERENCE_VERSION": f"20{_reference_major} R{_reference_minor}.{_reference_patch}",
-    "PYTHON_VERSIONS": "3.9 - 3.13"
+    "PYTHON_VERSIONS": "3.9 - 3.13",
 }
 
 templates_path = ["_templates"]
