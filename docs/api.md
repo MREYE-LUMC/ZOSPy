@@ -8,11 +8,11 @@
    :template: custom-module.rst
    :recursive:
 
-   zospy.zpcore
-   zospy.analyses
-   zospy.analyses.old
-   zospy.api.constants
-   zospy.api.codecs
-   zospy.functions
-   zospy.solvers
+   zpcore
+   analyses
+   analyses.old
+   api.constants
+   api.codecs
+   functions
+   solvers
 ```
