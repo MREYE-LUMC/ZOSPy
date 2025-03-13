@@ -1,5 +1,8 @@
 # Compatibility
 
+The unit tests automatically check compatibility with different versions of OpticStudio against a reference version.
+The current reference version is OpticStudio 25 R1.01.
+
 ```{include} compatibility_table.md
 ```
 
