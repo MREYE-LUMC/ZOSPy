@@ -14,8 +14,6 @@ definitely welcome:
 2. Implementation of additional analyses (in `zospy/analyses`). Please refer to other analyses on how to implement them.
    If you add a new analysis, please include unit tests as well;
 3. Implementation of additional solvers (in `zospy/solvers`);
-4. Compatibility checks. If you are using a version of OpticStudio that is not listed in the [README](README.md),
-   please [run the unit tests](#3-test) and update the README accordingly.
 
 ## Code style
 
