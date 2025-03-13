@@ -85,7 +85,7 @@ hatch test
 in the project directory. More information about running the unit tests can be found [here](unit_tests.md).
 If you run the tests for a previously untested version of OpticStudio or added tests for analysis wrappers, 
 do not forget to generate reference data for these tests.
-More information about this can be found in [the test documentation](unit_tests.md#generating-test-reference-data).
+More information about this can be found in [the test documentation](./unit_tests.md#generating-test-reference-data).
 
 ### 5. Open a Pull Request
 

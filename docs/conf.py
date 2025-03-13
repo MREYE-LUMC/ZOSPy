@@ -28,6 +28,7 @@ extensions = [
 ]
 
 myst_enable_extensions = ["colon_fence", "attrs_block", "attrs_inline"]
+myst_heading_anchors = 2
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/.conda", "**/.ipynb_checkpoints"]
