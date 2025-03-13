@@ -34,8 +34,7 @@ __all__ = (
     "ZRDFormatType",
 )
 
-class BatchRayTraceDataEntry:
-    ...
+class BatchRayTraceDataEntry: ...
 
 class BatchRayTraceDataHolder:
     @overload
@@ -647,8 +646,7 @@ class OPDMode:
     Current = 1
     CurrentAndChief = 2
 
-class RayPathDataEntry:
-    ...
+class RayPathDataEntry: ...
 
 class RayPathDataHolder:
     @overload

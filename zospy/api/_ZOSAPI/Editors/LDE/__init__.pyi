@@ -5,12 +5,7 @@ It should not be edited manually.
 from __future__ import annotations
 
 from zospy.api._ZOSAPI.Analysis import IMessage
-from zospy.api._ZOSAPI.Common import (
-    ICoordinateTransform,
-    IMetadata,
-    ZemaxColor,
-    ZemaxOpacity,
-)
+from zospy.api._ZOSAPI.Common import ICoordinateTransform, IMetadata, ZemaxColor, ZemaxOpacity
 from zospy.api._ZOSAPI.Editors import (
     DirectionOfRayTravel,
     IEditor,
@@ -1429,11 +1424,8 @@ class ISurfaceABCD(ISurface):
     @Dy.setter
     def Dy(self, value: float) -> None: ...
 
-class ISurfaceAlternateEven(ISurfaceNthEvenOrderTerms, ISurface):
-    ...
-
-class ISurfaceAlternateOdd(ISurfaceNthOrderTerms, ISurface):
-    ...
+class ISurfaceAlternateEven(ISurfaceNthEvenOrderTerms, ISurface): ...
+class ISurfaceAlternateOdd(ISurfaceNthOrderTerms, ISurface): ...
 
 class ISurfaceAnnularZernikeSag(ISurfaceNthEvenOrderTerms, ISurface):
     @property
@@ -1514,11 +1506,8 @@ class ISurfaceApertureElliptical(ISurfaceApertureType):
     @ApertureYDecenter.setter
     def ApertureYDecenter(self, value: float) -> None: ...
 
-class ISurfaceApertureFloating(ISurfaceApertureType):
-    ...
-
-class ISurfaceApertureNone(ISurfaceApertureType):
-    ...
+class ISurfaceApertureFloating(ISurfaceApertureType): ...
+class ISurfaceApertureNone(ISurfaceApertureType): ...
 
 class ISurfaceApertureRectangular(ISurfaceApertureType):
     @property
@@ -2334,8 +2323,7 @@ class ISurfaceEllipticalGrating2(ISurfaceXYPolynomial, ISurface):
     @NormRadius.setter
     def NormRadius(self, value: float) -> None: ...
 
-class ISurfaceEvenAspheric(ISurface, ISurfaceNthEvenOrderTerms):
-    ...
+class ISurfaceEvenAspheric(ISurface, ISurfaceNthEvenOrderTerms): ...
 
 class ISurfaceExtendedAsphere(ISurfaceCoeff_P_NthEvenPower, ISurface):
     @property
@@ -3943,8 +3931,7 @@ class ISurfaceFreeformXYPolynomial(ISurface):
     @X2Y19.setter
     def X2Y19(self, value: float) -> None: ...
 
-class ISurfaceFresnel(ISurfaceNthEvenOrderTerms, ISurface):
-    ...
+class ISurfaceFresnel(ISurfaceNthEvenOrderTerms, ISurface): ...
 
 class ISurfaceGeneralizedFresnel(ISurfaceXYPolynomial, ISurface, ISurfaceNthEvenOrderTerms):
     @property
@@ -4837,8 +4824,7 @@ class ISurfaceNthZernike(ISurface):
     def NthZernikeCoefficientCell(self, n: int) -> IEditorCell: ...
     def SetNthZernikeCoefficient(self, n: int, Value: float) -> None: ...
 
-class ISurfaceOddAsphere(ISurfaceNthOrderTerms, ISurface):
-    ...
+class ISurfaceOddAsphere(ISurfaceNthOrderTerms, ISurface): ...
 
 class ISurfaceOddCosine(ISurfaceCoeff_R_NthPower, ISurface, ISurfaceAPBC):
     @property
@@ -5020,8 +5006,7 @@ class ISurfacePeriodic(ISurface):
     @Y_Frequency.setter
     def Y_Frequency(self, value: float) -> None: ...
 
-class ISurfacePolynomial(ISurfaceCoeff_X_NthEvenPower_8, ISurface, ISurfaceCoeff_Y_NthEvenPower_8):
-    ...
+class ISurfacePolynomial(ISurfaceCoeff_X_NthEvenPower_8, ISurface, ISurfaceCoeff_Y_NthEvenPower_8): ...
 
 class ISurfaceQTypeAsphere(ISurface):
     @property
@@ -5115,8 +5100,7 @@ class ISurfaceRadialNurbs(ISurface):
     def YnCell(self, n: int) -> IEditorCell: ...
     def ZnCell(self, n: int) -> IEditorCell: ...
 
-class ISurfaceRetroReflect(ISurface):
-    ...
+class ISurfaceRetroReflect(ISurface): ...
 
 class ISurfaceScatteringABg(ISurfaceScatteringType):
     @property
@@ -5181,8 +5165,7 @@ class ISurfaceScatteringLambertian(ISurfaceScatteringType):
     @ScatterFraction.setter
     def ScatterFraction(self, value: float) -> None: ...
 
-class ISurfaceScatteringNone(ISurfaceScatteringType):
-    ...
+class ISurfaceScatteringNone(ISurfaceScatteringType): ...
 
 class ISurfaceScatteringType:
     @property
@@ -5236,8 +5219,7 @@ class ISurfaceSlide(ISurface):
     @Y_HalfWidth.setter
     def Y_HalfWidth(self, value: float) -> None: ...
 
-class ISurfaceStandard(ISurface):
-    ...
+class ISurfaceStandard(ISurface): ...
 
 class ISurfaceSuperconic(ISurface):
     @property

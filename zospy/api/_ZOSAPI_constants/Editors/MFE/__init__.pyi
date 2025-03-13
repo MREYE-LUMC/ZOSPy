@@ -459,3 +459,4 @@ class MeritOperandType:
     TSAG: MeritOperandType = None
     PSLP: MeritOperandType = None
     QSLP: MeritOperandType = None
+    RRET: MeritOperandType = None

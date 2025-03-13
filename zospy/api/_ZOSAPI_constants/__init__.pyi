@@ -3,7 +3,6 @@ It should not be edited manually.
 """
 
 from __future__ import annotations
-
 from . import Analysis, Common, Editors, Preferences, SystemData, Tools, Wizards
 
 __all__ = (
@@ -44,6 +43,7 @@ class LicenseStatusType:
     OpticsViewer: LicenseStatusType = None
     OpticStudioHPCEdition: LicenseStatusType = None
     EnterpriseEdition: LicenseStatusType = None
+    StudentEdition: LicenseStatusType = None
 
 class SessionModes:
     FromPreferences: SessionModes = None

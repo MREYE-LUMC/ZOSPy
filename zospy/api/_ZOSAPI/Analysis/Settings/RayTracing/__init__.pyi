@@ -4,10 +4,7 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from zospy.api._ZOSAPI.Analysis import (
-    DetectorViewerShowAsTypes,
-    DetectorViewerShowDataTypes,
-)
+from zospy.api._ZOSAPI.Analysis import DetectorViewerShowAsTypes, DetectorViewerShowDataTypes
 from zospy.api._ZOSAPI.Analysis.Settings import IAS_, DetectorViewerScaleTypes
 
 __all__ = ("IAS_DetectorViewer", "IAS_NSCSingleRayTrace")

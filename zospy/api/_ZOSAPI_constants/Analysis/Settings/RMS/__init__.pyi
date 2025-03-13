@@ -3,7 +3,6 @@ It should not be edited manually.
 """
 
 from __future__ import annotations
-
 from . import RMSField, RMSFieldMap
 
 __all__ = (

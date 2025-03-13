@@ -3,10 +3,9 @@ It should not be edited manually.
 """
 
 from __future__ import annotations
-
 from . import QuickYield
 
-__all__ = ("QuickYield", "QYCompensations", "QYCompensatorStrategy", "QYPrecisions")
+__all__ = ("QuickYield", "QYCompensations", "QYCompensatorStrategy", "QYPrecisions", "ShowAsISO")
 
 class QYCompensations:
     Standard: QYCompensations = None
@@ -23,3 +22,8 @@ class QYPrecisions:
     Standard: QYPrecisions = None
     High: QYPrecisions = None
     VeryHigh: QYPrecisions = None
+
+class ShowAsISO:
+    Surface: ShowAsISO = None
+    Singlet: ShowAsISO = None
+    Doublet: ShowAsISO = None

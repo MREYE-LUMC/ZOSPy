@@ -4,7 +4,15 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-__all__ = ("DateTimeType", "EncodingType", "LanguageType", "ShowLineAsType")
+__all__ = ("BackgroundColors", "DateTimeType", "EncodingType", "LanguageType", "ShowLineAsType", "ZemaxThemes")
+
+class BackgroundColors:
+    Default: BackgroundColors = None
+    White: BackgroundColors = None
+    LightGray: BackgroundColors = None
+    Gray: BackgroundColors = None
+    DarkGray: BackgroundColors = None
+    Black: BackgroundColors = None
 
 class DateTimeType:
     None_: DateTimeType = None
@@ -24,3 +32,7 @@ class ShowLineAsType:
     TextAbove: ShowLineAsType = None
     FileName: ShowLineAsType = None
     ConfigurationNumber: ShowLineAsType = None
+
+class ZemaxThemes:
+    Classic: ZemaxThemes = None
+    Dark: ZemaxThemes = None

@@ -5,13 +5,7 @@ It should not be edited manually.
 from __future__ import annotations
 
 from zospy.api._ZOSAPI.Analysis import HuygensShowAsTypes, SampleSizes
-from zospy.api._ZOSAPI.Analysis.Settings import (
-    IAS_,
-    HuygensPsfTypes,
-    PsfSpread,
-    PsfTypes,
-    Rotations,
-)
+from zospy.api._ZOSAPI.Analysis.Settings import IAS_, HuygensPsfTypes, PsfSpread, PsfTypes, Rotations
 
 __all__ = (
     "FftPsfType",
