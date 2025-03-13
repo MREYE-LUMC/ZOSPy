@@ -21,10 +21,8 @@ No known problems.
 
 :::{list-table}
 * - Type
-  - Python
   - Description
 * - ℹ
-  - All
   - The output of `zospy.analyses.polarization.TestPolarizationPupilMap` differs from the reference OpticStudio version in the returned Orientation. 
     This is a difference between the two OpticStudio versions, not an issue with ZOSPy. 
     As a result, the following unit tests fail:
