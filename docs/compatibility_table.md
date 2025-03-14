@@ -18,6 +18,3 @@ Older versions of OpticStudio are not tested, but they will likely work with ZOS
 [24.2.2]: compatibility/24-2-2
 [24.1.3]: compatibility/24-1-3
 [24.1.0]: compatibility/24-1-0
-[23.2.1]: compatibility/23-2-1
-[23.1.0]: compatibility/23-1-0
-[20.3.2]: compatibility/20-3-2
