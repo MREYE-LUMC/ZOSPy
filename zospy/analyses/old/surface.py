@@ -127,13 +127,17 @@ def curvature(
     if analysis.Results.NumberOfDataGrids <= 0:
         data = None
     elif analysis.Results.NumberOfDataGrids == 1:
-        data = zputils.unpack_datagrid(analysis.Results.DataGrids[0])
+        data = zputils.unpack_datagrid(analysis.Results.DataGrids[0],
+                                       # pass "center" and None for consistency with older ZOSPy versions
+                                       cell_origin="center", label_rounding=None)
     else:
         data = AttrDict()
         for ii in range(analysis.Results.NumberOfDataGrids):
             desc = analysis.Results.DataGrids[ii].Description
             key = desc if desc != "" else str(ii)
-            data[key] = zputils.unpack_datagrid(analysis.Results.DataGrids[ii])
+            data[key] = zputils.unpack_datagrid(analysis.Results.DataGrids[ii],
+                                                # pass "center" and None for consistency with older ZOSPy versions
+                                                cell_origin="center", label_rounding=None)
 
     result = AnalysisResult(
         analysistype=str(analysis_type),

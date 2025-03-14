@@ -142,7 +142,9 @@ def wavefront_map(
 
     data = []
     for ii in range(analysis.Results.NumberOfDataGrids):
-        data.append(unpack_datagrid(analysis.Results.DataGrids[ii]))
+        data.append(unpack_datagrid(analysis.Results.DataGrids[ii],
+                                    # pass "center" and None for consistency with older ZOSPy versions
+                                     cell_origin="center", label_rounding=None))
 
     if len(data) == 0:
         data = pd.DataFrame()

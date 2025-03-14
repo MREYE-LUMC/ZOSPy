@@ -532,7 +532,9 @@ def physical_optics_propagation(
     # Get data and unpack
     data = []
     for i in range(analysis.Results.NumberOfDataGrids):
-        data.append(utils.zputils.unpack_datagrid(analysis.Results.DataGrids[i]))
+        data.append(utils.zputils.unpack_datagrid(analysis.Results.DataGrids[i],
+                                                  # pass "center" and None for consistency with older ZOSPy versions
+                                                  cell_origin="center", label_rounding=None))
 
     if len(data) == 0:
         data = pd.DataFrame()
