@@ -11,12 +11,24 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+## [[2.0.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.0.0) - 2025-03-14
+
+### Added
+
 - `zospy.zpcore.ZOS.get_instance` to get the existing `ZOS` instance, if present (#107).
 - Test reference data for OpticStudio 2025 R1. This is now the reference version for the tests (#127).
 
 ### Fixed
 
-- `zospy.analyses.new.base.Analysis` now raises an `AttributeError` when trying to set an attribute that is not present in the OpticStudio analysis object (#106).
+- `zospy.analyses.base.Analysis` now raises an `AttributeError` when trying to set an attribute that is not present in the OpticStudio analysis object (#106).
 - Obtain correct minimum x and y values in data grids for `zospy.analyses.extendedscene.geometric_image_analysis` (#103).
 - Setting beam and fiber type with external files in `zospy.analyses.physicaloptics.physical_optics_propagation` (#114)
 
@@ -24,7 +36,7 @@ ZOS-API can also be added in patch releases.
 
 - `zospy.zpcore.ZOS` now uses a singleton pattern to ensure only one instance of `ZOS` is created. If a second instance is created, the existing instance is returned instead and a warning is raised (#107)
 - `zospy.zpcore.OpticStudioSystem._ZOS` was renamed to `ZOS`, making it a public attribute (#107)
-- `zospy.analyses.new.new_analysis`: `settings_first` is now a keyword-only argument.
+- `zospy.analyses.new_analysis`: `settings_first` is now a keyword-only argument.
 - `zospy.api.apisupport.load_zosapi_nethelper`: `preload` is now a keyword-only argument.
 - `zospy.api.apisupport.load_zosapi`: `preload` is now a keyword-only argument.
 - `zospy.functions.lde.find_surface_by_comment`: `case_sensitive` is now a keyword-only argument.
@@ -41,6 +53,8 @@ ZOS-API can also be added in patch releases.
   of the bottom-left corners of the cells (#128).
 
 ### Deprecated
+
+- `zospy.analyses.old` is deprecated in favor of the new object-oriented interface in `zospy.analyses` (#118).
 
 ### Removed
 
