@@ -8,8 +8,6 @@ from datetime import datetime
 from pathlib import Path
 from shutil import copytree
 
-from tests.config import REFERENCE_VERSION
-
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -31,9 +29,8 @@ extensions = [
 
 myst_enable_extensions = ["colon_fence", "attrs_block", "attrs_inline", "substitution"]
 myst_heading_anchors = 3
-_reference_major, _reference_minor, _reference_patch = REFERENCE_VERSION.split(".")
 myst_substitutions = {
-    "REFERENCE_VERSION": f"20{_reference_major} R{_reference_minor}.{_reference_patch}",
+    "REFERENCE_VERSION": "2025 R1.01",
     "PYTHON_VERSIONS": "3.9 - 3.13",
 }
 
