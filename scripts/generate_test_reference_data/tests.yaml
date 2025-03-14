@@ -130,10 +130,54 @@ tests:
     analysis: psf.HuygensPSF
     file: test_psf.py
     test: test_huygens_psf_returns_correct_result
+    parametrized: [pupil_sampling, image_sampling, image_delta, psf_type, normalize]
+    parameters:
+      - pupil_sampling: 64x64
+        image_sampling: 64x64
+        image_delta: 0.0
+        psf_type: Linear
+        normalize: false
+      - pupil_sampling: 32x32
+        image_sampling: 64x64
+        image_delta: 1.0
+        psf_type: Linear
+        normalize: false
+      - pupil_sampling: 128x128
+        image_sampling: 128x128
+        image_delta: 0.0
+        psf_type: Real
+        normalize: true
+      - pupil_sampling: 32x32
+        image_sampling: 32x32
+        image_delta: 0.0
+        psf_type: Real
+        normalize: true
   - model: decentered_system
     analysis: psf.HuygensPSF
     file: test_psf.py
     test: test_huygens_psf_asymmetric_returns_correct_result
+    parametrized: [pupil_sampling, image_sampling, image_delta, psf_type, normalize]
+    parameters:
+      - pupil_sampling: 64x64
+        image_sampling: 64x64
+        image_delta: 0.0
+        psf_type: Linear
+        normalize: false
+      - pupil_sampling: 32x32
+        image_sampling: 64x64
+        image_delta: 1.0
+        psf_type: Linear
+        normalize: false
+      - pupil_sampling: 128x128
+        image_sampling: 128x128
+        image_delta: 0.0
+        psf_type: Real
+        normalize: true
+      - pupil_sampling: 32x32
+        image_sampling: 32x32
+        image_delta: 0.0
+        psf_type: Real
+        normalize: true
   - model: simple_system
     analysis: raysandspots.SingleRayTrace
     file: test_raysandspots.py
