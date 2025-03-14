@@ -91,9 +91,10 @@ def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.Da
 
 def unpack_datagrid(
     datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid,
-    minx=None,
-    miny=None,
+    minx: float | None = None,
+    miny: float | None = None,
     cell_origin: Literal["bottom_left", "center"] = "bottom_left",
+    label_rounding: int | None = 10,
 ) -> pd.DataFrame:
     """Unpack an OpticStudio datagrid to a Pandas DataFrame.
 
@@ -109,6 +110,9 @@ def unpack_datagrid(
         Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they are
         defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the grid cell.
         Defaults to 'bottom_left'.
+    label_rounding : Optional[int]
+        Defines the numbers of decimals to which the column and index labels are rounded. If set to None, no rounding is
+        applied. Defaults to 10.
 
     Returns
     -------
@@ -129,8 +133,12 @@ def unpack_datagrid(
     else:
         raise ValueError(f"Cannot process the cell origin '{cell_origin}'")
 
-    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx).round(10)
-    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny).round(10)
+    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
+    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
+
+    if label_rounding is not None:
+        columns = columns.round(label_rounding)
+        rows = rows.round(label_rounding)
 
     df = pd.DataFrame(data=values, index=rows, columns=columns)
     df.index.name = datagrid.YLabel or "y"
