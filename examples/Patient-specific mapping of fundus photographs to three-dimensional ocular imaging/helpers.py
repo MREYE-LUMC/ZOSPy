@@ -1,5 +1,4 @@
-"""
-Helper functions that are used in the raytracing and analysis notebooks.
+"""Helper functions that are used in the raytracing and analysis notebooks.
 
 - `get_nodal_points`: Calculate the object and image nodal points of an optical system using OpticStudio.
 - `get_ray_input_angle`: Calculate the input angle of a ray with respect to the optical axis.
