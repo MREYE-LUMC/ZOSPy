@@ -80,11 +80,13 @@ jobs:
     name: Check CHANGELOG.md for updates
     steps:
         - uses: actions/checkout@v3
-        - name: Check for file updates
-          id: changed-files
-          uses: tj-actions/changed-files@v41
-          with:
-            files: CHANGELOG.md
-        - name: Fail if nothing changed
-          if: steps.changed-files.outputs.any_changed != 'true'
-          run: exit 1
+        - run: |
+            FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...HEAD)
+            for i in $FILES_CHANGED
+            do
+              if [[ "$i" == "CHANGELOG.md" ]]
+              then
+                exit 0
+              fi
+            done
+            exit 1
