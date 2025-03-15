@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 with one exception: small features that only simplify access to certain parts of the
 ZOS-API can also be added in patch releases.
 
+TEST
+
 ## [Unreleased]
 
 ### Added
