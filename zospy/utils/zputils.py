@@ -111,7 +111,7 @@ def unpack_datagrid(
         defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the grid cell.
         Defaults to 'bottom_left'.
     label_rounding : int, optional
-        Defines the numbers of decimals to which the column and index labels are rounded, to fix floating point errors. 
+        Defines the numbers of decimals to which the column and index labels are rounded, to fix floating point errors.
         If set to None, no rounding is applied. Defaults to 10.
 
     Returns
