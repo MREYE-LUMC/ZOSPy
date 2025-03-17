@@ -4,7 +4,7 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
+from typing import overload
 
 from zospy.api._ZOSAPI.Analysis import ErrorType
 from zospy.api._ZOSAPI.Tools import ISystemTool
@@ -34,8 +34,7 @@ __all__ = (
     "ZRDFormatType",
 )
 
-class BatchRayTraceDataEntry:
-    pass
+class BatchRayTraceDataEntry: ...
 
 class BatchRayTraceDataHolder:
     @overload
@@ -647,8 +646,7 @@ class OPDMode:
     Current = 1
     CurrentAndChief = 2
 
-class RayPathDataEntry:
-    pass
+class RayPathDataEntry: ...
 
 class RayPathDataHolder:
     @overload

@@ -8,11 +8,15 @@ import pytest
 import zospy as zp
 from zospy import constants
 
+# ruff: noqa: SLF001
+
 
 def patch_zos(zos: zp.ZOS, monkeypatch: pytest.MonkeyPatch):
     patch_application = SimpleNamespace(IsValidLicenseForAPI=False)
     patch_connection = SimpleNamespace(
-        IsAlive=False, ConnectAsExtension=lambda n: patch_application, CreateNewApplication=lambda: patch_application
+        IsAlive=False,
+        ConnectAsExtension=lambda n: patch_application,  # noqa: ARG005
+        CreateNewApplication=lambda: patch_application,
     )
 
     def patch_assign_connection(self: zp.ZOS):
@@ -33,8 +37,34 @@ def test_connect_without_valid_license_raises_exception(zos, connection_mode, mo
 
 
 def test_load_zos_dlls_with_nethelper_and_opticstudio_directory_raises_valueerror(zos):
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Only one of `zosapi_nethelper` and `opticstudio_directory` may be specified"):
         zos._load_zos_dlls(zosapi_nethelper="dummy/path", opticstudio_directory="dummy/path")
+
+
+@pytest.mark.must_pass  # Other tests will fail if this one does
+def test_zos_singleton(zos, oss):  # noqa: ARG001
+    assert zos.Application is not None
+
+    with pytest.warns(match=r"Only a single instance of ZOS can exist at any time\. Returning existing instance\."):
+        zos2 = zp.ZOS()
+
+        # If init is called again, the Application attribute will be set to None
+        assert zos2.Application is not None
+        assert zos2 is zos
+
+
+@pytest.mark.filterwarnings("ignore:Only a single instance of ZOS can exist at any time")
+def test_zos_singleton_logs(zos, caplog):
+    with caplog.at_level("DEBUG"):
+        zos2 = zp.ZOS()
+
+    assert "ZOS instance already initialized" in caplog.text
+    assert "Initializing ZOS instance" not in caplog.text
+    assert zos2 is zos
+
+
+def test_zos_get_instance(zos):
+    assert zp.ZOS.get_instance() is zos
 
 
 @pytest.mark.must_pass
@@ -42,7 +72,7 @@ def test_can_connect(oss):
     assert oss._System is not None
 
 
-def test_can_disconnect(zos, oss):
+def test_can_disconnect(zos, oss):  # noqa: ARG001
     assert zos.Application is not None  # The Application object should be available
 
     zos.disconnect()
@@ -51,7 +81,7 @@ def test_can_disconnect(zos, oss):
 
 
 @pytest.mark.require_mode("extension")
-def test_get_primary_system_populates_openfile(zos, oss):
+def test_get_primary_system_populates_openfile(zos, oss):  # noqa: ARG001
     assert oss._OpenFile == oss.SystemFile
 
 
@@ -141,7 +171,7 @@ def test_get_system(zos, oss, connection_mode):
 
 
 @pytest.mark.require_mode("standalone")
-def test_create_new_system(zos, oss, connection_mode):
+def test_create_new_system(zos, oss, connection_mode):  # noqa: ARG001
     new_system = zos.create_new_system()
 
     assert zos.Application.NumberOfOpticalSystems == 2
@@ -149,12 +179,12 @@ def test_create_new_system(zos, oss, connection_mode):
 
 
 @pytest.mark.require_mode("extension")
-def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode):
-    with pytest.raises(ValueError):
+def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode):  # noqa: ARG001
+    with pytest.raises(ValueError, match="Can only create a new system when using a standalone connection"):
         zos.create_new_system()
 
 
-@pytest.fixture()
+@pytest.fixture
 def oss_with_modifiable_config(zos: zp.ZOS, connection_mode, tmp_path) -> zp.zpcore.OpticStudioSystem:
     config_file = tmp_path / "opticstudio_config_file.CFG"
     zos.Connection.PreferencesFile = str(config_file)
@@ -176,7 +206,7 @@ class TestTxtFileEncoding:
     def test_get_txtfile_encoding_returns_correct_result(
         self, oss_with_modifiable_config, txtfile_encoding, expected_encoding, monkeypatch: pytest.MonkeyPatch
     ):
-        def getencoding(*args, **kwargs):
+        def getencoding(*args, **kwargs):  # noqa: ARG001
             return "LocalePreferredEncoding"
 
         if version_info < (3, 11):
@@ -184,17 +214,17 @@ class TestTxtFileEncoding:
         else:
             monkeypatch.setattr(locale, "getencoding", getencoding)
 
-        oss_with_modifiable_config._ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
+        oss_with_modifiable_config.ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding
         )
 
-        returned_encoding = oss_with_modifiable_config._ZOS.get_txtfile_encoding()
+        returned_encoding = oss_with_modifiable_config.ZOS.get_txtfile_encoding()
 
         assert returned_encoding == expected_encoding
 
     @pytest.mark.parametrize("txtfile_encoding", ["Unicode", "ANSI"])
     def test_analysis_result_parsed_with_correct_encoding(self, oss_with_modifiable_config, txtfile_encoding, tmp_path):
-        oss_with_modifiable_config._ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
+        oss_with_modifiable_config.ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding
         )
 
@@ -205,5 +235,5 @@ class TestTxtFileEncoding:
         txtoutfile = str(tmp_path / "test_analysis_result_parsed_with_correct_encoding.txt")
         analysis.Results.GetTextFile(txtoutfile)
 
-        with open(txtoutfile, "r", encoding=oss_with_modifiable_config._ZOS.get_txtfile_encoding()) as txtfile:
+        with open(txtoutfile, encoding=oss_with_modifiable_config.ZOS.get_txtfile_encoding()) as txtfile:
             assert "System/Prescription Data" in txtfile.readline()

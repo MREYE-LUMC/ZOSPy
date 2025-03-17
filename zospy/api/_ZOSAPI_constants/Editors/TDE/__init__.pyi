@@ -73,3 +73,8 @@ class ToleranceOperandType:
     TARX: ToleranceOperandType = None
     TARY: ToleranceOperandType = None
     TARR: ToleranceOperandType = None
+    ISOA: ToleranceOperandType = None
+    ISOB: ToleranceOperandType = None
+    ISOC: ToleranceOperandType = None
+    ISOD: ToleranceOperandType = None
+    MPVT: ToleranceOperandType = None

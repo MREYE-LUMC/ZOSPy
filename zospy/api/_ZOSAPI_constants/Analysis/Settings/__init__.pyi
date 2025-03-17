@@ -3,19 +3,7 @@ It should not be edited manually.
 """
 
 from __future__ import annotations
-
-from . import (
-    RMS,
-    Aberrations,
-    EncircledEnergy,
-    ExtendedScene,
-    Fans,
-    Mtf,
-    NSCSurface,
-    Psf,
-    Spot,
-    Wavefront,
-)
+from . import Aberrations, EncircledEnergy, ExtendedScene, Fans, Mtf, NSCSurface, Psf, RMS, Spot, Wavefront
 
 __all__ = (
     "Aberrations",

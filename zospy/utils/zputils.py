@@ -1,8 +1,10 @@
+"""Utility functions for ZOSPy."""
+
 from __future__ import annotations
 
 import re
 from collections.abc import MutableMapping
-from typing import TypeVar
+from typing import Literal, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -11,19 +13,19 @@ from zospy.api import _ZOSAPI
 from zospy.api import config as _config
 
 
-def flatten_dict(unflattend_dict, parent_key="", sep=".", keep_unflattend=False):
-    """Flattens an nested dictionary to a one-level dictionary.
+def flatten_dict(unflattened_dict, parent_key="", sep=".", *, keep_unflattened=False):
+    """Flatten a nested dictionary to a single-level dictionary.
 
     Parameters
     ----------
-    unflattend_dict: dict or MutableMapping
+    unflattened_dict : dict or MutableMapping
         A dictionary with nested dictionaries
-    parent_key: str
+    parent_key : str
         A key to which the flattened keys are added. Mainly present to support flatting of subdicts, should be '' in
         most primary calls.. Defaults to ''.
-    sep: str
+    sep : str
         The separator used for the flat items. Defaults to '.'
-    keep_unflattend: bool
+    keep_unflattened : bool
         Whether the keys, value pairs of nested dicts or MutableMappings should remain present in the output or not.
         Defaults to False
 
@@ -33,10 +35,10 @@ def flatten_dict(unflattend_dict, parent_key="", sep=".", keep_unflattend=False)
         A dictionary with one (flattened) key for a value.
     """
     items = []
-    for key, value in unflattend_dict.items():
+    for key, value in unflattened_dict.items():
         new_key = parent_key + sep + key if parent_key else key
         if isinstance(value, MutableMapping):
-            if keep_unflattend:
+            if keep_unflattened:
                 items.append((new_key, value))
             items.extend(flatten_dict(value, new_key, sep=sep).items())
         else:
@@ -51,7 +53,7 @@ def flatten_dlltreedict(dlltreedict):
 
     Parameters
     ----------
-    dlltreedict: dict
+    dlltreedict : dict
         A dictionary with nested dictionaries
 
     Returns
@@ -59,9 +61,8 @@ def flatten_dlltreedict(dlltreedict):
     list:
         A list with the items of the nested dictionaries.
     """
-    flatdict = flatten_dict(dlltreedict, parent_key="", sep=".", keep_unflattend=True)
-    flatlist = list(flatdict.keys())
-    return flatlist
+    flatdict = flatten_dict(dlltreedict, parent_key="", sep=".", keep_unflattened=True)
+    return list(flatdict.keys())
 
 
 def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.DataFrame:
@@ -82,19 +83,36 @@ def unpack_dataseries(dataseries: _ZOSAPI.Analysis.Data.IAR_DataSeries) -> pd.Da
     )
     index = np.array(list(dataseries.XData.Data))
     data = np.array(list(dataseries.YData.Data)).reshape(dataseries.YData.Rows, dataseries.YData.Cols)
-    df = pd.DataFrame(columns=columns, index=index, data=data)  # ToDo evaluate
+    df = pd.DataFrame(columns=columns, index=index, data=data)  # TODO evaluate
     df.index.name = dataseries.XLabel
 
     return df
 
 
-def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid) -> pd.DataFrame:
+def unpack_datagrid(
+    datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid,
+    minx: float | None = None,
+    miny: float | None = None,
+    cell_origin: Literal["bottom_left", "center"] = "bottom_left",
+    label_rounding: int | None = 10,
+) -> pd.DataFrame:
     """Unpack an OpticStudio datagrid to a Pandas DataFrame.
 
     Parameters
     ----------
     datagrid : ZOSAPI.Analysis.Data.IAR_DataGrid
         OpticStudio DataGrid object.
+    minx : float, optional
+        The MinX coordinate to be used when unpacking the datagrid.
+    miny : float, optional
+        The MinY coordinate to be used when unpacking the datagrid.
+    cell_origin : Literal["bottom_left", "center"]
+        Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they are
+        defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the grid cell.
+        Defaults to 'bottom_left'.
+    label_rounding : int, optional
+        Defines the numbers of decimals to which the column and index labels are rounded, to fix floating point errors.
+        If set to None, no rounding is applied. Defaults to 10.
 
     Returns
     -------
@@ -104,8 +122,23 @@ def unpack_datagrid(datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid) -> pd.DataFram
     """
     values = np.array(datagrid.Values)
 
-    columns = np.linspace(datagrid.MinX, datagrid.MinX + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
-    rows = np.linspace(datagrid.MinY, datagrid.MinY + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
+    minx = datagrid.MinX if minx is None else minx
+    miny = datagrid.MinY if miny is None else miny
+
+    if cell_origin == "bottom_left":  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
+        minx += 0.5 * datagrid.Dx
+        miny += 0.5 * datagrid.Dy
+    elif cell_origin == "center":
+        pass  # minx and miny remain equal
+    else:
+        raise ValueError(f"Cannot process the cell origin '{cell_origin}'")
+
+    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
+    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
+
+    if label_rounding is not None:
+        columns = columns.round(label_rounding)
+        rows = rows.round(label_rounding)
 
     df = pd.DataFrame(data=values, index=rows, columns=columns)
     df.index.name = datagrid.YLabel or "y"
@@ -122,7 +155,7 @@ def standardize_sampling(sampling: SamplingType) -> SamplingType:
 
     Parameters
     ----------
-    sampling: int | str
+    sampling : int | str
         The sampling pattern to use. Should be int or string. Accepts both S_00x00 and 00x00 string representation.
 
     Returns
@@ -139,14 +172,12 @@ def standardize_sampling(sampling: SamplingType) -> SamplingType:
     """
     if isinstance(sampling, int):
         return sampling
-    elif isinstance(sampling, str):
+    if isinstance(sampling, str):
         res = re.search(r"\d+x\d+", sampling)
         if res:
-            return "S_{}".format(res.group())
-        else:
-            raise ValueError('Cannot interpret sampling pattern "{}"'.format(sampling))
-    else:
-        raise TypeError("sampling should be int or string")
+            return f"S_{res.group()}"
+        raise ValueError(f'Cannot interpret sampling pattern "{sampling}"')
+    raise TypeError("sampling should be int or string")
 
 
 # TODO: Remove in ZOSPy 2.0.0

@@ -1,0 +1,10 @@
+start: "\ufeff"? _NEWLINE? text+ _field+ pupil_map_table
+
+pupil_map_table: table{pupil_map_header, pupil_map_row}
+!pupil_map_header: "Px" "Py" "Ex" "Ey" "Intensity" /Phase\s+\(Deg\)/ "Orientation" -> string_list
+pupil_map_row: FLOAT~7 -> list
+
+%import .zospy (_field, table, text, FLOAT)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE

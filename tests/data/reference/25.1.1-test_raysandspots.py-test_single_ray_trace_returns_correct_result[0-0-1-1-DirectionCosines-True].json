@@ -1,0 +1,257 @@
+{
+    "data": {
+        "units": "Millimeters",
+        "coordinates": "Global coordinates relative to surface 1",
+        "wavelength": {
+            "value": 0.543,
+            "unit": "µm"
+        },
+        "normalized_x_field_coord": 0.0,
+        "normalized_y_field_coord": 0.0,
+        "normalized_x_pupil_coord": 1.0,
+        "normalized_y_pupil_coord": 1.0,
+        "real_ray_trace_data": {
+            "index": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "columns": [
+                "Surf",
+                "X-coordinate",
+                "Y-coordinate",
+                "Z-coordinate",
+                "X-cosine",
+                "Y-cosine",
+                "Z-cosine",
+                "X-normal",
+                "Y-normal",
+                "Z-normal",
+                "Angle in",
+                "Path length",
+                "Comment"
+            ],
+            "data": [
+                [
+                    "OBJ",
+                    Infinity,
+                    Infinity,
+                    Infinity,
+                    0.0,
+                    0.0,
+                    1.0,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN
+                ],
+                [
+                    1,
+                    1.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    -1.0,
+                    0.0,
+                    -0.0,
+                    NaN
+                ],
+                [
+                    2,
+                    1.0,
+                    1.0,
+                    0.05006265674,
+                    -0.016694518,
+                    -0.016694518,
+                    0.9997212542,
+                    0.05,
+                    0.05,
+                    -0.9974968672,
+                    4.054807228,
+                    0.05006265674,
+                    "lens front"
+                ],
+                [
+                    3,
+                    0.98494782874,
+                    0.98494782874,
+                    0.95143492457,
+                    -0.04982749,
+                    -0.04982749,
+                    0.9975141315,
+                    -0.0492473914,
+                    -0.0492473914,
+                    -0.9975717462,
+                    5.346530705,
+                    0.9016235916,
+                    "lens back"
+                ],
+                [
+                    4,
+                    -0.0061213962872,
+                    -0.0061213962872,
+                    20.792,
+                    -0.04982749,
+                    -0.04982749,
+                    0.9975141315,
+                    0.0,
+                    0.0,
+                    -1.0,
+                    4.040794048,
+                    19.890009023,
+                    NaN
+                ]
+            ],
+            "index_names": [
+                null
+            ],
+            "column_names": [
+                null
+            ]
+        },
+        "paraxial_ray_trace_data": {
+            "index": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "columns": [
+                "Surf",
+                "X-coordinate",
+                "Y-coordinate",
+                "Z-coordinate",
+                "X-cosine",
+                "Y-cosine",
+                "Z-cosine",
+                "X-normal",
+                "Y-normal",
+                "Z-normal",
+                "Angle in",
+                "Path length",
+                "Comment"
+            ],
+            "data": [
+                [
+                    "OBJ",
+                    Infinity,
+                    Infinity,
+                    Infinity,
+                    0.0,
+                    0.0,
+                    1.0,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN
+                ],
+                [
+                    1,
+                    1.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN
+                ],
+                [
+                    2,
+                    1.0,
+                    1.0,
+                    0.0,
+                    -0.016662039,
+                    -0.016662039,
+                    0.9997223379,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    "lens front"
+                ],
+                [
+                    3,
+                    0.98333333333,
+                    0.98333333333,
+                    1.0,
+                    -0.0494618801,
+                    -0.0494618801,
+                    0.9975505224,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    "lens back"
+                ],
+                [
+                    4,
+                    0.00198,
+                    0.00198,
+                    20.792,
+                    -0.0494618801,
+                    -0.0494618801,
+                    0.9975505224,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN,
+                    NaN
+                ]
+            ],
+            "index_names": [
+                null
+            ],
+            "column_names": [
+                null
+            ]
+        },
+        "ym_um_yc_uc_ray_trace_data": null
+    },
+    "settings": {
+        "hx": 0.0,
+        "hy": 0.0,
+        "px": 1.0,
+        "py": 1.0,
+        "wavelength": 1,
+        "field": 0,
+        "raytrace_type": "DirectionCosines",
+        "global_coordinates": true
+    },
+    "metadata": {
+        "DateTime": "2025-03-10T19:21:32.057000",
+        "FeatureDescription": "",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "zospy_class",
+        "name": "SingleRayTraceResult",
+        "module": "zospy.analyses.raysandspots.single_ray_trace"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "SingleRayTraceSettings",
+        "module": "zospy.analyses.raysandspots.single_ray_trace"
+    }
+}

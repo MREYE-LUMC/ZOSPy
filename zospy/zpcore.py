@@ -1,18 +1,42 @@
+"""Manage the connection with OpticStudio and interact with the optical system.
+
+This module provides two classes:
+
+- `ZOS` is used to connect to OpticStudio and manage the connection.
+- `OpticStudioSystem` is used to interact with the optical system.
+
+Examples
+--------
+Connect to OpticStudio and create a new optical system:
+
+>>> import zospy as zp
+>>> zos = zp.ZOS()
+>>> oss = zos.connect()
+>>> oss.make_sequential()
+>>> oss.SystemName = "New System"
+>>> oss.LDE.InsertNewSurfaceAt(1)
+"""
+
 from __future__ import annotations
 
 import locale
 import logging
 import warnings
 import weakref
-from os import PathLike
 from sys import version_info
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
+from weakref import WeakValueDictionary
 
 from semver.version import Version
 
 from zospy.api import _ZOSAPI, constants
 from zospy.api.apisupport import load_zosapi, load_zosapi_nethelper
 from zospy.utils.pyutils import abspath
+
+if TYPE_CHECKING:
+    from os import PathLike
+
+__all__ = ("OpticStudioSystem", "ZOS")
 
 logger = logging.getLogger(__name__)
 
@@ -25,27 +49,28 @@ class OpticStudioSystem:
 
         Parameters
         ----------
-        zos_instance: ZOS
+        zos_instance : ZOS
             A ZOS instance
-        system_instance: ZOS.Application.PrimarySystem
+        system_instance : ZOS.Application.PrimarySystem
             A PrimarySystem instance obtained from the zos_instance.
         """
-        self._ZOS: ZOS = zos_instance
+        # Use weakref to make sure that the ZOS instance is not kept alive by the OpticStudioSystem instance
+        self.ZOS: ZOS = weakref.proxy(zos_instance)
 
         self._System: _ZOSAPI.IOpticalSystem = system_instance
         self._OpenFile = None
 
     @property
-    def SystemName(self) -> str:
+    def SystemName(self) -> str:  # noqa: N802
         """Name of the current optical system."""
         return self._System.SystemName
 
     @SystemName.setter
-    def SystemName(self, value: str):
+    def SystemName(self, value: str):  # noqa: N802
         self._System.SystemName = value
 
     @property
-    def SystemID(self) -> int:
+    def SystemID(self) -> int:  # noqa: N802
         """Unique identifier for the optical system.
 
         This identifier can be used to differentiate between multiple `OpticStudioSystem` instances.
@@ -56,7 +81,7 @@ class OpticStudioSystem:
 
         >>> import zospy as zp
         >>> zos = zp.ZOS()
-        >>> oss1 = zos.connect_as_standalone(return_primary_system=True)
+        >>> oss1 = zos.connect()
         >>> oss2 = zos.create_new_system()
         >>> oss1.SystemID != oss2.SystemID
         True
@@ -64,17 +89,17 @@ class OpticStudioSystem:
         return self._System.SystemID
 
     @property
-    def Mode(self) -> str:
+    def Mode(self) -> str:  # noqa: N802
         """Mode of the optical system. Either "Sequential" or "NonSequential"."""
         return str(self._System.Mode)
 
     @property
-    def SystemFile(self) -> str:
+    def SystemFile(self) -> str:  # noqa: N802
         """File path to the current optical system."""
         return self._System.SystemFile
 
     @property
-    def IsNonAxial(self) -> bool:
+    def IsNonAxial(self) -> bool:  # noqa: N802
         """Indicates whether the optical system is axial and sequential.
 
         `True` if the system is non-axial, `False` otherwise.
@@ -82,19 +107,21 @@ class OpticStudioSystem:
         return self._System.IsNonAxial
 
     @property
-    def NeedsSave(self) -> bool:
+    def NeedsSave(self) -> bool:  # noqa: N802
         """Indicates if the optical system contains unsaved changes."""
         return self._System.NeedsSave
 
     @property
-    def SystemData(self) -> _ZOSAPI.SystemData.ISystemData:
+    def SystemData(self) -> _ZOSAPI.SystemData.ISystemData:  # noqa: N802
         """Data for configuring everything in the system explorer.
 
         Examples
         --------
         Change the aperture type to "FloatByStopSize":
 
-        >>> oss.SystemData.Aperture.ApertureType = zp.constants.SystemData.ZemaxApertureType.FloatByStopSize
+        >>> oss.SystemData.Aperture.ApertureType = (
+        ...     zp.constants.SystemData.ZemaxApertureType.FloatByStopSize
+        ... )
 
         Add a wavelength of 543 nm with weight 1:
 
@@ -103,47 +130,47 @@ class OpticStudioSystem:
         return self._System.SystemData
 
     @property
-    def LDE(self) -> _ZOSAPI.Editors.LDE.ILensDataEditor:
+    def LDE(self) -> _ZOSAPI.Editors.LDE.ILensDataEditor:  # noqa: N802
         """Lens Data Editor."""
         return self._System.LDE
 
     @property
-    def NCE(self) -> _ZOSAPI.Editors.NCE.INonSeqEditor:
+    def NCE(self) -> _ZOSAPI.Editors.NCE.INonSeqEditor:  # noqa: N802
         """Non-Sequential Component Editor."""
         return self._System.NCE
 
     @property
-    def MFE(self) -> _ZOSAPI.Editors.MFE.IMeritFunctionEditor:
+    def MFE(self) -> _ZOSAPI.Editors.MFE.IMeritFunctionEditor:  # noqa: N802
         """Merit Function Editor."""
         return self._System.MFE
 
     @property
-    def TDE(self) -> _ZOSAPI.Editors.TDE.IToleranceDataEditor:
+    def TDE(self) -> _ZOSAPI.Editors.TDE.IToleranceDataEditor:  # noqa: N802
         """Tolerance Data Editor."""
         return self._System.TDE
 
     @property
-    def MCE(self) -> _ZOSAPI.Editors.MCE.IMultiConfigEditor:
+    def MCE(self) -> _ZOSAPI.Editors.MCE.IMultiConfigEditor:  # noqa: N802
         """Multi-Configuration Editor."""
         return self._System.MCE
 
     @property
-    def Analyses(self) -> _ZOSAPI.Analysis.I_Analyses:
+    def Analyses(self) -> _ZOSAPI.Analysis.I_Analyses:  # noqa: N802
         """Analyses for the current system."""
         return self._System.Analyses
 
     @property
-    def Tools(self) -> _ZOSAPI.Tools.IOpticalSystemTools:
+    def Tools(self) -> _ZOSAPI.Tools.IOpticalSystemTools:  # noqa: N802
         """Interface to run various tools on the optical system."""
         return self._System.Tools
 
     @property
-    def TheApplication(self) -> _ZOSAPI.IZOSAPI_Application:
+    def TheApplication(self) -> _ZOSAPI.IZOSAPI_Application:  # noqa: N802
         """Application in which the optical system is opened."""
         return self._System.TheApplication
 
     @property
-    def LensUpdateMode(self) -> str:
+    def LensUpdateMode(self) -> str:  # noqa: N802
         """Lens update mode of the optical system.
 
         Possible values are ['None', 'EditorsOnly', 'AllWindows'] or `zospy.constants.LensUpdateMode`.
@@ -151,11 +178,11 @@ class OpticStudioSystem:
         return str(self._System.UpdateMode)
 
     @LensUpdateMode.setter
-    def LensUpdateMode(self, value: constants.LensUpdateMode | str):
+    def LensUpdateMode(self, value: constants.LensUpdateMode | str):  # noqa: N802
         self._System.UpdateMode = value
 
     @property
-    def SessionModes(self) -> str:
+    def SessionModes(self) -> str:  # noqa: N802
         """Session mode of the optical system.
 
         Possible values are ['FromPreferences', 'SessionOn', 'SessionOff'], or `zospy.constants.SessionModes`.
@@ -163,7 +190,7 @@ class OpticStudioSystem:
         return str(self._System.SessionMode)
 
     @SessionModes.setter
-    def SessionModes(self, value: constants.SessionModes | str):
+    def SessionModes(self, value: constants.SessionModes | str):  # noqa: N802
         self._System.SessionMode = constants.process_constant(constants.SessionModes, value)
 
     def get_current_status(self) -> str:
@@ -194,31 +221,31 @@ class OpticStudioSystem:
         """Set the optical system to non-sequential mode if it is not already."""
         return self._System.MakeNonSequential()
 
-    def load(self, filepath: str | PathLike, saveifneeded: bool = False):
+    def load(self, filepath: str | PathLike, *, saveifneeded: bool = False):
         """Load an earlier defined Zemax file.
 
         Parameters
         ----------
-        filepath: str | PathLike
+        filepath : str | PathLike
             Path to the file that should be loaded
-        saveifneeded: bool
+        saveifneeded : bool
             Defines if the current file is saved before opening the new file. Defaults to False.
         """
         filepath = abspath(filepath)
 
-        logger.debug("Opening {} with SaveIfNeeded set to {}".format(filepath, saveifneeded))
+        logger.debug(f"Opening {filepath} with SaveIfNeeded set to {saveifneeded}")
 
         self._System.LoadFile(filepath, saveifneeded)
         self._OpenFile = filepath
 
-        logger.info("Opened {}".format(filepath))
+        logger.info(f"Opened {filepath}")
 
-    def new(self, saveifneeded: bool = False):
+    def new(self, *, saveifneeded: bool = False):
         """Create a new session file.
 
         Parameters
         ----------
-        saveifneeded: bool
+        saveifneeded : bool
             Defines if the current file is saved before opening the new file. Defaults to False.
         """
         logger.debug("Creating new file")
@@ -233,17 +260,17 @@ class OpticStudioSystem:
 
         Parameters
         ----------
-        filepath: str | PathLike
+        filepath : str | PathLike
             The filepath where the system should be saved. Note that a partial path or relative path does not work.
         """
         filepath = abspath(filepath, check_directory_only=True)
 
-        logger.debug("Saving open session as {}".format(filepath))
+        logger.debug(f"Saving open session as {filepath}")
 
         self._System.SaveAs(filepath)
         self._OpenFile = filepath
 
-        logger.info("File saved as {}".format(filepath))
+        logger.info(f"File saved as {filepath}")
 
     def save(self) -> bool:
         """Save the current OpticStudio session.
@@ -252,7 +279,6 @@ class OpticStudioSystem:
         On these occurences, save_as() should be used once.
 
         Returns (bool): A boolean indicating if the saving was successful.
-
         """
         logger.debug("Saving file")
 
@@ -267,7 +293,7 @@ class OpticStudioSystem:
         logger.info("File saved")
         return True
 
-    def close(self, saveifneeded: bool = False) -> bool:
+    def close(self, *, saveifneeded: bool = False) -> bool:
         """Close the optical system. Only works on secondary systems (See OpticStudio documentation).
 
         Parameters
@@ -285,14 +311,14 @@ class OpticStudioSystem:
         zospy.zpcore.OpticStudioSystem
             A ZOSPy OpticStudioSystem instance. Should be sequential.
         """
-        return OpticStudioSystem(self._ZOS, self._System.CopySystem())
+        return OpticStudioSystem(self.ZOS, self._System.CopySystem())
 
     def _ensure_correct_mode(self, required: str):
         """Ensure that the system is in the required type.
 
         Parameters
         ----------
-        required: str
+        required : str
             The required system type. Either 'Sequential' or 'NonSequential'.
 
         Returns
@@ -306,14 +332,14 @@ class OpticStudioSystem:
         """
         logger.debug("Ensuring correct mode")
         if self.Mode != required:
-            err = "Incorrect system type. System is in {} mode but {} mode is required".format(self.Mode, required)
+            err = f"Incorrect system type. System is in {self.Mode} mode but {required} mode is required"
             logger.critical(err)
             raise TypeError(err)
-        else:
-            logger.debug("System is in correct mode")
-        # ToDo: Eveluate what happens in 'mixed mode'
+        logger.debug("System is in correct mode")
+        # TODO: Eveluate what happens in 'mixed mode'
 
     def __del__(self):
+        """Close the optical system when the instance is deleted."""
         logger.debug("Closing connections with Zemax OpticStudio")
 
 
@@ -321,8 +347,8 @@ class ZOS:
     """A Communication instance for Zemax OpticStudio.
 
     This class manages the connection between Python and Zemax OpticStudio through .NET, and controls OpticStudio
-    instances. Only one instance of `ZOS` can exist at any time.
-
+    instances. Only one instance of `ZOS` can exist at any time. If a second instance is attempted to be created, the
+    existing instance is returned.
 
     Parameters
     ----------
@@ -343,11 +369,6 @@ class ZOS:
     ZOSAPI_NetHelper : None | netModuleObject
         The ZOSAPI_NetHelper interface once loaded, else `None`.
 
-    Raises
-    ------
-    ValueError
-        When it is attempted to initiate a second instance of  `ZOS`. Only one instance can exist at any time.
-
     Examples
     --------
     Preferred methods:
@@ -367,29 +388,26 @@ class ZOS:
         >>> oss = zos.connect(mode="standalone")
     """
 
-    _OpticStudioSystem = OpticStudioSystem
+    _instances: WeakValueDictionary = WeakValueDictionary()
 
-    _instances = set()
+    def __new__(cls, *args, **kwargs):  # noqa: ARG003
+        """Ensure that only one instance of ZOS exists at any time.
 
-    def __new__(cls, *args, **kwargs):
-        if len(cls._instances) >= 1:
-            # As the number of applications within runtime is limited to 1 by Zemax, it is logical to also limit the
-            # number of ZOS instances
-            raise ValueError(
-                "Cannot have more than one active ZOS instance.\n\n"
-                "Since OpticStudio limits the number of connections to the ZOS-API to 1, only a single ZOS instance "
-                "is allowed. Re-use the existing instance, or delete the existing instance prior to initializing a "
-                "new one. See https://zospy.rtfd.io/faq#single-zos-instance for more information."
-            )
+        If a ZOS instance already exists, the existing instance is returned. If not, a new instance is created.
+        """
+        if cls not in cls._instances:
+            instance = super().__new__(cls)
+            instance.__initialized = False  # noqa: SLF001
+            cls._instances[cls] = instance
+        else:
+            warnings.warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")
 
-        instance = super(ZOS, cls).__new__(cls)
-
-        return instance
+        return cls._instances[cls]
 
     def __init__(
-        self, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
+        self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
     ):
-        """Initiation of the ZOS instance.
+        """Initiate the OpticStudio API.
 
         The ZOS instance can subsequently be used to connect to OpticStudio. See the examples in the class docstring for
         more information.
@@ -406,23 +424,29 @@ class ZOS:
             zosapi_nethelper. Note that either the zosapi_nethelper or the opticstudio_directory has to be specified,
             not both.
         """
+        if self.__initialized:
+            logger.debug("ZOS instance already initialized")
+            return
+
         logger.debug("Initializing ZOS instance")
 
         self.ZOSAPI: _ZOSAPI = None
         self.ZOSAPI_NetHelper = None
-        self.Connection: _ZOSAPI.IZOSAPI_Connection = None
-        self.Application: _ZOSAPI.IZOSAPI_Application = None
+        self.Connection: _ZOSAPI.IZOSAPI_Connection | None = None
+        self.Application: _ZOSAPI.IZOSAPI_Application | None = None
 
         # Register the instance and create finalizers to tear down the ZOS instance when deleted
-        ZOS._instances.add(id(self))
-        weakref.finalize(self, ZOS.disconnect, self)
-        weakref.finalize(self, ZOS._instances.discard, id(self))
+        weakref.finalize(self, self.disconnect)
 
         logger.info("ZOS instance initialized")
 
         self._wakeup(preload=preload, zosapi_nethelper=zosapi_nethelper, opticstudio_directory=opticstudio_directory)
 
-    def _wakeup(self, preload: bool = False, zosapi_nethelper: str = None, opticstudio_directory: str | None = None):
+        self.__initialized = True
+
+    def _wakeup(
+        self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
+    ):
         """Wake the ZOSAPI instance.
 
         The parameters are passed to `ZOS._load_zos_dlls`.
@@ -445,32 +469,8 @@ class ZOS:
             )
             self._assign_connection()
 
-    def wakeup(self, preload: bool = False, zosapi_nethelper: str = None):
-        """Wake the ZOS-API.
-
-        .. deprecated:: 1.1.0
-                `wakeup` will be removed in ZOSPy 2.0.0, as it is automatically called by `__init__`.
-
-        The parameters are passed to self._load_zos_dlls().
-
-        Parameters
-        ----------
-        preload : bool
-            A boolean indicating if nested namespaces should be preloaded.
-        zosapi_nethelper : str, optional
-            File path to the ZOSAPI_NetHelper dll, if None, the Windows registry will be used to find
-            ZOSAPI_NetHelper dll. Defaults to None.
-        """
-        warnings.warn(
-            "ZOS.wakeup is deprecated and will be removed in ZOSPy 2.0.0. "
-            "It is now automatically called by __init__.",
-            DeprecationWarning,
-        )
-
-        self._wakeup(preload=preload, zosapi_nethelper=zosapi_nethelper)
-
     def _load_zos_dlls(
-        self, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
+        self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
     ):
         """Load the ZOS-API DLLs and makes them available for usage through ZOS.ZOSAPI and ZOS.ZOSAPI_NetHelper.
 
@@ -483,9 +483,9 @@ class ZOS:
 
         Parameters
         ----------
-        preload: bool
+        preload : bool
             A boolean indicating if nested namespaces should be preloaded.
-        zosapi_nethelper: str, optional
+        zosapi_nethelper : str, optional
             Path to the ZOSAPI_NetHelper dll, if `None`, the Windows registry will be used to find
             ZOSAPI_NetHelper dll. Defaults to `None`.
         opticstudio_directory : str, optional
@@ -505,7 +505,7 @@ class ZOS:
         if zosapi_nethelper is not None and opticstudio_directory is not None:
             raise ValueError("Only one of `zosapi_nethelper` and `opticstudio_directory` may be specified.")
 
-        logger.debug("Loading ZOS DLLs with preload set to {}".format(preload))
+        logger.debug(f"Loading ZOS DLLs with preload set to {preload}")
 
         if opticstudio_directory is not None:
             self.ZOSAPI = load_zosapi(zemaxdirectory=opticstudio_directory, preload=preload)
@@ -554,7 +554,7 @@ class ZOS:
 
         self._assign_connection()
 
-        if self.Connection.IsAlive:  # ToDo ensure no memory leak
+        if self.Connection.IsAlive:  # TODO ensure no memory leak
             raise RuntimeError("Only one Zemax application can exist within runtime")
 
         if mode == "standalone":
@@ -573,114 +573,6 @@ class ZOS:
 
         return self.get_primary_system()
 
-    def connect_as_extension(
-        self, instancenumber: int = 0, return_primary_system: bool = False
-    ) -> bool | OpticStudioSystem:
-        """Connect to Zemax OpticStudio as extension.
-
-        .. deprecated:: 1.2.0
-                This method is deprecated and will be removed in ZOSPy 2.0.0. Use `ZOS.connect("extension")` instead.
-
-        The application will be assigned to ZOS.Application.
-
-        Parameters
-        ----------
-        instancenumber : int, optional
-            An integer to specify the number of the instance used.
-        return_primary_system: bool, optional
-            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
-
-        Returns
-        -------
-        bool | OpticStudioSystem
-            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
-            returns the primary `OpticStudioSystem`.
-        """
-        warnings.warn("This method is deprecated, use 'ZOS.connect(\"extension\")' instead.", DeprecationWarning)
-
-        self._assign_connection()
-
-        if self.Connection.IsAlive:  # ToDo ensure no memory leak
-            raise RuntimeError("Only one Zemax application can exist within runtime")
-
-        self.Application = self.Connection.ConnectAsExtension(instancenumber)
-
-        if not self.Application.IsValidLicenseForAPI:
-            logger.critical("OpticStudio Licence is not valid for API, connection not established")
-
-            if return_primary_system:
-                raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
-
-            return False
-
-        if return_primary_system:
-            return self.get_primary_system()
-
-        return True
-
-    def create_new_application(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
-        """Create a standalone Zemax OpticStudio instance.
-
-        .. deprecated:: 1.2.0
-                This method is deprecated and will be removed in ZOSPy 2.0.0. Use `ZOS.connect()` instead.
-
-        The application will be assigned to ZOS.Application.
-
-        Parameters
-        ----------
-        return_primary_system : bool, optional
-            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
-
-        Returns
-        -------
-        bool | OpticStudioSystem
-            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
-            returns the primary `OpticStudioSystem`.
-        """
-        warnings.warn("This method is deprecated, use 'ZOS.connect(\"standalone\")' instead.", DeprecationWarning)
-
-        self._assign_connection()
-
-        if self.Connection.IsAlive:  # ToDo ensure no memory leak
-            raise RuntimeError("Only one Zemax application can exist within runtime")
-
-        self.Application = self.Connection.CreateNewApplication()
-
-        if not self.Application.IsValidLicenseForAPI:
-            logger.critical("OpticStudio Licence is not valid for API, connection not established")
-
-            if return_primary_system:
-                raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
-
-            return False
-
-        if return_primary_system:
-            return self.get_primary_system()
-
-        return True
-
-    def connect_as_standalone(self, return_primary_system: bool = False) -> bool | OpticStudioSystem:
-        """Creates a standalone Zemax OpticStudio instance.
-
-        ..deprecated:: 2.0.0
-                This method is deprecated and will be removed in ZOSPy 2.0.0. Use `ZOS.connect()` instead.
-
-        Equal to `ZOS.create_new_application`.
-
-        Parameters
-        ----------
-        return_primary_system : bool, optional
-            A boolean indicating if the primary OpticStudioSystem should be returned. Defaults to `False`.
-
-        Returns
-        -------
-        bool | OpticStudioSystem
-            `True` if a valid connection is made, else `False`. If `return_primary_system` is `True`, the function
-            returns the primary `OpticStudioSystem`.
-            runs ZOS.get_primary_system() and directly returns OpticStudioSystem.
-        """
-        return self.create_new_application(return_primary_system=return_primary_system)
-
     def disconnect(self):
         """Disconnect from the connected OpticStudio instance.
 
@@ -696,7 +588,9 @@ class ZOS:
         logger.info("Disconnected from OpticStudio")
 
     def create_new_system(self, system_mode: constants.SystemType | str = "Sequential") -> OpticStudioSystem:
-        """Creates a new OpticStudioSystem. This works only if ZOSPy is connected to a standalone application.
+        """Create a new OpticStudioSystem.
+
+        This works only if ZOSPy is connected to a standalone application.
 
         Parameters
         ----------
@@ -710,31 +604,30 @@ class ZOS:
         """
         if self.Application.Mode == constants.ZOSAPI_Mode.Server:
             new_system = self.Application.CreateNewSystem(constants.process_constant(constants.SystemType, system_mode))
-            return self._OpticStudioSystem(zos_instance=self, system_instance=new_system)
+            return OpticStudioSystem(zos_instance=self, system_instance=new_system)
 
+        # TODO: Check if this is really true
         raise ValueError("Can only create a new system when using a standalone connection.")
 
     def get_primary_system(self) -> OpticStudioSystem:
-        """
-        Get the primary optical system.
+        """Get the primary optical system.
 
         Returns
         -------
         OpticStudioSystem
             Primary optical system.
         """
-        optic_studio_system = self._OpticStudioSystem(zos_instance=self, system_instance=self.Application.PrimarySystem)
+        optic_studio_system = OpticStudioSystem(zos_instance=self, system_instance=self.Application.PrimarySystem)
 
         # Automatically populate _OpenFile when connecting in extension mode, to prevent unnecessary errors when
         # calling save
         if self.Application.Mode == constants.ZOSAPI_Mode.Plugin:
-            optic_studio_system._OpenFile = optic_studio_system.SystemFile
+            optic_studio_system._OpenFile = optic_studio_system.SystemFile  # noqa: SLF001
 
         return optic_studio_system
 
     def get_system(self, pos: int = 0) -> OpticStudioSystem:
-        """
-        Get the optical system at the specified position.
+        """Get the optical system at the specified position.
 
         Parameters
         ----------
@@ -746,11 +639,11 @@ class ZOS:
         OpticStudioSystem
             Optical system at position `pos`.
         """
-        opticstudiosystem = self.Application.GetSystemAt(pos)
-        return self._OpticStudioSystem(zos_instance=self, system_instance=opticstudiosystem)
+        optic_studio_system = self.Application.GetSystemAt(pos)
+        return OpticStudioSystem(zos_instance=self, system_instance=optic_studio_system)
 
     def get_txtfile_encoding(self) -> str:
-        """Determines the encoding used to write textfiles in OpticStudio.
+        """Determine the encoding used to write text files in OpticStudio.
 
         Returns
         -------
@@ -769,17 +662,16 @@ class ZOS:
 
         if str(self.Application.Preferences.General.TXTFileEncoding) == "Unicode":
             return "UTF-16-le"
-        elif str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
+        if str(self.Application.Preferences.General.TXTFileEncoding) == "ANSI":
             if version_info < (3, 11):
                 return locale.getpreferredencoding(False)
 
             # Python 3.11 introduced locale.getencoding, which returns the system preferred encoding also if Python's
             # UTF-8 mode is enabled
             return locale.getencoding()
-        else:
-            raise NotImplementedError(
-                f"ZOSPy cannot handle encoding {str(self.Application.Preferences.General.TXTFileEncoding)}"
-            )
+        raise NotImplementedError(
+            f"ZOSPy cannot handle encoding {self.Application.Preferences.General.TXTFileEncoding!s}"
+        )
 
     def retrieve_logs(self) -> str:
         """Retrieve messages logged by OpticStudio.
@@ -799,3 +691,16 @@ class ZOS:
             minor=self.Application.ZOSMinorVersion,
             patch=self.Application.ZOSSPVersion,
         )
+
+    @classmethod
+    def get_instance(cls) -> ZOS | None:
+        """Get the current instance of ZOS.
+
+        Unlike `__new__`, this method does not create a new instance if none exists.
+
+        Returns
+        -------
+        ZOS | None
+            The current instance of ZOS, or `None` if no instance exists.
+        """
+        return cls._instances.get(cls)

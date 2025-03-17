@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Editors.LDE import SurfaceColumn
 from zospy.api._ZOSAPI.Editors.NCE import ObjectColumn
 from zospy.api._ZOSAPI.SystemData import FieldColumn
@@ -163,11 +161,8 @@ class IEditorRow:
     def Bookmark(self, value: str) -> None: ...
     def GetCellAt(self, pos: int) -> IEditorCell: ...
 
-class ISolveAplanatic(ISolveData):
-    pass
-
-class ISolveAutomatic(ISolveData):
-    pass
+class ISolveAplanatic(ISolveData): ...
+class ISolveAutomatic(ISolveData): ...
 
 class ISolveCenterOfCurvature(ISolveData):
     @property
@@ -187,8 +182,7 @@ class ISolveChiefRayHeight(ISolveData):
     @Height.setter
     def Height(self, value: float) -> None: ...
 
-class ISolveChiefRayNormal(ISolveData):
-    pass
+class ISolveChiefRayNormal(ISolveData): ...
 
 class ISolveCocentricRadius(ISolveData):
     @property
@@ -350,8 +344,7 @@ class ISolveFieldPickup(ISolveData):
     def IsPickupFromCurrentColumn(self) -> bool: ...
     def MakePickupFromCurrentColumn(self) -> None: ...
 
-class ISolveFixed(ISolveData):
-    pass
+class ISolveFixed(ISolveData): ...
 
 class ISolveFNumber(ISolveData):
     @property
@@ -381,8 +374,7 @@ class ISolveMarginalRayHeight(ISolveData):
     @PupilZone.setter
     def PupilZone(self, value: float) -> None: ...
 
-class ISolveMarginalRayNormal(ISolveData):
-    pass
+class ISolveMarginalRayNormal(ISolveData): ...
 
 class ISolveMaterialModel(ISolveData):
     @property
@@ -426,11 +418,8 @@ class ISolveMaterialSubstitute(ISolveData):
     @Catalog.setter
     def Catalog(self, value: str) -> None: ...
 
-class ISolveMaximum(ISolveData):
-    pass
-
-class ISolveNone(ISolveData):
-    pass
+class ISolveMaximum(ISolveData): ...
+class ISolveNone(ISolveData): ...
 
 class ISolveObjectPickup(ISolveData):
     @property
@@ -486,8 +475,7 @@ class ISolvePosition(ISolveData):
     @Length.setter
     def Length(self, value: float) -> None: ...
 
-class ISolvePupilPosition(ISolveData):
-    pass
+class ISolvePupilPosition(ISolveData): ...
 
 class ISolveSurfacePickup(ISolveData):
     @property
@@ -519,8 +507,7 @@ class ISolveThermalPickup(ISolveData):
     @Configuration.setter
     def Configuration(self, value: int) -> None: ...
 
-class ISolveVariable(ISolveData):
-    pass
+class ISolveVariable(ISolveData): ...
 
 class ISolveZPLMacro(ISolveData):
     @property

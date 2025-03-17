@@ -1,0 +1,102 @@
+{
+    "data": {
+        "x_field": 1.0,
+        "y_field": 1.0,
+        "x_phase": 45.0,
+        "y_phase": 90.0,
+        "grid_size": "64 x 64",
+        "field_transmissions": [
+            {
+                "field_pos": {
+                    "value": 0.0,
+                    "unit": "deg"
+                },
+                "total_transmission": 0.460799917,
+                "transmissions": {
+                    "0.543": 0.460799917
+                }
+            }
+        ],
+        "chief_ray_transmissions": [
+            {
+                "field_pos": {
+                    "value": 0.0,
+                    "unit": "deg"
+                },
+                "wavelength": {
+                    "1": {
+                        "value": 0.543,
+                        "unit": "µm"
+                    }
+                },
+                "transmissions": {
+                    "index": [
+                        0,
+                        1,
+                        2,
+                        3
+                    ],
+                    "columns": [
+                        "Surf",
+                        "Tot. Tran",
+                        "Rel. Tran"
+                    ],
+                    "data": [
+                        [
+                            1,
+                            1.0,
+                            1.0
+                        ],
+                        [
+                            2,
+                            0.48,
+                            0.48
+                        ],
+                        [
+                            3,
+                            0.4608,
+                            0.96
+                        ],
+                        [
+                            4,
+                            0.4608,
+                            1.0
+                        ]
+                    ],
+                    "index_names": [
+                        null
+                    ],
+                    "column_names": [
+                        null
+                    ]
+                }
+            }
+        ]
+    },
+    "settings": {
+        "sampling": "64x64",
+        "unpolarized": false,
+        "jx": 1.0,
+        "jy": 1.0,
+        "x_phase": 45.0,
+        "y_phase": 90.0
+    },
+    "metadata": {
+        "DateTime": "2025-03-10T16:58:14.805000",
+        "FeatureDescription": "",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "zospy_class",
+        "name": "PolarizationTransmissionResult",
+        "module": "zospy.analyses.polarization.transmission"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "PolarizationTransmissionSettings",
+        "module": "zospy.analyses.polarization.transmission"
+    }
+}

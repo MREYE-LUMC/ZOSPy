@@ -12,6 +12,7 @@ docs/_build/
 docs/api/
 # Examples are automatically copied on build
 docs/examples/
+!docs/examples/introduction.md
 
 # Tool and cache folders
 .conda/

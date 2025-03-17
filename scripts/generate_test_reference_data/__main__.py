@@ -23,9 +23,10 @@ from pydantic import (
 from pydantic_core import PydanticCustomError
 
 import zospy as zp
+from zospy.analyses.base import BaseAnalysisWrapper  # noqa: TCH001
 
 logger = logging.getLogger("generate_test_reference_data")
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 TestParameters = dict[str, Any]
@@ -38,7 +39,7 @@ class VersionDependentParameters(BaseModel):
 
 class TestConfiguration(BaseModel):
     model: Callable[[zp.zpcore.OpticStudioSystem], zp.zpcore.OpticStudioSystem]
-    analysis: Callable[[zp.zpcore.OpticStudioSystem, ...], zp.analyses.base.AnalysisResult]
+    analysis: type[BaseAnalysisWrapper]
     file: str
     test: str
     parameters: list[VersionDependentParameters | TestParameters] = [{}]
@@ -57,7 +58,8 @@ class TestConfiguration(BaseModel):
     @field_validator("file")
     @classmethod
     def validate_filename(cls, v: str):
-        assert v.startswith("test") and v.endswith(".py"), "file should start with 'test_' and have extension '.py'"
+        assert v.startswith("test"), "file should start with 'test_'"
+        assert v.endswith(".py"), "file should have extension '.py'"
 
         return v
 
@@ -75,8 +77,8 @@ class TestConfiguration(BaseModel):
             parametrized = values.parametrized
             assert parametrized is not None, "Multiple sets of parameters are only allowed if parametrized is specified"
 
-            for params in parameters:
-                params = params.parameters if isinstance(params, VersionDependentParameters) else params
+            for p in parameters:
+                params = p.parameters if isinstance(p, VersionDependentParameters) else p
 
                 if not all(p in params for p in parametrized):
                     raise PydanticCustomError(
@@ -134,7 +136,7 @@ def _map_parameter_names(parameters: TestParameters):
 
     Parameters
     ----------
-    parameters: dict
+    parameters : dict
         A dictionary containing the test parameters in the form {param_name: param_value}.
 
     Returns
@@ -147,14 +149,13 @@ def _map_parameter_names(parameters: TestParameters):
 
         for param_name, param in mapped_parameters.items():
             if isinstance(param, dict):
-                mapped_name = hashlib.md5(json.dumps(param, sort_keys=True).encode("utf-8")).hexdigest()
+                mapped_name = hashlib.md5(json.dumps(param, sort_keys=True).encode("utf-8")).hexdigest()  # noqa: S324
 
                 mapped_parameters[param_name] = mapped_name
 
         return mapped_parameters
 
-    else:
-        return parameters
+    return parameters
 
 
 def process_test(
@@ -167,17 +168,17 @@ def process_test(
     test_parameters = test.parameters
     parametrized = test.parametrized
 
-    optic_studio_version = str(oss._ZOS.version)
+    optic_studio_version = str(oss.ZOS.version)
 
     for parameters in test_parameters:
         result_file_name = f"{optic_studio_version}-{test_file}-{test_name}"
 
         if isinstance(parameters, VersionDependentParameters):
-            if not oss._ZOS.version.match(parameters.opticstudio):
+            if not oss.ZOS.version.match(parameters.opticstudio):
                 logger.info(f"Skipping {result_file_name} because it requires OpticStudio {parameters.opticstudio}")
                 continue
 
-            parameters = parameters.parameters
+            parameters = parameters.parameters  # noqa: PLW2901
 
         if parametrized:
             mapped_parameters = _map_parameter_names(parameters=parameters)
@@ -198,9 +199,9 @@ def process_test(
 
         try:
             # Run analysis
-            result = analysis(oss, **parameters, oncomplete="Release")
+            result = analysis(**parameters).run(oss, oncomplete="Release")
         except Exception:
-            logger.error("Failed to run analysis %s. Traceback: %s", analysis.__name__, traceback.format_exc())
+            logger.exception("Failed to run analysis %s. Traceback: %s", analysis.__name__, traceback.format_exc())
             continue
 
         try:
@@ -210,12 +211,21 @@ def process_test(
             if redacted_strings:
                 logger.warning("\tRedacted strings: %s", "\n\t".join(redacted_strings))
 
-            with open(output_json, "w") as f:
+            with open(output_json, "w", encoding="utf-8") as f:
                 f.write(result_json)
 
-            oss.save_as(str(output_zos.absolute()))
+            try:
+                oss.save_as(str(output_zos.resolve()))
+            except Exception:
+                logger.exception("Failed to save Zemax file %s. Traceback: %s", output_zos, traceback.format_exc())
+                output_zos.with_suffix(".txt").resolve().write_text("Failed to save OpticStudio model.")
+
+                # Reconnect to OpticStudio to avoid potential issues
+                zos = zp.ZOS(opticstudio_directory=args.opticstudio_directory)
+                oss = zos.connect(mode=args.connection_mode)
+
         except TypeError:
-            logger.error("Failed to serialize %s. Traceback: %s", result_file_name, traceback.format_exc())
+            logger.exception("Failed to serialize %s. Traceback: %s", result_file_name, traceback.format_exc())
 
 
 def main(args):
@@ -237,7 +247,7 @@ def main(args):
 
         return 1
 
-    with open(args.config, "r") as f:
+    with open(args.config) as f:
         config = Configuration.model_validate(yaml.safe_load(f.read()))
 
     zos = zp.ZOS(opticstudio_directory=args.opticstudio_directory)
@@ -256,6 +266,8 @@ def main(args):
     logger.info("Removing Zemax workspace (.ZDA) files...")
     for f in args.output_directory.glob("*.ZDA"):
         f.unlink()
+
+    return 0
 
 
 argument_parser = ArgumentParser(description="Generate reference data files for ZOSPy unit tests.")

@@ -1,14 +1,43 @@
+"""Utility functions for the Lens Data Editor (LDE) in OpticStudio."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from warnings import warn
 
 from zospy.api import _ZOSAPI, constants
-from zospy.zpcore import OpticStudioSystem
+
+if TYPE_CHECKING:
+    from zospy.zpcore import OpticStudioSystem
+
+__all__ = ("get_pupil", "surface_change_type", "find_surface_by_comment", "surface_change_aperturetype")
 
 
 @dataclass(frozen=True)
 class PupilData:
+    """OpticStudio pupil data.
+
+    Attributes
+    ----------
+    ApertureType : int
+        The aperture type.
+    ApertureValue : float
+        The aperture value.
+    EntrancePupilDiameter : float
+        The entrance pupil diameter.
+    EntrancePupilPosition : float
+        The entrance pupil position.
+    ExitPupilDiameter : float
+        The exit pupil diameter.
+    ExitPupilPosition : float
+        The exit pupil position.
+    ApodizationType : int
+        The apodization type.
+    ApodizationFactor : float
+        The apodization factor.
+    """
+
     ApertureType: int
     ApertureValue: float
     EntrancePupilDiameter: float
@@ -20,11 +49,11 @@ class PupilData:
 
 
 def get_pupil(oss: OpticStudioSystem):
-    """Obtains the pupil data.
+    """Obtain the pupil data from the optical system.
 
     Parameters
     ----------
-    oss: zospy.zpcore.OpticStudioSystem
+    oss : zospy.zpcore.OpticStudioSystem
         A ZOSPy OpticStudioSystem instance.
 
     Returns
@@ -36,8 +65,7 @@ def get_pupil(oss: OpticStudioSystem):
     --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
-    >>> zos.connect_as_extension()
-    >>> oss = zos.get_primary_system()
+    >>> oss = zos.connect()
     >>> zp.functions.lde.get_pupil(oss)
     """
     return PupilData(*oss.LDE.GetPupil())
@@ -46,13 +74,13 @@ def get_pupil(oss: OpticStudioSystem):
 def surface_change_type(
     surface: _ZOSAPI.Editors.LDE.ILDERow, new_type: constants.Editors.LDE.SurfaceType | str, filename=None
 ):
-    """Simple function to change the type of a surface in the LDE.
+    """Change the type of a surface in the Lens Data Editor.
 
     Parameters
     ----------
-    surface: ZOSAPI.Editors.LDE.ILDERow
+    surface : ZOSAPI.Editors.LDE.ILDERow
         The Row/Surface for which the change is to be made.
-    new_type: zospy.constants.Editors.LDE.SurfaceType | str
+    new_type : zospy.constants.Editors.LDE.SurfaceType | str
         The new surface type, either string (e.g. 'Standard') or int. The integer will be treated as if obtained from
         zp.constants.Editors.LDE.SurfaceType.
 
@@ -64,10 +92,11 @@ def surface_change_type(
     --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
-    >>> zos.connect_as_extension()
-    >>> oss = zos.get_primary_system()
-    >>> newsurf = oss.LDE.InsertNewSurfaceAt(0)
-    >>> zp.functions.lde.surface_change_type(newsurf, zp.constants.Editors.LDE.SurfaceType.Standard)
+    >>> oss = zos.connect()
+    >>> new_surface = oss.LDE.InsertNewSurfaceAt(0)
+    >>> zp.functions.lde.surface_change_type(
+    ...     new_surface, zp.constants.Editors.LDE.SurfaceType.Standard
+    ... )
     """
     new_type = constants.process_constant(constants.Editors.LDE.SurfaceType, new_type)
 
@@ -76,33 +105,32 @@ def surface_change_type(
 
     if new_surface_type_settings.RequiresFile:
         if filename is None:
-            raise ValueError(f"Surface type {str(new_type)} requires the specification of a filename.")
-        elif filename not in list(new_surface_type_settings.GetFileNames()):
+            raise ValueError(f"Surface type {new_type!s} requires the specification of a filename.")
+        if filename not in list(new_surface_type_settings.GetFileNames()):
             raise ValueError(
                 f"Filename '{filename}' is not listed as valid filename for this surface type. The "
                 f"accepted names for this surface type are: "
                 f"{', '.join(list(new_surface_type_settings.GetFileNames()))}"
             )
-        else:
-            new_surface_type_settings.Filename = filename
+        new_surface_type_settings.Filename = filename
 
     surface.ChangeType(new_surface_type_settings)
 
 
 def find_surface_by_comment(
-    lde: _ZOSAPI.Editors.LDE, comment: str, case_sensitive: bool = True
+    lde: _ZOSAPI.Editors.LDE, comment: str, *, case_sensitive: bool = True
 ) -> list[_ZOSAPI.Editors.LDE.ILDERow]:
-    """Returns a list of surfaces from the LDE that have the supplied string as Comment.
+    """Retrieve surfaces from the Lens Data Editor that have the supplied string as Comment.
 
     In case of multiple matches, the surfaces are returned in ascending order.
 
     Parameters
     ----------
-    lde: ZOSAPI.Editors.LDE
+    lde : ZOSAPI.Editors.LDE
         The Lens Data Editor (LDE)
-    comment: str
+    comment : str
         String that is searched for in the Comment column of the LDE.
-    case_sensitive: bool
+    case_sensitive : bool
         Flag that specifies whether the search is case-sensitive or not. Defaults to True.
 
     Returns
@@ -114,16 +142,14 @@ def find_surface_by_comment(
     --------
     >>> import zospy as zp
     >>> zos = zp.ZOS()
-    >>> zos.wakeup()
-    >>> zos.connect_as_extension()
-    >>> oss = zos.get_primary_system()
-    >>> newobj1 = oss.LDE.GetSurfaceAt(0)
-    >>> newobj1.Comment = 'aa'
-    >>> newobj2 = oss.LDE.GetSurfaceAt(1)
-    >>> newobj2.Comment = 'bb'
-    >>> newobj3 = oss.LDE.GetSurfaceAt(2)
-    >>> newobj3.Comment = 'aA'
-    >>> zp.functions.lde.find_surface_by_comment(oss.LDE, 'aa')
+    >>> oss = zos.connect()
+    >>> lde_object_1 = oss.LDE.GetSurfaceAt(0)
+    >>> lde_object_1.Comment = "aa"
+    >>> lde_object_2 = oss.LDE.GetSurfaceAt(1)
+    >>> lde_object_2.Comment = "bb"
+    >>> lde_object_3 = oss.LDE.GetSurfaceAt(2)
+    >>> lde_object_3.Comment = "aA"
+    >>> zp.functions.lde.find_surface_by_comment(oss.LDE, "aa")
     """
     # Is the search case-sensitive?
     if not case_sensitive:
@@ -195,7 +221,7 @@ def surface_change_aperturetype(
     x_half_width: float | None = None,
     y_half_width: float | None = None,
 ) -> None:
-    """Simple function to change the aperturetype of a surface in the LDE.
+    """Change the aperturetype of a surface in the Lens Data Editor.
 
     Be aware that while all aperture parameters can be specified, only the ones accepted by the new_type should be
     given, any parameter that is not None but not accepted by the new type will result in a UserWarning and will not be
@@ -203,29 +229,29 @@ def surface_change_aperturetype(
 
     Parameters
     ----------
-    surface: ZOSAPI.Editors.LDE.ILDERow
+    surface : ZOSAPI.Editors.LDE.ILDERow
         The Row/Surface for which the change is to be made.
-    new_type: zospy.constants.Editors.LDE.SurfaceApertureTypes | str
+    new_type : zospy.constants.Editors.LDE.SurfaceApertureTypes | str
         The new surface aperture type.
-    aperture_file: str | None
+    aperture_file : str | None
         The aperture file. Defaults to None.
-    aperture_x_decenter: int | None
+    aperture_x_decenter : int | None
         The x decenter of the aperture. Defaults to None.
-    aperture_y_decenter: int | None
+    aperture_y_decenter : int | None
         The y decenter of the aperture. Defaults to None.
-    maximum_radius: float | None
+    maximum_radius : float | None
         The maximum radius. Defaults to None.
-    minimum_radius: float | None
+    minimum_radius : float | None
         The minimum radius. Defaults to None.
-    number_of_arms: int | None
+    number_of_arms : int | None
         The number of arms. Defaults to None.
-    uda_scale: float | None
+    uda_scale : float | None
         The UDA scale. Defaults to None.
-    width_of_arms: float | None
+    width_of_arms : float | None
         The width of arms. Defaults to None.
-    x_half_width: float | None
+    x_half_width : float | None
         The x half width. Defaults to None
-    y_half_width: float | None
+    y_half_width : float | None
         The y half width. Defaults to None
 
     Returns
@@ -251,7 +277,7 @@ def surface_change_aperturetype(
         if param is not None:
             if attr_name not in _APERTURETYPE_USED_SETTINGS[str(new_type)]:
                 warn(
-                    f"Aperture type {str(new_type)} does not support the specification of {attr_name}. See the "
+                    f"Aperture type {new_type!s} does not support the specification of {attr_name}. See the "
                     f"OpticStudio documentation for more information.",
                     UserWarning,
                 )

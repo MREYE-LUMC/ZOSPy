@@ -78,7 +78,7 @@ class TestNumberToStringConversion:
     @pytest.mark.parametrize(
         "new_locale,number,expected_output",
         [
-            ("de_CH", 1234.5, "1’234.5"),
+            ("de_CH", 1234.5, "1’234.5"),  # noqa: RUF001
             ("de_DE", 1234.5, "1.234,5"),
             ("en_US", 1234.5, "1,234.5"),
             ("nl_NL", 1234.5, "1.234,5"),
@@ -165,18 +165,18 @@ class TestStringToNumberConversion:
         ],
     )
     def test_atox_raises_error_correctly(self, string, dtype, thousands_separator, decimal_point):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError):  # noqa: PT011
             atox(string, dtype=dtype, thousands_separator=thousands_separator, decimal_point=decimal_point)
 
     @pytest.mark.parametrize(
         "locale_cat,string,dtype,expected_output",
         [
-            ("de_CH", "1’234.5", float, 1234.5),
+            ("de_CH", "1’234.5", float, 1234.5),  # noqa: RUF001
             ("de_DE", "1.234,5", float, 1234.5),
             ("en_US", "1,234.5", float, 1234.5),
             ("nl_NL", "1.234,5", float, 1234.5),
             ("zh_CN", "1,234.5", float, 1234.5),
-            ("de_CH", "1’234", int, 1234),
+            ("de_CH", "1’234", int, 1234),  # noqa: RUF001
             ("de_DE", "1.234", int, 1234),
             ("en_US", "1,234", int, 1234),
             ("nl_NL", "1.234", int, 1234),
@@ -236,7 +236,7 @@ class TestStringToNumberConversion:
         # Get results
         analysis.Results.GetTextFile(txtoutfile)
 
-        with open(txtoutfile, "r", encoding=simple_system._ZOS.get_txtfile_encoding()) as f:
+        with open(txtoutfile, encoding=simple_system.ZOS.get_txtfile_encoding()) as f:
             text_output = f.read()
 
         xphase_out = atox(_get_number_field("X-Phase", text_output), dtype=float)

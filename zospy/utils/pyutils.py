@@ -1,13 +1,17 @@
+"""Utility functions for working with Python types."""
+
 from __future__ import annotations
 
-import functools
-from collections.abc import Callable
-from os import PathLike
+from operator import attrgetter
 from pathlib import Path
 from sys import version_info
-from typing import TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
 import zospy.api.config as _config
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from os import PathLike
 
 
 def _check_path(path: Path, *, directory_only: bool = False) -> bool:
@@ -44,19 +48,18 @@ def abspath(path: PathLike | str, *, check_directory_only: bool = False) -> str:
 
     if _check_path(absolute_path, directory_only=check_directory_only):
         return str(absolute_path)
-    else:
-        raise FileNotFoundError(absolute_path)
+    raise FileNotFoundError(absolute_path)
 
 
-def rsetattr(obj, attr, val):
-    """Wrapper for the setattr() function that handles nested strings.
+def attrsetter(obj, attr, val):
+    """Set an attribute of an object.
 
     Parameters
     ----------
     obj
         The object from which the attribute is set
     attr
-        The name of the attribute. Can be nested, e.g. 'aa.bb.cc'
+        The name of the attribute
     val
         The value to which the attribute is set
 
@@ -65,37 +68,7 @@ def rsetattr(obj, attr, val):
         None
     """
     pre, _, post = attr.rpartition(".")
-    return setattr(rgetattr(obj, pre) if pre else obj, post, val)
-
-
-def rgetattr(obj, attr, *args):
-    """Wrapper for the getattr() function that handles nested strings.
-
-    Parameters
-    ----------
-    obj
-        The object from which the attribute is obtained
-    attr
-        The name of the attribute. Can be nested, e.g. 'aa.bb.cc'
-    *args
-        [default,] The default return if the attribute is not found. If not supplied, AttributeError can be
-        raised
-
-    Returns
-    -------
-    attribute
-        The attribute or the default return when not the attribute is not found
-
-    Raises
-    ------
-    AttributeError
-        When the attribute does not exist and no default is supplied in the *args
-    """
-
-    def _getattr(subobj, subattr, *subargs):
-        return getattr(subobj, subattr, *subargs)
-
-    return functools.reduce(lambda x, y: _getattr(x, y, *args), [obj] + attr.split("."))
+    return setattr(attrgetter(pre)(obj) if pre else obj, post, val)
 
 
 def _delocalize(
@@ -109,11 +82,11 @@ def _delocalize(
 
     Parameters
     ----------
-    string: str
+    string : str
         The string that is to be converted.
-    decimal_point: str
+    decimal_point : str
         The decimal point separator used in the string. Defaults to zospy.api.config.DECIMAL_POINT.
-    thousands_separator: str | None
+    thousands_separator : str | None
         The thousands separator used in the string. Defaults to zospy.api.config.THOUSANDS_SEPARATOR.
 
     Returns
@@ -144,19 +117,19 @@ def atox(
     decimal_point: str = ...,
     thousands_separator: str | None = ...,
 ) -> Number:
-    """Parses a string as a number format.
+    """Parse a string to a numeric type.
 
     By default, the locale settings stored in zospy.api.config are used to delocalize the string.
 
     Parameters
     ----------
-    string: str
+    string : str
         The string that is to be converted.
-    dtype: Callable[[str], int | float]
+    dtype : Callable[[str], int | float]
         The function used to convert the delocalized string into a number.
-    decimal_point: str
+    decimal_point : str
         The decimal point separator used in the string. Defaults to zospy.api.config.DECIMAL_POINT.
-    thousands_separator: str | None
+    thousands_separator : str | None
         The thousands separator used in the string. Defaults to zospy.api.config.THOUSANDS_SEPARATOR.
 
     Returns
@@ -168,21 +141,21 @@ def atox(
 
 
 def xtoa(
-    number: float | int,
+    number: float,
     decimal_point: str = ...,
     thousands_separator: str | None = ...,
 ) -> str:
-    """Localizes a number back to a string suing the locale settings.
+    """Localize a number back to a string using the locale settings.
 
     By default, the locale settings stored in zospy.api.config are used.
 
     Parameters
     ----------
-    number: int | float
+    number : int | float
         The number that is to be converted.
-    decimal_point: str
+    decimal_point : str
         The decimal point separator used in the string. Defaults to zospy.api.config.DECIMAL_POINT.
-    thousands_separator: str | None
+    thousands_separator : str | None
         The thousands separator used in the string. Defaults to zospy.api.config.THOUSANDS_SEPARATOR.
 
     Returns
@@ -194,22 +167,15 @@ def xtoa(
     decimal_point = _config.DECIMAL_POINT if decimal_point is ... else decimal_point
 
     if isinstance(number, int):
-        if thousands_separator:
-            string = format(number, ",").replace(",", thousands_separator)
-        else:
-            string = str(number)
-        return string
+        return format(number, ",").replace(",", thousands_separator) if thousands_separator else str(number)
 
     if isinstance(number, float):
         if not decimal_point:
             raise ValueError("Converting float to string requires decimal point to be known")
 
-        if thousands_separator:
-            string = format(number, ",")
-        else:
-            string = str(number)
+        string = format(number, ",") if thousands_separator else str(number)
 
         # swap , and . simultaneously for thousands_separator and decimal_point
-        string = string.translate(str.maketrans({",": thousands_separator, ".": decimal_point}))
+        return string.translate(str.maketrans({",": thousands_separator, ".": decimal_point}))
 
-        return string
+    raise TypeError(f"Expected int or float, got {type(number).__name__}")

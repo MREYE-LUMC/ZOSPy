@@ -9,19 +9,20 @@ Examples
 --------
 Run a Single Ray Trace analysis:
 
->>> from zospy.analyses.wavefront import zernike_standard_coefficients
->>> zernike_standard_coefficients(oss, sampling="32x32", maximum_term=15)
+>>> from zospy.analyses.wavefront import ZernikeStandardCoefficients
+>>> ZernikeStandardCoefficients(sampling="32x32", maximum_term=15).run(oss)
 
 Open an analysis for which a wrapper function is not yet available:
 
 >>> import zospy as zp
->>> analysis = zp.analyses.new_analysis(oss, zp.constants.Analysis.AnalysisIDM.ImageSimulation)
+>>> analysis = zp.analyses.new_analysis(
+...     oss, zp.constants.Analysis.AnalysisIDM.ImageSimulation
+... )
 """
 
 from zospy.analyses import (
     extendedscene,
     mtf,
-    new,
     physicaloptics,
     polarization,
     psf,
@@ -36,12 +37,11 @@ from zospy.analyses.base import OnComplete, new_analysis
 __all__ = (
     "extendedscene",
     "mtf",
-    "new",
     "physicaloptics",
-    "psf",
-    "reports",
-    "raysandspots",
     "polarization",
+    "psf",
+    "raysandspots",
+    "reports",
     "surface",
     "systemviewers",
     "wavefront",

@@ -167,6 +167,11 @@ class TolerancingOperand:
     TARR: TolerancingOperand = None
     TEDR: TolerancingOperand = None
     TSDR: TolerancingOperand = None
+    ISOA: TolerancingOperand = None
+    ISOB: TolerancingOperand = None
+    ISOC: TolerancingOperand = None
+    ISOD: TolerancingOperand = None
+    MPVT: TolerancingOperand = None
     Unknown: TolerancingOperand = None
 
 class TolerancingParameterName:
@@ -191,6 +196,9 @@ class TolerancingParameterName:
     Data: TolerancingParameterName = None
     FieldNumber: TolerancingParameterName = None
     SamplingSetting: TolerancingParameterName = None
+    Units: TolerancingParameterName = None
+    Statistics: TolerancingParameterName = None
+    PivotPointOption: TolerancingParameterName = None
     FieldSetting: TolerancingParameterName = None
     TdeRowNumber: TolerancingParameterName = None
     Undefined: TolerancingParameterName = None

@@ -7,7 +7,7 @@ body:
         Thanks for taking the time to fill out this bug report!
 
         If you have a feature request, please [open a discussion](https://github.com/MREYE-LUMC/ZOSPy/discussions/categories/ideas) instead.
-        If you have a question about the ZOS-API and not about the additional funcitonality offered by ZOSPy, please ask it on the 
+        If you have a question about the ZOS-API and not about the additional functionality offered by ZOSPy, please ask it on the 
         [Zemax community forum](https://community.zemax.com/zos-api-12).
   - type: textarea
     validations:

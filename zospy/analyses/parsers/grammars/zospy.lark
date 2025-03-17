@@ -1,0 +1,93 @@
+//
+// Templates
+//
+
+// Table consisting of a header and one or more rows
+table{header, row}: header _NEWLINE (row _NEWLINE)+
+
+// Group of fields with a common name
+// Field groups have a higher priority, to make sure the header is not matched as an empty field
+field_group{name, fields}.2: name ":" _NEWLINE fields
+
+//
+// Fields
+// A field is a key-value pair, where the key is a string and the value is any type.
+// Key and value are separated by a colon, and the field ends with a newline.
+//
+
+// Either a simple field or a parametric field, always inlined.
+_field: simple_field | parametric_field | unit_field | parametric_unit_field
+
+// Field with parameters and a unit, optionally in parentheses
+parametric_unit_field: field_name field_parameters+ ":" _number ( "(" unit ")" | unit ) _NEWLINE
+
+// Field with a unit, optionally in parentheses
+unit_field: field_name ":" _number ( "(" unit ")" | unit ) _NEWLINE
+!unit: WORD+ | "µm" | "%" // Can be made more generic, but µm is the only non-alphanumeric we encountered so far
+
+// Simple key-value pair
+simple_field: field_name ":" field_value? _NEWLINE
+
+// Key-value pair with one or more parameters before the colon
+parametric_field: field_name field_parameters+ ":" field_value _NEWLINE
+
+// Text can match nearly anything, but has a lower priority to make sure other terminals are matched first
+text.-1: STRING+ /\./? _NEWLINE
+
+field_name: FIELD_NAME+
+FIELD_NAME: (LETTER | "_" | "-" | "(" | ")")+
+
+field_value: (INT | FLOAT | DATE | multi_string)
+
+// One or more parameters, separated by whitespace
+field_parameters: _numbers
+
+multi_string: STRING+
+
+//
+// Numbers
+//
+
+// One or more numbers, separated by whitespace
+// Whitespace separation must be explicitly specified, otherwise 4.56 will be parsed as 4 0.56
+_numbers: _number (_WS_INLINE _number)*
+
+// Either an integer or a float, always inlined.
+// This rule helps to match any number type, but parse it as either a float or an integer.
+_number: FLOAT | INT
+
+// Float, optionally in scientific notation
+FLOAT: SIGN? ("infinity"i | _UNSIGNED_FLOAT)
+_UNSIGNED_FLOAT: UINT? DECIMAL_SEPARATOR UINT EXPONENT?
+EXPONENT: "e"i SIGN? UINT
+
+SIGN: "+" | "-"
+
+// Decimal separator is either a dot or a comma, depending on the locale
+DECIMAL_SEPARATOR: "." | ","
+
+//
+// Strings
+//
+
+// Sequence of strings 
+STRING_SEQUENCE: STRING+
+
+// Alpha-numeric string
+ALPHANUMERIC: (LETTER | DIGIT)+  
+
+// String without whitespace
+// Because this regex matches almost anything, it has a lower priority to make sure other terminals are matched first
+STRING.-1: /\S+/
+
+// Date. Needs a higher priority than STRING, because this also matches dates.
+DATE.2: DIGIT~2 DATESEP DIGIT~2 DATESEP DIGIT~4
+DATESEP: "/" | "-" | "."
+
+_COLON: ":"
+
+%import common.WS_INLINE -> _WS_INLINE
+%import common.NEWLINE -> _NEWLINE
+%import common.SIGNED_INT -> INT
+%import common.INT -> UINT
+%import common (DIGIT, WORD, LETTER)

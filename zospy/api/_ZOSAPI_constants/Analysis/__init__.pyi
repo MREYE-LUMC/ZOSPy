@@ -3,7 +3,6 @@ It should not be edited manually.
 """
 
 from __future__ import annotations
-
 from . import PhysicalOptics, RayTracing, Settings, Tolerancing
 
 __all__ = (
@@ -196,6 +195,13 @@ class AnalysisIDM:
     NSCGeometricMtf: AnalysisIDM = None
     SurfacePhaseSlope: AnalysisIDM = None
     SurfacePhaseSlopeCross: AnalysisIDM = None
+    STARAlignCheck: AnalysisIDM = None
+    STARSysViewer: AnalysisIDM = None
+    STAR2DDefPlot: AnalysisIDM = None
+    STARPerfChange: AnalysisIDM = None
+    STARIndexVsTemp: AnalysisIDM = None
+    STARInspectFEA: AnalysisIDM = None
+    UserDefinedCOM: AnalysisIDM = None
     XXXTemplateXXX: AnalysisIDM = None
 
 class Beam:
@@ -468,45 +474,49 @@ class ShowAs:
 
 class SurfaceCurvatureCrossData:
     TangentialCurvature: SurfaceCurvatureCrossData = None
-    SagitalCurvature: SurfaceCurvatureCrossData = None
+    SagittalCurvature: SurfaceCurvatureCrossData = None
     X_Curvature: SurfaceCurvatureCrossData = None
     Y_Curvature: SurfaceCurvatureCrossData = None
-    TanPlusSagCurvature: SurfaceCurvatureCrossData = None
-    XPlusYCurvature: SurfaceCurvatureCrossData = None
+    CurvatureModulus: SurfaceCurvatureCrossData = None
+    CurvatureUnused: SurfaceCurvatureCrossData = None
 
 class SurfaceCurvatureData:
     TangentialCurvature: SurfaceCurvatureData = None
-    SagitalCurvature: SurfaceCurvatureData = None
+    SagittalCurvature: SurfaceCurvatureData = None
     X_Curvature: SurfaceCurvatureData = None
     Y_Curvature: SurfaceCurvatureData = None
+    CurvatureModulus: SurfaceCurvatureData = None
+    CurvatureUnused: SurfaceCurvatureData = None
 
 class SurfacePhaseData:
     SurfacePhase: SurfacePhaseData = None
 
 class SurfacePhaseSlopeCrossData:
     PhaseSlopeTangential: SurfacePhaseSlopeCrossData = None
-    PhaseSlopeSaggital: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeSagittal: SurfacePhaseSlopeCrossData = None
     PhaseSlopeX: SurfacePhaseSlopeCrossData = None
     PhaseSlopeY: SurfacePhaseSlopeCrossData = None
-    PhaseSlopeTangentialAndSaggital: SurfacePhaseSlopeCrossData = None
-    PhaseSlopeX_and_Y: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeModulus: SurfacePhaseSlopeCrossData = None
+    PhaseSlopeUnused: SurfacePhaseSlopeCrossData = None
 
 class SurfacePhaseSlopeData:
     PhaseSlopeTangential: SurfacePhaseSlopeData = None
-    PhaseSlopeSaggital: SurfacePhaseSlopeData = None
+    PhaseSlopeSagittal: SurfacePhaseSlopeData = None
     PhaseSlopeX: SurfacePhaseSlopeData = None
     PhaseSlopeY: SurfacePhaseSlopeData = None
+    PhaseSlopeModulus: SurfacePhaseSlopeData = None
+    PhaseSlopeUnused: SurfacePhaseSlopeData = None
 
 class SurfaceSagData:
     SurfaceSag: SurfaceSagData = None
 
 class SurfaceSlopeCrossData:
-    TangentialCurvature: SurfaceSlopeCrossData = None
-    SagitalCurvature: SurfaceSlopeCrossData = None
-    X_Curvature: SurfaceSlopeCrossData = None
-    Y_Curvature: SurfaceSlopeCrossData = None
-    TanPlusSagCurvature: SurfaceSlopeCrossData = None
-    XPlusYCurvature: SurfaceSlopeCrossData = None
+    TangentialSlope: SurfaceSlopeCrossData = None
+    SagittalSlope: SurfaceSlopeCrossData = None
+    XSlope: SurfaceSlopeCrossData = None
+    YSlope: SurfaceSlopeCrossData = None
+    SlopeModulus: SurfaceSlopeCrossData = None
+    SlopeUnused: SurfaceSlopeCrossData = None
 
 class SurfaceSlopeData:
     SurfaceSlope: SurfaceSlopeData = None
@@ -514,6 +524,8 @@ class SurfaceSlopeData:
     SagittalSlope: SurfaceSlopeData = None
     XSlope: SurfaceSlopeData = None
     YSlope: SurfaceSlopeData = None
+    SlopeModulus: SurfaceSlopeData = None
+    SlopeUnused: SurfaceSlopeData = None
 
 class UserAnalysisDataType:
     None_: UserAnalysisDataType = None

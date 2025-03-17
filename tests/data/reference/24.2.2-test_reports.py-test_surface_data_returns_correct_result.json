@@ -1,0 +1,83 @@
+{
+    "data": {
+        "comment": "lens front",
+        "date": "10-3-2025",
+        "file": "REDACTED",
+        "diameter": 2.0,
+        "edge_thickness": {
+            "y": 0.950756,
+            "x": 0.950756
+        },
+        "material": {
+            "indices": [
+                {
+                    "number": 1,
+                    "wavelength": 0.543,
+                    "index": 1.5
+                }
+            ],
+            "best_fit_glass": "TIF6",
+            "glass": {
+                "nd": 1.5,
+                "abbe": 0.0,
+                "dpgf": 0.0
+            }
+        },
+        "lens_units": "Millimeters",
+        "surface_powers": {
+            "as_situated": {
+                "surf": {
+                    "2": 0.025,
+                    "3": 0.025
+                },
+                "power": {
+                    "2.0,3.0": 0.049583
+                },
+                "efl": {
+                    "2.0,3.0": 20.168
+                },
+                "f_number": {
+                    "2.0,3.0": 10.084
+                }
+            },
+            "in_air": {
+                "surf": {
+                    "2": 0.025,
+                    "3": 0.025
+                },
+                "power": {
+                    "2.0,3.0": 0.049583
+                },
+                "efl": {
+                    "2.0,3.0": 20.168
+                },
+                "f_number": {
+                    "2.0,3.0": 10.084
+                }
+            }
+        },
+        "thickness": 1.0,
+        "shape_factor": 0.0
+    },
+    "settings": {
+        "surface": 2
+    },
+    "metadata": {
+        "DateTime": "2025-03-10T16:58:16.907000",
+        "FeatureDescription": "",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "zospy_class",
+        "name": "SurfaceDataResult",
+        "module": "zospy.analyses.reports.surface_data"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "SurfaceDataSettings",
+        "module": "zospy.analyses.reports.surface_data"
+    }
+}

@@ -1,124 +1,102 @@
 {
-    "__type__": "AnalysisResult",
     "data": {
-        "AnalysisType": "Transmission",
-        "Data": {
-            "__type__": "dataclass",
-            "__type_name__": "TransmissionData",
-            "__type_module__": "zospy.analyses.polarization",
-            "data": {
-                "Header": "Polarization Transmission Data",
-                "FieldPos": 0.0,
-                "TotalTransmission": 9.216e-07,
-                "Wavelength": 0.543,
-                "Table": {
-                    "__type__": "DataFrame",
-                    "data": {
-                        "index": [
-                            0,
-                            1,
-                            2,
-                            3
-                        ],
-                        "columns": [
-                            "Surf",
-                            "Tot. Tran",
-                            "Rel. Tran"
-                        ],
-                        "data": [
-                            [
-                                1,
-                                1.0,
-                                1.0
-                            ],
-                            [
-                                2,
-                                1e-06,
-                                1e-06
-                            ],
-                            [
-                                3,
-                                1e-06,
-                                0.96
-                            ],
-                            [
-                                4,
-                                1e-06,
-                                1.0
-                            ]
-                        ],
-                        "index_names": [
-                            null
-                        ],
-                        "column_names": [
-                            null
-                        ]
-                    }
+        "x_field": 0.001,
+        "y_field": 1.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0,
+        "grid_size": "32 x 32",
+        "field_transmissions": [
+            {
+                "field_pos": {
+                    "value": 0.0,
+                    "unit": "deg"
+                },
+                "total_transmission": 9.216e-7,
+                "transmissions": {
+                    "0.543": 9.216e-7
                 }
             }
-        },
-        "Settings": {
-            "__type__": "Series",
-            "data": {
-                "Sampling": "32x32",
-                "Unpolarized": false,
-                "Jx": 0.001,
-                "Jy": 1,
-                "X-Phase": 0,
-                "Y-Phase": 0
-            }
-        },
-        "MetaData": {
-            "__type__": "dataclass",
-            "__type_name__": "AnalysisMetadata",
-            "__type_module__": "zospy.analyses.base",
-            "data": {
-                "DateTime": {
-                    "__type__": "datetime",
-                    "data": "2024-10-25T17:00:55.667000"
-                },
-                "FeatureDescription": "",
-                "LensFile": "REDACTED",
-                "LensTitle": ""
-            }
-        },
-        "HeaderData": [],
-        "Messages": [],
-        "RawTextData": [
-            "\ufeffPolarization Transmission Data",
-            "",
-            "File : REDACTED",
-            "Title: ",
-            "Date : 25-10-2024",
-            "",
-            "",
-            "X-Field     :\t 0,0010",
-            "Y-Field     :\t 1,0000",
-            "X-Phase     :\t   0,00",
-            "Y-Phase     :\t   0,00",
-            "",
-            "Grid Size : 32 x 32",
-            "",
-            "Aperture, Fresnel, coating, vignetting, and internal transmittance effects are considered.",
-            "",
-            "Field Pos : 0,0000 (deg)",
-            "  Transmission at    0,5430:      9,2160E-07",
-            "  Total Transmission       :      9,2160E-07",
-            "",
-            "",
-            "Chief Ray Transmission Surface By Surface:",
-            "",
-            "Field Pos : 0,0000 (deg)",
-            "Wavelength 1: 0,543 \u00b5m",
-            "",
-            " Surf    \tTot. Tran    \tRel. Tran",
-            "   1 \t    1,000000 \t    1,000000",
-            "   2 \t    0,000001 \t    0,000001",
-            "   3 \t    0,000001 \t    0,960000",
-            "   4 \t    0,000001 \t    1,000000",
-            ""
         ],
-        "CgfOutFile": "REDACTED",
-        "TxtOutFile": "REDACTED"
+        "chief_ray_transmissions": [
+            {
+                "field_pos": {
+                    "value": 0.0,
+                    "unit": "deg"
+                },
+                "wavelength": {
+                    "1": {
+                        "value": 0.543,
+                        "unit": "µm"
+                    }
+                },
+                "transmissions": {
+                    "index": [
+                        0,
+                        1,
+                        2,
+                        3
+                    ],
+                    "columns": [
+                        "Surf",
+                        "Tot. Tran",
+                        "Rel. Tran"
+                    ],
+                    "data": [
+                        [
+                            1,
+                            1.0,
+                            1.0
+                        ],
+                        [
+                            2,
+                            1e-6,
+                            1e-6
+                        ],
+                        [
+                            3,
+                            1e-6,
+                            0.96
+                        ],
+                        [
+                            4,
+                            1e-6,
+                            1.0
+                        ]
+                    ],
+                    "index_names": [
+                        null
+                    ],
+                    "column_names": [
+                        null
+                    ]
+                }
+            }
+        ]
+    },
+    "settings": {
+        "sampling": "32x32",
+        "unpolarized": false,
+        "jx": 0.001,
+        "jy": 1.0,
+        "x_phase": 0.0,
+        "y_phase": 0.0
+    },
+    "metadata": {
+        "DateTime": "2025-03-10T19:16:41.136000",
+        "FeatureDescription": "",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "zospy_class",
+        "name": "PolarizationTransmissionResult",
+        "module": "zospy.analyses.polarization.transmission"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "PolarizationTransmissionSettings",
+        "module": "zospy.analyses.polarization.transmission"
     }
 }

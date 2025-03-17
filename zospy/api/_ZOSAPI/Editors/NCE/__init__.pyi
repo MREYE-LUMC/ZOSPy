@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Analysis import IMessage, SampleSizes
 from zospy.api._ZOSAPI.Common import IMetadata, ZemaxColor, ZemaxOpacity
 from zospy.api._ZOSAPI.Editors import (
@@ -393,8 +391,7 @@ class IIMS_GRIN(IIndexModelSettings):
     def GetParameterValue(self, paramIdx: int) -> float: ...
     def SetParameterValue(self, paramIdx: int, Value: float) -> bool: ...
 
-class IIMS_Isotropic(IIndexModelSettings):
-    pass
+class IIMS_Isotropic(IIndexModelSettings): ...
 
 class IIndexModelSettings:
     @property
@@ -2851,14 +2848,9 @@ class IObjectCADAssemblySolidWorks(IObject):
     @Explode.setter
     def Explode(self, value: bool) -> None: ...
 
-class IObjectCADPartAutodeskInventor(IObject):
-    pass
-
-class IObjectCADPartCreoParametric(IObject):
-    pass
-
-class IObjectCADPartSolidWorks(IObject):
-    pass
+class IObjectCADPartAutodeskInventor(IObject): ...
+class IObjectCADPartCreoParametric(IObject): ...
+class IObjectCADPartSolidWorks(IObject): ...
 
 class IObjectCADPartSTEPIGESSAT(IObject):
     @property
@@ -2912,8 +2904,7 @@ class IObjectCADPartSTL(IObject):
     @IsVolume.setter
     def IsVolume(self, value: bool) -> None: ...
 
-class IObjectCADPartZPD(IObject):
-    pass
+class IObjectCADPartZPD(IObject): ...
 
 class IObjectCompoundLens(IObject):
     @property
@@ -5660,8 +5651,7 @@ class IObjectMEMS(IObject):
     def PixelAddressGroupNCell(self, n: int) -> IEditorCell: ...
     def SetPixelAddressGroupN(self, n: int, Value: int) -> None: ...
 
-class IObjectNullObject(IObject):
-    pass
+class IObjectNullObject(IObject): ...
 
 class IObjectOddAsphereLens(IObject):
     @property
@@ -6643,8 +6633,7 @@ class IObjectSourceDiode(IObjectSources, IObject):
     @YMinusWidthHY.setter
     def YMinusWidthHY(self, value: float) -> None: ...
 
-class IObjectSourceDLL(IObjectSources, IObject):
-    pass
+class IObjectSourceDLL(IObjectSources, IObject): ...
 
 class IObjectSourceEllipse(IObjectSources, IObject):
     @property
@@ -7965,8 +7954,7 @@ class IObjectTypeSettings:
     def GetFileNames1(self) -> list[str]: ...
     def GetFileNames2(self) -> list[str]: ...
 
-class IObjectUserDefinedObject(IObject):
-    pass
+class IObjectUserDefinedObject(IObject): ...
 
 class IObjectWolterSurface(IObject):
     @property
@@ -9695,8 +9683,7 @@ class IOSS_Lambertian(IObjectScatteringSettings):
     @ScatterFraction.setter
     def ScatterFraction(self, value: float) -> None: ...
 
-class IOSS_None(IObjectScatteringSettings):
-    pass
+class IOSS_None(IObjectScatteringSettings): ...
 
 class IOSS_User(IObjectScatteringSettings):
     @property
@@ -9896,8 +9883,7 @@ class ISCS_SpectrumFile(ISourceColorSettings):
     def Fit(self) -> str: ...
     def GetAvailableSpectrumFiles(self) -> list[str]: ...
 
-class ISCS_SystemWavelengths(ISourceColorSettings):
-    pass
+class ISCS_SystemWavelengths(ISourceColorSettings): ...
 
 class ISCS_UniformPowerSpectrum(ISourceColorSettings):
     @property
@@ -10064,8 +10050,7 @@ class IVolumePhysicsModelSettings:
     @property
     def _S_PhotoluminescenceModel(self) -> IVMPS_PhotoluminscenceModel: ...
 
-class IVPMS_None(IVolumePhysicsModelSettings):
-    pass
+class IVPMS_None(IVolumePhysicsModelSettings): ...
 
 class NCEIndexType:
     Isotropic = 0

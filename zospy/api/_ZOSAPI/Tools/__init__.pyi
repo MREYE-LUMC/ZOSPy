@@ -4,7 +4,7 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
+from typing import overload
 
 from zospy.api._ZOSAPI.Analysis import SampleSizes
 from zospy.api._ZOSAPI.Common import IVectorData
@@ -32,36 +32,12 @@ from zospy.api._ZOSAPI.Tools.Layouts import (
     INSCShadedModelExport,
     IShadedModelExport,
 )
-from zospy.api._ZOSAPI.Tools.Optimization import (
-    IGlobalOptimization,
-    IHammerOptimization,
-    ILocalOptimization,
-)
-from zospy.api._ZOSAPI.Tools.OptimizationTools import (
-    IConvertAsphereType,
-    IFindBestAsphere,
-)
-from zospy.api._ZOSAPI.Tools.RayTrace import (
-    IBatchRayTrace,
-    ILightningTrace,
-    INSCRayTrace,
-    IZRDReader,
-)
-from zospy.api._ZOSAPI.Tools.Tolerancing import (
-    IQuickSensitivity,
-    IToleranceDataViewer,
-    ITolerancing,
-)
+from zospy.api._ZOSAPI.Tools.Optimization import IGlobalOptimization, IHammerOptimization, ILocalOptimization
+from zospy.api._ZOSAPI.Tools.OptimizationTools import IConvertAsphereType, IFindBestAsphere
+from zospy.api._ZOSAPI.Tools.RayTrace import IBatchRayTrace, ILightningTrace, INSCRayTrace, IZRDReader
+from zospy.api._ZOSAPI.Tools.Tolerancing import IQuickSensitivity, IToleranceDataViewer, ITolerancing
 
-from . import (
-    FileManager,
-    General,
-    Layouts,
-    Optimization,
-    OptimizationTools,
-    RayTrace,
-    Tolerancing,
-)
+from . import FileManager, General, Layouts, Optimization, OptimizationTools, RayTrace, Tolerancing
 
 __all__ = (
     "FileManager",

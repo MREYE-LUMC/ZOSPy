@@ -1,0 +1,59 @@
+{
+    "data": {
+        "starting_surface": 2,
+        "ending_surface": 3,
+        "wavelength": 0.543,
+        "orientation": "Y-Z",
+        "lens_units": "Millimeters",
+        "cardinal_points": {
+            "focal_length": {
+                "object": -20.168067,
+                "image": 20.168067
+            },
+            "focal_planes": {
+                "object": -19.831933,
+                "image": 19.831933
+            },
+            "principal_planes": {
+                "object": 0.336134,
+                "image": -0.336134
+            },
+            "anti_principal_planes": {
+                "object": -40.0,
+                "image": 40.0
+            },
+            "nodal_planes": {
+                "object": 0.336134,
+                "image": -0.336134
+            },
+            "anti_nodal_planes": {
+                "object": -40.0,
+                "image": 40.0
+            }
+        }
+    },
+    "settings": {
+        "surface_1": 2,
+        "surface_2": 3,
+        "wavelength": 1,
+        "orientation": "Y-Z"
+    },
+    "metadata": {
+        "DateTime": "2025-03-10T16:58:17.438000",
+        "FeatureDescription": "",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "zospy_class",
+        "name": "CardinalPointsResult",
+        "module": "zospy.analyses.reports.cardinal_points"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "CardinalPointsSettings",
+        "module": "zospy.analyses.reports.cardinal_points"
+    }
+}

@@ -4,8 +4,6 @@ It should not be edited manually.
 
 from __future__ import annotations
 
-from typing import Iterable, overload
-
 from zospy.api._ZOSAPI.Analysis import IColorTranslator, IMessage
 from zospy.api._ZOSAPI.Tools.RayTrace import RayStatus
 

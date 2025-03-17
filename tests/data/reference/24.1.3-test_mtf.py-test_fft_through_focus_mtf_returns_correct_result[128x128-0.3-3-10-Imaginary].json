@@ -1,9 +1,13 @@
 {
-    "__type__": "AnalysisResult",
-    "data": {
-        "AnalysisType": "FftThroughFocusMtf",
-        "Data": {
-            "__type__": "DataFrame",
+    "data": [
+        {
+            "field_coordinate": {
+                "value": [
+                    0.0,
+                    0.0
+                ],
+                "unit": "(deg)"
+            },
             "data": {
                 "index": [
                     -0.3,
@@ -308,14 +312,8 @@
                     0.3
                 ],
                 "columns": [
-                    [
-                        "Field: 0,0000 (deg)",
-                        "Tangential"
-                    ],
-                    [
-                        "Field: 0,0000 (deg)",
-                        "Sagittal"
-                    ]
+                    "Tangential",
+                    "Sagittal"
                 ],
                 "data": [
                     [
@@ -1523,43 +1521,42 @@
                     "Focal Shift"
                 ],
                 "column_names": [
-                    "Description",
-                    "SeriesLabels"
+                    null
                 ]
             }
-        },
-        "Settings": {
-            "__type__": "Series",
-            "data": {
-                "SampleSize": "S_128x128",
-                "DeltaFocus": 0.3,
-                "Frequency": 3.0,
-                "Wavelength": "All",
-                "Field": "All",
-                "Type": "7",
-                "UsePolarization": false,
-                "UseDashes": false
-            }
-        },
-        "MetaData": {
-            "__type__": "dataclass",
-            "__type_name__": "AnalysisMetadata",
-            "__type_module__": "zospy.analyses.base",
-            "data": {
-                "DateTime": {
-                    "__type__": "datetime",
-                    "data": "2024-10-25T17:00:54.286000"
-                },
-                "FeatureDescription": "Polychromatic Diffraction Through Focus Imaginary part of OTF\n\n",
-                "LensFile": "REDACTED",
-                "LensTitle": ""
-            }
-        },
-        "HeaderData": [
-            "Data for 0,5430 to 0,5430 \u00b5m.",
-            "Spatial frequency: 3,0000 cycles per mm.",
-            "Defocus Units    : Millimeters."
-        ],
-        "Messages": []
+        }
+    ],
+    "settings": {
+        "sampling": "128x128",
+        "delta_focus": 0.3,
+        "frequency": 3.0,
+        "number_of_steps": 10,
+        "wavelength": "All",
+        "field": "All",
+        "mtf_type": "Imaginary",
+        "use_polarization": false,
+        "use_dashes": false
+    },
+    "metadata": {
+        "DateTime": "2025-03-10T19:16:37.266000",
+        "FeatureDescription": "Polychromatic Diffraction Through Focus Imaginary part of OTF\n\n",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [
+        "Data for 0,5430 to 0,5430 µm.",
+        "Spatial frequency: 3,0000 cycles per mm.",
+        "Defocus Units    : Millimeters."
+    ],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "zospy_class",
+        "name": "FFTThroughFocusMTFResult",
+        "module": "zospy.analyses.mtf.fft_through_focus_mtf"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "FFTThroughFocusMTFSettings",
+        "module": "zospy.analyses.mtf.fft_through_focus_mtf"
     }
 }

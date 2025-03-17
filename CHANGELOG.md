@@ -13,13 +13,55 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- Setting beam and fiber type with external files in PhysicalOpticsPropagation (#105)
-
 ### Changed
 
 ### Deprecated
 
 ### Removed
+
+## [[2.0.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.0.0) - 2025-03-17
+
+### Added
+
+- `zospy.zpcore.ZOS.get_instance` to get the existing `ZOS` instance, if present (#107).
+- Test reference data for OpticStudio 2025 R1. This is now the reference version for the tests (#127).
+
+### Fixed
+
+- `zospy.analyses.base.Analysis` now raises an `AttributeError` when trying to set an attribute that is not present in the OpticStudio analysis object (#106).
+- Obtain correct minimum x and y values in data grids for `zospy.analyses.extendedscene.geometric_image_analysis` (#103).
+- Setting beam and fiber type with external files in `zospy.analyses.physicaloptics.physical_optics_propagation` (#114)
+
+### Changed
+
+- `zospy.zpcore.ZOS` now uses a singleton pattern to ensure only one instance of `ZOS` is created. If a second instance is created, the existing instance is returned instead and a warning is raised (#107)
+- `zospy.zpcore.OpticStudioSystem._ZOS` was renamed to `ZOS`, making it a public attribute (#107)
+- `zospy.analyses.new_analysis`: `settings_first` is now a keyword-only argument.
+- `zospy.api.apisupport.load_zosapi_nethelper`: `preload` is now a keyword-only argument.
+- `zospy.api.apisupport.load_zosapi`: `preload` is now a keyword-only argument.
+- `zospy.functions.lde.find_surface_by_comment`: `case_sensitive` is now a keyword-only argument.
+- `zospy.functions.nce.find_object_by_comment`: `case_sensitive` is now a keyword-only argument.
+- `zospy.utils.flatten_dict`: `keep_unflattened` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.load`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.new`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.OpticStudioSystem.close`: `saveifneeded` is now a keyword-only argument.
+- `zospy.zpcore.ZOS.__init__`: all parameters are now keyword-only arguments.
+- Replaced `zospy.utils.zputils.rsetattr` with `zospy.utils.zputils.attrsetter`, based on `operator.attrgetter`.
+- `zospy.analyses` now uses a new, object-oriented interface for OpticStudio analyses (#118). The old interface is now deprecated, but still available in `zospy.analyses.old`.
+  See discussion [#87](https://github.com/MREYE-LUMC/ZOSPy/discussions/87) and the release notes for more information.
+- `zospy.utils.zputils.unpack_datagrid` now returns a DataGrid with column and row labels indicating the centers of the cells, instead
+  of the bottom-left corners of the cells (#128).
+
+### Deprecated
+
+- `zospy.analyses.old` is deprecated in favor of the new object-oriented interface in `zospy.analyses` (#118).
+
+### Removed
+
+- `zospy.zpcore.ZOS.wakeup` is no longer needed, as the ZOS-API is now loaded in `zospy.zpcore.ZOS.__init__` (#107)
+- `zospy.zpcore.ZOS.connect_as_extension`, `zospy.zpcore.ZOS.create_new_application` and `zospy.zpcore.ZOS.connect_as_standalone` have been removed in favor of `zospy.zpcore.ZOS.connect` (#107)
+- `zospy.functions.nce.get_object_data` has been removed because it implements a conversion that is now done automatically by `zospy.api.codecs.OpticStudioInterfaceEncoder` (#107)
+- Removed `zospy.utils.zputils.rgetattr` because `operator.attrgetter` does the same thing.
 
 ## [[1.3.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v1.3.1) - 2025-01-16
 
