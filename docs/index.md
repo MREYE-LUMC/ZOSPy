@@ -81,6 +81,7 @@ examples/Retinal illumination in pseudophakic eyes with and without Negative Dys
 examples/Ray trace Double Gauss/raytrace_double_gauss
 examples/Polarization Prism/polarization_prism_example
 examples/Modelling of a Shack-Hartmann Sensor for eye aberration evaluation/README
+examples/Patient-specific mapping of fundus photographs to three-dimensional ocular imaging/README
 ```
 
 ```{toctree}
