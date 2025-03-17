@@ -63,7 +63,7 @@ If you contributed an example:
   Meanwhile, here are some useful resources that will help you to improve
   the quality of your contribution:
 -->
-[contribution-guidelines]: https://github.com/MREYE-LUMC/ZOSPy/blob/main/CONTRIBUTING.md
-[code-style-guidelines]: https://github.com/MREYE-LUMC/ZOSPy/blob/main/CONTRIBUTING.md#workflow
-[unittest-instructions]: https://github.com/MREYE-LUMC/ZOSPy/blob/main/tests/README.md
+[contribution-guidelines]: https://zospy.readthedocs.io/en/latest/contributing/contributing.html
+[code-style-guidelines]: https://zospy.readthedocs.io/en/latest/contributing/contributing.html#workflow
+[unittest-instructions]: https://zospy.readthedocs.io/en/latest/contributing/unit_tests.html
 [numpydoc]: https://numpydoc.readthedocs.io/en/latest/format.html
