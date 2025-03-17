@@ -102,17 +102,17 @@ def unpack_datagrid(
     ----------
     datagrid : ZOSAPI.Analysis.Data.IAR_DataGrid
         OpticStudio DataGrid object.
-    minx : Optional[float, int]
+    minx : float, optional
         The MinX coordinate to be used when unpacking the datagrid.
-    miny : Optional[float, int]
+    miny : float, optional
         The MinY coordinate to be used when unpacking the datagrid.
     cell_origin : Literal["bottom_left", "center"]
         Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they are
         defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the grid cell.
         Defaults to 'bottom_left'.
     label_rounding : int, optional
-        Defines the numbers of decimals to which the column and index labels are rounded. If set to None, no rounding is
-        applied. Defaults to 10.
+        Defines the numbers of decimals to which the column and index labels are rounded, to fix floating point errors. 
+        If set to None, no rounding is applied. Defaults to 10.
 
     Returns
     -------
