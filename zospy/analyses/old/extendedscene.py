@@ -205,7 +205,9 @@ def geometric_image_analysis(
     # Get data and unpack
     data = []
     for ii in range(analysis.Results.NumberOfDataGrids):
-        data.append(utils.zputils.unpack_datagrid(analysis.Results.DataGrids[ii]))
+        data.append(utils.zputils.unpack_datagrid(analysis.Results.DataGrids[ii],
+                                                  # pass "center" and None for consistency with older ZOSPy versions
+                                                  cell_origin="center", label_rounding=None))
 
     if len(data) == 0:
         data = pd.DataFrame()
