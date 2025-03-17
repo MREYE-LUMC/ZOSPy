@@ -23,10 +23,12 @@ from sympy.geometry import Ellipse, Line2D, Point2D, intersection
 import zospy as zp
 
 if TYPE_CHECKING:
-    import zospy as zp
+    from zospy.analyses.base import AnalysisResult
+    from zospy.analyses.raysandspots.single_ray_trace import SingleRayTraceResult, SingleRayTraceSettings
+    from zospy.zpcore import OpticStudioSystem
 
 
-def _ignore_fields(oss: zp.zpcore.OpticStudioSystem, index: int | list[int], ignore=True):
+def _ignore_fields(oss: OpticStudioSystem, index: int | list[int], ignore=True):
     if isinstance(index, int):
         index = [index]
 
@@ -34,7 +36,7 @@ def _ignore_fields(oss: zp.zpcore.OpticStudioSystem, index: int | list[int], ign
         oss.SystemData.Fields.GetField(i).Ignore = ignore
 
 
-def get_nodal_points(oss: zp.zpcore.OpticStudioSystem) -> tuple[float, float]:
+def get_nodal_points(oss: OpticStudioSystem) -> tuple[float, float]:
     """Calculate the object and image nodal points of an optical system using OpticStudio."""
     surface_1_to_iris = sum(oss.LDE.GetSurfaceAt(i).Thickness for i in range(1, oss.LDE.StopSurface))
     surface_2_to_iris = sum(
@@ -44,12 +46,12 @@ def get_nodal_points(oss: zp.zpcore.OpticStudioSystem) -> tuple[float, float]:
     # Only use the chief ray
     _ignore_fields(oss, range(2, oss.SystemData.Fields.NumberOfFields + 1), True)
 
-    cardinal_points_result = zp.analyses.reports.cardinal_points(
-        oss, surface_1=1, surface_2=oss.LDE.NumberOfSurfaces - 1
-    )
+    cardinal_points_result = zp.analyses.reports.CardinalPoints(
+        surface_1=1, surface_2=oss.LDE.NumberOfSurfaces - 1
+    ).run(oss)
 
-    object_nodal_point = cardinal_points_result.Data["Object Space"]["Nodal Planes"] - surface_1_to_iris
-    image_nodal_point = cardinal_points_result.Data["Image Space"]["Nodal Planes"] + surface_2_to_iris
+    object_nodal_point = cardinal_points_result.data.cardinal_points.nodal_planes.object - surface_1_to_iris
+    image_nodal_point = cardinal_points_result.data.cardinal_points.nodal_planes.image + surface_2_to_iris
 
     # Enable rays again
     _ignore_fields(oss, range(2, oss.SystemData.Fields.NumberOfFields + 1), False)
@@ -98,16 +100,16 @@ class InputOutputAngles(NamedTuple):
     input_angle_pupil: float
     output_angle_pupil: float
     output_angle_np2: float
-    output_angle_retina_center: float = None
-    output_angle_navarro_np2: float = None
-    location_np2: float = None
-    location_retina_center: float = None
+    output_angle_retina_center: float | None = None
+    output_angle_navarro_np2: float | None = None
+    location_np2: float | None = None
+    location_retina_center: float | None = None
     patient: int | str | None = None
 
     @classmethod
     def from_ray_trace_result(
         cls,
-        ray_trace_result: zp.analyses.base.AnalysisResult,
+        ray_trace_result: AnalysisResult[SingleRayTraceResult, SingleRayTraceSettings],
         field_angle: float,
         np2: float,
         np2_navarro: float | None = None,
@@ -115,7 +117,7 @@ class InputOutputAngles(NamedTuple):
         patient: int | None = None,
         coordinate="Y-coordinate",
     ) -> InputOutputAngles:
-        real_ray_trace_data = ray_trace_result.Data.RealRayTraceData
+        real_ray_trace_data = ray_trace_result.data.real_ray_trace_data
 
         return cls(
             input_angle_field=field_angle,
