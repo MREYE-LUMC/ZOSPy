@@ -12,6 +12,16 @@ tests:
         maximum_term: 37
       - sampling: 128x128
         maximum_term: 64
+  - model: decentered_system
+    analysis: wavefront.ZernikeStandardCoefficients
+    file: test_wavefront.py
+    test: test_zernike_standard_coefficients_decentered_returns_correct_result
+    parametrized: [ sampling, maximum_term ]
+    parameters:
+      - sampling: 64x64
+        maximum_term: 37
+      - sampling: 128x128
+        maximum_term: 64
   - model: simple_system
     analysis: mtf.FFTThroughFocusMTF
     file: test_mtf.py
