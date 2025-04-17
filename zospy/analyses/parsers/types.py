@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from operator import attrgetter
-from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, Optional, TypeVar, Union
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, NamedTuple, Optional, TypeVar, Union
 
 from numpy import array, ndarray
 from pandas import DataFrame
@@ -156,3 +156,18 @@ def ZOSAPIConstant(enum: str) -> type[str]:  # noqa: N802
 
 WavelengthNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]
 FieldNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]
+
+
+class Coordinate(NamedTuple):
+    """Two-dimensional coordinate.
+
+    Attributes
+    ----------
+    x : float
+        X coordinate.
+    y : float
+        Y coordinate.
+    """
+
+    x: float
+    y: float

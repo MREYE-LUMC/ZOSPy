@@ -10,7 +10,7 @@ from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers import ZospyTransformer
 from zospy.analyses.parsers.transformers import SimpleField
-from zospy.analyses.parsers.types import UnitField  # noqa: TCH001
+from zospy.analyses.parsers.types import Coordinate, UnitField  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
@@ -57,10 +57,10 @@ class ZernikeStandardCoefficientsResult:
     subaperture_decenter_sy: float | None = Field(alias="Subaperture decenter Sy", default=None)
     subaperture_radius_sr: float | None = Field(alias="Subaperture radius Sr", default=None)
     surface: str | int = Field(alias="Surface")
-    field: UnitField = Field(alias="Field")
-    wavelength: UnitField = Field(alias="Wavelength")
-    peak_to_valley_to_chief: UnitField = Field(alias="Peak to Valley (to chief)")
-    peak_to_valley_to_centroid: UnitField = Field(alias="Peak to Valley (to centroid)")
+    field: UnitField[float | Coordinate] = Field(alias="Field")
+    wavelength: UnitField[float] = Field(alias="Wavelength")
+    peak_to_valley_to_chief: UnitField[float] = Field(alias="Peak to Valley (to chief)")
+    peak_to_valley_to_centroid: UnitField[float] = Field(alias="Peak to Valley (to centroid)")
 
     from_integration_of_the_rays: IntegrationData = Field(alias="From integration of the rays")
     from_integration_of_the_fitted_coefficients: IntegrationData = Field(
