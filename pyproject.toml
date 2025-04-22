@@ -176,6 +176,10 @@ markers = [
     "skip_for_opticstudio_versions: test is skipped for specific OpticStudio versions",
     "xfail_for_opticstudio_versions: test is expected to fail for specific OpticStudio versions",
 ]
+filterwarnings = [
+    "ignore:Header and row length mismatch",
+    "ignore:The `zospy.analyses.old` module contains the deprecated analysis API"
+]
 
 [tool.mypy]
 files = ["zospy"]

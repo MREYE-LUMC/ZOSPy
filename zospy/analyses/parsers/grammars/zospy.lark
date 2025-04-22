@@ -45,6 +45,12 @@ field_parameters: _numbers
 multi_string: STRING+
 
 //
+// Composite values
+//
+
+tuple: _number ("," _WS_INLINE _number)+
+
+//
 // Numbers
 //
 

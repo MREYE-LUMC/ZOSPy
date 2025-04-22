@@ -161,6 +161,33 @@ def test_list():
     assert result == [1, 2, 3, 4, 5]
 
 
+@pytest.mark.parametrize(
+    "value,decimal_point,expected",
+    [
+        ("1, 2", ",", (1, 2)),
+        ("1.2, 2.3", ".", (1.2, 2.3)),
+        ("1,212, 2,30", ",", (1.212, 2.30)),
+        ("1, 2, 3, 4", ".", (1, 2, 3, 4)),
+        ("1, 2, 3, 4", ",", (1, 2, 3, 4)),
+    ],
+)
+def test_tuple(value, decimal_point, expected, monkeypatch):
+    monkeypatch.setattr(config, "DECIMAL_POINT", decimal_point)
+    monkeypatch.setattr(config, "THOUSANDS_SEPARATOR", "")
+
+    grammar = """start: tuple
+
+    %import common.WS_INLINE
+    %import zospy.tuple
+    %ignore WS_INLINE
+    """
+
+    parser = Lark(grammar, parser="earley", start="start", import_paths=[zospy_grammar_loader])
+    result = transformer.transform(parser.parse(value))
+
+    assert result == expected
+
+
 @pytest.fixture
 def setup_field_test(monkeypatch):
     monkeypatch.setattr(config, "DECIMAL_POINT", ".")

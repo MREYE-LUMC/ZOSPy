@@ -104,6 +104,10 @@ class ZospyTransformer(Transformer):
 
         return (header, rows)
 
+    def tuple(self, args):
+        """Transform a tuple of values."""
+        return tuple(args)
+
     def field_group(self, args):
         """Transform a group of fields under a common key to a SimpleField."""
         name, fields = args

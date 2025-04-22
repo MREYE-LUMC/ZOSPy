@@ -2,7 +2,7 @@
 |-------------|:-------------:|
 | 25.1.1      |  [✔][25.1.1]  |
 | 24.2.2      |  [✔][24.2.2]  |
-| 24.1.3      |  [✔][24.1.0]  |
+| 24.1.3      |  [✔][24.1.3]  |
 | 24.1.0      |  [✔][24.1.0]  |
 
 Older versions of OpticStudio are not tested, but they will likely work with ZOSPy.
