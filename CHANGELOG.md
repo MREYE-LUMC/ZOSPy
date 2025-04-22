@@ -17,7 +17,7 @@ ZOS-API can also be added in patch releases.
 
 ### Removed
 
-## [[2.0.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.0.0) - 2025-04-22
+## [[2.0.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.0.1) - 2025-04-22
 
 ### Fixed
 
