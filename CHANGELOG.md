@@ -13,11 +13,15 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- `zospy.analyses.wavefront.ZernikeStandardCoefficients` now supports non-zero fields in the X-direction (#139)
-
 ### Deprecated
 
 ### Removed
+
+## [[2.0.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.0.1) - 2025-04-22
+
+### Fixed
+
+- `zospy.analyses.wavefront.ZernikeStandardCoefficients` now supports non-zero fields in the X-direction (#139)
 
 ## [[2.0.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.0.0) - 2025-03-17
 
