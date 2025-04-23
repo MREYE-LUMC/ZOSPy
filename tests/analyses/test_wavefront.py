@@ -75,3 +75,14 @@ class TestZernikeStandardCoefficients:
             result.data,
             reference_data.data,
         )
+
+    @pytest.mark.parametrize("sampling,maximum_term", [("64x64", 37), ("128x128", 64)])
+    def test_zernike_standard_coefficients_object_height_matches_reference_data(
+        self, object_height_system, sampling, maximum_term, reference_data
+    ):
+        result = ZernikeStandardCoefficients(sampling=sampling, maximum_term=maximum_term).run(object_height_system)
+
+        assert_dataclass_equal(
+            result.data,
+            reference_data.data,
+        )

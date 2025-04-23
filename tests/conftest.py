@@ -232,6 +232,18 @@ def decentered_system(simple_system) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
+def object_height_system(simple_system) -> zp.zpcore.OpticStudioSystem:
+    """Decentered system with object height field type."""
+    oss = simple_system
+
+    oss.SystemData.Fields.FieldType = zp.constants.SystemData.FieldType.ObjectHeight
+    oss.SystemData.Fields.GetField(1).X = 1.0
+    oss.SystemData.Fields.GetField(1).Y = 2.0
+
+    return oss
+
+
+@pytest.fixture
 def nsc_empty_system(oss, system_save_file) -> zp.zpcore.OpticStudioSystem:
     oss.new()
     oss.make_nonsequential()
