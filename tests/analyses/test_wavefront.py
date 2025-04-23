@@ -55,6 +55,17 @@ class TestZernikeStandardCoefficients:
         )
 
     @pytest.mark.parametrize("sampling,maximum_term", [("64x64", 37), ("128x128", 64)])
+    def test_zernike_standard_coefficients_object_height_returns_correct_result(
+        self, object_height_system, sampling, maximum_term, reference_data
+    ):
+        result = ZernikeStandardCoefficients(sampling=sampling, maximum_term=maximum_term).run(object_height_system)
+
+        assert_dataclass_equal(
+            result.data,
+            reference_data.data,
+        )
+
+    @pytest.mark.parametrize("sampling,maximum_term", [("64x64", 37), ("128x128", 64)])
     def test_zernike_standard_coefficients_matches_reference_data(
         self, simple_system, sampling, maximum_term, reference_data
     ):
@@ -70,6 +81,17 @@ class TestZernikeStandardCoefficients:
         self, decentered_system, sampling, maximum_term, reference_data
     ):
         result = ZernikeStandardCoefficients(sampling=sampling, maximum_term=maximum_term).run(decentered_system)
+
+        assert_dataclass_equal(
+            result.data,
+            reference_data.data,
+        )
+
+    @pytest.mark.parametrize("sampling,maximum_term", [("64x64", 37), ("128x128", 64)])
+    def test_zernike_standard_coefficients_object_height_matches_reference_data(
+        self, object_height_system, sampling, maximum_term, reference_data
+    ):
+        result = ZernikeStandardCoefficients(sampling=sampling, maximum_term=maximum_term).run(object_height_system)
 
         assert_dataclass_equal(
             result.data,
