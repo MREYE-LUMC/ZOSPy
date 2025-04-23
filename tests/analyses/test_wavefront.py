@@ -65,7 +65,6 @@ class TestZernikeStandardCoefficients:
             reference_data.data,
         )
 
-
     @pytest.mark.parametrize("sampling,maximum_term", [("64x64", 37), ("128x128", 64)])
     def test_zernike_standard_coefficients_matches_reference_data(
         self, simple_system, sampling, maximum_term, reference_data
