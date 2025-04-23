@@ -6,7 +6,7 @@ _value: _field
     | _integration_rays
     | _integration_fitted_coefficients
 
-field_coordinate: /Field/ ":" tuple "(" unit ")" _NEWLINE -> unit_field
+field_coordinate: /Field/ ":" tuple ("(" unit ")" | unit) _NEWLINE -> unit_field
 
 _integration_rays: field_group{ir_name, ir_fields}
 !ir_name: "From" "integration" "of" "the" "rays" -> field_name // Process as field name

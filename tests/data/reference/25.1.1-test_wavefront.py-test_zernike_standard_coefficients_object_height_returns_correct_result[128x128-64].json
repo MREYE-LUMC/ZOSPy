@@ -9,49 +9,49 @@
                 1.0,
                 2.0
             ],
-            "unit": "deg"
+            "unit": "mm"
         },
         "wavelength": {
             "value": 0.543,
             "unit": "µm"
         },
         "peak_to_valley_to_chief": {
-            "value": 0.23216239,
+            "value": 88.42851852,
             "unit": "waves"
         },
         "peak_to_valley_to_centroid": {
-            "value": 0.16978902,
+            "value": 88.12815858,
             "unit": "waves"
         },
         "from_integration_of_the_rays": {
             "rms_to_chief": {
-                "value": 0.04789618,
+                "value": 24.57950174,
                 "unit": "waves"
             },
             "rms_to_centroid": {
-                "value": 0.03182565,
+                "value": 24.56113846,
                 "unit": "waves"
             },
             "variance": {
-                "value": 0.00101287,
+                "value": 603.24952238,
                 "unit": "waves squared"
             },
-            "strehl_ratio": 0.96080233
+            "strehl_ratio": 0.0
         },
         "from_integration_of_the_fitted_coefficients": {
             "rms_to_chief": {
-                "value": 0.04799259,
+                "value": 24.61026671,
                 "unit": "waves"
             },
             "rms_to_centroid": {
-                "value": 0.03189437,
+                "value": 24.5918563,
                 "unit": "waves"
             },
             "variance": {
-                "value": 0.00101725,
+                "value": 604.75939625,
                 "unit": "waves squared"
             },
-            "strehl_ratio": 0.96063625
+            "strehl_ratio": 0.0
         },
         "rms_fit_error": {
             "value": 0.0,
@@ -63,131 +63,131 @@
         },
         "coefficients": {
             "1": {
-                "value": 0.02865684,
+                "value": -42.51603929,
                 "formula": "1"
             },
             "2": {
-                "value": -0.01603378,
+                "value": -0.42563624,
                 "formula": "4^(1/2) (p) * COS (A)"
             },
             "3": {
-                "value": -0.03207734,
+                "value": -0.85127249,
                 "formula": "4^(1/2) (p) * SIN (A)"
             },
             "4": {
-                "value": 0.02535529,
+                "value": -24.55667978,
                 "formula": "3^(1/2) (2p^2 - 1)"
             },
             "5": {
-                "value": 0.01033988,
+                "value": 1.01683361,
                 "formula": "6^(1/2) (p^2) * SIN (2A)"
             },
             "6": {
-                "value": -0.00775885,
+                "value": -0.7626252,
                 "formula": "6^(1/2) (p^2) * COS (2A)"
             },
             "7": {
-                "value": -0.01133653,
+                "value": -0.30036605,
                 "formula": "8^(1/2) (3p^3 - 2p) * SIN (A)"
             },
             "8": {
-                "value": -0.00566654,
+                "value": -0.15018302,
                 "formula": "8^(1/2) (3p^3 - 2p) * COS (A)"
             },
             "9": {
-                "value": -1.86e-6,
+                "value": -0.00383358,
                 "formula": "8^(1/2) (p^3) * SIN (3A)"
             },
             "10": {
-                "value": -0.0000102,
+                "value": -0.0210847,
                 "formula": "8^(1/2) (p^3) * COS (3A)"
             },
             "11": {
-                "value": 0.00682792,
+                "value": -0.0077611,
                 "formula": "5^(1/2) (6p^4 - 6p^2 + 1)"
             },
             "12": {
-                "value": 5.12e-6,
+                "value": 0.00341074,
                 "formula": "10^(1/2) (4p^4 - 3p^2) * COS (2A)"
             },
             "13": {
-                "value": -6.83e-6,
+                "value": -0.00454765,
                 "formula": "10^(1/2) (4p^4 - 3p^2) * SIN (2A)"
             },
             "14": {
-                "value": 0.0,
+                "value": -0.00010265,
                 "formula": "10^(1/2) (p^4) * COS (4A)"
             },
             "15": {
-                "value": 0.0,
+                "value": -0.00035195,
                 "formula": "10^(1/2) (p^4) * SIN (4A)"
             },
             "16": {
-                "value": 1.25e-6,
+                "value": 0.00016466,
                 "formula": "12^(1/2) (10p^5 - 12p^3 + 3p) * COS (A)"
             },
             "17": {
-                "value": 2.5e-6,
+                "value": 0.00032933,
                 "formula": "12^(1/2) (10p^5 - 12p^3 + 3p) * SIN (A)"
             },
             "18": {
-                "value": -2e-8,
+                "value": 0.0000951,
                 "formula": "12^(1/2) (5p^5 - 4p^3) * COS (3A)"
             },
             "19": {
-                "value": 0.0,
+                "value": 0.00001729,
                 "formula": "12^(1/2) (5p^5 - 4p^3) * SIN (3A)"
             },
             "20": {
-                "value": 0.0,
+                "value": 3.58e-6,
                 "formula": "12^(1/2) (p^5) * COS (5A)"
             },
             "21": {
-                "value": 0.0,
+                "value": -3.32e-6,
                 "formula": "12^(1/2) (p^5) * SIN (5A)"
             },
             "22": {
-                "value": 2.97e-6,
+                "value": 8.86e-6,
                 "formula": "7^(1/2) (20p^6 - 30p^4 + 12p^2 - 1)"
             },
             "23": {
-                "value": -2e-8,
+                "value": 6.08e-6,
                 "formula": "14^(1/2) (15p^6 - 20p^4 + 6p^2) * SIN (2A)"
             },
             "24": {
-                "value": 2e-8,
+                "value": -4.56e-6,
                 "formula": "14^(1/2) (15p^6 - 20p^4 + 6p^2) * COS (2A)"
             },
             "25": {
-                "value": 0.0,
+                "value": 1.16e-6,
                 "formula": "14^(1/2) (6p^6 - 5p^4) * SIN (4A)"
             },
             "26": {
-                "value": 0.0,
+                "value": 3.4e-7,
                 "formula": "14^(1/2) (6p^6 - 5p^4) * COS (4A)"
             },
             "27": {
-                "value": 0.0,
+                "value": 2e-8,
                 "formula": "14^(1/2) (p^6) * SIN (6A)"
             },
             "28": {
-                "value": 0.0,
+                "value": 5e-8,
                 "formula": "14^(1/2) (p^6) * COS (6A)"
             },
             "29": {
-                "value": 2e-8,
+                "value": 2.8e-7,
                 "formula": "16^(1/2) (35p^7 - 60p^5 + 30p^3 - 4p) * SIN (A)"
             },
             "30": {
-                "value": 1e-8,
+                "value": 1.4e-7,
                 "formula": "16^(1/2) (35p^7 - 60p^5 + 30p^3 - 4p) * COS (A)"
             },
             "31": {
-                "value": 0.0,
+                "value": -2e-8,
                 "formula": "16^(1/2) (21p^7 - 30p^5 + 10p^3) * SIN (3A)"
             },
             "32": {
-                "value": 0.0,
+                "value": -1.3e-7,
                 "formula": "16^(1/2) (21p^7 - 30p^5 + 10p^3) * COS (3A)"
             },
             "33": {
@@ -207,7 +207,7 @@
                 "formula": "16^(1/2) (p^7) * COS (7A)"
             },
             "37": {
-                "value": 0.0,
+                "value": 1e-8,
                 "formula": "9^(1/2) (70p^8 - 140p^6 + 90p^4 - 20p^2 + 1)"
             },
             "38": {
@@ -215,7 +215,7 @@
                 "formula": "18^(1/2) (56p^8 - 105p^6 + 60p^4 - 10p^2) * COS (2A)"
             },
             "39": {
-                "value": 0.0,
+                "value": -1e-8,
                 "formula": "18^(1/2) (56p^8 - 105p^6 + 60p^4 - 10p^2) * SIN (2A)"
             },
             "40": {
@@ -332,7 +332,7 @@
         "sr": 0.0
     },
     "metadata": {
-        "DateTime": "2025-04-23T15:12:43.400000",
+        "DateTime": "2025-04-23T16:37:24.061000",
         "FeatureDescription": "",
         "LensFile": "REDACTED",
         "LensTitle": ""

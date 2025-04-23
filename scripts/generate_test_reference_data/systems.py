@@ -73,7 +73,10 @@ def decentered_system(oss: zp.zpcore.OpticStudioSystem) -> zp.zpcore.OpticStudio
 def object_height_system(oss: zp.zpcore.OpticStudioSystem) -> zp.zpcore.OpticStudioSystem:
     oss = simple_system(oss)
 
-    oss.SystemData.Fields.FieldType = zp.constants.SystemData.FieldType.ObjectHeight
+    # Use a finite object distance
+    oss.LDE.GetSurfaceAt(0).Thickness = 10
+
+    oss.SystemData.Fields.SetFieldType(zp.constants.SystemData.FieldType.ObjectHeight)
     oss.SystemData.Fields.GetField(1).X = 1.0
     oss.SystemData.Fields.GetField(1).Y = 2.0
 
