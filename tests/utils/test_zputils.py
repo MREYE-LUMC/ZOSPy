@@ -43,7 +43,7 @@ class TestStandardizeSampling:
             ("64x32", None, pytest.raises(ValueError, match="Cannot interpret sampling pattern")),
             ("32x32x32", None, pytest.raises(ValueError, match="Cannot interpret sampling pattern")),
             (2.25, None, pytest.raises(TypeError, match="sampling should be int or string")),
-        ]
+        ],
     )
     def test_standardize_sampling(self, value, output, expectation):
         with expectation:

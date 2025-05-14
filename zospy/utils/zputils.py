@@ -150,7 +150,7 @@ def unpack_datagrid(
 SamplingType = TypeVar("SamplingType", int, str)
 
 
-def standardize_sampling(sampling: SamplingType, prefix: str="S") -> SamplingType:
+def standardize_sampling(sampling: SamplingType, prefix: str = "S") -> SamplingType:
     """Standardizes the sampling patterns to either int or string (S_00x00) representation.
 
     Parameters

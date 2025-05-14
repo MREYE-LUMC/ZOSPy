@@ -199,6 +199,98 @@ tests:
         psf_type: Real
         normalize: true
   - model: simple_system
+    analysis: psf.FFTPSF
+    file: test_psf.py
+    test: test_fft_psf_returns_correct_result
+    parametrized: [sampling, display, rotation, psf_type, use_polarization, image_delta, normalize, surface]
+    parameters:
+      - sampling: 32x32
+        display: 32x32
+        rotation: 0
+        psf_type: Linear
+        use_polarization: false
+        image_delta: 0.0
+        normalize: false
+        surface: Image
+      - sampling: 64x64
+        display: 32x32
+        rotation: 90
+        psf_type: Log
+        use_polarization: true
+        image_delta: 0.0
+        normalize: false
+        surface: Image
+      - sampling: 64x64
+        display: 64x64
+        rotation: 180
+        psf_type: Phase
+        use_polarization: true
+        image_delta: 0.5
+        normalize: true
+        surface: Image
+      - sampling: 128x128
+        display: 32x32
+        rotation: 270
+        psf_type: Real
+        use_polarization: false
+        image_delta: 0.0
+        normalize: true
+        surface: Image
+      - sampling: 32x32
+        display: 32x32
+        rotation: 0
+        psf_type: Imaginary
+        use_polarization: false
+        image_delta: 1.0
+        normalize: false
+        surface: 3
+  - model: decentered_system
+    analysis: psf.FFTPSF
+    file: test_psf.py
+    test: test_fft_psf_asymmetric_returns_correct_result
+    parametrized: [sampling, display, rotation, psf_type, use_polarization, image_delta, normalize, surface]
+    parameters:
+      - sampling: 128x128
+        display: 32x32
+        rotation: 0
+        psf_type: Linear
+        use_polarization: false
+        image_delta: 0.0
+        normalize: false
+        surface: Image
+      - sampling: 128x128
+        display: 128x128
+        rotation: 90
+        psf_type: Log
+        use_polarization: true
+        image_delta: 0.0
+        normalize: false
+        surface: Image
+      - sampling: 256x256
+        display: 64x64
+        rotation: 180
+        psf_type: Phase
+        use_polarization: true
+        image_delta: 0.5
+        normalize: true
+        surface: Image
+      - sampling: 128x128
+        display: 32x32
+        rotation: 270
+        psf_type: Real
+        use_polarization: false
+        image_delta: 0.0
+        normalize: true
+        surface: Image
+      - sampling: 1024x1024
+        display: 512x512
+        rotation: 0
+        psf_type: Imaginary
+        use_polarization: false
+        image_delta: 1.0
+        normalize: false
+        surface: 3
+  - model: simple_system
     analysis: raysandspots.SingleRayTrace
     file: test_raysandspots.py
     test: test_single_ray_trace_returns_correct_result
