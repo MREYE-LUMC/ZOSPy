@@ -175,9 +175,10 @@ def standardize_sampling(sampling: SamplingType, prefix: str="S") -> SamplingTyp
     if isinstance(sampling, int):
         return sampling
     if isinstance(sampling, str):
-        res = re.search(r"\d+x\d+", sampling)
+        res = re.match(rf"^(?:{prefix}_)?(?P<size>\d+)x(?P=size)$", sampling)
         if res:
-            return f"{prefix}_{res.group()}"
+            size = res.group("size")
+            return f"{prefix}_{size}x{size}"
         raise ValueError(f'Cannot interpret sampling pattern "{sampling}"')
     raise TypeError("sampling should be int or string")
 
