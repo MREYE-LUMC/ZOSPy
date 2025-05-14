@@ -150,13 +150,15 @@ def unpack_datagrid(
 SamplingType = TypeVar("SamplingType", int, str)
 
 
-def standardize_sampling(sampling: SamplingType) -> SamplingType:
+def standardize_sampling(sampling: SamplingType, prefix: str = "S") -> SamplingType:
     """Standardizes the sampling patterns to either int or string (S_00x00) representation.
 
     Parameters
     ----------
     sampling : int | str
         The sampling pattern to use. Should be int or string. Accepts both S_00x00 and 00x00 string representation.
+    prefix : str
+        The prefix to use for the sampling pattern. Defaults to 'S'.
 
     Returns
     -------
@@ -173,9 +175,10 @@ def standardize_sampling(sampling: SamplingType) -> SamplingType:
     if isinstance(sampling, int):
         return sampling
     if isinstance(sampling, str):
-        res = re.search(r"\d+x\d+", sampling)
+        res = re.match(rf"^(?:{re.escape(prefix)}_)?(?P<size>\d+)x(?P=size)$", sampling)
         if res:
-            return f"S_{res.group()}"
+            size = res.group("size")
+            return f"{prefix}_{size}x{size}"
         raise ValueError(f'Cannot interpret sampling pattern "{sampling}"')
     raise TypeError("sampling should be int or string")
 
