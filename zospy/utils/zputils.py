@@ -175,7 +175,7 @@ def standardize_sampling(sampling: SamplingType, prefix: str = "S") -> SamplingT
     if isinstance(sampling, int):
         return sampling
     if isinstance(sampling, str):
-        res = re.match(rf"^(?:{prefix}_)?(?P<size>\d+)x(?P=size)$", sampling)
+        res = re.match(rf"^(?:{re.escape(prefix)}_)?(?P<size>\d+)x(?P=size)$", sampling)
         if res:
             size = res.group("size")
             return f"{prefix}_{size}x{size}"
