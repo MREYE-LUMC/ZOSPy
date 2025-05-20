@@ -1,4 +1,6 @@
 import locale
+import re
+import weakref
 from pathlib import Path
 from sys import version_info
 from types import SimpleNamespace
@@ -7,6 +9,7 @@ import pytest
 
 import zospy as zp
 from zospy import constants
+from zospy.zpcore import OpticStudioSystem
 
 # ruff: noqa: SLF001
 
@@ -90,6 +93,17 @@ def test_create_simple_system(simple_system):
     assert simple_system.LDE.NumberOfSurfaces == 5
 
 
+def test_oss_constructor_weakref_zos_raises_typeerror(zos):
+    with pytest.raises(
+        TypeError,
+        match=re.escape(
+            "zos_instance must be a ZOS instance, but a weak reference is passed. Use "
+            "ZOS.get_instance() to get the current ZOS instance."
+        ),
+    ):
+        OpticStudioSystem(weakref.proxy(zos), None)
+
+
 def test_version(optic_studio_version):
     assert optic_studio_version
 
@@ -158,6 +172,17 @@ class TestSaveAs:
         simple_system.save_as(filename)
 
         assert save_path.exists()
+
+
+def test_copy_system(simple_system):
+    # Copy the system
+    copied_system = simple_system.copy_system()
+
+    assert copied_system.SystemID != simple_system.SystemID
+    assert copied_system.LDE.NumberOfSurfaces == 5
+
+    # Check that the copied system is a different object
+    assert copied_system is not simple_system
 
 
 def test_get_system(zos, oss, connection_mode):

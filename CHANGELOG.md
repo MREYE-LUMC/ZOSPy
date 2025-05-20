@@ -15,6 +15,8 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- `OpticStudioSystem.copy_system` now uses `ZOS.get_instance` instead of an internal weak reference (#149)
+
 ### Deprecated
 
 ### Removed
