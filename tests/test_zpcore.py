@@ -160,6 +160,17 @@ class TestSaveAs:
         assert save_path.exists()
 
 
+def test_copy_system(simple_system):
+    # Copy the system
+    copied_system = simple_system.copy_system()
+
+    assert copied_system.SystemID != simple_system.SystemID
+    assert copied_system.LDE.NumberOfSurfaces == 5
+
+    # Check that the copied system is a different object
+    assert copied_system is not simple_system
+
+
 def test_get_system(zos, oss, connection_mode):
     if connection_mode == "extension":
         pytest.xfail(reason="GetSystem does not work correctly in extension mode due to a bug in the ZOS-API.")

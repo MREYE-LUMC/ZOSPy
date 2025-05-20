@@ -311,7 +311,7 @@ class OpticStudioSystem:
         zospy.zpcore.OpticStudioSystem
             A ZOSPy OpticStudioSystem instance. Should be sequential.
         """
-        return OpticStudioSystem(self.ZOS, self._System.CopySystem())
+        return OpticStudioSystem(ZOS.get_instance(), self._System.CopySystem())
 
     def _ensure_correct_mode(self, required: str):
         """Ensure that the system is in the required type.
