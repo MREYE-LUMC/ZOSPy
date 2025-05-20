@@ -44,17 +44,28 @@ logger = logging.getLogger(__name__)
 class OpticStudioSystem:
     """Wrapper for OpticStudio System instances."""
 
-    def __init__(self, zos_instance, system_instance):
+    def __init__(self, zos_instance: ZOS, system_instance: _ZOSAPI.IOpticalSystem):
         """Initiate the OpticStudioSystem.
 
         Parameters
         ----------
         zos_instance : ZOS
             A ZOS instance
-        system_instance : ZOS.Application.PrimarySystem
-            A PrimarySystem instance obtained from the zos_instance.
+        system_instance : ZOSAPI.IOpticalSystem
+            An optical system obtained from the ZOS instance.
+
+        Raises
+        ------
+        TypeError
+            If a weak reference to the ZOS instance is passed instead of the instance itself.
         """
-        # Use weakref to make sure that the ZOS instance is not kept alive by the OpticStudioSystem instance
+        if isinstance(zos_instance, weakref.ProxyType):
+            raise TypeError(
+                "zos_instance must be a ZOS instance, but a weak reference is passed. Use "
+                "ZOS.get_instance() to get the current ZOS instance."
+            )
+
+        # Use weak reference to make sure that the ZOS instance is not kept alive by the OpticStudioSystem instance
         self.ZOS: ZOS = weakref.proxy(zos_instance)
 
         self._System: _ZOSAPI.IOpticalSystem = system_instance
