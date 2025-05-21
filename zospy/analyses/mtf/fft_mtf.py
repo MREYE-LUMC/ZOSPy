@@ -26,6 +26,8 @@ class FFTMTFSettings:
     ----------
     sampling : str | int
         The size of the ray grid used to sample the pupil, either string (e.g. '32x32') or int (e.g. 32).
+    surface : str | int
+        The surface at which the MTF is calculated. Either 'Image' or an integer specifying the surface number.
     wavelength : str | int
         The wavelength to use in the MTF. Either 'All' or an integer specifying the wavelength number.
     field : str | int
