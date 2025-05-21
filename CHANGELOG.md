@@ -12,6 +12,7 @@ ZOS-API can also be added in patch releases.
 ### Added
 
 - FFT PSF analysis: `zospy.analysis.psf.FFTPSF` (#146)
+- FFT MTF analysis: `zospy.analysis.mtf.FFTMTF` (#150)
 
 ### Fixed
 
