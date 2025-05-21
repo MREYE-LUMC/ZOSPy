@@ -3,7 +3,83 @@ from typing import ClassVar
 import pytest
 from pandas.testing import assert_frame_equal
 
-from zospy.analyses.mtf import FFTThroughFocusMTF, HuygensMTF
+from zospy.analyses.mtf import FFTMTF, FFTThroughFocusMTF, HuygensMTF
+
+
+class TestFFTMTF:
+    def test_can_run(self, simple_system):
+        result = FFTMTF().run(simple_system)
+        assert result.data is not None
+
+    def test_to_json(self, simple_system):
+        result = FFTMTF().run(simple_system)
+        assert result.from_json(result.to_json()).to_json() == result.to_json()
+
+    fft_mtf_parametrize = pytest.mark.parametrize(
+        "sampling,surface,field,mtf_type,maximum_frequency,use_polarization,use_dashes,show_diffraction_limit",
+        [
+            ("32x32", "Image", "All", "Modulation", 0.0, False, False, False),
+            ("64x64", "Image", 1, "Modulation", 0.0, True, True, True),
+            ("128x128", 3, "All", "Real", 1.5, True, False, False),
+            ("32x32", 3, 1, "Imaginary", 0.0, False, True, False),
+            ("256x256", "Image", "All", "Phase", 3.0, True, False, True),
+            ("32x32", "Image", "All", "SquareWave", 0.0, False, False, True),
+        ],
+    )
+
+    @fft_mtf_parametrize
+    def test_fft_mtf_returns_correct_result(
+        self,
+        sampling,
+        surface,
+        field,
+        mtf_type,
+        maximum_frequency,
+        use_polarization,
+        use_dashes,
+        show_diffraction_limit,
+        simple_system,
+        expected_data,
+    ):
+        result = FFTMTF(
+            sampling=sampling,
+            surface=surface,
+            field=field,
+            mtf_type=mtf_type,
+            maximum_frequency=maximum_frequency,
+            use_polarization=use_polarization,
+            use_dashes=use_dashes,
+            show_diffraction_limit=show_diffraction_limit,
+        ).run(simple_system)
+
+        assert_frame_equal(result.data, expected_data.data)
+
+    @fft_mtf_parametrize
+    def test_fft_mtf_matches_reference_data(
+        self,
+        sampling,
+        surface,
+        field,
+        mtf_type,
+        maximum_frequency,
+        use_polarization,
+        use_dashes,
+        show_diffraction_limit,
+        simple_system,
+        reference_data,
+    ):
+        result = FFTMTF(
+            sampling=sampling,
+            surface=surface,
+            field=field,
+            mtf_type=mtf_type,
+            maximum_frequency=maximum_frequency,
+            use_polarization=use_polarization,
+            use_dashes=use_dashes,
+            show_diffraction_limit=show_diffraction_limit,
+        ).run(simple_system)
+
+        assert_frame_equal(result.data, reference_data.data)
 
 
 class TestFFTThroughFocusMTF:

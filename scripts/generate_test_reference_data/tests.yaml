@@ -6,7 +6,7 @@ tests:
     analysis: wavefront.ZernikeStandardCoefficients
     file: test_wavefront.py
     test: test_zernike_standard_coefficients_returns_correct_result
-    parametrized: [sampling, maximum_term]
+    parametrized: [ sampling, maximum_term ]
     parameters:
       - sampling: 64x64
         maximum_term: 37
@@ -33,10 +33,64 @@ tests:
       - sampling: 128x128
         maximum_term: 64
   - model: simple_system
+    analysis: mtf.FFTMTF
+    file: test_mtf.py
+    test: test_fft_mtf_returns_correct_result
+    parametrized: [ sampling, surface, field, mtf_type, maximum_frequency, use_polarization, use_dashes, show_diffraction_limit ]
+    parameters:
+      - sampling: 32x32
+        surface: Image
+        field: All
+        mtf_type: Modulation
+        maximum_frequency: 0.0
+        use_polarization: false
+        use_dashes: false
+        show_diffraction_limit: false
+      - sampling: 64x64
+        surface: Image
+        field: 1
+        mtf_type: Modulation
+        maximum_frequency: 0.0
+        use_polarization: true
+        use_dashes: true
+        show_diffraction_limit: true
+      - sampling: 128x128
+        surface: 3
+        field: All
+        mtf_type: Real
+        maximum_frequency: 1.5
+        use_polarization: true
+        use_dashes: false
+        show_diffraction_limit: false
+      - sampling: 32x32
+        surface: 3
+        field: 1
+        mtf_type: Imaginary
+        maximum_frequency: 0.0
+        use_polarization: false
+        use_dashes: true
+        show_diffraction_limit: false
+      - sampling: 256x256
+        surface: Image
+        field: All
+        mtf_type: Phase
+        maximum_frequency: 3.0
+        use_polarization: true
+        use_dashes: false
+        show_diffraction_limit: true
+      - sampling: 32x32
+        surface: Image
+        field: All
+        mtf_type: SquareWave
+        maximum_frequency: 0.0
+        use_polarization: false
+        use_dashes: false
+        show_diffraction_limit: true
+  - model: simple_system
     analysis: mtf.FFTThroughFocusMTF
     file: test_mtf.py
     test: test_fft_through_focus_mtf_returns_correct_result
-    parametrized: [sampling, delta_focus, frequency, number_of_steps, mtf_type]
+    parametrized: [ sampling, delta_focus, frequency, number_of_steps, mtf_type ]
     parameters:
       - sampling: 64x64
         delta_focus: 0.1
@@ -52,7 +106,7 @@ tests:
     analysis: mtf.HuygensMTF
     file: test_mtf.py
     test: test_huygens_mtf_returns_correct_result
-    parametrized: [pupil_sampling, image_sampling, image_delta, mtf_type, maximum_frequency]
+    parametrized: [ pupil_sampling, image_sampling, image_delta, mtf_type, maximum_frequency ]
     parameters:
       - pupil_sampling: 64x64
         image_sampling: 64x64
@@ -78,7 +132,7 @@ tests:
     analysis: polarization.PolarizationPupilMap
     file: test_polarization.py
     test: test_polarization_pupil_map_returns_correct_result
-    parametrized: [jx, jy, x_phase, y_phase, surface, sampling]
+    parametrized: [ jx, jy, x_phase, y_phase, surface, sampling ]
     parameters:
       - jx: 1
         jy: 0
@@ -108,7 +162,7 @@ tests:
     analysis: polarization.PolarizationTransmission
     file: test_polarization.py
     test: test_transmission_returns_correct_result
-    parametrized: [sampling, unpolarized, jx, jy, x_phase, y_phase]
+    parametrized: [ sampling, unpolarized, jx, jy, x_phase, y_phase ]
     parameters:
       - sampling: 32x32
         unpolarized: false
@@ -150,7 +204,7 @@ tests:
     analysis: psf.HuygensPSF
     file: test_psf.py
     test: test_huygens_psf_returns_correct_result
-    parametrized: [pupil_sampling, image_sampling, image_delta, psf_type, normalize]
+    parametrized: [ pupil_sampling, image_sampling, image_delta, psf_type, normalize ]
     parameters:
       - pupil_sampling: 64x64
         image_sampling: 64x64
@@ -176,7 +230,7 @@ tests:
     analysis: psf.HuygensPSF
     file: test_psf.py
     test: test_huygens_psf_asymmetric_returns_correct_result
-    parametrized: [pupil_sampling, image_sampling, image_delta, psf_type, normalize]
+    parametrized: [ pupil_sampling, image_sampling, image_delta, psf_type, normalize ]
     parameters:
       - pupil_sampling: 64x64
         image_sampling: 64x64
@@ -202,7 +256,7 @@ tests:
     analysis: psf.FFTPSF
     file: test_psf.py
     test: test_fft_psf_returns_correct_result
-    parametrized: [sampling, display, rotation, psf_type, use_polarization, image_delta, normalize, surface]
+    parametrized: [ sampling, display, rotation, psf_type, use_polarization, image_delta, normalize, surface ]
     parameters:
       - sampling: 32x32
         display: 32x32
@@ -248,7 +302,7 @@ tests:
     analysis: psf.FFTPSF
     file: test_psf.py
     test: test_fft_psf_asymmetric_returns_correct_result
-    parametrized: [sampling, display, rotation, psf_type, use_polarization, image_delta, normalize, surface]
+    parametrized: [ sampling, display, rotation, psf_type, use_polarization, image_delta, normalize, surface ]
     parameters:
       - sampling: 128x128
         display: 32x32
@@ -294,7 +348,7 @@ tests:
     analysis: raysandspots.SingleRayTrace
     file: test_raysandspots.py
     test: test_single_ray_trace_returns_correct_result
-    parametrized: [hx, hy, px, py, raytrace_type, global_coordinates]
+    parametrized: [ hx, hy, px, py, raytrace_type, global_coordinates ]
     parameters:
       - hx: 1
         hy: 1
@@ -318,7 +372,7 @@ tests:
     analysis: raysandspots.RayFan
     file: test_raysandspots.py
     test: test_ray_fan_returns_correct_result
-    parametrized: [plot_scale, number_of_rays, tangential, sagittal]
+    parametrized: [ plot_scale, number_of_rays, tangential, sagittal ]
     parameters:
       - plot_scale: 0
         number_of_rays: 20
@@ -353,7 +407,7 @@ tests:
     analysis: surface.Curvature
     file: test_surface.py
     test: test_curvature_returns_correct_result
-    parametrized: [sampling, data, remove, surface, show_as, contour_format, bfs_criterion, bfs_reverse_direction]
+    parametrized: [ sampling, data, remove, surface, show_as, contour_format, bfs_criterion, bfs_reverse_direction ]
     parameters:
       - sampling: 65x65
         data: TangentialCurvature
@@ -431,7 +485,7 @@ tests:
     analysis: wavefront.WavefrontMap
     file: test_wavefront.py
     test: test_wavefront_map_returns_correct_result
-    parametrized: [sampling, use_exit_pupil]
+    parametrized: [ sampling, use_exit_pupil ]
     parameters:
       - sampling: 64x64
         use_exit_pupil: true
@@ -445,7 +499,7 @@ tests:
     analysis: extendedscene.GeometricImageAnalysis
     file: test_extendedscene.py
     test: test_geometric_image_analysis_returns_correct_result
-    parametrized: [show_as, field_size, total_watts, rays_x_1000]
+    parametrized: [ show_as, field_size, total_watts, rays_x_1000 ]
     parameters:
       - show_as: Surface
         field_size: 0
@@ -483,7 +537,7 @@ tests:
     analysis: physicaloptics.PhysicalOpticsPropagation
     file: test_physicaloptics.py
     test: test_physical_optics_propagation_returns_correct_result
-    parametrized: [surface_to_beam, data_type, use_total_power, use_peak_irradiance,beam_type,beam_parameters,auto_calculate_beam_sampling,compute_fiber_coupling_integral,fiber_type,fiber_parameters]
+    parametrized: [ surface_to_beam, data_type, use_total_power, use_peak_irradiance,beam_type,beam_parameters,auto_calculate_beam_sampling,compute_fiber_coupling_integral,fiber_type,fiber_parameters ]
     parameters:
       - surface_to_beam: 0.0
         data_type: Irradiance
@@ -514,13 +568,13 @@ tests:
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Irradiance
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -530,7 +584,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -540,17 +594,17 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Irradiance
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -560,7 +614,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -570,17 +624,17 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Irradiance
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -590,7 +644,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -600,11 +654,11 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 1.0
         data_type: Irradiance
         use_total_power: true
@@ -634,13 +688,13 @@ tests:
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 1.0
         data_type: Irradiance
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -650,7 +704,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -660,17 +714,17 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 1.0
         data_type: Irradiance
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -680,7 +734,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -690,17 +744,17 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 1.0
         data_type: Irradiance
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -710,7 +764,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -720,11 +774,11 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Irradiance
         use_total_power: false
@@ -754,13 +808,13 @@ tests:
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Irradiance
         use_total_power: false
         use_peak_irradiance: true
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -770,7 +824,7 @@ tests:
         use_total_power: false
         use_peak_irradiance: true
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -780,17 +834,17 @@ tests:
         use_total_power: false
         use_peak_irradiance: true
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Irradiance
         use_total_power: false
         use_peak_irradiance: true
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -800,7 +854,7 @@ tests:
         use_total_power: false
         use_peak_irradiance: true
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -810,17 +864,17 @@ tests:
         use_total_power: false
         use_peak_irradiance: true
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Irradiance
         use_total_power: false
         use_peak_irradiance: true
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -830,7 +884,7 @@ tests:
         use_total_power: false
         use_peak_irradiance: true
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -840,11 +894,11 @@ tests:
         use_total_power: false
         use_peak_irradiance: true
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Phase
         use_total_power: true
@@ -874,13 +928,13 @@ tests:
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Phase
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -890,7 +944,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -900,17 +954,17 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: GaussianWaist
-        beam_parameters: {'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        beam_parameters: { 'Waist X': 1.5, 'Waist Y': 1.5, 'Decenter X': 0.1, 'Decenter Y': 0.1, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Phase
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -920,7 +974,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -930,17 +984,17 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: false
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
       - surface_to_beam: 0.0
         data_type: Phase
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: false
         fiber_type: TopHat
@@ -950,7 +1004,7 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: TopHat
@@ -960,9 +1014,9 @@ tests:
         use_total_power: true
         use_peak_irradiance: false
         beam_type: TopHat
-        beam_parameters: {'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0}
+        beam_parameters: { 'Waist X': 0.5, 'Waist Y': 0.5, 'Decenter X': 0.0, 'Decenter Y': 0.0 }
         auto_calculate_beam_sampling: true
         compute_fiber_coupling_integral: true
         fiber_type: GaussianWaist
-        fiber_parameters: {'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0}
+        fiber_parameters: { 'Waist X': 0.03, 'Waist Y': 0.03, 'Decenter X': 0.0, 'Decenter Y': 0.0, 'Aperture X': 0.0, 'Aperture Y': 0.0, 'Order X': 0.0, 'Order Y': 0.0 }
         
