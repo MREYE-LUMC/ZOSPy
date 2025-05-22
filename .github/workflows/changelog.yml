@@ -1,4 +1,5 @@
-name: pr.yml
+name: Check pull requests for changelog updates
+
 on:
   - pull_request
 
