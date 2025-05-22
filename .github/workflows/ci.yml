@@ -2,26 +2,27 @@ name: Continuous Integration
 
 on:
   - push
-  - pull_request
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: Build ZOSPy
     strategy:
       matrix:
-        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up uv
-      id: setup-uv
-      uses: astral-sh/setup-uv@v3
-    - name: Build package
-      run: uv build --python ${{ matrix.python }}
-    - name: Install package
-      run: uv venv --python ${{ matrix.python }} && uv pip install --find-links ./dist/ zospy
+      - uses: actions/checkout@v4
+      - name: Set up uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v3
+      - name: Build package
+        run: uv build --python ${{ matrix.python }}
+      - name: Install package
+        run: uv venv --python ${{ matrix.python }} && uv pip install --find-links ./dist/ zospy
 
   lint:
     runs-on: ubuntu-latest
+    name: Lint ZOSPy
     steps:
       - uses: actions/checkout@v4
       - name: Set up uv
@@ -34,21 +35,3 @@ jobs:
         if: always() # Run even if previous step fails
         run: |
           uvx pydocstringformatter --exit-code examples scripts tests zospy
-
-  check_file_updates:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip changelog')
-    name: Check CHANGELOG.md for updates
-    steps:
-        - uses: actions/checkout@v4
-        - name: Check for CHANGELOG.md updates
-          run: |
-            git fetch
-            FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})
-            for i in $FILES_CHANGED
-            do
-              if [[ "$i" == "CHANGELOG.md" ]]
-              then
-                exit 0
-              fi
-            done
