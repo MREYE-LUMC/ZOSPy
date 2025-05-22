@@ -4,7 +4,7 @@ on:
   - pull_request
 
 jobs:
-  check_file_updates:
+  check_changelog_updates:
     runs-on: ubuntu-latest
     if: !contains(github.event.pull_request.labels.*.name, 'skip changelog')
     name: Check CHANGELOG.md for updates
@@ -21,3 +21,5 @@ jobs:
                 exit 0
               fi
             done
+            echo "ERROR: Please update CHANGELOG.md"
+            exit 1
