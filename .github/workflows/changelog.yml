@@ -6,20 +6,20 @@ on:
 jobs:
   check_changelog_updates:
     runs-on: ubuntu-latest
-    if: !contains(github.event.pull_request.labels.*.name, 'skip changelog')
+    if: "!contains(github.event.pull_request.labels.*.name, 'skip changelog')"
     name: Check CHANGELOG.md for updates
     steps:
-        - uses: actions/checkout@v4
-        - name: Check for CHANGELOG.md updates
-          run: |
-            git fetch
-            FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})
-            for i in $FILES_CHANGED
-            do
-              if [[ "$i" == "CHANGELOG.md" ]]
-              then
-                exit 0
-              fi
-            done
-            echo "ERROR: Please update CHANGELOG.md"
-            exit 1
+      - uses: actions/checkout@v4
+      - name: Check for CHANGELOG.md updates
+        run: |
+          git fetch
+          FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})
+          for i in $FILES_CHANGED
+          do
+            if [[ "$i" == "CHANGELOG.md" ]]
+            then
+              exit 0
+            fi
+          done
+          echo "ERROR: Please update CHANGELOG.md"
+          exit 1
