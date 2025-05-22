@@ -3,6 +3,9 @@ name: Check pull requests for changelog updates
 on:
   - pull_request
 
+permissions:
+  contents: read
+
 jobs:
   check_changelog_updates:
     runs-on: ubuntu-latest
