@@ -36,7 +36,7 @@ from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar, cast, get_args
+from typing import TYPE_CHECKING, Any, Generic, Literal, TypedDict, TypeVar, cast, get_args
 
 import numpy as np
 import pandas as pd
@@ -218,7 +218,7 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
 
     @model_validator(mode="wrap")
     @classmethod
-    def _deserialize_types(cls, data: any, handler):
+    def _deserialize_types(cls, data: Any, handler):
         if isinstance(data, dict):
             if "__analysis_data__" in data:
                 data["data"] = _deserialize_analysis_data(data["data"], data.pop("__analysis_data__"))
@@ -593,7 +593,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     _needs_config_file: bool = False
     _needs_text_output_file: bool = False
 
-    def __init__(self, *, settings_kws: dict[str, any] | None = None):
+    def __init__(self, *, settings_kws: dict[str, Any] | None = None):
         """Create a new analysis wrapper.
 
         Settings can be changed by passing the settings as keyword arguments. Use the `with_settings` method to specify
@@ -601,7 +601,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
 
         Parameters
         ----------
-        settings_kws : dict[str, any]
+        settings_kws : dict[str, Any]
             Arguments to set the settings of the analysis.
 
         Raises
@@ -648,7 +648,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         self,
         *,
         settings: AnalysisSettings | None = None,
-        settings_kws: dict[str, any] | None = None,
+        settings_kws: dict[str, Any] | None = None,
     ) -> None:
         """Update the settings of the analysis using a settings object or keyword arguments.
 
