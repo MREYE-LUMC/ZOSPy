@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "versioningit"]
 build-backend = "hatchling.build"
 
 [project]
@@ -51,7 +51,8 @@ docs = [
 ### Hatch configuration
 
 [tool.hatch.version]
-path = "zospy/__init__.py"
+source = "versioningit"
+default-version = "0.0.0+unknown"
 
 [tool.hatch.envs.default]
 python = "3.12"
