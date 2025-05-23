@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
   release:
-    types: [released]
+    types: [ released ]
 
 permissions:
   contents: read
@@ -21,28 +21,25 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build
-    - name: Build package
-      run: python -m build
-    - name: Upload dist
-      uses: actions/upload-artifact@v4
-      with:
-        name: zospy_dist
-        path: "dist/"
-        
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+      - name: Build package
+        run: python -m build
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: zospy_dist
+          path: "dist/"
+
   publish_to_pypi:
     name: Publish to PyPI
     needs: build
@@ -53,16 +50,16 @@ jobs:
       id-token: write
 
     steps:
-    - name: Download dist
-      uses: actions/download-artifact@v4
-      with:
-        name: zospy_dist
-        path: dist
-    - name: Publish package
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: zospy_dist
+          path: dist
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+
   upload_to_github:
     name: Upload to GitHub
     runs-on: ubuntu-latest
@@ -73,20 +70,20 @@ jobs:
       contents: write
 
     steps:
-    - name: Download dist
-      uses: actions/download-artifact@v4
-      with:
-        name: zospy_dist
-        path: dist
-    - name: Upload wheels to GitHub release
-      uses: svenstaro/upload-release-action@2.9.0
-      with:
-        tag: ${{ github.ref }}
-        file: "dist/*.whl"
-        file_glob: true
-    - name: Upload dist to GitHub release
-      uses: svenstaro/upload-release-action@2.9.0
-      with:
-        tag: ${{ github.ref }}
-        file: "dist/*.tar.gz"
-        file_glob: true
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: zospy_dist
+          path: dist
+      - name: Upload wheels to GitHub release
+        uses: svenstaro/upload-release-action@2.9.0
+        with:
+          tag: ${{ github.ref }}
+          file: "dist/*.whl"
+          file_glob: true
+      - name: Upload dist to GitHub release
+        uses: svenstaro/upload-release-action@2.9.0
+        with:
+          tag: ${{ github.ref }}
+          file: "dist/*.tar.gz"
+          file_glob: true
