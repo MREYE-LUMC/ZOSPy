@@ -9,7 +9,7 @@ from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import FieldNumber, WavelengthNumber  # noqa: TCH001
+from zospy.analyses.parsers.types import FieldNumber, WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
@@ -55,8 +55,8 @@ class HuygensPSFSettings:
     rotation: Literal[0, 90, 180, 270] = Field(default=0, description="Rotation")
     wavelength: WavelengthNumber = Field(default="All", description="Wavelength number or 'All'")
     field: FieldNumber = Field(default=1, description="Field number or 'All'")
-    psf_type: str = Field(default="Linear", description="PSF type")
-    show_as: str = Field(default="Surface", description="Show as")
+    psf_type: ZOSAPIConstant("Analysis.Settings.HuygensPsfTypes") = Field(default="Linear", description="PSF type")
+    show_as: ZOSAPIConstant("Analysis.HuygensShowAsTypes") = Field(default="Surface", description="Show as")
     use_polarization: bool = Field(default=False, description="Use polarization")
     use_centroid: bool = Field(default=False, description="Use centroid")
     normalize: bool = Field(default=False, description="Normalize")
