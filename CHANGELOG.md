@@ -11,16 +11,24 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+### Fixed
+
+- Huygens PSF analysis now accepts ZOSAPI constants for the `psf_type` and `show_as` parameters (#158)
+
+### Deprecated
+
+### Removed
+
+## [[2.1.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.0) - 2025-05-23
+
+### Added
+
 - FFT PSF analysis: `zospy.analysis.psf.FFTPSF` (#146)
 - FFT MTF analysis: `zospy.analysis.mtf.FFTMTF` (#150)
 
 ### Fixed
 
 - `OpticStudioSystem.copy_system` now uses `ZOS.get_instance` instead of an internal weak reference (#149)
-
-### Deprecated
-
-### Removed
 
 ## [[2.0.2]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.0.2) - 2025-04-23
 
