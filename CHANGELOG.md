@@ -17,6 +17,12 @@ ZOS-API can also be added in patch releases.
 
 ### Removed
 
+## [[2.1.2]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.2) - 2025-06-17
+
+### Fixed
+
+- Correct type hints for `zospy.analyses.psf.HuygensPSFAndStrehlRatio` return types (#161)
+
 ## [[2.1.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.1) - 2025-06-17
 
 ### Added

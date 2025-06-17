@@ -4382,7 +4382,7 @@
         "normalize": false
     },
     "metadata": {
-        "DateTime": "2025-06-17T11:26:26.637000",
+        "DateTime": "2025-06-17T16:28:18.772000",
         "FeatureDescription": "Listing of Huygens PSF Data\n\n",
         "LensFile": "REDACTED",
         "LensTitle": ""
@@ -4391,7 +4391,7 @@
     "messages": [],
     "__analysis_data__": {
         "data_type": "zospy_class",
-        "name": "HuygensPSFData",
+        "name": "HuygensPSFResult",
         "module": "zospy.analyses.psf.huygens_psf"
     },
     "__analysis_settings__": {
