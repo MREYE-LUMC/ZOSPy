@@ -25,7 +25,7 @@ __all__ = ("HuygensPSF", "HuygensPSFAndStrehlRatio", "HuygensPSFSettings")
 
 
 @analysis_result
-class HuygensPSFData:
+class HuygensPSFResult:
     psf: ValidatedDataFrame
     strehl_ratio: float
 
@@ -136,7 +136,7 @@ class HuygensPSF(BaseHuygensPSF[Union[DataFrame, None]], analysis_type="HuygensP
     """Huygens Point Spread Function (PSF) analysis."""
 
 
-class HuygensPSFAndStrehlRatio(BaseHuygensPSF[HuygensPSFData], needs_text_output_file=True, analysis_type="HuygensPsf"):
+class HuygensPSFAndStrehlRatio(BaseHuygensPSF[HuygensPSFResult], needs_text_output_file=True, analysis_type="HuygensPsf"):
     """Huygens Point Spread Function (PSF) analysis with Strehl ratio."""
 
     RE_STREHL_RATIO = re.compile(r"^\s*Strehl ratio\s*:\s*(\d+[.,]?\d*)\s*$", re.IGNORECASE | re.MULTILINE)
@@ -150,9 +150,9 @@ class HuygensPSFAndStrehlRatio(BaseHuygensPSF[HuygensPSFData], needs_text_output
 
         raise RuntimeError("Could not extract Strehl ratio from Huygens PSF output.")
 
-    def run_analysis(self) -> HuygensPSFData:
+    def run_analysis(self) -> HuygensPSFResult:
         """Run the Huygens PSF and Strehl Ratio analysis."""
         psf_data = super().run_analysis()
         strehl_ratio = self.get_strehl_ratio()
 
-        return HuygensPSFData(psf=psf_data, strehl_ratio=strehl_ratio)
+        return HuygensPSFResult(psf=psf_data, strehl_ratio=strehl_ratio)
