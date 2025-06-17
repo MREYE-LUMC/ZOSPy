@@ -1,7 +1,9 @@
 import pytest
 from pandas.testing import assert_frame_equal
 
-from zospy.analyses.psf import FFTPSF, HuygensPSF
+from tests.helpers import assert_dataclass_equal
+from zospy.analyses.psf import FFTPSF, HuygensPSF, HuygensPSFAndStrehlRatio
+from zospy.api import config
 
 
 class TestHuygensPSF:
@@ -100,6 +102,79 @@ class TestHuygensPSF:
         ).run(decentered_system)
 
         assert_frame_equal(result.data, reference_data.data)
+
+
+class TestHuygensPSFAndStrehlRatio:
+    def test_can_run(self, simple_system):
+        result = HuygensPSFAndStrehlRatio().run(simple_system)
+        assert result.data is not None
+
+    def test_to_json(self, simple_system):
+        result = HuygensPSFAndStrehlRatio().run(simple_system)
+        assert result.from_json(result.to_json()).to_json() == result.to_json()
+
+    @pytest.mark.parametrize(
+        "pupil_sampling,image_sampling,image_delta,psf_type,normalize",
+        [
+            ("64x64", "64x64", 0.0, "Linear", False),
+            ("32x32", "64x64", 1.0, "Linear", False),
+            ("128x128", "128x128", 0.0, "Real", True),
+            ("32x32", "32x32", 0.0, "Real", True),
+        ],
+    )
+    def test_huygens_psf_and_strehl_ratio_returns_correct_result(
+        self, simple_system, pupil_sampling, image_sampling, image_delta, psf_type, normalize, expected_data
+    ):
+        result = HuygensPSFAndStrehlRatio(
+            pupil_sampling=pupil_sampling,
+            image_sampling=image_sampling,
+            image_delta=image_delta,
+            psf_type=psf_type,
+            normalize=normalize,
+        ).run(simple_system)
+
+        assert_dataclass_equal(result.data, expected_data.data)
+
+    @pytest.mark.parametrize(
+        "pupil_sampling,image_sampling,image_delta,psf_type,normalize",
+        [
+            ("64x64", "64x64", 0.0, "Linear", False),
+            ("32x32", "64x64", 1.0, "Linear", False),
+            ("128x128", "128x128", 0.0, "Real", True),
+            ("32x32", "32x32", 0.0, "Real", True),
+        ],
+    )
+    def test_huygens_psf_and_strehl_ratio_matches_reference_data(
+        self, simple_system, pupil_sampling, image_sampling, image_delta, psf_type, normalize, reference_data
+    ):
+        result = HuygensPSFAndStrehlRatio(
+            pupil_sampling=pupil_sampling,
+            image_sampling=image_sampling,
+            image_delta=image_delta,
+            psf_type=psf_type,
+            normalize=normalize,
+        ).run(simple_system)
+
+        assert_dataclass_equal(result.data, reference_data.data)
+
+    @pytest.mark.parametrize(
+        "value,string_value,decimal_point",
+        [
+            (1, "1", "."),
+            (1, "1.0", "."),
+            (1, "1,0", ","),
+            (0.5, "0.5", "."),
+            (0.5, "0,5", ","),
+            (0.123456789, "0.123456789", "."),
+            (0.123456789, "0,123456789", ","),
+        ],
+    )
+    def test_get_strehl_ratio(self, value, string_value, decimal_point, monkeypatch):
+        monkeypatch.setattr(config, "DECIMAL_POINT", decimal_point)
+        monkeypatch.setattr(config, "THOUSANDS_SEPARATOR", " ")  # Avoid collision with the decimal point
+        monkeypatch.setattr(HuygensPSFAndStrehlRatio, "get_text_output", lambda _: f"Strehl ratio: {string_value}")
+
+        assert HuygensPSFAndStrehlRatio().get_strehl_ratio() == value
 
 
 class TestFFTPSF:

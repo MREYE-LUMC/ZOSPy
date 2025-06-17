@@ -2,18 +2,31 @@
 
 from __future__ import annotations
 
+import re
 from typing import Annotated, Literal, Union
 
 from pandas import DataFrame
 from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
-from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import FieldNumber, WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.decorators import analysis_result, analysis_settings
+from zospy.analyses.parsers.types import (  # noqa: TCH001
+    FieldNumber,
+    ValidatedDataFrame,
+    WavelengthNumber,
+    ZOSAPIConstant,
+)
 from zospy.api import constants
+from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling
 
-__all__ = ("HuygensPSF", "HuygensPSFSettings")
+__all__ = ("HuygensPSF", "HuygensPSFAndStrehlRatio", "HuygensPSFSettings")
+
+
+@analysis_result
+class HuygensPSFData:
+    psf: ValidatedDataFrame
+    strehl_ratio: float
 
 
 @analysis_settings
@@ -116,3 +129,25 @@ class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings]
         self.analysis.ApplyAndWaitForCompletion()
 
         return self.get_data_grid(cell_origin="bottom_left")
+
+
+class HuygensPSFAndStrehlRatio(HuygensPSF, needs_text_output_file=True, analysis_type="HuygensPsf"):
+    """Huygens Point Spread Function (PSF) analysis with Strehl ratio."""
+
+    RE_STREHL_RATIO = re.compile(r"^Strehl ratio\s*:\s*(\d+[.,]?\d*)$", re.IGNORECASE | re.MULTILINE)
+
+    def get_strehl_ratio(self) -> float:
+        """Extract the Strehl ratio from the text output."""
+        text_data = self.get_text_output()
+        match = self.RE_STREHL_RATIO.search(text_data)
+        if match:
+            return atox(match.group(1))
+
+        raise RuntimeError("Could not extract Strehl ratio from Huygens PSF output.")
+
+    def run_analysis(self) -> HuygensPSFData:
+        """Run the Huygens PSF and Strehl Ratio analysis."""
+        psf_data = super().run_analysis()
+        strehl_ratio = self.get_strehl_ratio()
+
+        return HuygensPSFData(psf=psf_data, strehl_ratio=strehl_ratio)
