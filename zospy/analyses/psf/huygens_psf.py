@@ -134,7 +134,7 @@ class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings]
 class HuygensPSFAndStrehlRatio(HuygensPSF, needs_text_output_file=True, analysis_type="HuygensPsf"):
     """Huygens Point Spread Function (PSF) analysis with Strehl ratio."""
 
-    RE_STREHL_RATIO = re.compile(r"^Strehl ratio\s*:\s*(\d+[.,]?\d*)$", re.IGNORECASE | re.MULTILINE)
+    RE_STREHL_RATIO = re.compile(r"^\s*Strehl ratio\s*:\s*(\d+[.,]?\d*)\s*$", re.IGNORECASE | re.MULTILINE)
 
     def get_strehl_ratio(self) -> float:
         """Extract the Strehl ratio from the text output."""
