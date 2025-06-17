@@ -14,6 +14,7 @@ ZOS-API can also be added in patch releases.
 ### Fixed
 
 - Huygens PSF analysis now accepts ZOSAPI constants for the `psf_type` and `show_as` parameters (#158)
+- Huygens PSF analysis that returns the Strehl ratio as well: `zospy.analyses.psf.HuygensPSFAndStrehlRatio` (#159)
 
 ### Deprecated
 
