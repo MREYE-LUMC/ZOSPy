@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import re
-from typing import Annotated, Literal, Union
+from abc import ABC
+from typing import Annotated, Generic, Literal, Union
 
 from pandas import DataFrame
 from pydantic import Field
 
-from zospy.analyses.base import BaseAnalysisWrapper
+from zospy.analyses.base import AnalysisData, BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers.types import (  # noqa: TCH001
     FieldNumber,
@@ -75,8 +76,8 @@ class HuygensPSFSettings:
     normalize: bool = Field(default=False, description="Normalize")
 
 
-class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings], analysis_type="HuygensPsf"):
-    """Huygens Point Spread Function (PSF) analysis."""
+class BaseHuygensPSF(BaseAnalysisWrapper[AnalysisData, HuygensPSFSettings], ABC, Generic[AnalysisData]):
+    """Base class for Huygens Point Spread Function (PSF) analyses."""
 
     def __init__(
         self,
@@ -131,7 +132,11 @@ class HuygensPSF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensPSFSettings]
         return self.get_data_grid(cell_origin="bottom_left")
 
 
-class HuygensPSFAndStrehlRatio(HuygensPSF, needs_text_output_file=True, analysis_type="HuygensPsf"):
+class HuygensPSF(BaseHuygensPSF[Union[DataFrame, None]], analysis_type="HuygensPsf"):
+    """Huygens Point Spread Function (PSF) analysis."""
+
+
+class HuygensPSFAndStrehlRatio(BaseHuygensPSF[HuygensPSFData], needs_text_output_file=True, analysis_type="HuygensPsf"):
     """Huygens Point Spread Function (PSF) analysis with Strehl ratio."""
 
     RE_STREHL_RATIO = re.compile(r"^\s*Strehl ratio\s*:\s*(\d+[.,]?\d*)\s*$", re.IGNORECASE | re.MULTILINE)

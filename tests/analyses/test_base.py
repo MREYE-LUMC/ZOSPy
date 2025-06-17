@@ -26,6 +26,7 @@ from zospy.analyses.base import (
 )
 from zospy.analyses.decorators import analysis_settings
 from zospy.analyses.parsers.types import ValidatedDataFrame
+from zospy.analyses.psf.huygens_psf import BaseHuygensPSF
 from zospy.analyses.reports.surface_data import SurfaceDataSettings
 from zospy.analyses.systemviewers.base import SystemViewerWrapper
 
@@ -36,6 +37,7 @@ def all_subclasses(cls):
 
 analysis_wrapper_classes = all_subclasses(BaseAnalysisWrapper)
 analysis_wrapper_classes.remove(SystemViewerWrapper)
+analysis_wrapper_classes.remove(BaseHuygensPSF)
 
 
 class TestValidatedSetter:
