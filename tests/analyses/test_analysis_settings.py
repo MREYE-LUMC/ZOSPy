@@ -20,8 +20,6 @@ def test_settings_exist(empty_system, analysis_wrapper_class):
 
     settings = REGEX_SETTING.findall(source)
 
-    nonexistent_settings = [
-        setting for setting in settings if not hasattr(analysis.Settings, setting)
-    ]
+    nonexistent_settings = [setting for setting in settings if not hasattr(analysis.Settings, setting)]
 
     assert not nonexistent_settings, f"Nonexistent settings: {nonexistent_settings}"

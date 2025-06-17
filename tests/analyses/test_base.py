@@ -128,7 +128,9 @@ class TestAnalysisWrapper:
         assert hasattr(constants.Analysis.AnalysisIDM, analysis_wrapper_class.TYPE)
 
     def test_init_all_keyword_only_parameters(self, analysis_wrapper_class):
-        assert all(p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(analysis_wrapper_class).parameters.items())
+        assert all(
+            p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(analysis_wrapper_class).parameters.items()
+        )
 
     def test_init_contains_all_settings(self, analysis_wrapper_class):
         if analysis_wrapper_class().settings is None:

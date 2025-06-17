@@ -55,8 +55,11 @@ def _all_subclasses(cls):
     return set(cls.__subclasses__()).union([s for c in cls.__subclasses__() for s in _all_subclasses(c)])
 
 
-_analysis_wrapper_classes = [c for c in _all_subclasses(BaseAnalysisWrapper) if c not in {BaseHuygensPSF, SystemViewerWrapper}]
+_analysis_wrapper_classes = [
+    c for c in _all_subclasses(BaseAnalysisWrapper) if c not in {BaseHuygensPSF, SystemViewerWrapper}
+]
+
 
 @pytest.fixture(scope="module", params=_analysis_wrapper_classes)
 def analysis_wrapper_class(request):
-    yield request.param
+    return request.param
