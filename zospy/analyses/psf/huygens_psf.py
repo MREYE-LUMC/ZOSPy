@@ -136,7 +136,9 @@ class HuygensPSF(BaseHuygensPSF[Union[DataFrame, None]], analysis_type="HuygensP
     """Huygens Point Spread Function (PSF) analysis."""
 
 
-class HuygensPSFAndStrehlRatio(BaseHuygensPSF[HuygensPSFResult], needs_text_output_file=True, analysis_type="HuygensPsf"):
+class HuygensPSFAndStrehlRatio(
+    BaseHuygensPSF[HuygensPSFResult], needs_text_output_file=True, analysis_type="HuygensPsf"
+):
     """Huygens Point Spread Function (PSF) analysis with Strehl ratio."""
 
     RE_STREHL_RATIO = re.compile(r"^\s*Strehl ratio\s*:\s*(\d+[.,]?\d*)\s*$", re.IGNORECASE | re.MULTILINE)
