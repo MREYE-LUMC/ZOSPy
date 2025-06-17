@@ -26,18 +26,7 @@ from zospy.analyses.base import (
 )
 from zospy.analyses.decorators import analysis_settings
 from zospy.analyses.parsers.types import ValidatedDataFrame
-from zospy.analyses.psf.huygens_psf import BaseHuygensPSF
 from zospy.analyses.reports.surface_data import SurfaceDataSettings
-from zospy.analyses.systemviewers.base import SystemViewerWrapper
-
-
-def all_subclasses(cls):
-    return set(cls.__subclasses__()).union([s for c in cls.__subclasses__() for s in all_subclasses(c)])
-
-
-analysis_wrapper_classes = all_subclasses(BaseAnalysisWrapper)
-analysis_wrapper_classes.remove(SystemViewerWrapper)
-analysis_wrapper_classes.remove(BaseHuygensPSF)
 
 
 class TestValidatedSetter:
@@ -134,32 +123,28 @@ class TestAnalysisWrapper:
     def test_settings_type_is_specified(self):
         assert MockAnalysis._settings_type is not AnalysisSettings  # noqa: SLF001
 
-    @pytest.mark.parametrize("cls", analysis_wrapper_classes)
-    def test_analyses_correct_analysis_name(self, cls):
-        assert cls.TYPE is not None
-        assert hasattr(constants.Analysis.AnalysisIDM, cls.TYPE)
+    def test_analyses_correct_analysis_name(self, analysis_wrapper_class):
+        assert analysis_wrapper_class.TYPE is not None
+        assert hasattr(constants.Analysis.AnalysisIDM, analysis_wrapper_class.TYPE)
 
-    @pytest.mark.parametrize("cls", analysis_wrapper_classes)
-    def test_init_all_keyword_only_parameters(self, cls):
-        assert all(p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(cls).parameters.items())
+    def test_init_all_keyword_only_parameters(self, analysis_wrapper_class):
+        assert all(p.kind.name == "KEYWORD_ONLY" for _, p in inspect.signature(analysis_wrapper_class).parameters.items())
 
-    @pytest.mark.parametrize("cls", analysis_wrapper_classes)
-    def test_init_contains_all_settings(self, cls):
-        if cls().settings is None:
+    def test_init_contains_all_settings(self, analysis_wrapper_class):
+        if analysis_wrapper_class().settings is None:
             return
 
-        init_signature = inspect.signature(cls.__init__)
-        settings_fields = fields(cls().settings)
+        init_signature = inspect.signature(analysis_wrapper_class.__init__)
+        settings_fields = fields(analysis_wrapper_class().settings)
 
         assert all(field.name in init_signature.parameters for field in settings_fields)
 
-    @pytest.mark.parametrize("cls", analysis_wrapper_classes)
-    def test_analyses_default_values(self, cls):
-        if cls().settings is None:
+    def test_analyses_default_values(self, analysis_wrapper_class):
+        if analysis_wrapper_class().settings is None:
             return
 
-        settings_defaults = self.get_settings_defaults(type(cls().settings))
-        init_signature = inspect.signature(cls.__init__)
+        settings_defaults = self.get_settings_defaults(type(analysis_wrapper_class().settings))
+        init_signature = inspect.signature(analysis_wrapper_class.__init__)
 
         for field_name, default_value in settings_defaults.items():
             assert field_name in init_signature.parameters
