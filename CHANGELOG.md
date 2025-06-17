@@ -13,12 +13,19 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- Huygens PSF analysis now accepts ZOSAPI constants for the `psf_type` and `show_as` parameters (#158)
-- Huygens PSF analysis that returns the Strehl ratio as well: `zospy.analyses.psf.HuygensPSFAndStrehlRatio` (#159)
-
 ### Deprecated
 
 ### Removed
+
+## [[2.1.1]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.1) - 2025-06-17
+
+### Added
+
+- Huygens PSF analysis that returns the Strehl ratio as well: `zospy.analyses.psf.HuygensPSFAndStrehlRatio` (#159)
+
+### Fixed
+
+- Huygens PSF analysis now accepts ZOSAPI constants for the `psf_type` and `show_as` parameters (#158)
 
 ## [[2.1.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.0) - 2025-05-23
 
