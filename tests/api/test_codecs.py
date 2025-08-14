@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import clr
 import pytest
 from System.Reflection import Assembly

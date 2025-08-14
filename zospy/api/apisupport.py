@@ -1,5 +1,7 @@
 """Support functions for loading the ZOS-API."""
 
+from __future__ import annotations
+
 import logging
 import os
 import sys

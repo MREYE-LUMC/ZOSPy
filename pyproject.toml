@@ -155,9 +155,15 @@ extend-ignore = ["B028", "EM101", "EM102", "G004", "PLR2004", "TD004", "TRY003"]
     "D100",   # Missing docstring in public module
     "D103",   # Missing docstring in public function
 ]
+"**/*.ipynb" = [
+    "I002",  # Missing required import
+]
 
 [tool.ruff.lint.flake8-pytest-style]
 parametrize-names-type = "csv"
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"

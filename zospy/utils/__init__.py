@@ -8,6 +8,8 @@ through its submodules:
 - **`zospy.utils.zputils`** provides utility functions for working with Zemax OpticStudio.
 """
 
+from __future__ import annotations
+
 from zospy.utils import clrutils, pyutils, zputils
 
 __all__ = ("zputils", "clrutils", "pyutils")

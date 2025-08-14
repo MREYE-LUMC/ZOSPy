@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from zospy.functions.lde import find_surface_by_comment
