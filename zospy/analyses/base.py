@@ -53,7 +53,7 @@ from pydantic import (
 
 from zospy.analyses.parsers import load_grammar, parse
 from zospy.analyses.parsers.types import ValidatedDataFrame
-from zospy.api import _ZOSAPI, constants
+from zospy.api import constants
 from zospy.utils import zputils
 from zospy.utils.clrutils import system_datetime_to_datetime
 
@@ -63,6 +63,7 @@ if TYPE_CHECKING:
     from lark import Transformer
     from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
+    from zospy.api import _ZOSAPI
     from zospy.zpcore import OpticStudioSystem
 
     if sys.version_info <= (3, 11):

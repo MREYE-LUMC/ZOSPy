@@ -119,8 +119,6 @@ extend = "ruff_defaults.toml"
 line-length = 120
 extend-include = ["*.ipynb"]
 exclude = [
-    "zospy/api/_ZOSAPI",
-    "zospy/api/_ZOSAPI_constants",
     "zospy/analyses/old",
 ]
 

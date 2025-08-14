@@ -4,16 +4,19 @@ from __future__ import annotations
 
 from inspect import signature
 from os import PathLike
-from typing import Any, Callable
+from typing import Any, Callable, TYPE_CHECKING
 from warnings import warn
 
 import numpy as np
 from System import Array
 
 from zospy.analyses.old.base import AnalysisResult, OnComplete, new_analysis
-from zospy.api import _ZOSAPI, constants
+from zospy.api import constants
 from zospy.utils.pyutils import abspath
 from zospy.zpcore import OpticStudioSystem
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
 
 
 def _warn_specified_parameters(
