@@ -11,11 +11,15 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- Support for Python 3.14
+
 ### Fixed
 
 ### Deprecated
 
 ### Removed
+
+- Support for Python 3.9
 
 ## [[2.1.2]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.2) - 2025-06-17
 
