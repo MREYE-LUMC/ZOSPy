@@ -8,7 +8,7 @@ Provides the `ZospyTransformer` class for transforming common OpticStudio constr
 from __future__ import annotations
 
 from itertools import groupby
-from typing import Any, Generic, NamedTuple, TypedDict, TypeVar
+from typing import Any, NamedTuple, TypedDict, TypeVar
 
 from lark import Discard, Transformer
 
@@ -17,14 +17,14 @@ from zospy.utils.pyutils import atox
 FieldValue = TypeVar("FieldValue")
 
 
-class SimpleField(NamedTuple, Generic[FieldValue]):
+class SimpleField(NamedTuple):
     """A simple field with a name and a value."""
 
     name: str
     value: FieldValue
 
 
-class ParametricField(NamedTuple, Generic[FieldValue]):
+class ParametricField(NamedTuple):
     """A field with parameters and a value.
 
     Should be used as a value for a `SimpleField`.
@@ -45,7 +45,7 @@ class UnitField(TypedDict):
 
 
 def group_parametric_fields(
-    parametric_fields: list[SimpleField[ParametricField]],
+    parametric_fields: list[SimpleField],
 ) -> dict[str, dict[list[int | float], Any]]:
     """Convert a list of parametric fields into a dictionary of dictionaries."""
     result = {}
