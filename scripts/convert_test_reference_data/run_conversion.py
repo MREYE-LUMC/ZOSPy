@@ -22,7 +22,7 @@ OUTPUT_FOLDER = Path("tests/data/reference")
 
 
 def _list_replace_values(data: list, old_values, new_values):
-    for old_value, new_value in zip(old_values, new_values):
+    for old_value, new_value in zip(old_values, new_values, strict=False):
         if old_value in data:
             data[data.index(old_value)] = new_value
 

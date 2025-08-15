@@ -35,8 +35,10 @@ from zospy.analyses import (
 from zospy.analyses.base import OnComplete, new_analysis
 
 __all__ = (
+    "OnComplete",
     "extendedscene",
     "mtf",
+    "new_analysis",
     "physicaloptics",
     "polarization",
     "psf",
@@ -45,6 +47,4 @@ __all__ = (
     "surface",
     "systemviewers",
     "wavefront",
-    "new_analysis",
-    "OnComplete",
 )

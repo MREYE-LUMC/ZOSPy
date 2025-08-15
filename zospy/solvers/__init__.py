@@ -172,7 +172,7 @@ def position(
 
     if isinstance(from_surface, int):
         solve_data.FromSurface = from_surface
-    elif type(from_surface).__name__ in ("ILDERow", "INCERow"):
+    elif type(from_surface).__name__ in {"ILDERow", "INCERow"}:
         solve_data.FromSurface = from_surface.RowIndex
     else:
         raise ValueError(f"from_surface should be an int or a Surface, got {from_surface}")

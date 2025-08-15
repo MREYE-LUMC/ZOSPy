@@ -10,4 +10,4 @@ through its submodules:
 
 from zospy.utils import clrutils, pyutils, zputils
 
-__all__ = ("zputils", "clrutils", "pyutils")
+__all__ = ("clrutils", "pyutils", "zputils")

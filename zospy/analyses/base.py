@@ -31,12 +31,24 @@ import os
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, is_dataclass
-from datetime import datetime  # noqa: TCH003 Pydantic needs datetime to be present at runtime
+from datetime import (
+    datetime,  # noqa: TC003 Pydantic needs datetime to be present at runtime
+)
 from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from tempfile import mkstemp
-from typing import TYPE_CHECKING, Any, Generic, Literal, TypedDict, TypeVar, cast, get_args
+from types import NoneType
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Generic,
+    Literal,
+    TypedDict,
+    TypeVar,
+    cast,
+    get_args,
+)
 
 import numpy as np
 import pandas as pd
@@ -65,7 +77,7 @@ if TYPE_CHECKING:
 
     from zospy.zpcore import OpticStudioSystem
 
-    if sys.version_info <= (3, 11):
+    if sys.version_info < (3, 12):
         from typing_extensions import NotRequired
     else:
         from typing import NotRequired
@@ -188,11 +200,11 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
         return TypeAdapter(cls).validate_json(data)
 
     @field_serializer("data", mode="wrap", when_used="json")
+    @staticmethod
     def _serialize_data(
-        self,
         value: AnalysisData,
         nxt: SerializerFunctionWrapHandler,
-        info,  # noqa: ARG002
+        info,  # noqa: ARG004
     ):
         if isinstance(value, pd.DataFrame):
             return TypeAdapter(ValidatedDataFrame, config=ConfigDict(ser_json_inf_nan="constants")).dump_python(
@@ -640,7 +652,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
                 base = cls.__orig_bases__[0]
                 cls._settings_type: type[AnalysisSettings] = get_args(base)[1]
             else:
-                cls._settings_type = type(None)  # TODO: change to NoneType when dropping support for Python 3.9
+                cls._settings_type = NoneType
 
         super().__init_subclass__(**kwargs)
 

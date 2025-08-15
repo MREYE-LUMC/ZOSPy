@@ -99,7 +99,7 @@ no rights can be derived from it, as is also stated in the [MIT license](LICENSE
 
 ## Dependencies
 
-ZOSPy officially supports Python 3.9 - 3.13. It may work with older Python versions, but support is not provided for
+ZOSPy officially supports Python 3.10 - 3.14. It may work with older Python versions, but support is not provided for
 these versions. Furthermore, a working installation of [Ansys Zemax OpticStudio](https://www.zemax.com/pages/opticstudio) is required.
 
 ## Compatibility

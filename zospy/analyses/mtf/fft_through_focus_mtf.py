@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Annotated, Literal, Union
+from typing import TYPE_CHECKING, Annotated, Literal
 
 import numpy as np
 import pandas as pd
@@ -119,7 +119,7 @@ class FFTThroughFocusMTFResult(RootModel[list[FFTThroughFocusMTFData]]):
 
 
 class FFTThroughFocusMTF(
-    BaseAnalysisWrapper[Union[FFTThroughFocusMTFResult, None], FFTThroughFocusMTFSettings],
+    BaseAnalysisWrapper[FFTThroughFocusMTFResult | None, FFTThroughFocusMTFSettings],
     analysis_type="FftThroughFocusMtf",
     needs_config_file=True,
 ):

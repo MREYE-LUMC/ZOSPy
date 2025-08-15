@@ -117,7 +117,7 @@ class RayFanSettings:
     tangential: str = Field(default="Aberration_Y", description="Tangential aberration to plot")
     sagittal: str = Field(default="Aberration_X", description="Sagittal aberration to plot")
     surface: Literal["Image"] | Annotated[int, Field(ge=0)] = Field(
-        default="Image", description="Surface " "to be analyzed"
+        default="Image", description="Surface to be analyzed"
     )
     use_dashes: bool = Field(default=False, description="Use dashed lines for the rays")
     vignetted_pupil: bool = Field(default=True, description="Scale the pupil axis to the unvignetted pupil")

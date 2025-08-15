@@ -1,3 +1,4 @@
+import math
 from typing import Any
 
 import pytest
@@ -232,7 +233,7 @@ def test_simple_field(value, expected, setup_field_test):
         ("Double parameters 123 4.56: 7.89", SimpleField("Double parameters", ParametricField((123, 4.56), 7.89))),
         (
             "Negative parameters -3.14 -2: a meaningless string",
-            SimpleField("Negative parameters", ParametricField((-3.14, -2), "a meaningless string")),
+            SimpleField("Negative parameters", ParametricField((-math.pi, -2), "a meaningless string")),
         ),
     ],
 )
@@ -245,7 +246,7 @@ def test_parametric_field(value, expected, setup_field_test):
     assert isinstance(result.value.value, type(expected.value.value))
 
     if isinstance(result.value.parameters, tuple):
-        for r, e in zip(result.value.parameters, expected.value.parameters):
+        for r, e in zip(result.value.parameters, expected.value.parameters, strict=False):
             assert isinstance(r, type(e))
     else:
         assert isinstance(result.value.parameters, type(expected.value.parameters))
@@ -292,7 +293,7 @@ def test_parametric_unit_field(value, expected, setup_field_test):
     assert isinstance(result.value.value, type(expected.value.value))
 
     if isinstance(result.value.parameters, tuple):
-        for r, e in zip(result.value.parameters, expected.value.parameters):
+        for r, e in zip(result.value.parameters, expected.value.parameters, strict=False):
             assert isinstance(r, type(e))
     else:
         assert isinstance(result.value.parameters, type(expected.value.parameters))
@@ -302,7 +303,7 @@ def test_parametric_unit_field(value, expected, setup_field_test):
     "value, expected",
     [
         ("Simple field : 1.23", SimpleField("Simple field", 1.23)),
-        ("Parametric field 1 2: 3.14", SimpleField("Parametric field", ParametricField((1, 2), 3.14))),
+        ("Parametric field 1 2: 3.14", SimpleField("Parametric field", ParametricField((1, 2), math.pi))),
         ("Unit field: 10 m", SimpleField("Unit field", UnitField(value=10, unit="m"))),
         (
             "Parametric unit field 1 2: 3 m",
@@ -346,8 +347,8 @@ def test_field_group(setup_field_test):  # noqa: ARG001
         "Group key",
         {
             "Simple field": 1.23,
-            "Parametric field": {(1, 2): 3.14},
-            "Parametric unit field": {3.14: {"value": 1.23, "unit": "m"}},
+            "Parametric field": {(1, 2): math.pi},
+            "Parametric unit field": {math.pi: {"value": 1.23, "unit": "m"}},
         },
     )
 

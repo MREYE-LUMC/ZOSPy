@@ -31,7 +31,7 @@ myst_enable_extensions = ["colon_fence", "attrs_block", "attrs_inline", "substit
 myst_heading_anchors = 3
 myst_substitutions = {
     "REFERENCE_VERSION": "2025 R1.01",
-    "PYTHON_VERSIONS": "3.9 - 3.13",
+    "PYTHON_VERSIONS": "3.10 - 3.14",
 }
 
 templates_path = ["_templates"]

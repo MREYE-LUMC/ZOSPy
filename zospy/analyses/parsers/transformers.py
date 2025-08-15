@@ -3,10 +3,12 @@
 Provides the `ZospyTransformer` class for transforming common OpticStudio constructs into dictionaries.
 """
 
+# ruff: noqa: PLR6301
+
 from __future__ import annotations
 
 from itertools import groupby
-from typing import Any, NamedTuple, TypedDict, TypeVar
+from typing import Any, Generic, NamedTuple, TypedDict, TypeVar
 
 from lark import Discard, Transformer
 
@@ -15,14 +17,14 @@ from zospy.utils.pyutils import atox
 FieldValue = TypeVar("FieldValue")
 
 
-class SimpleField(NamedTuple):
+class SimpleField(NamedTuple, Generic[FieldValue]):
     """A simple field with a name and a value."""
 
     name: str
     value: FieldValue
 
 
-class ParametricField(NamedTuple):
+class ParametricField(NamedTuple, Generic[FieldValue]):
     """A field with parameters and a value.
 
     Should be used as a value for a `SimpleField`.
