@@ -14,7 +14,7 @@ jobs:
       matrix:
         python: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up uv
         id: setup-uv
         uses: astral-sh/setup-uv@v3
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint ZOSPy
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up uv
         id: setup-uv
         uses: astral-sh/setup-uv@v3
