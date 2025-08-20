@@ -78,13 +78,13 @@ jobs:
           name: zospy_dist
           path: dist
       - name: Upload wheels to GitHub release
-        uses: svenstaro/upload-release-action@2.9.0
+        uses: svenstaro/upload-release-action@2.11.2
         with:
           tag: ${{ github.ref }}
           file: "dist/*.whl"
           file_glob: true
       - name: Upload dist to GitHub release
-        uses: svenstaro/upload-release-action@2.9.0
+        uses: svenstaro/upload-release-action@2.11.2
         with:
           tag: ${{ github.ref }}
           file: "dist/*.tar.gz"
