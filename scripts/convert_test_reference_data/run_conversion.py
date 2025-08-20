@@ -6,6 +6,7 @@
 #   "zospy @ file://${PROJECT_ROOT}",
 # ]
 # ///
+from __future__ import annotations
 
 import json
 from math import isnan

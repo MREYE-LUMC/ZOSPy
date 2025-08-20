@@ -19,7 +19,12 @@ Change the refractive index of a medium:
 
 from __future__ import annotations
 
-from zospy.api import _ZOSAPI, constants
+from typing import TYPE_CHECKING
+
+from zospy.api import constants
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
 
 __all__ = ("element_power", "fixed", "material_model", "pickup_chief_ray", "position", "surface_pickup", "variable")
 

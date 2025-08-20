@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import hashlib
 import json
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -8,6 +10,9 @@ from tests.config import CONFIG_DATA_FOLDER, REFERENCE_DATA_FOLDER, REFERENCE_VE
 from zospy.analyses.base import AnalysisResult, BaseAnalysisWrapper
 from zospy.analyses.psf.huygens_psf import BaseHuygensPSF
 from zospy.analyses.systemviewers.base import SystemViewerWrapper
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def pytest_make_parametrize_id(config, val, argname):  # noqa: ARG001

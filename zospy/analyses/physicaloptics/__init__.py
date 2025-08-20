@@ -1,5 +1,7 @@
 """OpticStudio analyses from the Physical Optics category."""
 
+from __future__ import annotations
+
 from zospy.analyses.physicaloptics.physical_optics_propagation import (
     PhysicalOpticsPropagation,
     PhysicalOpticsPropagationSettings,

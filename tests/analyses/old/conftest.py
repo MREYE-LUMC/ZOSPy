@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from tests.config import REFERENCE_DATA_FOLDER, REFERENCE_VERSION

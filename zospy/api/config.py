@@ -4,6 +4,8 @@ Retrieves and stores the number format used by Zemax OpticStudio.
 These values are used to parse analysis result text files.
 """
 
+from __future__ import annotations
+
 import locale
 import logging
 

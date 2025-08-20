@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from tests.helpers import assert_dataclass_equal
 from zospy.analyses.reports import CardinalPoints, SurfaceData, SystemData
 

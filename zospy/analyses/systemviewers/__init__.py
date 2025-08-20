@@ -1,5 +1,7 @@
 """OpticStudio system viewers."""
 
+from __future__ import annotations
+
 from zospy.analyses.systemviewers.cross_section import CrossSection, CrossSectionSettings
 from zospy.analyses.systemviewers.nsc_3d_layout import NSC3DLayout, NSC3DLayoutSettings
 from zospy.analyses.systemviewers.nsc_shaded_model import NSCShadedModel, NSCShadedModelSettings

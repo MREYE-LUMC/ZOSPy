@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 # Reference version of OpticStudio, with which all analysis outputs are compared

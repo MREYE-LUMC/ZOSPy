@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 import locale
 import re
 import weakref
-from pathlib import Path
 from sys import version_info
 from types import SimpleNamespace
+from typing import TYPE_CHECKING
 
 import pytest
 
 import zospy as zp
 from zospy import constants
 from zospy.zpcore import OpticStudioSystem
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ruff: noqa: SLF001
 

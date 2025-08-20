@@ -1,5 +1,7 @@
 """Utilities for working with the Common Language Runtime (CLR)."""
 
+from __future__ import annotations
+
 import os
 from collections import namedtuple
 from datetime import datetime as dt

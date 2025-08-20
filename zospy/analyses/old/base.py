@@ -10,14 +10,17 @@ from datetime import datetime
 from enum import Enum
 from importlib import import_module
 from types import SimpleNamespace
-from typing import Any, Literal
+from typing import Any, Literal, TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
 
-from zospy.api import _ZOSAPI, constants
+from zospy.api import constants
 from zospy.utils.clrutils import system_datetime_to_datetime
 from zospy.zpcore import OpticStudioSystem
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
 
 
 def _pprint(d, indent=0):
