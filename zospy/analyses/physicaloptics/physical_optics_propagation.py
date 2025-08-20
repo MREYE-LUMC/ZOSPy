@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Literal, Union
+from typing import TYPE_CHECKING, Annotated, Literal
 from warnings import warn
 
 from pandas import DataFrame
@@ -10,7 +10,10 @@ from pydantic import Field, model_validator
 
 from zospy.analyses.base import BaseAnalysisWrapper, new_analysis
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.parsers.types import (  # noqa: TC001
+    WavelengthNumber,
+    ZOSAPIConstant,
+)
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
@@ -217,17 +220,17 @@ class PhysicalOpticsPropagationSettings:
 
     @model_validator(mode="after")
     def _validate_beam_file(self):
-        if str(self.beam_type) not in ("File", "DLL", "Multimode") and self.beam_file != "":
+        if str(self.beam_type) not in {"File", "DLL", "Multimode"} and self.beam_file:
             raise ValueError(f"Beam type {self.beam_type!s} does not allow specification of beam_file.")
 
         return self
 
     @model_validator(mode="after")
     def _validate_output_beam_file(self):
-        if self.save_output_beam and self.output_beam_file == "":
+        if self.save_output_beam and not self.output_beam_file:
             raise ValueError("output_beam_file should be specified when save_output_beam is True.")
         if not self.save_output_beam:
-            if self.output_beam_file != "":
+            if self.output_beam_file:
                 warn("output_beam_file is ignored when save_output_beam is False.")
             if self.save_beam_at_all_surfaces:
                 warn("save_beam_at_all_surfaces is ignored when save_output_beam is False.")
@@ -236,14 +239,14 @@ class PhysicalOpticsPropagationSettings:
 
     @model_validator(mode="after")
     def _validate_fiber_type_file(self):
-        if str(self.fiber_type) not in ("File", "DLL") and self.fiber_type_file != "":
+        if str(self.fiber_type) not in {"File", "DLL"} and self.fiber_type_file:
             raise ValueError(f"Fiber type {self.fiber_type!s} does not allow specification of fiber_type_file.")
 
         return self
 
 
 class PhysicalOpticsPropagation(
-    BaseAnalysisWrapper[Union[DataFrame, None], PhysicalOpticsPropagationSettings],
+    BaseAnalysisWrapper[DataFrame | None, PhysicalOpticsPropagationSettings],
     analysis_type="PhysicalOpticsPropagation",
     mode="Sequential",
 ):
@@ -359,7 +362,7 @@ class PhysicalOpticsPropagation(
             self.analysis.Settings.UsePeakIrradiance = True
             self.analysis.Settings.PeakIrradiance = self.settings.peak_irradiance
 
-        if self.settings.beam_file != "":
+        if self.settings.beam_file:
             self.analysis.Settings.BeamTypeFilename = self.settings.beam_file
 
         self._set_pop_parameters("beam", self.settings.beam_parameters)
@@ -377,7 +380,7 @@ class PhysicalOpticsPropagation(
 
         if self.settings.show_as == "Contour":
             self.analysis.Settings.ContourFormat = self.settings.contour_format
-        elif self.settings.show_as in ("CrossX", "CrossY"):
+        elif self.settings.show_as in {"CrossX", "CrossY"}:
             self.analysis.Settings.RowOrColumn = (
                 0 if self.settings.row_or_column == "Center" else self.settings.row_or_column
             )
@@ -410,17 +413,17 @@ class PhysicalOpticsPropagation(
             self.analysis.Settings.TiltAboutX = self.settings.tilt_about_x
             self.analysis.Settings.TiltAboutY = self.settings.tilt_about_y
 
-            if self.settings.fiber_type_file != "":
+            if self.settings.fiber_type_file:
                 self.analysis.Settings.FiberTypeFilename = self.settings.fiber_type_file
 
             self._set_pop_parameters("fiber", self.settings.fiber_parameters)
 
         # Auto calculate beam sampling
-        if self.settings.auto_calculate_beam_sampling and str(self.settings.beam_type) not in (
+        if self.settings.auto_calculate_beam_sampling and str(self.settings.beam_type) not in {
             "File",
             "DLL",
             "Multimode",
-        ):
+        }:
             self.analysis.Settings.AutoCalculateBeamSampling()
 
         # Run analysis

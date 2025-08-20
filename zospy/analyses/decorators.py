@@ -8,7 +8,7 @@ from sys import version_info
 import pydantic
 from pydantic import ConfigDict, Field, PrivateAttr
 
-if version_info <= (3, 11):
+if version_info < (3, 12):
     from typing_extensions import dataclass_transform
 else:
     from typing import dataclass_transform

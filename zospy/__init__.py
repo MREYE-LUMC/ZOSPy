@@ -10,11 +10,11 @@ from zospy.zpcore import ZOS
 __version__ = version("zospy")
 
 __all__ = (
+    "ZOS",
     "analyses",
     "constants",
     "functions",
     "solvers",
-    "ZOS",
 )
 
 config.set_decimal_point_and_thousands_separator()

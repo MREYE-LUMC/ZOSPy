@@ -9,7 +9,7 @@ from pandas.testing import assert_frame_equal
 
 def assert_dataclass_equal(
     a, b, *, return_bool: bool = False, tolerance: float = 1e-5, ignore_fields: list[str] | None = None
-) -> None | bool:
+) -> bool | None:
     if not is_dataclass(a) and not is_dataclass(b):
         raise ValueError("Both result and expected must be dataclasses")
 
@@ -38,9 +38,9 @@ def assert_dataclass_equal(
         elif is_dataclass(value_a) and is_dataclass(value_b):
             if not assert_dataclass_equal(value_a, value_b, return_bool=True):
                 differences[f.name] = (value_a, value_b)
-        elif isinstance(value_a, (list, tuple)) and isinstance(value_b, (list, tuple)):
+        elif isinstance(value_a, list | tuple) and isinstance(value_b, list | tuple):
             if is_dataclass(value_a[0]):
-                for i, (item_a, item_b) in enumerate(zip(value_a, value_b)):
+                for i, (item_a, item_b) in enumerate(zip(value_a, value_b, strict=False)):
                     if not assert_dataclass_equal(item_a, item_b, return_bool=True):
                         differences[f"{f.name}[{i}]"] = (item_a, item_b)
         elif value_a != value_b:

@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 from typing import Literal
 
-from _common import process_example
+from _common import process_example  # noqa: PLC2701
 
 
 def _handle_output_folder(output_folder: Path | None, example_folder: Path) -> Path:

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Annotated, Literal
 from pydantic import Field
 
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import FieldNumber, WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.parsers.types import FieldNumber, WavelengthNumber, ZOSAPIConstant  # noqa: TC001
 from zospy.analyses.systemviewers.base import ImageSize, SystemViewerWrapper
 from zospy.api import constants
 

@@ -260,11 +260,11 @@ class TestPhysicalOpticsPropagation:
             )
 
     def test_physical_optics_propagation_with_wrong_beam_parameter_raises_exception(self, simple_system):
-        with pytest.raises(ValueError, match="The following .+ parameters are specified but not accepted"):
+        with pytest.raises(ValueError, match=r"The following .+ parameters are specified but not accepted"):
             PhysicalOpticsPropagation(beam_type="GaussianWaist", beam_parameters={"WrongName": 1}).run(simple_system)
 
     def test_physical_optics_propagation_with_wrong_fiber_parameter_raises_exception(self, simple_system):
-        with pytest.raises(ValueError, match="The following .+ parameters are specified but not accepted"):
+        with pytest.raises(ValueError, match=r"The following .+ parameters are specified but not accepted"):
             PhysicalOpticsPropagation(
                 compute_fiber_coupling_integral=True,
                 fiber_type="GaussianWaist",

@@ -9,14 +9,21 @@ from __future__ import annotations
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from typing import TYPE_CHECKING, Annotated, Generic, Literal, Optional, get_args
+from types import NoneType
+from typing import TYPE_CHECKING, Annotated, Generic, Literal, get_args
 from warnings import warn
 
 import numpy as np
 from pydantic.fields import Field, FieldInfo
 from System import Array
 
-from zospy.analyses.base import AnalysisData, AnalysisResult, AnalysisSettings, BaseAnalysisWrapper, OnComplete
+from zospy.analyses.base import (
+    AnalysisData,
+    AnalysisResult,
+    AnalysisSettings,
+    BaseAnalysisWrapper,
+    OnComplete,
+)
 from zospy.utils.pyutils import abspath
 
 if TYPE_CHECKING:
@@ -27,10 +34,10 @@ if TYPE_CHECKING:
     from zospy.zpcore import OpticStudioSystem
 
 
-__all__ = ("SystemViewerWrapper", "ImageSize")
+__all__ = ("ImageSize", "SystemViewerWrapper")
 
 
-class SystemViewerWrapper(BaseAnalysisWrapper[Optional[np.ndarray], AnalysisSettings], ABC, Generic[AnalysisSettings]):
+class SystemViewerWrapper(BaseAnalysisWrapper[np.ndarray | None, AnalysisSettings], ABC, Generic[AnalysisSettings]):
     """Base class for SystemViewer analyses."""
 
     ALLOWED_IMAGE_EXTENSIONS: tuple[str, ...] = ("bmp", "jpeg", "png")
@@ -47,7 +54,7 @@ class SystemViewerWrapper(BaseAnalysisWrapper[Optional[np.ndarray], AnalysisSett
                 base = cls.__orig_bases__[0]
                 cls._settings_type: type[AnalysisSettings] = get_args(base)[0]
             else:
-                cls._settings_type = type(None)  # TODO: Replace with NoneType when dropping support for Python 3.9
+                cls._settings_type = NoneType
 
         super().__init_subclass__(**kwargs)
 
@@ -115,7 +122,7 @@ class SystemViewerWrapper(BaseAnalysisWrapper[Optional[np.ndarray], AnalysisSett
         return field
 
     def _validate_end_surface(self, start_surface, end_surface: int):
-        if end_surface != -1 and end_surface <= start_surface or end_surface > self.oss.LDE.NumberOfSurfaces - 1:
+        if (end_surface != -1 and end_surface <= start_surface) or end_surface > self.oss.LDE.NumberOfSurfaces - 1:
             raise ValueError(
                 "end_surface must be -1 or greater than start_surface and less than the number of surfaces."
             )

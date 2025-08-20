@@ -21,7 +21,7 @@ from zospy.analyses.base import (
     AnalysisResult,
     AnalysisSettings,
     BaseAnalysisWrapper,
-    _validated_setter,
+    _validated_setter,  # noqa: PLC2701
     new_analysis,
 )
 from zospy.analyses.decorators import analysis_settings
@@ -218,7 +218,7 @@ class TestAnalysisWrapper:
 
         analysis = new_analysis(simple_system, constants.Analysis.AnalysisIDM.RayFan, settings_first=True)
 
-        if field_specification in ("All", 0):
+        if field_specification in {"All", 0}:
             analysis.Settings.Field.UseAllFields()
         else:
             analysis.Settings.Field.SetFieldNumber(field_specification)
@@ -271,7 +271,7 @@ class TestAnalysisWrapper:
 
         analysis = new_analysis(simple_system, constants.Analysis.AnalysisIDM.RayFan, settings_first=True)
 
-        if wavelength_specification in ("All", 0):
+        if wavelength_specification in {"All", 0}:
             analysis.Settings.Wavelength.UseAllWavelengths()
         else:
             analysis.Settings.Wavelength.SetWavelengthNumber(wavelength_specification)
@@ -376,7 +376,7 @@ class TestAnalysisWrapper:
         analysis = MockAnalysis()
         monkeypatch.setattr(analysis, f"_needs_{temp_file_type}", True)
 
-        with pytest.raises(ValueError, match="File path should end with ."):
+        with pytest.raises(ValueError, match=r"File path should end with ."):
             analysis.run(oss=MockOpticStudioSystem(), **{temp_file_type: tmp_path / filename})
 
     @pytest.mark.parametrize(

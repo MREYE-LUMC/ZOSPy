@@ -41,16 +41,14 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
     __namespace__ = "ZOSPy.API.Codecs"
 
     # Types that are downcast by this encoder
-    _interfaces = frozenset(
-        (
-            "ZOSAPI.Analysis.Settings.IAS_",
-            "ZOSAPI.Editors.LDE.ISurface",
-            "ZOSAPI.Editors.LDE.ISurfaceApertureType",
-            "ZOSAPI.Editors.LDE.ISurfaceScatteringType",
-            "ZOSAPI.Editors.NCE.IObject",
-            "ZOSAPI.Tools.ISystemTool",
-        )
-    )
+    _interfaces = frozenset((
+        "ZOSAPI.Analysis.Settings.IAS_",
+        "ZOSAPI.Editors.LDE.ISurface",
+        "ZOSAPI.Editors.LDE.ISurfaceApertureType",
+        "ZOSAPI.Editors.LDE.ISurfaceScatteringType",
+        "ZOSAPI.Editors.NCE.IObject",
+        "ZOSAPI.Tools.ISystemTool",
+    ))
 
     def CanEncode(self, clr_type) -> bool:  # noqa: N802
         """Check if `clr_type` should be encoded.
@@ -65,7 +63,8 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
         logger.debug("%s cannot be encoded by OpticStudioInterfaceEncoder", clr_type.FullName)
         return False
 
-    def TryEncode(self, obj):  # noqa: N802
+    @staticmethod
+    def TryEncode(obj):  # noqa: N802
         """Try to downcast `obj` to its implementation."""
         logger.debug("Converting %s to its implementation", obj.GetType().FullName)
         return obj.__implementation__

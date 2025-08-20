@@ -20,7 +20,7 @@ from operator import attrgetter
 from types import SimpleNamespace as _SimpleNamespace
 from typing import TypeVar
 
-from zospy.api import _ZOSAPI  # noqa: TCH001
+from zospy.api import _ZOSAPI  # noqa: TC001
 from zospy.api._ZOSAPI_constants import *  # noqa
 from zospy.utils import clrutils as _clrutils
 from zospy.utils import pyutils as _pyutils

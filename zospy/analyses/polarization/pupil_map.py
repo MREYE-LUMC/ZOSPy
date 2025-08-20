@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal, Union
+from typing import Literal
 
 import pandas as pd
 from pydantic import Field
@@ -11,7 +11,7 @@ from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers import ZospyTransformer
 from zospy.analyses.parsers.transformers import SimpleField
-from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # noqa: TCH001
+from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # noqa: TC001
 from zospy.api import constants
 from zospy.utils.pyutils import xtoa
 from zospy.utils.zputils import standardize_sampling
@@ -20,7 +20,7 @@ __all__ = ("PolarizationPupilMap", "PolarizationPupilMapSettings")
 
 
 class PolarizationPupilMapTransformer(ZospyTransformer):
-    def pupil_map_table(self, args):
+    def pupil_map_table(self, args):  # noqa: PLR6301
         header, rows = args[0]
         table = pd.DataFrame(columns=header, data=rows)
 
@@ -85,7 +85,7 @@ class PolarizationPupilMapSettings:
 
 
 class PolarizationPupilMap(
-    BaseAnalysisWrapper[Union[PolarizationPupilMapResult, None], PolarizationPupilMapSettings],
+    BaseAnalysisWrapper[PolarizationPupilMapResult | None, PolarizationPupilMapSettings],
     analysis_type="PolarizationPupilMap",
     needs_config_file=True,
     needs_text_output_file=True,

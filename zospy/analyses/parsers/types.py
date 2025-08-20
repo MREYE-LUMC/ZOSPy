@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from operator import attrgetter
-from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, NamedTuple, Optional, TypeVar, Union
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Literal, NamedTuple, TypeVar
 
 from numpy import array, ndarray
 from pandas import DataFrame
@@ -17,7 +17,7 @@ from zospy.api import constants
 if TYPE_CHECKING:
     from pydantic import GetCoreSchemaHandler
 
-__all__ = ("UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "FieldNumber", "ZOSAPIConstant")
+__all__ = ("FieldNumber", "UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "ZOSAPIConstant")
 
 
 Value = TypeVar("Value")
@@ -43,7 +43,7 @@ class ValidatedDataFrameAnnotation:
             except (KeyError, ValueError) as e:
                 raise PydanticCustomError(
                     "invalid_dataframe",
-                    "Cannot convert dictionary to DataFrame: {value}",
+                    "Cannot convert dictionary to DataFrame: {value}",  # noqa: RUF027
                     {"value": value},
                 ) from e
 
@@ -54,12 +54,13 @@ class ValidatedDataFrameAnnotation:
         return value.to_dict(orient="tight")
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:  # noqa: PLW3201
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.dict_schema(),
-            python_schema=core_schema.union_schema(
-                [core_schema.is_instance_schema(DataFrame), core_schema.dict_schema()]
-            ),
+            python_schema=core_schema.union_schema([
+                core_schema.is_instance_schema(DataFrame),
+                core_schema.dict_schema(),
+            ]),
         )
 
         serializer = core_schema.plain_serializer_function_ser_schema(
@@ -91,19 +92,20 @@ class ValidatedNDArrayAnnotation:
             except ValueError as e:
                 raise PydanticCustomError(
                     "invalid_ndarray",
-                    "Cannot convert list to ndarray: {value}",
+                    "Cannot convert list to ndarray: {value}",  # noqa: RUF027
                     {"value": value},
                 ) from e
 
         return value
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:  # noqa: PLW3201
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.list_schema(),
-            python_schema=core_schema.union_schema(
-                [core_schema.is_instance_schema(ndarray), core_schema.list_schema()]
-            ),
+            python_schema=core_schema.union_schema([
+                core_schema.is_instance_schema(ndarray),
+                core_schema.list_schema(),
+            ]),
         )
 
         serializer = core_schema.plain_serializer_function_ser_schema(
@@ -137,7 +139,7 @@ class ZOSAPIConstantAnnotation:
 
         return constants.process_constant(constant, value)
 
-    def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> any:
+    def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> Any:  # noqa: PLW3201
         """Validate ZOSAPI constants."""
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.any_schema(),
@@ -151,11 +153,11 @@ class ZOSAPIConstantAnnotation:
 
 def ZOSAPIConstant(enum: str) -> type[str]:  # noqa: N802
     """Pydantic validation and serialization for ZOSAPI constants."""
-    return Annotated[Optional[str], ZOSAPIConstantAnnotation(enum)]
+    return Annotated[str | None, ZOSAPIConstantAnnotation(enum)]
 
 
-WavelengthNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]
-FieldNumber = Union[Literal["All"], Annotated[int, Field(gt=0)]]
+WavelengthNumber = Literal["All"] | Annotated[int, Field(gt=0)]
+FieldNumber = Literal["All"] | Annotated[int, Field(gt=0)]
 
 
 class Coordinate(NamedTuple):

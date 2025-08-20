@@ -10,7 +10,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from _common import process_example
+from _common import process_example  # noqa: PLC2701
 
 
 def main(args: argparse.Namespace) -> int:

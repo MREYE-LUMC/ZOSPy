@@ -3,6 +3,8 @@
 Provides the `ZospyTransformer` class for transforming common OpticStudio constructs into dictionaries.
 """
 
+# ruff: noqa: PLR6301
+
 from __future__ import annotations
 
 from itertools import groupby
@@ -43,7 +45,7 @@ class UnitField(TypedDict):
 
 
 def group_parametric_fields(
-    parametric_fields: list[SimpleField[ParametricField]],
+    parametric_fields: list[SimpleField],
 ) -> dict[str, dict[list[int | float], Any]]:
     """Convert a list of parametric fields into a dictionary of dictionaries."""
     result = {}

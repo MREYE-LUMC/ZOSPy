@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Union
+from typing import Annotated
 
 from pandas import DataFrame
 from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import FieldNumber, WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.parsers.types import (  # noqa: TC001
+    FieldNumber,
+    WavelengthNumber,
+    ZOSAPIConstant,
+)
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
@@ -61,7 +65,7 @@ class HuygensMtfSettings:
     use_dashes: bool = Field(default=False, description="Use dashes")
 
 
-class HuygensMTF(BaseAnalysisWrapper[Union[DataFrame, None], HuygensMtfSettings], analysis_type="HuygensMtf"):
+class HuygensMTF(BaseAnalysisWrapper[DataFrame | None, HuygensMtfSettings], analysis_type="HuygensMtf"):
     """Huygens Modulation Transfer Function (MTF) analysis."""
 
     def __init__(

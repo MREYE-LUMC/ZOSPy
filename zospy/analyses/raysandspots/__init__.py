@@ -6,4 +6,4 @@ from zospy.analyses.raysandspots.single_ray_trace import (
     SingleRayTraceSettings,
 )
 
-__all__ = ("SingleRayTrace", "SingleRayTraceSettings", "RayFan", "RayFanSettings")
+__all__ = ("RayFan", "RayFanSettings", "SingleRayTrace", "SingleRayTraceSettings")

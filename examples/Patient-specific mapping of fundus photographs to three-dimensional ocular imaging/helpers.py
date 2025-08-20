@@ -12,7 +12,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, NamedTuple
+from collections.abc import Callable
+from typing import TYPE_CHECKING, NamedTuple
 
 import numpy as np
 import pandas as pd

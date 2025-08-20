@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 from pandas import DataFrame
 from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.parsers.types import (  # noqa: TC001
+    WavelengthNumber,
+    ZOSAPIConstant,
+)
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
@@ -58,7 +61,7 @@ class FFTPSFSettings:
     surface: Literal["Image"] | Annotated[int, Field(ge=0)] = Field(default="Image", description="PSF surface")
 
 
-class FFTPSF(BaseAnalysisWrapper[Union[DataFrame, None], FFTPSFSettings], analysis_type="FftPsf"):
+class FFTPSF(BaseAnalysisWrapper[DataFrame | None, FFTPSFSettings], analysis_type="FftPsf"):
     """FFT Point Spread Function (PSF) analysis."""
 
     def __init__(

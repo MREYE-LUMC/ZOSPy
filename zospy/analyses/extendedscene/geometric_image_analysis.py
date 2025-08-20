@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 import pandas as pd
 from pandas import DataFrame
@@ -10,7 +10,10 @@ from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import WavelengthNumber, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.parsers.types import (  # noqa: TC001
+    WavelengthNumber,
+    ZOSAPIConstant,
+)
 from zospy.api import constants
 
 __all__ = ("GeometricImageAnalysis", "GeometricImageAnalysisSettings")
@@ -112,7 +115,7 @@ class GeometricImageAnalysisSettings:
 
 
 class GeometricImageAnalysis(
-    BaseAnalysisWrapper[Union[DataFrame, None], GeometricImageAnalysisSettings], analysis_type="GeometricImageAnalysis"
+    BaseAnalysisWrapper[DataFrame | None, GeometricImageAnalysisSettings], analysis_type="GeometricImageAnalysis"
 ):
     """Geometric Image Analysis."""
 
@@ -192,7 +195,7 @@ class GeometricImageAnalysis(
             constants.Analysis.Settings.SourceGia, self.settings.source
         )
 
-        if str(self.analysis.Settings.ShowAs) in ("CrossX", "CrossY"):
+        if str(self.analysis.Settings.ShowAs) in {"CrossX", "CrossY"}:
             if self.settings.row_column_number == "Center":
                 self.analysis.Settings.UseColumnRowCenter()
             else:

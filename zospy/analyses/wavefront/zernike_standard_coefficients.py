@@ -10,7 +10,7 @@ from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers import ZospyTransformer
 from zospy.analyses.parsers.transformers import SimpleField
-from zospy.analyses.parsers.types import Coordinate, UnitField  # noqa: TCH001
+from zospy.analyses.parsers.types import Coordinate, UnitField  # noqa: TC001
 from zospy.api import constants
 from zospy.utils.zputils import standardize_sampling
 
@@ -24,7 +24,7 @@ class ZernikeStandardCoefficientsTransformer(ZospyTransformer):
         value: float
         formula: str
 
-    def coefficients(self, args):
+    def coefficients(self, args):  # noqa: PLR6301
         """Convert the coefficients to a SimpleField."""
         return SimpleField("Coefficients", dict(args))
 

@@ -2,11 +2,14 @@ from __future__ import annotations
 
 from operator import attrgetter
 from string import Template
-from typing import Callable, Literal
+from typing import TYPE_CHECKING, Literal
 
 from jsonata import Jsonata
 
 import zospy as zp
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class JSONataExpressionTemplate(Template):
