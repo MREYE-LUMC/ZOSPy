@@ -38,7 +38,7 @@ if TYPE_CHECKING:
 
     from zospy.api import _ZOSAPI
 
-__all__ = ("OpticStudioSystem", "ZOS")
+__all__ = ("ZOS", "OpticStudioSystem")
 
 logger = logging.getLogger(__name__)
 
