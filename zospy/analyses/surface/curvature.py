@@ -10,7 +10,7 @@ from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
-from zospy.analyses.parsers.types import ValidatedDataFrame, ZOSAPIConstant  # noqa: TCH001
+from zospy.analyses.parsers.types import ValidatedDataFrame, ZOSAPIConstant  # noqa: TC001
 from zospy.api import config, constants
 from zospy.utils.pyutils import atox
 from zospy.utils.zputils import standardize_sampling, unpack_datagrid

@@ -11,7 +11,7 @@ import zospy.api.config as _config
 from zospy import constants
 from zospy.analyses.base import new_analysis
 from zospy.utils.pyutils import abspath, atox, xtoa
-from zospy.utils.zputils import _get_number_field
+from zospy.utils.zputils import _get_number_field  # noqa: PLC2701
 
 
 @pytest.mark.parametrize("input_type", [str, Path])

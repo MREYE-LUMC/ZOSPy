@@ -18,5 +18,5 @@ def test_load_grammar(grammar: str):
 
 
 def test_load_nonexistent_grammar():
-    with pytest.raises(FileNotFoundError, match="Grammar file nonexistent.lark not found"):
+    with pytest.raises(FileNotFoundError, match=r"Grammar file nonexistent.lark not found"):
         base.load_grammar("nonexistent")

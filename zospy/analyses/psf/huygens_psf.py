@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import re
 from abc import ABC
-from typing import Annotated, Generic, Literal, Union
+from typing import Annotated, Generic, Literal
 
 from pandas import DataFrame
 from pydantic import Field
 
 from zospy.analyses.base import AnalysisData, BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
-from zospy.analyses.parsers.types import (  # noqa: TCH001
+from zospy.analyses.parsers.types import (  # noqa: TC001
     FieldNumber,
     ValidatedDataFrame,
     WavelengthNumber,
@@ -132,7 +132,7 @@ class BaseHuygensPSF(BaseAnalysisWrapper[AnalysisData, HuygensPSFSettings], ABC,
         return self.get_data_grid(cell_origin="bottom_left")
 
 
-class HuygensPSF(BaseHuygensPSF[Union[DataFrame, None]], analysis_type="HuygensPsf"):
+class HuygensPSF(BaseHuygensPSF[DataFrame | None], analysis_type="HuygensPsf"):
     """Huygens Point Spread Function (PSF) analysis."""
 
 

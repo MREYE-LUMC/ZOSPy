@@ -9,8 +9,8 @@ from zospy.analyses.polarization.transmission import (
 )
 
 __all__ = (
-    "PolarizationTransmission",
-    "PolarizationTransmissionSettings",
     "PolarizationPupilMap",
     "PolarizationPupilMapSettings",
+    "PolarizationTransmission",
+    "PolarizationTransmissionSettings",
 )

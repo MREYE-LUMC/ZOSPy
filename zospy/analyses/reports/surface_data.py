@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path  # noqa: TCH003
+from pathlib import Path  # noqa: TC003
 from typing import Annotated, Any
 
 from pydantic import AliasChoices, BeforeValidator, Field
@@ -17,18 +17,18 @@ __all__ = ("SurfaceData", "SurfaceDataSettings")
 class SurfaceDataTransformer(ZospyTransformer):
     """Transformer for the output of the Surface Data analysis."""
 
-    def refractive_index_table(self, args):
+    def refractive_index_table(self, args):  # noqa: PLR6301
         """Convert the refractive index table to a list of dictionaries."""
         header, rows = args[0]
-        table_records = [dict(zip(header, row)) for row in rows]
+        table_records = [dict(zip(header, row, strict=False)) for row in rows]
 
         return SimpleField("Refractive Indices", table_records)
 
-    def surface_number(self, n):
+    def surface_number(self, n):  # noqa: PLR6301
         """Extract the surface number from the header."""
         return SimpleField("Surface Number", n)
 
-    def surface_powers(self, args):
+    def surface_powers(self, args):  # noqa: PLR6301
         """Convert the surface powers to a dictionary."""
         return SimpleField("Surface Powers", dict(args))
 

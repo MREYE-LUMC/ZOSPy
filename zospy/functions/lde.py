@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
     from zospy.zpcore import OpticStudioSystem
 
-__all__ = ("get_pupil", "surface_change_type", "find_surface_by_comment", "surface_change_aperturetype")
+__all__ = ("find_surface_by_comment", "get_pupil", "surface_change_aperturetype", "surface_change_type")
 
 
 @dataclass(frozen=True)

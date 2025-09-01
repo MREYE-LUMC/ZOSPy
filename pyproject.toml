@@ -20,7 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Typing :: Typed",
 ]
-requires-python = ">=3.9,<3.14"
+requires-python = ">=3.10,<3.14"
 dependencies = [
     "lark ~= 1.2.0",
     "pythonnet >=3.0.0,<4",
@@ -28,7 +28,6 @@ dependencies = [
     "pydantic >= 2.4.0",
     "numpy",
     "semver >= 3.0.0,<4",
-    "eval_type_backport; python_version <= '3.9'", # TODO: Remove when dropping support for Python 3.9
     "typing_extensions; python_version <= '3.10'",
 ]
 dynamic = ["version"]
@@ -83,7 +82,7 @@ randomize = false
 retries = 0
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.13", "3.12", "3.11", "3.10", "3.9"]
+python = ["3.13", "3.12", "3.11", "3.10"]
 
 ## Documentation
 [tool.hatch.envs.docs]
@@ -111,10 +110,12 @@ generate = "python scripts/generate_test_reference_data {args}"
 ## Formatting using hatch fmt
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "ruff_defaults.toml"
+dependencies = ["ruff==0.11.5"]
 
 # Linting and formatting options
 [tool.ruff]
 extend = "ruff_defaults.toml"
+preview = true
 
 line-length = 120
 extend-include = ["*.ipynb"]
@@ -129,6 +130,7 @@ extend-select = [
     "RUF", # ruff-specific
 ]
 extend-ignore = ["B028", "EM101", "EM102", "G004", "PLR2004", "TD004", "TRY003"]
+allowed-confusables = ["µ"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "examples/**" = [

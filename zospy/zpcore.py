@@ -38,7 +38,7 @@ if TYPE_CHECKING:
 
     from zospy.api import _ZOSAPI
 
-__all__ = ("OpticStudioSystem", "ZOS")
+__all__ = ("ZOS", "OpticStudioSystem")
 
 logger = logging.getLogger(__name__)
 
@@ -403,14 +403,14 @@ class ZOS:
 
     _instances: WeakValueDictionary = WeakValueDictionary()
 
-    def __new__(cls, *args, **kwargs):  # noqa: ARG003
+    def __new__(cls, *args, **kwargs):  # noqa: ARG004, RUF100
         """Ensure that only one instance of ZOS exists at any time.
 
         If a ZOS instance already exists, the existing instance is returned. If not, a new instance is created.
         """
         if cls not in cls._instances:
             instance = super().__new__(cls)
-            instance.__initialized = False  # noqa: SLF001
+            instance.__initialized = False
             cls._instances[cls] = instance
         else:
             warnings.warn("Only a single instance of ZOS can exist at any time. Returning existing instance.")

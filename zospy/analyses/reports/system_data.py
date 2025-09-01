@@ -17,46 +17,46 @@ class SystemDataTransformer(ZospyTransformer):
     def general_lens_data(self, args):
         return SimpleField("General Lens Data", self.dict(args[1:]))
 
-    def system_aperture(self, args):
+    def system_aperture(self, args):  # noqa: PLR6301
         name, aperture_type, value = args
 
         return SimpleField(str(name), {"type": aperture_type, "value": value})
 
-    def apodization(self, args):
+    def apodization(self, args):  # noqa: PLR6301
         name, apodization_type, factor = args
 
         return SimpleField(str(name), {"type": apodization_type, "factor": factor})
 
-    def efl_air(self, args):
-        name, value = args
+    def efl_air(self, args):  # noqa: PLR6301
+        _, value = args
 
         return SimpleField("Effective Focal Length (air)", value)
 
-    def efl_image(self, args):
-        name, value = args
+    def efl_image(self, args):  # noqa: PLR6301
+        _, value = args
 
         return SimpleField("Effective Focal Length (image)", value)
 
     def field_data(self, args):
         return SimpleField("Fields", self.dict(args))
 
-    def fields_table(self, args):
+    def fields_table(self, args):  # noqa: PLR6301
         header, rows = args[0]
 
-        return SimpleField("Table", [dict(zip(header, row)) for row in rows])
+        return SimpleField("Table", [dict(zip(header, row, strict=False)) for row in rows])
 
-    def vignetting_table(self, args):
+    def vignetting_table(self, args):  # noqa: PLR6301
         header, rows = args[0]
 
-        return SimpleField("Vignetting Factors", [dict(zip(header, row)) for row in rows])
+        return SimpleField("Vignetting Factors", [dict(zip(header, row, strict=False)) for row in rows])
 
     def wavelength_data(self, args):
         return SimpleField("Wavelengths", self.dict(args))
 
-    def wavelength_table(self, args):
+    def wavelength_table(self, args):  # noqa: PLR6301
         header, rows = args[0]
 
-        return SimpleField("Table", [dict(zip(header, row)) for row in rows])
+        return SimpleField("Table", [dict(zip(header, row, strict=False)) for row in rows])
 
     def abcd_matrix(self, args):
         return SimpleField("Predicted coordinate ABCD matrix", self.dict(args))

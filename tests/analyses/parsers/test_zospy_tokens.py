@@ -1,3 +1,4 @@
+# ruff: noqa: FURB152
 from __future__ import annotations
 
 from typing import Any
@@ -247,7 +248,7 @@ def test_parametric_field(value, expected, setup_field_test):
     assert isinstance(result.value.value, type(expected.value.value))
 
     if isinstance(result.value.parameters, tuple):
-        for r, e in zip(result.value.parameters, expected.value.parameters):
+        for r, e in zip(result.value.parameters, expected.value.parameters, strict=False):
             assert isinstance(r, type(e))
     else:
         assert isinstance(result.value.parameters, type(expected.value.parameters))
@@ -294,7 +295,7 @@ def test_parametric_unit_field(value, expected, setup_field_test):
     assert isinstance(result.value.value, type(expected.value.value))
 
     if isinstance(result.value.parameters, tuple):
-        for r, e in zip(result.value.parameters, expected.value.parameters):
+        for r, e in zip(result.value.parameters, expected.value.parameters, strict=False):
             assert isinstance(r, type(e))
     else:
         assert isinstance(result.value.parameters, type(expected.value.parameters))

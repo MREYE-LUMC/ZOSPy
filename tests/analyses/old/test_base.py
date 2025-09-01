@@ -12,8 +12,8 @@ from zospy.analyses.old.base import (
     AnalysisResult,
     AttrDict,
     OnComplete,
-    _AnalysisResultJSONDecoder,
-    _AnalysisResultJSONEncoder,
+    _AnalysisResultJSONDecoder,  # noqa: PLC2701
+    _AnalysisResultJSONEncoder,  # noqa: PLC2701
     new_analysis,
 )
 from zospy.api import constants
@@ -88,13 +88,11 @@ class TestToJSON:
         assert all(restored_series == series)
 
     def test_restore_pandas_dataframe(self):
-        dataframe = pd.DataFrame(
-            {
-                "int_column": [1, 2, 3, 4],
-                "float_column": [1.2, 3.4, 5.6, 7.8],
-                "str_column": ["this", "ain't", "string", "theory"],
-            }
-        )
+        dataframe = pd.DataFrame({
+            "int_column": [1, 2, 3, 4],
+            "float_column": [1.2, 3.4, 5.6, 7.8],
+            "str_column": ["this", "ain't", "string", "theory"],
+        })
 
         restored_dataframe = _AnalysisResultJSONDecoder().decode(_AnalysisResultJSONEncoder().encode(dataframe))
 

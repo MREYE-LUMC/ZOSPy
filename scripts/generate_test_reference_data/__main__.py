@@ -9,7 +9,7 @@ import traceback
 from argparse import ArgumentParser
 from operator import attrgetter
 from pathlib import Path
-from typing import Annotated, Any, Callable, Literal
+from typing import TYPE_CHECKING, Annotated, Any, Literal
 
 import systems
 import yaml
@@ -23,7 +23,10 @@ from pydantic import (
 from pydantic_core import PydanticCustomError
 
 import zospy as zp
-from zospy.analyses.base import BaseAnalysisWrapper  # noqa: TCH001
+from zospy.analyses.base import BaseAnalysisWrapper  # noqa: TC001
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = logging.getLogger("generate_test_reference_data")
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -85,7 +88,7 @@ class TestConfiguration(BaseModel):
                         error_type="invalid_parameters",
                         message_template=(
                             "All sets of parameters should contain the same keys as parametrized. Allowed keys: "
-                            "{parametrized}, found keys: {params}"
+                            "{parametrized}, found keys: {params}"  # noqa: RUF027
                         ),
                         context={"parametrized": parametrized, "params": params.keys()},
                     )
@@ -247,7 +250,7 @@ def main(args):
 
         return 1
 
-    with open(args.config) as f:
+    with open(args.config, encoding="utf-8") as f:
         config = Configuration.model_validate(yaml.safe_load(f.read()))
 
     zos = zp.ZOS(opticstudio_directory=args.opticstudio_directory)

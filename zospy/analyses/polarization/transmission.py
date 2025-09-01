@@ -11,7 +11,7 @@ from pydantic import Field
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers.transformers import SimpleField, ZospyTransformer
-from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # noqa: TCH001
+from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # noqa: TC001
 from zospy.api import constants
 from zospy.utils import zputils
 
@@ -21,15 +21,15 @@ __all__ = ("PolarizationTransmission", "PolarizationTransmissionSettings")
 class PolarizationTransmissionTransformer(ZospyTransformer):
     """Transformer for the output of the Polarization Transmission analysis."""
 
-    def chief_ray_transmissions(self, args) -> SimpleField:
+    def chief_ray_transmissions(self, args) -> SimpleField:  # noqa: PLR6301
         """Transform the chief ray transmission data to a SimpleField."""
         return SimpleField("Chief ray transmission", list(args))
 
-    def field_transmissions(self, args) -> SimpleField:
+    def field_transmissions(self, args) -> SimpleField:  # noqa: PLR6301
         """Transform the field transmission data to a SimpleField."""
         return SimpleField("Field transmission", list(args))
 
-    def transmission_table(self, args) -> SimpleField:
+    def transmission_table(self, args) -> SimpleField:  # noqa: PLR6301
         """Transform the transmission table data to a SimpleField."""
         header, rows = args[0]
         return SimpleField("Transmissions", pd.DataFrame(columns=header, data=rows))
