@@ -18,12 +18,14 @@ import itertools as _itertools
 import logging as _logging
 from operator import attrgetter
 from types import SimpleNamespace as _SimpleNamespace
-from typing import TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
-from zospy.api import _ZOSAPI  # noqa: TCH001
-from zospy.api._ZOSAPI_constants import *  # noqa
 from zospy.utils import clrutils as _clrutils
 from zospy.utils import pyutils as _pyutils
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
+    from zospy.api.stubs._ZOSAPI_constants import *  # noqa
 
 _logger = _logging.getLogger(__name__)
 

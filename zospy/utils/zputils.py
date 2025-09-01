@@ -4,13 +4,15 @@ from __future__ import annotations
 
 import re
 from collections.abc import MutableMapping
-from typing import Literal, TypeVar
+from typing import TYPE_CHECKING, Literal, TypeVar
 
 import numpy as np
 import pandas as pd
 
-from zospy.api import _ZOSAPI
 from zospy.api import config as _config
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
 
 
 def flatten_dict(unflattened_dict, parent_key="", sep=".", *, keep_unflattened=False):

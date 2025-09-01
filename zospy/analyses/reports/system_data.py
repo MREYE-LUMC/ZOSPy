@@ -1,5 +1,7 @@
 """System Data analysis."""
 
+from __future__ import annotations
+
 from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper

@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
-from zospy.api import _ZOSAPI, constants
+from typing import TYPE_CHECKING
+
+from zospy.api import constants
+
+if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
 
 __all__ = (
     "find_object_by_comment",

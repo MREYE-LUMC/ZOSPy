@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from tests.helpers import assert_dataclass_equal
