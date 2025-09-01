@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from zospy.functions.nce import find_object_by_comment

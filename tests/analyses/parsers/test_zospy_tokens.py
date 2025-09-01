@@ -1,4 +1,5 @@
 # ruff: noqa: FURB152
+from __future__ import annotations
 
 from typing import Any
 

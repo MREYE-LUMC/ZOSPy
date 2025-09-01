@@ -120,8 +120,6 @@ preview = true
 line-length = 120
 extend-include = ["*.ipynb"]
 exclude = [
-    "zospy/api/_ZOSAPI",
-    "zospy/api/_ZOSAPI_constants",
     "zospy/analyses/old",
 ]
 
@@ -157,9 +155,15 @@ allowed-confusables = ["µ"]
     "D100",   # Missing docstring in public module
     "D103",   # Missing docstring in public function
 ]
+"**/*.ipynb" = [
+    "I002",  # Missing required import
+]
 
 [tool.ruff.lint.flake8-pytest-style]
 parametrize-names-type = "csv"
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"

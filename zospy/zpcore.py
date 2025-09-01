@@ -29,14 +29,16 @@ from weakref import WeakValueDictionary
 
 from semver.version import Version
 
-from zospy.api import _ZOSAPI, constants
+from zospy.api import constants
 from zospy.api.apisupport import load_zosapi, load_zosapi_nethelper
 from zospy.utils.pyutils import abspath
 
 if TYPE_CHECKING:
     from os import PathLike
 
-__all__ = ("ZOS", "OpticStudioSystem")
+    from zospy.api import _ZOSAPI
+
+__all__ = ("OpticStudioSystem", "ZOS")
 
 logger = logging.getLogger(__name__)
 

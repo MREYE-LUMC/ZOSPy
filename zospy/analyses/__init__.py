@@ -20,6 +20,8 @@ Open an analysis for which a wrapper function is not yet available:
 ... )
 """
 
+from __future__ import annotations
+
 from zospy.analyses import (
     extendedscene,
     mtf,

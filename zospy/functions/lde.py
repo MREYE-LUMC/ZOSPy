@@ -6,9 +6,10 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from warnings import warn
 
-from zospy.api import _ZOSAPI, constants
+from zospy.api import constants
 
 if TYPE_CHECKING:
+    from zospy.api import _ZOSAPI
     from zospy.zpcore import OpticStudioSystem
 
 __all__ = ("find_surface_by_comment", "get_pupil", "surface_change_aperturetype", "surface_change_type")
