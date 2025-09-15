@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import Annotated, Literal
 
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from pydantic import Field
@@ -81,11 +83,12 @@ class WavefrontMap(BaseAnalysisWrapper[DataFrame | None, WavefrontMapSettings], 
 
     Warnings
     --------
-    The ZOS-API returns a datagrid with an empty first row and first column. Given normalized within the wavefront
-    map, the datagrid should span from x=-1 to x=1, and y=-1 to y=1. The provided datagrid.MinX and .MinY indeed
-    point to (-1, -1), but the provided width the datagrid cells make the width of the entire datagrid 2 +
-    1*cell_width. The same holds for the height. Thus, ZOSPy drops the empty first row and column, resulting in a
-    centered wavefront map ranging from -1 to 1 in both x and y.
+    OpticStudio's wavefront map analysis exhibits counterintuitive behavior. For NxN sampling, it traces an odd
+    number of rays ((N-1)x(N-1)) through the pupil to ensure the pupil center is sampled. An empty row and column
+    are then added at the bottom and left of the wavefront map to adhere to the requested sampling.
+
+    ZOSPy returns the actual sampled data with (N-1)x(N-1) shape and coordinates properly spanning from -1 to +1
+    in normalized pupil coordinates, representing the locations where OpticStudio actually traces rays.
     """
 
     def __init__(
@@ -141,4 +144,20 @@ class WavefrontMap(BaseAnalysisWrapper[DataFrame | None, WavefrontMapSettings], 
         self.analysis.ApplyAndWaitForCompletion()
 
         datagrid = self.get_data_grid(cell_origin="bottom_left")
-        return pd.DataFrame(datagrid.values[1:, 1:], columns=datagrid.columns[:-1], index=datagrid.index[:-1])
+
+        # Extract the actual sampled data (excluding empty first row and column)
+        sampled_data = datagrid.values[1:, 1:]
+
+        # OpticStudio samples N-1 points equispaced on [-1, 1] for NxN sampling
+        n_sampled = sampled_data.shape[0]  # This should be N-1
+        coordinates = np.linspace(-1, 1, n_sampled)
+
+        # Issue a warning about the coordinate behavior
+        warnings.warn(
+            "OpticStudio's wavefront map traces rays at N-1 equispaced points on [-1, 1] for NxN sampling. "
+            "The returned DataFrame contains the actual sampled data with proper coordinates.",
+            UserWarning,
+            stacklevel=2
+        )
+
+        return pd.DataFrame(sampled_data, columns=coordinates, index=coordinates)
