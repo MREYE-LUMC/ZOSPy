@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import warnings
+
 import pytest
 from pandas.testing import assert_frame_equal
 
@@ -23,6 +25,35 @@ class TestWavefrontMap:
         result = WavefrontMap(sampling=sampling, use_exit_pupil=use_exit_pupil).run(simple_system)
 
         assert_frame_equal(result.data, expected_data.data)
+
+    @pytest.mark.parametrize("sampling", ["64x64", "128x128"])
+    def test_wavefront_map_coordinates_span_full_range(self, simple_system, sampling):
+        """Test that wavefront map coordinates properly span [-1, 1] for actual sampled points."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)  # Ignore the coordinate warning for this test
+            result = WavefrontMap(sampling=sampling).run(simple_system)
+
+        # For NxN sampling, OpticStudio samples (N-1)x(N-1) points
+        expected_size = int(sampling.split("x")[0]) - 1
+
+        # Check shape
+        assert result.data.shape == (expected_size, expected_size)
+
+        # Check coordinates span full [-1, 1] range
+        assert result.data.columns.min() == -1.0
+        assert result.data.columns.max() == 1.0
+        assert result.data.index.min() == -1.0
+        assert result.data.index.max() == 1.0
+
+        # Check center coordinate is 0
+        center_idx = expected_size // 2
+        assert result.data.columns[center_idx] == 0.0
+        assert result.data.index[center_idx] == 0.0
+
+    def test_wavefront_map_issues_coordinate_warning(self, simple_system):
+        """Test that WavefrontMap issues a warning about coordinate behavior."""
+        with pytest.warns(UserWarning, match="OpticStudio's wavefront map traces rays"):
+            WavefrontMap().run(simple_system)
 
 
 class TestZernikeStandardCoefficients:
