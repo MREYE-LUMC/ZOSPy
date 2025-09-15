@@ -15,7 +15,7 @@ zos = zp.ZOS() # <-- Constants are only available after creating a ZOS instance
 print(zp.constants.Editors.LDE.SurfaceType.Standard)
 ```
 
-:::{note}}
+:::{note}
 OpticStudio `None` constants have been implemented as `None_` since `None` is a Python keyword.
 For example, the `LensUpdateMode.None` constant is available as `LensUpdateMode.None_`.
 :::
