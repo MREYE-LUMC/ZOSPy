@@ -16,7 +16,7 @@ __all__ = (
     "analyses",
     "constants",
     "functions",
-    "solvers",,
+    "solvers",
     "_ZOSAPI"
 )
 
