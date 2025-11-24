@@ -1,0 +1,72 @@
+{
+    "data": {
+        "index": [
+            0.0,
+            1e-6
+        ],
+        "columns": [
+            "1",
+            "2",
+            "3",
+            "5",
+            "6",
+            "7"
+        ],
+        "data": [
+            [
+                -0.016471,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            [
+                -0.016518,
+                0.0,
+                -0.00011677,
+                0.0,
+                0.000040188,
+                -0.00017196
+            ]
+        ],
+        "index_names": [
+            "Field"
+        ],
+        "column_names": [
+            null
+        ]
+    },
+    "settings": {
+        "coefficients": "1-2,3,5-7",
+        "wavelength": 1,
+        "coefficients_type": "Annular",
+        "field_scan": "Plus_Y",
+        "field_density": 1,
+        "sampling": "32x32",
+        "obscuration": 0.5,
+        "minimum_plot_scale": 0.0,
+        "maximum_plot_scale": 0.0
+    },
+    "metadata": {
+        "DateTime": "2025-11-24T17:00:00.032000",
+        "FeatureDescription": "Listing of Zernike vs. Field \n \n",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [
+        "Zernike Annular Polynomial",
+        "Field in degrees",
+        "Wavefront error values are in waves",
+        "Wavelength: 0,5430 µm"
+    ],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "dataframe"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "ZernikeCoefficientsVsFieldSettings",
+        "module": "zospy.analyses.wavefront.zernike_coefficients_vs_field"
+    }
+}

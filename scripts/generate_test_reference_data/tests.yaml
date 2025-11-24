@@ -560,6 +560,77 @@ tests:
         total_watts: 100
         rays_x_1000: 100000
   - model: simple_system
+    analysis: wavefront.ZernikeCoefficientsVsField
+    file: test_wavefront.py
+    test: test_zernike_coefficients_vs_field_returns_correct_result
+    parametrized: [ coefficients, coefficients_type, field_scan, field_density, sampling, obscuration, minimum_plot_scale, maximum_plot_scale ]
+    parameters:
+      - coefficients: 1-8
+        coefficients_type: Standard
+        field_scan: +y
+        field_density: 20
+        sampling: 64x64
+        obscuration: 0.5
+        minimum_plot_scale: 0
+        maximum_plot_scale: 0
+      - coefficients: "2"
+        coefficients_type: Standard
+        field_scan: -y
+        field_density: 10
+        sampling: 32x32
+        obscuration: 0.5
+        minimum_plot_scale: 0
+        maximum_plot_scale: 0
+      - coefficients: 1,3,5
+        coefficients_type: Standard
+        field_scan: +x
+        field_density: 5
+        sampling: 32x32
+        obscuration: 0.5
+        minimum_plot_scale: 0
+        maximum_plot_scale: 1
+      - coefficients: 1-15
+        coefficients_type: Fringe
+        field_scan: -x
+        field_density: 15
+        sampling: 128x128
+        obscuration: 0.5
+        minimum_plot_scale: 1
+        maximum_plot_scale: 5
+      - coefficients: 1-2,3,5-7
+        coefficients_type: Annular
+        field_scan: Plus_Y
+        field_density: 1
+        sampling: 32x32
+        obscuration: 0.5
+        minimum_plot_scale: 0
+        maximum_plot_scale: 0
+      - coefficients: 1-2,3,5-7
+        coefficients_type: Annular
+        field_scan: Minus_Y
+        field_density: 1
+        sampling: 32x32
+        obscuration: 0.1
+        minimum_plot_scale: 0
+        maximum_plot_scale: 0
+      - coefficients: 1-2,3,5-7
+        coefficients_type: Standard
+        field_scan: Plus_X
+        field_density: 1
+        sampling: 32x32
+        obscuration: 0.5
+        minimum_plot_scale: 1
+        maximum_plot_scale: 5
+      - coefficients: 1-2,3,5-7
+        coefficients_type: Standard
+        field_scan: Minus_X
+        field_density: 1
+        sampling: 32x32
+        obscuration: 0.5
+        minimum_plot_scale: 0
+        maximum_plot_scale: 0
+
+  - model: simple_system
     analysis: physicaloptics.PhysicalOpticsPropagation
     file: test_physicaloptics.py
     test: test_physical_optics_propagation_returns_correct_result

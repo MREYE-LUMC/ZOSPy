@@ -7,9 +7,10 @@ import re
 import sys
 import traceback
 from argparse import ArgumentParser
+from collections.abc import Callable  # noqa: TC003
 from operator import attrgetter
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any, Literal
+from typing import Annotated, Any, Literal
 
 import systems
 import yaml
@@ -24,9 +25,6 @@ from pydantic_core import PydanticCustomError
 
 import zospy as zp
 from zospy.analyses.base import BaseAnalysisWrapper  # noqa: TC001
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 logger = logging.getLogger("generate_test_reference_data")
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -85,12 +83,12 @@ class TestConfiguration(BaseModel):
 
                 if not all(p in params for p in parametrized):
                     raise PydanticCustomError(
-                        error_type="invalid_parameters",
-                        message_template=(
+                        "invalid_parameters",
+                        (
                             "All sets of parameters should contain the same keys as parametrized. Allowed keys: "
                             "{parametrized}, found keys: {params}"  # noqa: RUF027
                         ),
-                        context={"parametrized": parametrized, "params": params.keys()},
+                        {"parametrized": parametrized, "params": params.keys()},
                     )
 
         return values
