@@ -32,7 +32,7 @@ simple_field: field_name ":" field_value? _NEWLINE
 parametric_field: field_name field_parameters+ ":" field_value _NEWLINE
 
 // Text can match nearly anything, but has a lower priority to make sure other terminals are matched first
-text.-1: STRING+ /\./? _NEWLINE
+text.-1: (STRING+ /\./? | _WS_INLINE) _NEWLINE
 
 field_name: FIELD_NAME+
 FIELD_NAME: (LETTER | "_" | "-" | "(" | ")")+
