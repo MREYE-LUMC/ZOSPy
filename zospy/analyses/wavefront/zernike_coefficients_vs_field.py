@@ -1,3 +1,5 @@
+"""Zernike Coefficients vs. Field analysis."""
+
 from __future__ import annotations
 
 from typing import Annotated, Literal, get_args
@@ -52,24 +54,24 @@ class ZernikeCoefficientsVsFieldSettings:
 
     Attributes
     ----------
-    coefficients: str
+    coefficients : str
         The Zernike coefficients that are calculated, e.g. '1-6'. Defaults to '1-6'.
-    wavelength: int
+    wavelength : int
         The wavelength number that is to be used. Defaults to 1.
-    coefficients_type: str | constants.Analysis.Settings.Aberrations.ZernikeCoefficientTypes
+    coefficients_type : str | constants.Analysis.Settings.Aberrations.ZernikeCoefficientTypes
         Determines which Zernike coefficients are to be calculated. Should be one of ['Fringe', 'Standard', 'Annular'].
     Defaults to 'Fringe'.
-    field_scan: str | constants.Analysis.Settings.Aberrations.FieldScanDirections
+    field_scan : str | constants.Analysis.Settings.Aberrations.FieldScanDirections
         The field scan direction. Should be one of ['+y', '-y', '+x', '-x']. Defaults to '+y'.
-    field_density: int
+    field_density : int
         The field density. Defaults to 20.
-    sampling: str | constants.Analysis.SampleSizes
+    sampling : str | constants.Analysis.SampleSizes
         The sampling, formatted as '...x...' where the dots represent numbers (e.g. '64x64'). Defaults to '64x64'.
-    obscuration: float
+    obscuration : float
         The obscuration factor. Is only used when coefficient_type == 'Annular'. Defaults to 0.5.
-    minimum_plot_scale: float
+    minimum_plot_scale : float
         The minimum plot scale. When 0, OpticStudio will choose the value. Defaults to 0.
-    maximum_plot_scale: float
+    maximum_plot_scale : float
         The maximum plot scale. When 0, OpticStudio will choose the value. Defaults to 0.
     """
 
