@@ -1,0 +1,12 @@
+start: "\ufeff"? _NEWLINE? text+ zernike_vs_field_table
+
+zernike_vs_field_table: table{zernike_vs_field_header, zernike_vs_field_row}
+
+zernike_vs_field_header: /Field:/ INT+ -> string_list
+zernike_vs_field_row: FLOAT+ -> list
+
+
+%import .zospy (FLOAT, INT, text, table)
+%import common.NEWLINE -> _NEWLINE
+%import common (LETTER, WORD, WS_INLINE)
+%ignore WS_INLINE

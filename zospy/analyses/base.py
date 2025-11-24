@@ -782,9 +782,9 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         return self._oss
 
     @property
-    def analysis(self) -> Analysis | None:
+    def analysis(self) -> Analysis:
         """The OpticStudio analysis object. This property is set when the analysis is run."""
-        return self._analysis
+        return cast(Analysis, self._analysis)
 
     def get_text_output(self) -> str:
         """Get the text output of the analysis."""
@@ -904,11 +904,14 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         self,
         grammar: str,
         transformer: type[Transformer],
-        result_type: type[AnalysisData],
+        result_type: type[AnalysisData] | None = None,
     ) -> AnalysisData:
         """Parse the text output of the analysis."""
         parser = load_grammar(grammar)
         parse_result = parse(self.get_text_output(), parser, transformer)
+
+        if result_type is None:
+            return cast(AnalysisData, parse_result)
 
         return cast(result_type, result_type(**parse_result))
 
