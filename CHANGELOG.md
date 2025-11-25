@@ -11,6 +11,8 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- Zernike coefficients vs field analysis: `zospy.analyses.wavefront.ZernikeCoefficientsVsField` (#187)
+
 ### Fixed
 
 ### Deprecated
