@@ -55,12 +55,14 @@ class ZernikeCoefficientsVsFieldSettings:
     Attributes
     ----------
     coefficients : str
-        The Zernike coefficients that are calculated, e.g. '1-6'. Defaults to '1-6'.
+        The Zernike coefficients that are calculated, as a comma-separated list of positive integers of ranges.
+        For example, '1-8' calculates coefficients 1 through 8 and '1,3-5,7' calculates coefficients 1, 3, 4, 5 and 7.
+        Defaults to '1-8'.
     wavelength : int
         The wavelength number that is to be used. Defaults to 1.
     coefficients_type : str | constants.Analysis.Settings.Aberrations.ZernikeCoefficientTypes
         Determines which Zernike coefficients are to be calculated. Should be one of ['Fringe', 'Standard', 'Annular'].
-    Defaults to 'Fringe'.
+        Defaults to 'Standard'.
     field_scan : str | constants.Analysis.Settings.Aberrations.FieldScanDirections
         The field scan direction. Should be one of ['+y', '-y', '+x', '-x']. Defaults to '+y'.
     field_density : int
