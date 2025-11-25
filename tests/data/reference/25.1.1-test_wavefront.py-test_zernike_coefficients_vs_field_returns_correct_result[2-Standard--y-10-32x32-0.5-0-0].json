@@ -1,0 +1,92 @@
+{
+    "data": {
+        "index": [
+            -0.0,
+            -1e-7,
+            -2e-7,
+            -3e-7,
+            -4e-7,
+            -5e-7,
+            -6e-7,
+            -7e-7,
+            -8e-7,
+            -9e-7,
+            -1e-6
+        ],
+        "columns": [
+            "2"
+        ],
+        "data": [
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ],
+            [
+                0.0
+            ]
+        ],
+        "index_names": [
+            "Field"
+        ],
+        "column_names": [
+            null
+        ]
+    },
+    "settings": {
+        "coefficients": "2",
+        "wavelength": 1,
+        "coefficients_type": "Standard",
+        "field_scan": "Minus_Y",
+        "field_density": 10,
+        "sampling": "32x32",
+        "obscuration": 0.5,
+        "minimum_plot_scale": 0.0,
+        "maximum_plot_scale": 0.0
+    },
+    "metadata": {
+        "DateTime": "2025-11-24T17:00:31.811000",
+        "FeatureDescription": "Listing of Zernike vs. Field \n \n",
+        "LensFile": "REDACTED",
+        "LensTitle": ""
+    },
+    "header": [
+        "Zernike Standard Polynomial",
+        "Field in degrees",
+        "Wavefront error values are in waves"
+    ],
+    "messages": [],
+    "__analysis_data__": {
+        "data_type": "dataframe"
+    },
+    "__analysis_settings__": {
+        "data_type": "zospy_class",
+        "name": "ZernikeCoefficientsVsFieldSettings",
+        "module": "zospy.analyses.wavefront.zernike_coefficients_vs_field"
+    }
+}
