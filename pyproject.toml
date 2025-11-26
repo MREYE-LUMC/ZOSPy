@@ -43,6 +43,7 @@ docs = [
     "nbsphinx",
     "numpydoc",
     "sphinx",
+    "sphinx-autobuild",
     "sphinx-book-theme",
     "sphinx-design",
 ]
@@ -64,7 +65,7 @@ dependencies = ["pytest"]
 test-extension = "hatch test --extension {args}"
 
 # Build and serve documentation
-docs = ["hatch run docs:build", "hatch run docs:serve"]
+docs = ["hatch run docs:preview"]
 
 # Run examples using the development version of ZOSPy
 example = "{env:HATCH_UV:uv} run --isolated scripts/run_examples/run_single_example.py {args} --zospy-location ."
@@ -92,8 +93,9 @@ features = ["docs"]
 [tool.hatch.envs.docs.scripts]
 # Build documentation; run as hatch run docs:build
 build = "sphinx-build -M {args:html} ./docs ./docs/_build"
-# Serve documentation locally; run as hatch run docs:serve
-serve = "python -m http.server -d ./docs/_build/html {args:8888}"
+# Preview documentation locally; run as hatch run docs:preview
+# docs/examples is ignored because examples are copied from the examples folder on build
+preview = "sphinx-autobuild --ignore ./docs/api --ignore ./docs/examples --watch ./examples {args:--open-browser} ./docs ./docs/_build/html"
 
 ## Examples
 [tool.hatch.envs.examples]
