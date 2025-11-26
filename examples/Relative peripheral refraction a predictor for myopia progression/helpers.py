@@ -25,6 +25,7 @@ from zospy.analyses.base import AnalysisResult, AttrDict, OnComplete, new_analys
 from zospy.api import constants
 from zospy.zpcore import OpticStudioSystem
 
+
 def _structure_zernike_coefficients_vs_field_result(line_list: list[str], coefficients):
     """Structures the result of a zernike coefficients vs field analysis.
 
