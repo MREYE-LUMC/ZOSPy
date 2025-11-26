@@ -16,6 +16,7 @@ examples/Ray trace Double Gauss/raytrace_double_gauss
 examples/Polarization Prism/polarization_prism_example
 examples/Patient-specific mapping of fundus photographs to three-dimensional ocular imaging/README
 examples/Modelling of a Shack-Hartmann Sensor for eye aberration evaluation/README
+examples/Relative peripheral refraction a predictor for myopia progression/peripheral_refraction_example
 ```
 
 ## Warranty and liability
