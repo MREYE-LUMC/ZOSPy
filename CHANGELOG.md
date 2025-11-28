@@ -11,7 +11,7 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
-- Zernike coefficients vs field analysis: `zospy.analyses.wavefront.ZernikeCoefficientsVsField` (#187)
+### Changed
 
 ### Fixed
 
@@ -19,7 +19,21 @@ ZOS-API can also be added in patch releases.
 
 ### Removed
 
-- Support for Python 3.9
+## [[2.1.4]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.4) - 2025-11-27
+
+### Added
+
+- Zernike coefficients vs field analysis: `zospy.analyses.wavefront.ZernikeCoefficientsVsField` (#187)
+
+## [[2.1.3]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.3) - 2025-09-15
+
+### Changed
+
+- Update ZOS-API stubs (#164)
+
+### Removed
+
+- Support for Python 3.9 (#165)
 
 ## [[2.1.2]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.2) - 2025-06-17
 
