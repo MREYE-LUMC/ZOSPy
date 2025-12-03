@@ -34,7 +34,7 @@ dynamic = ["version"]
 
 [project.urls]
 Source = "https://github.com/MREYE-LUMC/ZOSPy"
-Documentation = "https://mreye-lumc.github.io/ZOSPy"
+Documentation = "https://zospy.readthedocs.io"
 
 [project.optional-dependencies]
 docs = [
