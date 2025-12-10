@@ -14,7 +14,7 @@ Wrapper around the [Ansys OpticStudio][opticstudio] API that provides a more int
 [ZOS-API][zos-api] through Python using a .NET connection, as described in [this Journal of Open Source Software paper][joss-paper].
 It thereby allows you to do more optics modelling with less coding.
 
-In addition to full access to all the OpticStudio fucntions through the ZOS-API, ZOSPy provides the following features:
+In addition to full access to all the OpticStudio functions through the ZOS-API, ZOSPy provides the following features:
 
 - Wrapper functions for several OpticStudio analyses in `zospy.analyses`;
 - Easy access to solvers in `zospy.solvers`;
