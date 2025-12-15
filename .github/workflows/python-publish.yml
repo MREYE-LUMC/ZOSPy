@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Download dist
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: zospy_dist
           path: dist
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Download dist
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: zospy_dist
           path: dist
