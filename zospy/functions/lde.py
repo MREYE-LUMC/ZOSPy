@@ -190,7 +190,7 @@ _NUMBER_OF_ARMS = "NumberOfArms"
 _WIDTH_OF_ARMS = "WidthOfArms"
 _X_HALF_WIDTH = "XHalfWidth"
 _Y_HALF_WIDTH = "YHalfWidth"
-_UDA_SCALE = "UDAScale"
+_UDA_SCALE = "UDASCale"
 
 # Define a dictionary with accepted constants
 _APERTURETYPE_USED_SETTINGS = {
