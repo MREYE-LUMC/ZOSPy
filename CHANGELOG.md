@@ -15,7 +15,8 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
-- Correct aperture type parameter mappings in `zospy.functions.lde.surface_change_aperturetype` (#195) 
+- Correct aperture type parameter mappings in `zospy.functions.lde.surface_change_aperturetype` (#195)
+- Do not reference `ZOS` in finalizer and register finalizer after successful connection (#199)
 
 ### Deprecated
 
