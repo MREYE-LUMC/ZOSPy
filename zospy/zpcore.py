@@ -447,9 +447,7 @@ class ZOS:
         self.ZOSAPI_NetHelper = None
         self.Connection: _ZOSAPI.IZOSAPI_Connection | None = None
         self.Application: _ZOSAPI.IZOSAPI_Application | None = None
-
-        # Register the instance and create finalizers to tear down the ZOS instance when deleted
-        weakref.finalize(self, self.disconnect)
+        self._finalizer: weakref.finalize | None = None
 
         logger.info("ZOS instance initialized")
 
@@ -581,6 +579,10 @@ class ZOS:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
             raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
 
+        # Close the application when the ZOS instance is deleted
+        if self._finalizer is None:
+            self._finalizer = weakref.finalize(self, _disconnect_zos, self.Application)
+
         if message_logging:
             self.Application.BeginMessageLogging()
 
@@ -595,8 +597,13 @@ class ZOS:
         logger.debug("Disconnecting from OpticStudio")
 
         if self.Application is not None:
-            self.Application.CloseApplication()
-            self.Application = None
+            try:
+                self.Application.CloseApplication()
+                if self._finalizer is not None:
+                    self._finalizer.detach()  # Prevent the finalizer from running after manual disconnection
+                    self._finalizer = None
+            finally:
+                self.Application = None
 
         logger.info("Disconnected from OpticStudio")
 
@@ -717,3 +724,21 @@ class ZOS:
             The current instance of ZOS, or `None` if no instance exists.
         """
         return cls._instances.get(cls)
+
+
+def _disconnect_zos(application: _ZOSAPI.IZOSAPI_Application) -> None:
+    """Disconnect from the connected OpticStudio instance.
+
+    This function is used as a finalizer for the ZOS instance, to ensure that the connection is properly closed when the
+    ZOS instance is deleted or the program is terminated. It is not intended to be used directly.
+    In standalone mode, this closes the standalone OpticStudio instance. In extension mode, this closes the connection but
+    keeps the OpticStudio instance open.
+    """
+    logger.debug("Disconnecting from OpticStudio")
+
+    try:
+        application.CloseApplication()
+    except Exception as e:  # noqa: BLE001
+        logger.debug(f"An error occurred while disconnecting from OpticStudio: {e}")
+    else:
+        logger.info("Disconnected from OpticStudio")

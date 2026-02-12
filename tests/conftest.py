@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import pytest
 from semver.version import Version
 
 import zospy as zp
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from zospy.zpcore import OpticStudioSystem
 
 
 def pytest_addoption(parser):
@@ -123,7 +128,7 @@ def zos(opticstudio_directory) -> zp.ZOS:
 
 
 @pytest.fixture
-def oss(zos: zp.ZOS, connection_mode, request) -> zp.zpcore.OpticStudioSystem:
+def oss(zos: zp.ZOS, connection_mode, request) -> Generator[OpticStudioSystem, None, None]:
     oss = zos.connect(connection_mode)
 
     if connection_mode == "extension":
@@ -134,8 +139,7 @@ def oss(zos: zp.ZOS, connection_mode, request) -> zp.zpcore.OpticStudioSystem:
 
     # Close the system
     if zos.Connection.IsAlive:
-        zos.Application.CloseApplication()
-        zos.Application = None
+        zos.disconnect()
 
 
 @pytest.fixture(scope="session")
@@ -153,7 +157,7 @@ def optic_studio_version(zos, connection_mode) -> Version:
 
 
 @pytest.fixture
-def empty_system(oss, system_save_file) -> zp.zpcore.OpticStudioSystem:
+def empty_system(oss, system_save_file) -> Generator[OpticStudioSystem, None, None]:
     oss.new()
     oss.make_sequential()
 
@@ -164,7 +168,7 @@ def empty_system(oss, system_save_file) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
-def simple_system(empty_system) -> zp.zpcore.OpticStudioSystem:
+def simple_system(empty_system: OpticStudioSystem) -> OpticStudioSystem:
     oss = empty_system
 
     oss.SystemData.Aperture.ApertureType = zp.constants.SystemData.ZemaxApertureType.FloatByStopSize
@@ -191,7 +195,7 @@ def simple_system(empty_system) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
-def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
+def polarized_system(simple_system: OpticStudioSystem) -> OpticStudioSystem:
     """Simple system with a polarizing front lens surface."""
     oss = simple_system
 
@@ -208,7 +212,7 @@ def polarized_system(simple_system) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
-def coordinate_break_system(simple_system: zp.zpcore.OpticStudioSystem) -> zp.zpcore.OpticStudioSystem:
+def coordinate_break_system(simple_system: OpticStudioSystem) -> OpticStudioSystem:
     """Simple system with a coordinate break behind the lens."""
     oss = simple_system
 
@@ -220,7 +224,7 @@ def coordinate_break_system(simple_system: zp.zpcore.OpticStudioSystem) -> zp.zp
 
 
 @pytest.fixture
-def decentered_system(simple_system) -> zp.zpcore.OpticStudioSystem:
+def decentered_system(simple_system: OpticStudioSystem) -> OpticStudioSystem:
     """Simple system with incoming rays at a non-zero angle."""
     oss = simple_system
 
@@ -232,7 +236,7 @@ def decentered_system(simple_system) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
-def object_height_system(simple_system) -> zp.zpcore.OpticStudioSystem:
+def object_height_system(simple_system: OpticStudioSystem) -> OpticStudioSystem:
     """Decentered system with object height field type."""
     oss = simple_system
 
@@ -247,7 +251,7 @@ def object_height_system(simple_system) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
-def nsc_empty_system(oss, system_save_file) -> zp.zpcore.OpticStudioSystem:
+def nsc_empty_system(oss, system_save_file) -> Generator[OpticStudioSystem, None, None]:
     oss.new()
     oss.make_nonsequential()
 
@@ -258,7 +262,7 @@ def nsc_empty_system(oss, system_save_file) -> zp.zpcore.OpticStudioSystem:
 
 
 @pytest.fixture
-def nsc_simple_system(nsc_empty_system) -> zp.zpcore.OpticStudioSystem:
+def nsc_simple_system(nsc_empty_system) -> Generator[OpticStudioSystem, None, None]:
     oss = nsc_empty_system
 
     oss.SystemData.Wavelengths.GetWavelength(1).Wavelength = 0.543
