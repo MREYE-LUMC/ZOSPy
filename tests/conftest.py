@@ -134,8 +134,7 @@ def oss(zos: zp.ZOS, connection_mode, request) -> zp.zpcore.OpticStudioSystem:
 
     # Close the system
     if zos.Connection.IsAlive:
-        zos.Application.CloseApplication()
-        zos.Application = None
+        zos.disconnect()
 
 
 @pytest.fixture(scope="session")
