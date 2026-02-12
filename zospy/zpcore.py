@@ -447,6 +447,7 @@ class ZOS:
         self.ZOSAPI_NetHelper = None
         self.Connection: _ZOSAPI.IZOSAPI_Connection | None = None
         self.Application: _ZOSAPI.IZOSAPI_Application | None = None
+        self._finalizer: weakref.finalize | None = None
 
         logger.info("ZOS instance initialized")
 
@@ -575,7 +576,8 @@ class ZOS:
             raise ValueError(f"Invalid connection mode {mode}")
 
         # Close the application when the ZOS instance is deleted
-        self._finalizer = weakref.finalize(self, _disconnect_zos, self.Application)
+        if self._finalizer is None:
+            self._finalizer = weakref.finalize(self, _disconnect_zos, self.Application)
 
         if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
@@ -595,9 +597,14 @@ class ZOS:
         logger.debug("Disconnecting from OpticStudio")
 
         if self.Application is not None:
-            self._finalizer.detach()  # Prevent the finalizer from running after manual disconnection
-            self.Application.CloseApplication()
-            self.Application = None
+            if self._finalizer is not None:
+                self._finalizer.detach()  # Prevent the finalizer from running after manual disconnection
+                self._finalizer = None
+
+            try:
+                self.Application.CloseApplication()
+            finally:
+                self.Application = None
 
         logger.info("Disconnected from OpticStudio")
 
@@ -720,7 +727,7 @@ class ZOS:
         return cls._instances.get(cls)
 
 
-def _disconnect_zos(application: _ZOSAPI.IZOSAPI_Application | None):
+def _disconnect_zos(application: _ZOSAPI.IZOSAPI_Application):
     """Disconnect from the connected OpticStudio instance.
 
     This function is used as a finalizer for the ZOS instance, to ensure that the connection is properly closed when the
@@ -730,8 +737,9 @@ def _disconnect_zos(application: _ZOSAPI.IZOSAPI_Application | None):
     """
     logger.debug("Disconnecting from OpticStudio")
 
-    if application is not None:
+    try:
         application.CloseApplication()
-        application = None
-
-    logger.info("Disconnected from OpticStudio")
+    except Exception as e:  # noqa: BLE001
+        logger.debug(f"An error occurred while disconnecting from OpticStudio: {e}")
+    else:
+        logger.info("Disconnected from OpticStudio")
