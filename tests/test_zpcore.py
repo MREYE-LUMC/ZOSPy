@@ -16,6 +16,8 @@ from zospy.zpcore import OpticStudioSystem
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from pytest_mock import MockerFixture
+
 # ruff: noqa: SLF001
 
 
@@ -86,6 +88,31 @@ def test_can_disconnect(zos, oss):  # noqa: ARG001
     zos.disconnect()
 
     assert zos.Application is None
+
+
+def test_connect_registers_finalizer(zos, connection_mode, mocker: MockerFixture):
+    mock_finalizer = mocker.Mock()
+    mocker.patch("weakref.finalize", return_value=mock_finalizer)
+
+    zos._finalizer = None
+    zos.connect(connection_mode)
+    finalizer_set = zos._finalizer is mock_finalizer
+    zos.disconnect()
+
+    assert finalizer_set
+
+
+def test_disconnect_detaches_finalizer(zos, connection_mode, mocker: MockerFixture):
+    mocker.patch("weakref.finalize", return_value=mocker.Mock())
+
+    zos._finalizer = None
+    zos.connect(connection_mode)
+
+    detach = mocker.spy(zos._finalizer, "detach")
+
+    zos.disconnect()
+
+    detach.assert_called_once()
 
 
 @pytest.mark.require_mode("extension")
