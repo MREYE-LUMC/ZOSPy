@@ -100,8 +100,8 @@ class TestNumberToStringConversion:
         loc = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, new_locale)
 
-        mocker.patch.object("zospy.config.THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
-        mocker.patch.object("zospy.config.DECIMAL_POINT", locale.localeconv()["decimal_point"])
+        mocker.patch("zospy.config.THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
+        mocker.patch("zospy.config.DECIMAL_POINT", locale.localeconv()["decimal_point"])
 
         # convert
         result = xtoa(number)
@@ -198,8 +198,8 @@ class TestStringToNumberConversion:
         loc = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, locale_cat)
 
-        mocker.patch.object("zospy.config.THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
-        mocker.patch.object("zospy.config.DECIMAL_POINT", locale.localeconv()["decimal_point"])
+        mocker.patch("zospy.config.THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
+        mocker.patch("zospy.config.DECIMAL_POINT", locale.localeconv()["decimal_point"])
 
         # convert
         result = atox(string, dtype=dtype)
