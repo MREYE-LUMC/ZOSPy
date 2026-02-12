@@ -575,13 +575,13 @@ class ZOS:
         else:
             raise ValueError(f"Invalid connection mode {mode}")
 
-        # Close the application when the ZOS instance is deleted
-        if self._finalizer is None:
-            self._finalizer = weakref.finalize(self, _disconnect_zos, self.Application)
-
         if not self.Application.IsValidLicenseForAPI:
             logger.critical("OpticStudio Licence is not valid for API, connection not established")
             raise ConnectionRefusedError("OpticStudio Licence is not valid for API, connection not established")
+
+        # Close the application when the ZOS instance is deleted
+        if self._finalizer is None:
+            self._finalizer = weakref.finalize(self, _disconnect_zos, self.Application)
 
         if message_logging:
             self.Application.BeginMessageLogging()
@@ -597,12 +597,11 @@ class ZOS:
         logger.debug("Disconnecting from OpticStudio")
 
         if self.Application is not None:
-            if self._finalizer is not None:
-                self._finalizer.detach()  # Prevent the finalizer from running after manual disconnection
-                self._finalizer = None
-
             try:
                 self.Application.CloseApplication()
+                if self._finalizer is not None:
+                    self._finalizer.detach()  # Prevent the finalizer from running after manual disconnection
+                    self._finalizer = None
             finally:
                 self.Application = None
 
@@ -727,7 +726,7 @@ class ZOS:
         return cls._instances.get(cls)
 
 
-def _disconnect_zos(application: _ZOSAPI.IZOSAPI_Application):
+def _disconnect_zos(application: _ZOSAPI.IZOSAPI_Application) -> None:
     """Disconnect from the connected OpticStudio instance.
 
     This function is used as a finalizer for the ZOS instance, to ensure that the connection is properly closed when the
