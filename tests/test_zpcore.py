@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import locale
 import re
 import weakref
 from sys import version_info
-from types import SimpleNamespace
 from typing import TYPE_CHECKING
 
 import pytest
@@ -16,29 +14,21 @@ from zospy.zpcore import OpticStudioSystem
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from pytest_mock import MockerFixture
+
 # ruff: noqa: SLF001
 
 
-def patch_zos(zos: zp.ZOS, monkeypatch: pytest.MonkeyPatch):
-    patch_application = SimpleNamespace(IsValidLicenseForAPI=False)
-    patch_connection = SimpleNamespace(
-        IsAlive=False,
-        ConnectAsExtension=lambda n: patch_application,  # noqa: ARG005
-        CreateNewApplication=lambda: patch_application,
+def test_connect_without_valid_license_raises_exception(zos, connection_mode, mocker: MockerFixture):
+    # patch_zos(zos, mocker)
+
+    mocker.patch.object(zos, "_assign_connection")
+    application = mocker.Mock(IsValidLicenseForAPI=False)
+    mocker.patch.object(
+        zos,
+        "Connection",
+        mocker.Mock(IsAlive=False, ConnectAsExtension=lambda _: application, CreateNewApplication=lambda: application),
     )
-
-    def patch_assign_connection(self: zp.ZOS):
-        self.Connection = patch_connection
-
-    # Patch ZOS class so ZOS.Application.IsValidLicenseForAPI is False
-    monkeypatch.setattr(zos, "_assign_connection", patch_assign_connection.__get__(zos, zp.ZOS))
-    # All attributes need to be patched explicitly, otherwise they won't be restored
-    monkeypatch.setattr(zos, "Application", patch_application)
-    monkeypatch.setattr(zos, "Connection", patch_connection)
-
-
-def test_connect_without_valid_license_raises_exception(zos, connection_mode, monkeypatch):
-    patch_zos(zos, monkeypatch)
 
     with pytest.raises(ConnectionRefusedError):
         zos.connect(connection_mode)
@@ -234,15 +224,15 @@ class TestTxtFileEncoding:
         "txtfile_encoding,expected_encoding", [("Unicode", "UTF-16-le"), ("ANSI", "LocalePreferredEncoding")]
     )
     def test_get_txtfile_encoding_returns_correct_result(
-        self, oss_with_modifiable_config, txtfile_encoding, expected_encoding, monkeypatch: pytest.MonkeyPatch
+        self, oss_with_modifiable_config, txtfile_encoding, expected_encoding, mocker: MockerFixture
     ):
         def getencoding(*args, **kwargs):  # noqa: ARG001
             return "LocalePreferredEncoding"
 
         if version_info < (3, 11):
-            monkeypatch.setattr(locale, "getpreferredencoding", getencoding)
+            mocker.patch("locale.getpreferredencoding", return_value="LocalePreferredEncoding")
         else:
-            monkeypatch.setattr(locale, "getencoding", getencoding)
+            mocker.patch("locale.getencoding", return_value="LocalePreferredEncoding")
 
         oss_with_modifiable_config.ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding

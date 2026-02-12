@@ -1,11 +1,16 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import clr
 import pytest
 from System.Reflection import Assembly
 
 import zospy as zp
 from zospy.api.codecs import OpticStudioInterfaceEncoder
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 # ruff: noqa: SLF001
 
@@ -30,9 +35,9 @@ class TestOpticStudioInterfaceEncoder:
         """Test if all types in `OpticStudioInterfaceEncoder._interfaces` are interfaces."""
         assert all(zosapi_interfaces.GetType(t).IsInterface for t in OpticStudioInterfaceEncoder._interfaces)
 
-    def test_register_interfaces_single(self, monkeypatch):
+    def test_register_interfaces_single(self, mocker: MockerFixture):
         # Temporarily overwrite OpticStudioInterfaceEncoder._interfaces and restore it after the test
-        monkeypatch.setattr(OpticStudioInterfaceEncoder, "_interfaces", frozenset())
+        mocker.patch.object(OpticStudioInterfaceEncoder, "_interfaces", frozenset())
 
         interface = "ZOSAPI.Editors.NCE.IObjectScatteringSettings"
 
@@ -42,9 +47,9 @@ class TestOpticStudioInterfaceEncoder:
 
         assert interface in OpticStudioInterfaceEncoder._interfaces
 
-    def test_register_interfaces_multiple(self, monkeypatch):
+    def test_register_interfaces_multiple(self, mocker: MockerFixture):
         # Temporarily overwrite OpticStudioInterfaceEncoder._interfaces and restore it after the test
-        monkeypatch.setattr(OpticStudioInterfaceEncoder, "_interfaces", frozenset())
+        mocker.patch.object(OpticStudioInterfaceEncoder, "_interfaces", frozenset())
 
         interfaces = ["ZOSAPI.Editors.NCE.IObjectScatteringSettings", "ZOSAPI.Editors.NCE.IVolumePhysicsModelSettings"]
 
