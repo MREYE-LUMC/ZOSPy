@@ -4,14 +4,17 @@ import locale
 import os
 from pathlib import Path
 from tempfile import mkstemp
+from typing import TYPE_CHECKING
 
 import pytest
 
-import zospy.api.config as _config
 from zospy import constants
 from zospy.analyses.base import new_analysis
 from zospy.utils.pyutils import abspath, atox, xtoa
 from zospy.utils.zputils import _get_number_field  # noqa: PLC2701
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 
 @pytest.mark.parametrize("input_type", [str, Path])
@@ -88,7 +91,7 @@ class TestNumberToStringConversion:
         ],
     )
     def test_xtoa_converts_number_correctly_for_different_locale_categories(
-        self, new_locale, number, expected_output, monkeypatch
+        self, new_locale, number, expected_output, mocker: MockerFixture
     ):
         if new_locale not in locale.windows_locale.values():
             pytest.skip(f"Locale '{new_locale}' not available.")
@@ -97,8 +100,8 @@ class TestNumberToStringConversion:
         loc = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, new_locale)
 
-        monkeypatch.setattr(_config, "THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
-        monkeypatch.setattr(_config, "DECIMAL_POINT", locale.localeconv()["decimal_point"])
+        mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
+        mocker.patch("zospy.api.config.DECIMAL_POINT", locale.localeconv()["decimal_point"])
 
         # convert
         result = xtoa(number)
@@ -186,7 +189,7 @@ class TestStringToNumberConversion:
         ],
     )
     def test_xtoa_converts_string_correctly_for_different_locale_categories(
-        self, locale_cat, string, dtype, expected_output, monkeypatch
+        self, locale_cat, string, dtype, expected_output, mocker: MockerFixture
     ):
         if locale_cat not in locale.windows_locale.values():
             pytest.skip(f"Locale '{locale_cat}' not available.")
@@ -195,8 +198,8 @@ class TestStringToNumberConversion:
         loc = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, locale_cat)
 
-        monkeypatch.setattr(_config, "THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
-        monkeypatch.setattr(_config, "DECIMAL_POINT", locale.localeconv()["decimal_point"])
+        mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", locale.localeconv()["thousands_sep"])
+        mocker.patch("zospy.api.config.DECIMAL_POINT", locale.localeconv()["decimal_point"])
 
         # convert
         result = atox(string, dtype=dtype)

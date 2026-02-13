@@ -6,6 +6,7 @@ from contextlib import nullcontext as does_not_raise
 from dataclasses import fields
 from datetime import datetime
 from types import SimpleNamespace
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 import pytest
@@ -16,7 +17,6 @@ from pydantic.fields import FieldInfo
 
 from zospy import constants
 from zospy.analyses.base import (
-    AnalysisData,
     AnalysisMetadata,
     AnalysisResult,
     AnalysisSettings,
@@ -27,6 +27,9 @@ from zospy.analyses.base import (
 from zospy.analyses.decorators import analysis_settings
 from zospy.analyses.parsers.types import ValidatedDataFrame
 from zospy.analyses.reports.surface_data import SurfaceDataSettings
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 
 class TestValidatedSetter:
@@ -79,11 +82,8 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
         *,
         int_setting: int = 1,
         string_setting: str = "a",
-        block_remove_temp_files: bool = False,
     ):
         super().__init__(settings_kws=locals())
-
-        self.block_remove_temp_files = block_remove_temp_files
 
     def _create_analysis(self):
         self._analysis = SimpleNamespace(
@@ -93,15 +93,8 @@ class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
             Close=lambda: None,
         )
 
-    def run_analysis(self) -> AnalysisData:
-        if self.block_remove_temp_files:
-            self._remove_config_file = False
-            self._remove_text_output_file = False
-
+    def run_analysis(self) -> MockAnalysisData:
         return MockAnalysisData()
-
-
-MockOpticStudioSystem = type("OpticStudioSystem", (), {})
 
 
 class TestAnalysisWrapper:
@@ -160,14 +153,14 @@ class TestAnalysisWrapper:
 
     def test_change_settings_from_object(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = MockAnalysis.with_settings(settings)
+        analysis = MockAnalysis().with_settings(settings)
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
     def test_settings_object_is_copied(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = MockAnalysis.with_settings(settings)
+        analysis = MockAnalysis().with_settings(settings)
 
         assert analysis.settings is not settings
         assert analysis.settings == settings
@@ -345,9 +338,16 @@ class TestAnalysisWrapper:
             ("config_file", None),
         ],
     )
-    def test_create_temp_file(self, temp_file_type, filename, tmp_path, monkeypatch):
-        analysis = MockAnalysis(block_remove_temp_files=True)
-        monkeypatch.setattr(analysis, f"_needs_{temp_file_type}", True)
+    def test_create_temp_file(
+        self,
+        temp_file_type: Literal["text_output_file", "config_file"],
+        filename: str,
+        tmp_path,
+        mocker: MockerFixture,
+    ):
+        analysis = MockAnalysis()
+        mocker.patch.object(analysis, f"_needs_{temp_file_type}", True)
+        mocker.patch("os.remove")  # Prevent actual file deletion
 
         if filename:
             path = tmp_path / filename
@@ -355,7 +355,7 @@ class TestAnalysisWrapper:
         else:
             path = None
 
-        analysis.run(oss=MockOpticStudioSystem(), **{temp_file_type: path})
+        analysis.run(oss=mocker.Mock(), **{temp_file_type: path})
 
         if filename:
             assert getattr(analysis, temp_file_type) == path
@@ -372,12 +372,12 @@ class TestAnalysisWrapper:
             ("config_file", "test.cfg"),
         ],
     )
-    def test_temp_file_wrong_filename(self, temp_file_type, tmp_path, filename, monkeypatch):
+    def test_temp_file_wrong_filename(self, temp_file_type, tmp_path, filename, mocker: MockerFixture):
         analysis = MockAnalysis()
-        monkeypatch.setattr(analysis, f"_needs_{temp_file_type}", True)
+        mocker.patch.object(analysis, f"_needs_{temp_file_type}", True)
 
         with pytest.raises(ValueError, match=r"File path should end with ."):
-            analysis.run(oss=MockOpticStudioSystem(), **{temp_file_type: tmp_path / filename})
+            analysis.run(oss=mocker.Mock(), **{temp_file_type: tmp_path / filename})
 
     @pytest.mark.parametrize(
         "temp_file_type,filename",
@@ -388,9 +388,9 @@ class TestAnalysisWrapper:
             ("config_file", None),
         ],
     )
-    def test_remove_temp_file(self, temp_file_type, filename, tmp_path, monkeypatch):
+    def test_remove_temp_file(self, temp_file_type, filename, tmp_path, mocker: MockerFixture):
         analysis = MockAnalysis()
-        monkeypatch.setattr(analysis, f"_needs_{temp_file_type}", True)
+        mocker.patch.object(analysis, f"_needs_{temp_file_type}", True)
 
         if filename:
             path = tmp_path / filename
@@ -398,7 +398,7 @@ class TestAnalysisWrapper:
         else:
             path = None
 
-        analysis.run(oss=MockOpticStudioSystem(), **{temp_file_type: path})
+        analysis.run(oss=mocker.Mock(), **{temp_file_type: path})
 
         if path:
             assert path.exists()

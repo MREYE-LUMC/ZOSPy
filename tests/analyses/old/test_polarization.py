@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 import pytest
 
-import zospy.api.config as _config
 from zospy.analyses.old.polarization import polarization_pupil_map, transmission
 from zospy.utils.zputils import _get_number_field  # noqa: PLC2701
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 pytestmark = pytest.mark.old_analyses
 
@@ -32,8 +36,8 @@ class TestGetNumberField:
     @pytest.mark.parametrize("exp", _exponents)
     @pytest.mark.parametrize("number", _float_numbers)
     @pytest.mark.parametrize("sign", _signs)
-    def test_parses_float(self, sign, number, exp, decimal_separator, monkeypatch: pytest.MonkeyPatch):
-        monkeypatch.setattr(_config, "DECIMAL_POINT", decimal_separator)
+    def test_parses_float(self, sign, number, exp, decimal_separator, mocker: MockerFixture):
+        mocker.patch("zospy.api.config.DECIMAL_POINT", decimal_separator)
 
         number_string = (sign + number + exp).replace(".", decimal_separator)
 

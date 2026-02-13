@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from types import SimpleNamespace
+from typing import TYPE_CHECKING
 
 import pytest
 from semver import Version
@@ -12,6 +12,9 @@ from zospy.analyses.old.systemviewers import (
     shaded_model,
     viewer_3d,
 )
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 # ruff: noqa: SLF001
 
@@ -61,8 +64,8 @@ class TestViewers:
             (viewer_3d, {"end_surface": 2, "hide_x_bars": True}),
         ],
     )
-    def test_old_opticstudio_version_raises_warning(self, simple_system, analysis, parameters, monkeypatch):
-        monkeypatch.setattr(simple_system, "ZOS", SimpleNamespace(version=Version(20, 1, 0)))
+    def test_old_opticstudio_version_raises_warning(self, simple_system, analysis, parameters, mocker: MockerFixture):
+        mocker.patch.object(simple_system, "ZOS", mocker.Mock(version=Version(20, 1, 0)))
 
         with pytest.warns(UserWarning, match=", ".join(parameters.keys())):
             analysis(simple_system, **parameters, oncomplete="Close")

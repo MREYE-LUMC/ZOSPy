@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
 from pandas.testing import assert_frame_equal
 
 from tests.helpers import assert_dataclass_equal
 from zospy.analyses.psf import FFTPSF, HuygensPSF, HuygensPSFAndStrehlRatio
-from zospy.api import config
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 
 class TestHuygensPSF:
@@ -171,10 +175,10 @@ class TestHuygensPSFAndStrehlRatio:
             (0.123456789, "0,123456789", ","),
         ],
     )
-    def test_get_strehl_ratio(self, value, string_value, decimal_point, monkeypatch):
-        monkeypatch.setattr(config, "DECIMAL_POINT", decimal_point)
-        monkeypatch.setattr(config, "THOUSANDS_SEPARATOR", " ")  # Avoid collision with the decimal point
-        monkeypatch.setattr(HuygensPSFAndStrehlRatio, "get_text_output", lambda _: f"Strehl ratio: {string_value}")
+    def test_get_strehl_ratio(self, value, string_value, decimal_point, mocker: MockerFixture):
+        mocker.patch("zospy.api.config.DECIMAL_POINT", decimal_point)
+        mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", " ")  # Avoid collision with the decimal point
+        mocker.patch.object(HuygensPSFAndStrehlRatio, "get_text_output", return_value=f"Strehl ratio: {string_value}")
 
         assert HuygensPSFAndStrehlRatio().get_strehl_ratio() == value
 
