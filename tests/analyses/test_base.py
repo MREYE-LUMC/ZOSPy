@@ -5,6 +5,7 @@ import json
 from contextlib import nullcontext as does_not_raise
 from dataclasses import fields
 from datetime import datetime
+from types import SimpleNamespace
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
@@ -73,38 +74,27 @@ class MockAnalysisSettings:
     string_setting: str = Field(default="a", description="A string setting")
 
 
-@pytest.fixture
-def mock_analysis(mocker: MockerFixture) -> type[BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]]:
-    class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
-        TYPE = "MockAnalysis"
+class MockAnalysis(BaseAnalysisWrapper[MockAnalysisData, MockAnalysisSettings]):
+    TYPE = "MockAnalysis"
 
-        def __init__(
-            self,
-            *,
-            int_setting: int = 1,
-            string_setting: str = "a",
-            block_remove_temp_files: bool = False,
-        ):
-            super().__init__(settings_kws=locals())
+    def __init__(
+        self,
+        *,
+        int_setting: int = 1,
+        string_setting: str = "a",
+    ):
+        super().__init__(settings_kws=locals())
 
-            self.block_remove_temp_files = block_remove_temp_files
+    def _create_analysis(self):
+        self._analysis = SimpleNamespace(
+            metadata=AnalysisMetadata(DateTime=datetime.now(), LensFile="", LensTitle="", FeatureDescription=""),
+            header_data=None,
+            messages=[],
+            Close=lambda: None,
+        )
 
-        def _create_analysis(self):
-            self._analysis = mocker.Mock(
-                metadata=AnalysisMetadata(DateTime=datetime.now(), LensFile="", LensTitle="", FeatureDescription=""),
-                header_data=None,
-                messages=[],
-                Close=lambda: None,
-            )
-
-        def run_analysis(self) -> MockAnalysisData:
-            if self.block_remove_temp_files:
-                self._remove_config_file = False
-                self._remove_text_output_file = False
-
-            return MockAnalysisData()
-
-    return MockAnalysis
+    def run_analysis(self) -> MockAnalysisData:
+        return MockAnalysisData()
 
 
 class TestAnalysisWrapper:
@@ -120,11 +110,11 @@ class TestAnalysisWrapper:
 
         return result
 
-    def test_get_settings_type(self, mock_analysis):
-        assert mock_analysis._settings_type == MockAnalysisSettings  # noqa: SLF001
+    def test_get_settings_type(self):
+        assert MockAnalysis._settings_type == MockAnalysisSettings  # noqa: SLF001
 
-    def test_settings_type_is_specified(self, mock_analysis):
-        assert mock_analysis._settings_type is not AnalysisSettings  # noqa: SLF001
+    def test_settings_type_is_specified(self):
+        assert MockAnalysis._settings_type is not AnalysisSettings  # noqa: SLF001
 
     def test_analyses_correct_analysis_name(self, analysis_wrapper_class):
         assert analysis_wrapper_class.TYPE is not None
@@ -155,44 +145,44 @@ class TestAnalysisWrapper:
             assert field_name in init_signature.parameters
             assert init_signature.parameters[field_name].default == default_value
 
-    def test_change_settings_from_parameters(self, mock_analysis):
-        analysis = mock_analysis(int_setting=2, string_setting="b")
+    def test_change_settings_from_parameters(self):
+        analysis = MockAnalysis(int_setting=2, string_setting="b")
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
-    def test_change_settings_from_object(self, mock_analysis):
+    def test_change_settings_from_object(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = mock_analysis.with_settings(settings)
+        analysis = MockAnalysis().with_settings(settings)
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
-    def test_settings_object_is_copied(self, mock_analysis):
+    def test_settings_object_is_copied(self):
         settings = MockAnalysisSettings(int_setting=2, string_setting="b")
-        analysis = mock_analysis.with_settings(settings)
+        analysis = MockAnalysis().with_settings(settings)
 
         assert analysis.settings is not settings
         assert analysis.settings == settings
 
-    def test_update_settings_object(self, mock_analysis):
-        analysis = mock_analysis(int_setting=1, string_setting="a")
+    def test_update_settings_object(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
 
         analysis.update_settings(settings=MockAnalysisSettings(int_setting=2, string_setting="b"))
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
-    def test_update_settings_dictionary(self, mock_analysis):
-        analysis = mock_analysis(int_setting=1, string_setting="a")
+    def test_update_settings_dictionary(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
 
         analysis.update_settings(settings_kws={"int_setting": 2, "string_setting": "b"})
 
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
-    def test_update_settings_object_and_dictionary(self, mock_analysis):
-        analysis = mock_analysis(int_setting=1, string_setting="a")
+    def test_update_settings_object_and_dictionary(self):
+        analysis = MockAnalysis(int_setting=1, string_setting="a")
 
         analysis.update_settings(
             settings=MockAnalysisSettings(int_setting=2, string_setting="a"), settings_kws={"string_setting": "b"}
@@ -201,9 +191,9 @@ class TestAnalysisWrapper:
         assert analysis.settings.int_setting == 2
         assert analysis.settings.string_setting == "b"
 
-    def test_update_settings_no_dataclass_raises_type_error(self, mock_analysis):
+    def test_update_settings_no_dataclass_raises_type_error(self):
         with pytest.raises(TypeError, match="settings should be a dataclass"):
-            mock_analysis().update_settings(settings=123)
+            MockAnalysis().update_settings(settings=123)
 
     @pytest.mark.parametrize(
         "field_specification",
@@ -354,10 +344,10 @@ class TestAnalysisWrapper:
         filename: str,
         tmp_path,
         mocker: MockerFixture,
-        mock_analysis,
     ):
-        analysis = mock_analysis(block_remove_temp_files=True)
+        analysis = MockAnalysis()
         mocker.patch.object(analysis, f"_needs_{temp_file_type}", True)
+        mocker.patch("os.remove")  # Prevent actual file deletion
 
         if filename:
             path = tmp_path / filename
@@ -382,8 +372,8 @@ class TestAnalysisWrapper:
             ("config_file", "test.cfg"),
         ],
     )
-    def test_temp_file_wrong_filename(self, temp_file_type, tmp_path, filename, mocker: MockerFixture, mock_analysis):
-        analysis = mock_analysis()
+    def test_temp_file_wrong_filename(self, temp_file_type, tmp_path, filename, mocker: MockerFixture):
+        analysis = MockAnalysis()
         mocker.patch.object(analysis, f"_needs_{temp_file_type}", True)
 
         with pytest.raises(ValueError, match=r"File path should end with ."):
@@ -398,8 +388,8 @@ class TestAnalysisWrapper:
             ("config_file", None),
         ],
     )
-    def test_remove_temp_file(self, temp_file_type, filename, tmp_path, mocker: MockerFixture, mock_analysis):
-        analysis = mock_analysis()
+    def test_remove_temp_file(self, temp_file_type, filename, tmp_path, mocker: MockerFixture):
+        analysis = MockAnalysis()
         mocker.patch.object(analysis, f"_needs_{temp_file_type}", True)
 
         if filename:
