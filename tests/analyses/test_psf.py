@@ -176,8 +176,8 @@ class TestHuygensPSFAndStrehlRatio:
         ],
     )
     def test_get_strehl_ratio(self, value, string_value, decimal_point, mocker: MockerFixture):
-        mocker.patch("zospy.config.DECIMAL_POINT", decimal_point)
-        mocker.patch("zospy.config.THOUSANDS_SEPARATOR", " ")  # Avoid collision with the decimal point
+        mocker.patch("zospy.api.config.DECIMAL_POINT", decimal_point)
+        mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", " ")  # Avoid collision with the decimal point
         mocker.patch.object(HuygensPSFAndStrehlRatio, "get_text_output", return_value=f"Strehl ratio: {string_value}")
 
         assert HuygensPSFAndStrehlRatio().get_strehl_ratio() == value

@@ -37,7 +37,7 @@ class TestGetNumberField:
     @pytest.mark.parametrize("number", _float_numbers)
     @pytest.mark.parametrize("sign", _signs)
     def test_parses_float(self, sign, number, exp, decimal_separator, mocker: MockerFixture):
-        mocker.patch("zospy.config.DECIMAL_POINT", decimal_separator)
+        mocker.patch("zospy.api.config.DECIMAL_POINT", decimal_separator)
 
         number_string = (sign + number + exp).replace(".", decimal_separator)
 

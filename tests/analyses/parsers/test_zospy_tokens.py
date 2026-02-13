@@ -82,8 +82,8 @@ def test_date(value):
     ],
 )
 def test_float(value, expected, decimal_point, mocker: MockerFixture):
-    mocker.patch("zospy.config.DECIMAL_POINT", decimal_point)
-    mocker.patch("zospy.config.THOUSANDS_SEPARATOR", "")  # Avoid collision with the decimal point
+    mocker.patch("zospy.api.config.DECIMAL_POINT", decimal_point)
+    mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", "")  # Avoid collision with the decimal point
 
     result = parse_token("FLOAT", value)
     assert isinstance(result, float)
@@ -110,8 +110,8 @@ def test_float(value, expected, decimal_point, mocker: MockerFixture):
     ],
 )
 def test_number(value, expected, mocker: MockerFixture):
-    mocker.patch("zospy.config.DECIMAL_POINT", ".")
-    mocker.patch("zospy.config.THOUSANDS_SEPARATOR", "")
+    mocker.patch("zospy.api.config.DECIMAL_POINT", ".")
+    mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", "")
 
     result = parse_token("_number", value)
 
@@ -178,8 +178,8 @@ def test_list():
     ],
 )
 def test_tuple(value, decimal_point, expected, mocker: MockerFixture):
-    mocker.patch("zospy.config.DECIMAL_POINT", decimal_point)
-    mocker.patch("zospy.config.THOUSANDS_SEPARATOR", "")
+    mocker.patch("zospy.api.config.DECIMAL_POINT", decimal_point)
+    mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", "")
 
     grammar = """start: tuple
 
@@ -196,8 +196,8 @@ def test_tuple(value, decimal_point, expected, mocker: MockerFixture):
 
 @pytest.fixture
 def setup_field_test(mocker: MockerFixture):
-    mocker.patch("zospy.config.DECIMAL_POINT", ".")
-    mocker.patch("zospy.config.THOUSANDS_SEPARATOR", "")
+    mocker.patch("zospy.api.config.DECIMAL_POINT", ".")
+    mocker.patch("zospy.api.config.THOUSANDS_SEPARATOR", "")
 
     def setup(value):
         if not value.endswith("\n"):

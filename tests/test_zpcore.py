@@ -20,8 +20,6 @@ if TYPE_CHECKING:
 
 
 def test_connect_without_valid_license_raises_exception(zos, connection_mode, mocker: MockerFixture):
-    # patch_zos(zos, mocker)
-
     mocker.patch.object(zos, "_assign_connection")
     application = mocker.Mock(IsValidLicenseForAPI=False)
     mocker.patch.object(
