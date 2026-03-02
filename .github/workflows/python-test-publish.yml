@@ -35,7 +35,7 @@ jobs:
       - name: Build package
         run: python -m build
       - name: Upload dist
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: zospy_dist
           path: "dist/"
