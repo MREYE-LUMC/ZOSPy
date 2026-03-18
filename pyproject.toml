@@ -131,7 +131,7 @@ extend-select = [
     "NPY", # numpy-specific
     "RUF", # ruff-specific
 ]
-extend-ignore = ["B028", "EM101", "EM102", "G004", "PLR2004", "TD004", "TRY003"]
+extend-ignore = ["B028", "EM101", "EM102", "G004", "PLR2004", "RUF067", "TD004", "TRY003"]
 allowed-confusables = ["µ"]
 
 [tool.ruff.lint.extend-per-file-ignores]

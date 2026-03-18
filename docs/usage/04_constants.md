@@ -10,7 +10,7 @@ For example, the `Editors.LDE.SurfaceType` constant is available as `zospy.const
 ```python
 import zospy as zp
 
-zos = zp.ZOS() # <-- Constants are only available after creating a ZOS instance
+zos = zp.ZOS()  # <-- Constants are only available after creating a ZOS instance
 
 print(zp.constants.Editors.LDE.SurfaceType.Standard)
 ```

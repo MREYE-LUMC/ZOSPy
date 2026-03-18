@@ -156,7 +156,7 @@ class TestLoad:
         oss.load(path)
 
         assert oss.LDE.NumberOfSurfaces == 5
-        assert oss.LDE.GetSurfaceAt(2).Radius == 20.0
+        assert oss.LDE.GetSurfaceAt(2).Radius == pytest.approx(20.0)
 
     def test_load_relative(self, oss, demo_systems_folder, filename, monkeypatch):
         monkeypatch.chdir(demo_systems_folder)
@@ -164,7 +164,7 @@ class TestLoad:
         oss.load(filename)
 
         assert oss.LDE.NumberOfSurfaces == 5
-        assert oss.LDE.GetSurfaceAt(2).Radius == 20.0
+        assert oss.LDE.GetSurfaceAt(2).Radius == pytest.approx(20.0)
 
 
 @pytest.mark.parametrize(

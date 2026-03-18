@@ -33,7 +33,7 @@ class TestSurfaceData:
         result = surface_data_fromcfg(simple_system, str(cfg_file))
 
         # Check if the correct surface thickness is returned
-        assert result.Data.Surface.Thickness == 19.792
+        assert result.Data.Surface.Thickness == pytest.approx(19.792)
 
     def test_surface_data_returns_correct_result(self, simple_system, expected_data):
         result = surface_data(simple_system, surface=2)

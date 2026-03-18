@@ -23,7 +23,7 @@ def _quote(s: Any) -> str:
 
 
 def get_dependencies_from_requirements(requirements: Path) -> list[str]:
-    with requirements.open("r") as f:
+    with requirements.open("r", encoding="utf-8") as f:
         return [line.strip() for line in f.readlines() if line.strip()]
 
 
