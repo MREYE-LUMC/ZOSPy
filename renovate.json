@@ -4,5 +4,11 @@
     "config:recommended"
   ],
   "labels": ["dependencies", "skip changelog"],
-  "ignorePaths": ["pyproject.toml"]
+  "packageRules": [
+    {
+      "matchFileNames": ["pyproject.toml"],
+      "matchDepTypes": ["dependencies"],
+      "enabled": false
+    }
+  ]
 }
