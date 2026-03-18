@@ -3,5 +3,12 @@
   "extends": [
     "config:recommended"
   ],
-  "labels": ["dependencies", "skip changelog"]
+  "labels": ["dependencies", "skip changelog"],
+  "packageRules": [
+    {
+      "matchFileNames": ["pyproject.toml"],
+      "matchDepTypes": ["dependencies", "requires-python"],
+      "enabled": false
+    }
+  ]
 }
