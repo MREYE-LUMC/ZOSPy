@@ -7,7 +7,7 @@
   "packageRules": [
     {
       "matchFileNames": ["pyproject.toml"],
-      "matchDepTypes": ["dependencies"],
+      "matchDepTypes": ["dependencies", "requires-python"],
       "enabled": false
     }
   ]
