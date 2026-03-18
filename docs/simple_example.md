@@ -49,7 +49,9 @@ plt.axis("off")
 plt.show()
 
 # Trace a single chief ray
-raytrace = zp.analyses.raysandspots.SingleRayTrace(hx=0, hy=1, px=0, py=0, wavelength=1, global_coordinates=True).run(oss)
+raytrace = zp.analyses.raysandspots.SingleRayTrace(hx=0, hy=1, px=0, py=0, wavelength=1, global_coordinates=True).run(
+    oss
+)
 ```
 
 ![Full example system](images/simple_example.png)

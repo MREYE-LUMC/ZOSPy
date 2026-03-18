@@ -50,13 +50,13 @@ oss = zos.connect(mode="standalone")
 huygens_psf = oss.Analyses.New_Analysis_SettingsFirst(zp.constants.Analysis.AnalysisIDM.HuygensPsf)
 huygens_psf_settings = huygens_psf.GetSettings()
 
-print(huygens_psf_settings.Normalize) # AttributeError: 'IAS_' object has no attribute 'Normalize'
+print(huygens_psf_settings.Normalize)  # AttributeError: 'IAS_' object has no attribute 'Normalize'
 ```
 
 By downcasting using the `__implementation__` attribute, the Huygens PSF settings can be accessed:
 
 ```python
-print(huygens_psf_settings.__implementation__.Normalize) # False
+print(huygens_psf_settings.__implementation__.Normalize)  # False
 ```
 ::::
 

@@ -36,8 +36,8 @@ class TestGeometricImageAnalysis:
         # Adjust expected_minx and expected_miny with respectively 0.5 * pixel_width and 0.5 * pixel_height as the
         # columns and index from result.data provide the pixel center rather than the bottom left corner of the pixel,
         # while expected_minx and expected_miny point to that bottom left corner.
-        assert result.data.columns[0] == (expected_minx + 0.5 * pixel_width)
-        assert result.data.index[0] == (expected_miny + 0.5 * pixel_height)
+        assert result.data.columns[0] == pytest.approx(expected_minx + 0.5 * pixel_width)
+        assert result.data.index[0] == pytest.approx(expected_miny + 0.5 * pixel_height)
 
     @pytest.mark.parametrize(
         "show_as,field_size,total_watts,rays_x_1000",

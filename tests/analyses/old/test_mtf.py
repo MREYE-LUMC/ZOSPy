@@ -42,8 +42,8 @@ class TestFFTThroughFocusMTF:
         result = fft_through_focus_mtf_fromcfg(simple_system, str(cfg_file))
 
         assert result.Settings.SampleSize == "S_128x128"
-        assert result.Settings.DeltaFocus == 1.2
-        assert result.Settings.Frequency == 3.0
+        assert result.Settings.DeltaFocus == pytest.approx(1.2)
+        assert result.Settings.Frequency == pytest.approx(3.0)
         assert result.Settings.NumberOfSteps == 9
         # assert result.Settings.Type == "Imaginary"
         assert result.Settings.UsePolarization

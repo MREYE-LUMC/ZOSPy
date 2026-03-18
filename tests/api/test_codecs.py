@@ -104,7 +104,7 @@ class TestOpticStudioInterfaceEncoder:
         gaussian_scattering.ScatterFraction = 0.5
         lens_front.ScatteringData.ChangeScatteringTypeSettings(gaussian_scattering)
 
-        assert lens_front.ScatteringData.CurrentTypeSettings.ScatterFraction == 0.5
+        assert lens_front.ScatteringData.CurrentTypeSettings.ScatterFraction == pytest.approx(0.5)
 
     def test_tools_isystemtool(self, oss):
         """Test downcasting for `ZOSAPI.Tools.ISystemTool`."""
