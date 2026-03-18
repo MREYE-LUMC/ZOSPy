@@ -112,7 +112,7 @@ generate = "python scripts/generate_test_reference_data {args}"
 ## Formatting using hatch fmt
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "ruff_defaults.toml"
-dependencies = ["ruff==0.11.5"]
+dependencies = ["ruff==0.15.6"]
 
 # Linting and formatting options
 [tool.ruff]
