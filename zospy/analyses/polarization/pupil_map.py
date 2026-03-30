@@ -20,7 +20,7 @@ __all__ = ("PolarizationPupilMap", "PolarizationPupilMapSettings")
 
 
 class PolarizationPupilMapTransformer(ZospyTransformer):
-    def pupil_map_table(self, args):  # noqa: PLR6301
+    def pupil_map_table(self, args) -> SimpleField:
         header, rows = args[0]
         table = pd.DataFrame(columns=header, data=rows)
 

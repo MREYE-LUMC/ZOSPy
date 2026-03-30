@@ -17,18 +17,18 @@ __all__ = ("SurfaceData", "SurfaceDataSettings")
 class SurfaceDataTransformer(ZospyTransformer):
     """Transformer for the output of the Surface Data analysis."""
 
-    def refractive_index_table(self, args):  # noqa: PLR6301
+    def refractive_index_table(self, args) -> SimpleField:
         """Convert the refractive index table to a list of dictionaries."""
         header, rows = args[0]
         table_records = [dict(zip(header, row, strict=False)) for row in rows]
 
         return SimpleField("Refractive Indices", table_records)
 
-    def surface_number(self, n):  # noqa: PLR6301
+    def surface_number(self, n) -> SimpleField:
         """Extract the surface number from the header."""
         return SimpleField("Surface Number", n)
 
-    def surface_powers(self, args):  # noqa: PLR6301
+    def surface_powers(self, args) -> SimpleField:
         """Convert the surface powers to a dictionary."""
         return SimpleField("Surface Powers", dict(args))
 

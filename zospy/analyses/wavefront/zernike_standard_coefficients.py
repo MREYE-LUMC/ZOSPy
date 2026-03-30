@@ -24,11 +24,11 @@ class ZernikeStandardCoefficientsTransformer(ZospyTransformer):
         value: float
         formula: str
 
-    def coefficients(self, args):  # noqa: PLR6301
+    def coefficients(self, args) -> SimpleField:
         """Convert the coefficients to a SimpleField."""
         return SimpleField("Coefficients", dict(args))
 
-    def zernike_coefficient(self, args):
+    def zernike_coefficient(self, args) -> SimpleField:
         """Convert a Zernike coefficient to a SimpleField with the value and the formula."""
         index, value, formula = args
 

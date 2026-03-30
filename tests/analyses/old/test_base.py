@@ -12,8 +12,8 @@ from zospy.analyses.old.base import (
     AnalysisResult,
     AttrDict,
     OnComplete,
-    _AnalysisResultJSONDecoder,  # noqa: PLC2701
-    _AnalysisResultJSONEncoder,  # noqa: PLC2701
+    _AnalysisResultJSONDecoder,
+    _AnalysisResultJSONEncoder,
     new_analysis,
 )
 from zospy.api import constants

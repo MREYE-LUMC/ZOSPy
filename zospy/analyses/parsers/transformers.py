@@ -3,8 +3,6 @@
 Provides the `ZospyTransformer` class for transforming common OpticStudio constructs into dictionaries.
 """
 
-# ruff: noqa: PLR6301
-
 from __future__ import annotations
 
 from itertools import groupby

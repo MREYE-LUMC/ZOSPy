@@ -11,7 +11,7 @@ import pytest
 from zospy import constants
 from zospy.analyses.base import new_analysis
 from zospy.utils.pyutils import abspath, atox, xtoa
-from zospy.utils.zputils import _get_number_field  # noqa: PLC2701
+from zospy.utils.zputils import _get_number_field
 
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture

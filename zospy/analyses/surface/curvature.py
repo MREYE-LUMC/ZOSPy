@@ -17,6 +17,8 @@ from zospy.utils.zputils import standardize_sampling, unpack_datagrid
 
 __all__ = ("Curvature", "CurvatureSettings")
 
+logger = logging.getLogger(__name__)
+
 
 @analysis_result
 class CurvatureResult:
@@ -152,7 +154,7 @@ class Curvature(BaseAnalysisWrapper[CurvatureResult, CurvatureSettings], analysi
         match = curvature_description_regex.match(datagrid.Description)
 
         if match is None:  # fall back to using exported text files
-            logging.warning(
+            logger.warning(
                 "Could not obtain description parameters from datagrid.Description, trying to use exported text file"
             )
 

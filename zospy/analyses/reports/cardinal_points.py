@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Annotated, Literal
 
 from pydantic import Field, model_validator
-from pydantic_core._pydantic_core import PydanticCustomError  # noqa: PLC2701
+from pydantic_core._pydantic_core import PydanticCustomError
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
@@ -16,14 +16,14 @@ __all__ = ("CardinalPoints", "CardinalPointsSettings")
 
 
 class CardinalPointsTransformer(ZospyTransformer):
-    def cardinal_points(self, args):
+    def cardinal_points(self, args) -> SimpleField:
         header, *values = args
 
         updated_values = [SimpleField(v.name, dict(zip(header, v.value, strict=False))) for v in values]
 
         return SimpleField("Cardinal Points", self.dict(updated_values))
 
-    def cardinal_point(self, args):  # noqa: PLR6301
+    def cardinal_point(self, args) -> SimpleField:
         name, *values = args
 
         return SimpleField(str(name), values)
