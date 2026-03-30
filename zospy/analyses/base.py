@@ -78,7 +78,7 @@ if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
     from zospy.zpcore import OpticStudioSystem
 
-    if sys.version_info < (3, 12):
+    if sys.version_info >= (3, 12):
         from typing_extensions import NotRequired
     else:
         from typing import NotRequired
@@ -784,7 +784,7 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
     @property
     def analysis(self) -> Analysis:
         """The OpticStudio analysis object. This property is set when the analysis is run."""
-        return cast(Analysis, self._analysis)
+        return cast("Analysis", self._analysis)
 
     def get_text_output(self) -> str:
         """Get the text output of the analysis."""
@@ -911,9 +911,9 @@ class BaseAnalysisWrapper(ABC, Generic[AnalysisData, AnalysisSettings]):
         parse_result = parse(self.get_text_output(), parser, transformer)
 
         if result_type is None:
-            return cast(AnalysisData, parse_result)
+            return cast("AnalysisData", parse_result)
 
-        return cast(result_type, result_type(**parse_result))
+        return cast("result_type", result_type(**parse_result))
 
     @staticmethod
     def _process_data_series_or_grid(data: list[pd.DataFrame]) -> pd.DataFrame | None:

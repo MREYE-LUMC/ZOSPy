@@ -20,11 +20,11 @@ __all__ = ("SingleRayTrace", "SingleRayTraceSettings")
 class SingleRayTraceTransformer(ZospyTransformer):
     """Transformer for the output of the Single Ray Trace analysis."""
 
-    def NAN(self, args):  # noqa: ARG002, N802, PLR6301
+    def NAN(self, args):  # noqa: ARG002, N802
         """Transform a NaN value."""
         return float("nan")
 
-    def ray_trace_data_table(self, args):  # noqa: PLR6301
+    def ray_trace_data_table(self, args):
         """Transform the ray trace data table to a DataFrame."""
         header, rows = args[0]
         header_length = len(header)

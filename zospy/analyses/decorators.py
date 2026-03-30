@@ -8,10 +8,10 @@ from sys import version_info
 import pydantic
 from pydantic import ConfigDict, Field, PrivateAttr
 
-if version_info < (3, 12):
-    from typing_extensions import dataclass_transform
-else:
+if version_info >= (3, 12):
     from typing import dataclass_transform
+else:
+    from typing_extensions import dataclass_transform
 
 
 __all__ = ("analysis_result", "analysis_settings")

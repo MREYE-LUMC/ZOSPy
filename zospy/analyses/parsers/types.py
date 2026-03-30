@@ -19,6 +19,8 @@ if TYPE_CHECKING:
 
 __all__ = ("FieldNumber", "UnitField", "ValidatedDataFrame", "ValidatedNDArray", "WavelengthNumber", "ZOSAPIConstant")
 
+logger = logging.getLogger(__name__)
+
 
 Value = TypeVar("Value")
 
@@ -54,7 +56,7 @@ class ValidatedDataFrameAnnotation:
         return value.to_dict(orient="tight")
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:  # noqa: PLW3201
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.dict_schema(),
             python_schema=core_schema.union_schema([
@@ -99,7 +101,7 @@ class ValidatedNDArrayAnnotation:
         return value
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:  # noqa: PLW3201
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.list_schema(),
             python_schema=core_schema.union_schema([
@@ -134,12 +136,12 @@ class ZOSAPIConstantAnnotation:
         try:
             constant = attrgetter(self.enum)(constants)
         except AttributeError:
-            logging.warning(f"Constant {self.enum} not found in zospy.constants")
+            logger.warning(f"Constant {self.enum} not found in zospy.constants")
             return None
 
         return constants.process_constant(constant, value)
 
-    def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> Any:  # noqa: PLW3201
+    def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> Any:
         """Validate ZOSAPI constants."""
         schema = core_schema.json_or_python_schema(
             json_schema=core_schema.any_schema(),

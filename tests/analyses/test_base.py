@@ -21,7 +21,7 @@ from zospy.analyses.base import (
     AnalysisResult,
     AnalysisSettings,
     BaseAnalysisWrapper,
-    _validated_setter,  # noqa: PLC2701
+    _validated_setter,
     new_analysis,
 )
 from zospy.analyses.decorators import analysis_settings

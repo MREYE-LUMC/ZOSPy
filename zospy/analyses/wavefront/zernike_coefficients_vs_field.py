@@ -21,11 +21,11 @@ __all__ = ("ZernikeCoefficientsVsField", "ZernikeCoefficientsVsFieldSettings")
 class ZernikeCoefficientsVsFieldTransformer(ZospyTransformer):
     """Lark Transformer for the Zernike Coefficients vs. Field analysis."""
 
-    def start(self, args):  # noqa: PLR6301
+    def start(self, args):
         """Transform the root of the parse tree."""
         return args[0]
 
-    def zernike_vs_field_table(self, args):  # noqa: PLR6301
+    def zernike_vs_field_table(self, args) -> pd.DataFrame:
         """Transform the Zernike vs. Field table to a DataFrame."""
         header, rows = args[0]
 

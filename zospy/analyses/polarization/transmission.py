@@ -21,15 +21,15 @@ __all__ = ("PolarizationTransmission", "PolarizationTransmissionSettings")
 class PolarizationTransmissionTransformer(ZospyTransformer):
     """Transformer for the output of the Polarization Transmission analysis."""
 
-    def chief_ray_transmissions(self, args) -> SimpleField:  # noqa: PLR6301
+    def chief_ray_transmissions(self, args) -> SimpleField:
         """Transform the chief ray transmission data to a SimpleField."""
         return SimpleField("Chief ray transmission", list(args))
 
-    def field_transmissions(self, args) -> SimpleField:  # noqa: PLR6301
+    def field_transmissions(self, args) -> SimpleField:
         """Transform the field transmission data to a SimpleField."""
         return SimpleField("Field transmission", list(args))
 
-    def transmission_table(self, args) -> SimpleField:  # noqa: PLR6301
+    def transmission_table(self, args) -> SimpleField:
         """Transform the transmission table data to a SimpleField."""
         header, rows = args[0]
         return SimpleField("Transmissions", pd.DataFrame(columns=header, data=rows))

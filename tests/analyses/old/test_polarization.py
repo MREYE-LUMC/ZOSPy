@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from zospy.analyses.old.polarization import polarization_pupil_map, transmission
-from zospy.utils.zputils import _get_number_field  # noqa: PLC2701
+from zospy.utils.zputils import _get_number_field
 
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture

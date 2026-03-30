@@ -6,17 +6,17 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import pytest
 
 from zospy.functions.lde import (
-    _APERTURE_FILE,  # noqa: PLC2701
-    _APERTURE_X_DECENTER,  # noqa: PLC2701
-    _APERTURE_Y_DECENTER,  # noqa: PLC2701
-    _APERTURETYPE_USED_SETTINGS,  # noqa: PLC2701
-    _MAXIMUM_RADIUS,  # noqa: PLC2701
-    _MINIMUM_RADIUS,  # noqa: PLC2701
-    _NUMBER_OF_ARMS,  # noqa: PLC2701
-    _UDA_SCALE,  # noqa: PLC2701
-    _WIDTH_OF_ARMS,  # noqa: PLC2701
-    _X_HALF_WIDTH,  # noqa: PLC2701
-    _Y_HALF_WIDTH,  # noqa: PLC2701
+    _APERTURE_FILE,
+    _APERTURE_X_DECENTER,
+    _APERTURE_Y_DECENTER,
+    _APERTURETYPE_USED_SETTINGS,
+    _MAXIMUM_RADIUS,
+    _MINIMUM_RADIUS,
+    _NUMBER_OF_ARMS,
+    _UDA_SCALE,
+    _WIDTH_OF_ARMS,
+    _X_HALF_WIDTH,
+    _Y_HALF_WIDTH,
     find_surface_by_comment,
     surface_change_aperturetype,
 )

@@ -44,9 +44,9 @@ def test_zos_singleton(zos, oss):  # noqa: ARG001
     with pytest.warns(match=r"Only a single instance of ZOS can exist at any time\. Returning existing instance\."):
         zos2 = zp.ZOS()
 
-        # If init is called again, the Application attribute will be set to None
-        assert zos2.Application is not None
-        assert zos2 is zos
+    # If init is called again, the Application attribute will be set to None
+    assert zos2.Application is not None
+    assert zos2 is zos
 
 
 @pytest.mark.filterwarnings("ignore:Only a single instance of ZOS can exist at any time")
@@ -252,10 +252,10 @@ class TestTxtFileEncoding:
         def getencoding(*args, **kwargs):  # noqa: ARG001
             return "LocalePreferredEncoding"
 
-        if version_info < (3, 11):
-            mocker.patch("locale.getpreferredencoding", return_value="LocalePreferredEncoding")
-        else:
+        if version_info >= (3, 11):
             mocker.patch("locale.getencoding", return_value="LocalePreferredEncoding")
+        else:
+            mocker.patch("locale.getpreferredencoding", return_value="LocalePreferredEncoding")
 
         oss_with_modifiable_config.ZOS.Application.Preferences.General.TXTFileEncoding = getattr(
             constants.Preferences.EncodingType, txtfile_encoding
