@@ -9,18 +9,15 @@ build:
   os: ubuntu-lts-latest
   tools:
     python: "3.13"
-  apt_packages:
-    - pandoc
-    - language-pack-en-base
-  jobs:
-    create_environment:
-        - asdf plugin add uv
-        - asdf install uv latest
-        - asdf global uv latest
-    build:
-        html:
-          - uvx hatch run docs:build -T -b html docs $READTHEDOCS_OUTPUT/html
 
-# Optionally build your docs in additional formats such as PDF and ePub
+sphinx:
+  configuration: docs/conf.py
+
 formats:
   - pdf
+
+python:
+  install:
+    - method: uv
+      command: sync
+      groups: [docs]
