@@ -1958,7 +1958,10 @@ dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
+dev = [
+    { name = "pytest-mock" },
+]
 docs = [
     { name = "ipython", version = "8.37.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "ipython", version = "9.7.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -1972,30 +1975,26 @@ docs = [
     { name = "sphinx-design" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "pytest-mock" },
-]
-
 [package.metadata]
 requires-dist = [
-    { name = "ipython", marker = "extra == 'docs'" },
     { name = "lark", specifier = "~=1.2.0" },
-    { name = "myst-parser", marker = "extra == 'docs'" },
-    { name = "nbsphinx", marker = "extra == 'docs'" },
     { name = "numpy" },
-    { name = "numpydoc", marker = "extra == 'docs'" },
     { name = "pandas" },
     { name = "pydantic", specifier = ">=2.4.0" },
     { name = "pythonnet", specifier = ">=3.0.0,<4" },
     { name = "semver", specifier = ">=3.0.0,<4" },
-    { name = "sphinx", marker = "extra == 'docs'" },
-    { name = "sphinx-autobuild", marker = "extra == 'docs'" },
-    { name = "sphinx-book-theme", marker = "extra == 'docs'" },
-    { name = "sphinx-design", marker = "extra == 'docs'" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
-provides-extras = ["docs"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest-mock", specifier = ">=3.15.1" }]
+docs = [
+    { name = "ipython", specifier = ">=8.37.0" },
+    { name = "myst-parser", specifier = ">=4.0.1" },
+    { name = "nbsphinx", specifier = ">=0.9.7" },
+    { name = "numpydoc", specifier = ">=1.9.0" },
+    { name = "sphinx", specifier = ">=8.1.3" },
+    { name = "sphinx-autobuild", specifier = ">=2024.10.3" },
+    { name = "sphinx-book-theme", specifier = ">=1.1.4" },
+    { name = "sphinx-design", specifier = ">=0.6.1" },
+]
