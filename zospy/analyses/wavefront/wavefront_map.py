@@ -152,13 +152,8 @@ class WavefrontMap(BaseAnalysisWrapper[DataFrame, WavefrontMapSettings], analysi
 
         The wavefront map analysis only supports even N x N samplings, but samples the pupil at (N - 1) x (N - 1) points
         to include the pupil center. As a result, the first row and column of the returned datagrid are empty.
-
-        Parameters
-        ----------
-        cell_origin : Literal["bottom_left", "center"]
-            Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they
-            are defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the
-            grid cell. Defaults to 'bottom_left'.
+        The index and column labels of the datagrid are adjusted accordingly to span from -1 to 1 for the non-empty
+        rows and columns.
 
         Returns
         -------

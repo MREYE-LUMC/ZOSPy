@@ -136,8 +136,8 @@ def unpack_datagrid(
     dy = datagrid.Dy if dy is None else dy
 
     if cell_origin == "bottom_left":  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
-        minx += 0.5 * datagrid.Dx
-        miny += 0.5 * datagrid.Dy
+        minx += 0.5 * dx
+        miny += 0.5 * dy
     elif cell_origin == "center":
         pass  # minx and miny remain unchanged
     else:

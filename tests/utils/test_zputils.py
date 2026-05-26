@@ -1,3 +1,4 @@
+# ruff: noqa: RUF069
 from __future__ import annotations
 
 from contextlib import nullcontext as does_not_raise
@@ -24,34 +25,53 @@ class TestUnpackDatagrid:
             YLabel="ylabel",
         )
 
-    def test_unpack_datagrid(self, mock_datagrid):
-        result = unpack_datagrid(mock_datagrid, cell_origin="center")
-
-        assert np.all(result.values == mock_datagrid.Values)
-        assert result.columns.name == mock_datagrid.XLabel
-        assert result.index.name == mock_datagrid.YLabel
-
     def test_unpack_datagrid_bottom_left(self, mock_datagrid):
         result = unpack_datagrid(mock_datagrid, cell_origin="bottom_left")
 
+        assert np.all(result.values == mock_datagrid.Values)
         assert np.all(result.columns == [-1, 0, 1])
         assert np.all(result.index == [-1, 0, 1])
+        assert result.columns.name == mock_datagrid.XLabel
+        assert result.index.name == mock_datagrid.YLabel
 
     def test_unpack_datagrid_center(self, mock_datagrid):
         result = unpack_datagrid(mock_datagrid, cell_origin="center")
 
+        assert np.all(result.values == mock_datagrid.Values)
         assert np.all(result.columns == [-1.5, -0.5, 0.5])
         assert np.all(result.index == [-1.5, -0.5, 0.5])
+        assert result.columns.name == mock_datagrid.XLabel
+        assert result.index.name == mock_datagrid.YLabel
 
     def test_unpack_datagrid_invalid_cell_origin(self, mock_datagrid):
         with pytest.raises(ValueError, match="Cannot process the cell origin 'invalid'"):
             unpack_datagrid(mock_datagrid, cell_origin="invalid")
 
-    def test_unpack_datagrid_custom_spacing_and_origin(self, mock_datagrid):
-        result = unpack_datagrid(mock_datagrid, cell_origin="center", minx=-2, miny=-2, dx=0.5, dy=0.5)
+    def test_unpack_datagrid_custom_spacing_and_origin_bottom_left(self, mock_datagrid):
+        minx = miny = -2
+        dx = dy = 0.5
+
+        result = unpack_datagrid(mock_datagrid, cell_origin="bottom_left", minx=minx, miny=miny, dx=dx, dy=dy)
+
+        assert np.all(result.columns == [-1.75, -1.25, -0.75])
+        assert np.all(result.index == [-1.75, -1.25, -0.75])
+        assert result.columns[0] == minx + 0.5 * dx
+        assert result.index[0] == miny + 0.5 * dy
+        assert result.columns[1] - result.columns[0] == dx
+        assert result.index[1] - result.index[0] == dy
+
+    def test_unpack_datagrid_custom_spacing_and_origin_center(self, mock_datagrid):
+        minx = miny = -2
+        dx = dy = 0.5
+
+        result = unpack_datagrid(mock_datagrid, cell_origin="center", minx=minx, miny=miny, dx=dx, dy=dy)
 
         assert np.all(result.columns == [-2, -1.5, -1])
         assert np.all(result.index == [-2, -1.5, -1])
+        assert result.columns[0] == minx
+        assert result.index[0] == miny
+        assert result.columns[1] - result.columns[0] == dx
+        assert result.index[1] - result.index[0] == dy
 
 
 class TestStandardizeSampling:
