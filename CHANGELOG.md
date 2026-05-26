@@ -11,6 +11,8 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
+- Support for Python 3.14 (#221)
+
 ### Changed
 
 ### Fixed
