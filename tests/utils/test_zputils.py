@@ -3,35 +3,55 @@ from __future__ import annotations
 from contextlib import nullcontext as does_not_raise
 from types import SimpleNamespace
 
+import numpy as np
 import pytest
 
 from zospy.utils.zputils import standardize_sampling, unpack_datagrid
 
-mock_datagrid = SimpleNamespace(
-    Values=[[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-    MinX=-1.5,
-    MinY=-1.5,
-    Nx=3,
-    Ny=3,
-    Dx=1,
-    Dy=1,
-    XLabel="x",
-    YLabel="y",
-)
 
+class TestUnpackDatagrid:
+    @pytest.fixture
+    def mock_datagrid(self):
+        return SimpleNamespace(
+            Values=[[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            MinX=-1.5,
+            MinY=-1.5,
+            Nx=3,
+            Ny=3,
+            Dx=1,
+            Dy=1,
+            XLabel="xlabel",
+            YLabel="ylabel",
+        )
 
-def test_unpack_datagrid_bottom_left():
-    result = unpack_datagrid(mock_datagrid, cell_origin="bottom_left")
+    def test_unpack_datagrid(self, mock_datagrid):
+        result = unpack_datagrid(mock_datagrid, cell_origin="center")
 
-    assert all(result.columns == [-1, 0, 1])
-    assert all(result.index == [-1, 0, 1])
+        assert np.all(result.values == mock_datagrid.Values)
+        assert result.columns.name == mock_datagrid.XLabel
+        assert result.index.name == mock_datagrid.YLabel
 
+    def test_unpack_datagrid_bottom_left(self, mock_datagrid):
+        result = unpack_datagrid(mock_datagrid, cell_origin="bottom_left")
 
-def test_unpack_datagrid_center():
-    result = unpack_datagrid(mock_datagrid, cell_origin="center")
+        assert np.all(result.columns == [-1, 0, 1])
+        assert np.all(result.index == [-1, 0, 1])
 
-    assert all(result.columns == [-1.5, -0.5, 0.5])
-    assert all(result.index == [-1.5, -0.5, 0.5])
+    def test_unpack_datagrid_center(self, mock_datagrid):
+        result = unpack_datagrid(mock_datagrid, cell_origin="center")
+
+        assert np.all(result.columns == [-1.5, -0.5, 0.5])
+        assert np.all(result.index == [-1.5, -0.5, 0.5])
+
+    def test_unpack_datagrid_invalid_cell_origin(self, mock_datagrid):
+        with pytest.raises(ValueError, match="Cannot process the cell origin 'invalid'"):
+            unpack_datagrid(mock_datagrid, cell_origin="invalid")
+
+    def test_unpack_datagrid_custom_spacing_and_origin(self, mock_datagrid):
+        result = unpack_datagrid(mock_datagrid, cell_origin="center", minx=-2, miny=-2, dx=0.5, dy=0.5)
+
+        assert np.all(result.columns == [-2, -1.5, -1])
+        assert np.all(result.index == [-2, -1.5, -1])
 
 
 class TestStandardizeSampling:

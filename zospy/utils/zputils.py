@@ -95,6 +95,8 @@ def unpack_datagrid(
     datagrid: _ZOSAPI.Analysis.Data.IAR_DataGrid,
     minx: float | None = None,
     miny: float | None = None,
+    dx: float | None = None,
+    dy: float | None = None,
     cell_origin: Literal["bottom_left", "center"] = "bottom_left",
     label_rounding: int | None = 10,
 ) -> pd.DataFrame:
@@ -108,6 +110,10 @@ def unpack_datagrid(
         The MinX coordinate to be used when unpacking the datagrid.
     miny : float, optional
         The MinY coordinate to be used when unpacking the datagrid.
+    dx : float, optional
+        The spacing between columns in the datagrid.
+    dy : float, optional
+        The spacing between rows in the datagrid.
     cell_origin : Literal["bottom_left", "center"]
         Defines how minx and miny are handled to determine coordinates. Either 'bottom_left' indicating that they are
         defining the bottom left of the grd cell, or 'center', indicating that they provide the center of the grid cell.
@@ -126,17 +132,19 @@ def unpack_datagrid(
 
     minx = datagrid.MinX if minx is None else minx
     miny = datagrid.MinY if miny is None else miny
+    dx = datagrid.Dx if dx is None else dx
+    dy = datagrid.Dy if dy is None else dy
 
     if cell_origin == "bottom_left":  # datagrid.MinX and .MinY point to edge of pixel, shift by half Dx and Dy
         minx += 0.5 * datagrid.Dx
         miny += 0.5 * datagrid.Dy
     elif cell_origin == "center":
-        pass  # minx and miny remain equal
+        pass  # minx and miny remain unchanged
     else:
         raise ValueError(f"Cannot process the cell origin '{cell_origin}'")
 
-    columns = np.linspace(minx, minx + datagrid.Dx * (datagrid.Nx - 1), datagrid.Nx)
-    rows = np.linspace(miny, miny + datagrid.Dy * (datagrid.Ny - 1), datagrid.Ny)
+    columns = np.linspace(minx, minx + dx * (datagrid.Nx - 1), datagrid.Nx)
+    rows = np.linspace(miny, miny + dy * (datagrid.Ny - 1), datagrid.Ny)
 
     if label_rounding is not None:
         columns = columns.round(label_rounding)
