@@ -20,10 +20,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Typing :: Typed",
 ]
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10,<3.15"
 dependencies = [
     "lark ~= 1.2.0",
-    "pythonnet >=3.0.0,<4",
+    "pythonnet >=3.1.0,<4",
     "pandas",
     "pydantic >= 2.4.0",
     "numpy",
@@ -43,7 +43,7 @@ source = "versioningit"
 default-version = "0.0.0+unknown"
 
 [tool.hatch.envs.default]
-python = "3.12"
+python = "3.14"
 installer = "uv"
 path = ".venv"
 dependencies = ["pytest"]
@@ -71,7 +71,7 @@ randomize = false
 retries = 0
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.13", "3.12", "3.11", "3.10"]
+python = ["3.14", "3.13", "3.12", "3.11", "3.10"]
 
 ## Documentation
 [tool.hatch.envs.docs]
