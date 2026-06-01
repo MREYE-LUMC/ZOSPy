@@ -23,6 +23,18 @@ class TestWavefrontMap:
         result = WavefrontMap().run(simple_system)
         assert result.from_json(result.to_json()).to_json() == result.to_json()
 
+    def test_datagrid_indices(self, simple_system):
+        sampling = 64
+        result = WavefrontMap(sampling=f"{sampling}x{sampling}").run(simple_system)
+
+        step_size = result.data.index[1] - result.data.index[0]
+
+        assert result.data.index[1] == pytest.approx(-1.0)
+        assert result.data.columns[1] == pytest.approx(-1.0)
+        assert result.data.index[-1] == pytest.approx(1.0)
+        assert result.data.columns[-1] == pytest.approx(1.0)
+        assert step_size == pytest.approx(2 / (sampling - 2))
+
     @pytest.mark.parametrize(
         "sampling,use_exit_pupil", [("64x64", True), ("64x64", False), ("128x128", True), ("128x128", False)]
     )
@@ -30,6 +42,14 @@ class TestWavefrontMap:
         result = WavefrontMap(sampling=sampling, use_exit_pupil=use_exit_pupil).run(simple_system)
 
         assert_frame_equal(result.data, expected_data.data)
+
+    @pytest.mark.parametrize(
+        "sampling,use_exit_pupil", [("64x64", True), ("64x64", False), ("128x128", True), ("128x128", False)]
+    )
+    def test_wavefront_map_matches_reference_data(self, simple_system, sampling, use_exit_pupil, reference_data):
+        result = WavefrontMap(sampling=sampling, use_exit_pupil=use_exit_pupil).run(simple_system)
+
+        assert_frame_equal(result.data, reference_data.data)
 
 
 class TestZernikeStandardCoefficients:

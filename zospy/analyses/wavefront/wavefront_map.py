@@ -12,7 +12,7 @@ from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
 from zospy.analyses.parsers.types import ZOSAPIConstant  # noqa: TC001
 from zospy.api import constants
-from zospy.utils.zputils import standardize_sampling
+from zospy.utils.zputils import standardize_sampling, unpack_datagrid
 
 __all__ = ("WavefrontMap", "WavefrontMapSettings")
 
@@ -76,7 +76,7 @@ class WavefrontMapSettings:
     contour_format: str = Field(default="", description="Contour format")
 
 
-class WavefrontMap(BaseAnalysisWrapper[DataFrame | None, WavefrontMapSettings], analysis_type="WavefrontMap"):
+class WavefrontMap(BaseAnalysisWrapper[DataFrame, WavefrontMapSettings], analysis_type="WavefrontMap"):
     """Wavefront Map analysis.
 
     Warnings
@@ -140,5 +140,33 @@ class WavefrontMap(BaseAnalysisWrapper[DataFrame | None, WavefrontMapSettings], 
 
         self.analysis.ApplyAndWaitForCompletion()
 
-        datagrid = self.get_data_grid(cell_origin="bottom_left")
-        return pd.DataFrame(datagrid.values[1:, 1:], columns=datagrid.columns[:-1], index=datagrid.index[:-1])
+        datagrid = self.get_data_grid()
+
+        if datagrid is None:
+            raise ValueError("The wavefront map analysis did not return a result.")
+
+        return datagrid
+
+    def get_data_grid(self) -> pd.DataFrame | None:
+        """Get the data grid from the Wavefront Map analysis result.
+
+        The wavefront map analysis only supports even N x N samplings, but samples the pupil at (N - 1) x (N - 1) points
+        to include the pupil center. As a result, the first row and column of the returned datagrid are empty.
+        The index and column labels of the datagrid are adjusted accordingly to span from -1 to 1 for the non-empty
+        rows and columns.
+
+        Returns
+        -------
+        pd.DataFrame | None
+            The data grids from the analysis result, or None if there are no data grids.
+        """
+        if self.analysis.Results.NumberOfDataGrids == 0:
+            return None
+
+        sampling = self.analysis.Results.DataGrids[0].Nx
+        step_size = 2 / (sampling - 2)
+        minx = -1 - step_size
+
+        return unpack_datagrid(
+            self.analysis.Results.DataGrids[0], minx=minx, miny=minx, dx=step_size, dy=step_size, cell_origin="center"
+        )

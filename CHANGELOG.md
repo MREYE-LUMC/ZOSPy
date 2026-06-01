@@ -17,6 +17,8 @@ ZOS-API can also be added in patch releases.
 
 ### Fixed
 
+- DataFrames returned by the Wavefront Map analysis now have the same size as the requested sampling, with the first row and column containing NaN values. Row and column labels span the range [-1, 1] for the coordinates inside the pupil (#222)
+
 ### Deprecated
 
 ### Removed
