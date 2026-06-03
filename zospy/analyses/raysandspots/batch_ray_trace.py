@@ -148,6 +148,7 @@ class NormUnpol(BaseAnalysisWrapper[pd.DataFrame | None, NormUnpolSettings],
                    "l2","m2","n2","opd","Intensity"]
         for ii in range(number_of_rays):
             outputs.append(normUnPolData.ReadNextResult(*placeholders)[1:])
+        raytrace.Close()
 
         # Convert to DataFrame and return
         return pd.DataFrame(outputs, columns=columns)
