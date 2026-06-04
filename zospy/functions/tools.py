@@ -12,16 +12,18 @@ if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
     from zospy.zpcore import OpticStudioSystem
 
+__all__ = ("open_tool",)
+
 logger = logging.getLogger(__name__)
 
 
 @contextmanager
 def open_tool(
-    oss: OpticStudioSystem, tool: Callable[..., _ZOSAPI.Tools.ISystemTool], *, close_current: bool = False
+    oss: OpticStudioSystem, tool: Callable[[], _ZOSAPI.Tools.ISystemTool], *, close_current: bool = False
 ) -> Generator[_ZOSAPI.Tools.ISystemTool, Any, None]:
     """Context manager for opening a tool in OpticStudio.
 
-    Opens a tool in OpticStudio and ensures that it is properly closed after use. If there is already an open tool, it can
+    Opens a tool in OpticStudio and ensures that it is properly closed after use. If there is already an open tool, it
     will be closed if `close_current` is True. Otherwise, a RuntimeError is raised.
 
     Parameters
