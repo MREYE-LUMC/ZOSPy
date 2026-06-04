@@ -4,10 +4,11 @@
 
 - **`zospy.functions.lde`** provides helper functions for the Lens Data Editor (LDE);
 - **`zospy.functions.nce`** provides helper functions for the Non-sequential Component Editor (NCE).
+- **`zospy.functions.tools`** provides helper functions for Tools in OpticStudio.
 """
 
 from __future__ import annotations
 
-from zospy.functions import lde, nce
+from zospy.functions import lde, nce, tools
 
-__all__ = ("lde", "nce")
+__all__ = ("lde", "nce", "tools")
