@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from importlib.metadata import version
 
-from zospy import analyses, functions, solvers
+from zospy import analyses, functions, solvers, tools
 from zospy.api import config, constants
 from zospy.zpcore import ZOS
 
@@ -17,6 +17,7 @@ __all__ = (
     "constants",
     "functions",
     "solvers",
+    "tools",
 )
 
 config.set_decimal_point_and_thousands_separator()

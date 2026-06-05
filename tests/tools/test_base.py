@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from zospy.functions.tools import open_tool
+from zospy.tools import open_tool
 
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture
