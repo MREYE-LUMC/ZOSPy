@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Literal, Annotated, Union, Sequence
+from typing import Literal, Annotated
+from collections.abc import Sequence
 
 import pandas as pd
-from pydantic import confloat, conint, Field, model_validator
+from pydantic import Field, PositiveInt, model_validator
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
@@ -15,8 +16,7 @@ __all__ = ("BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
 
 
 # Constrained types
-NormalizedCoordinate = Annotated[float, confloat(le=1.0, ge=-1.0)]
-PositiveInt = Annotated[int, conint(gt=0)]
+NormalizedCoordinate = Annotated[float, Field(le=1.0, ge=-1.0)]
 
 @analysis_settings
 class BatchRayTraceNormUnpolSettings:
@@ -97,7 +97,7 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNorm
         """
         super().__init__(settings_kws=locals())
 
-    def run_analysis(self) -> pd.DataFrame | None:
+    def run_analysis(self) -> pd.DataFrame:
         """Run the Batch Ray Trace of unpolarized light."""
         number_of_rays = len(self.settings.hx)
         wavelengths = [self.settings.wavelength] * number_of_rays if isinstance(self.settings.wavelength, int) else self.settings.wavelength
