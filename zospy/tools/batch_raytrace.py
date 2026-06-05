@@ -121,7 +121,7 @@ class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpo
         return oss.Tools.OpenBatchRayTrace
         
 
-    def run_analysis(self, tool: _ZOSAPI.Tools.RayTrace.IBatchRayTrace) -> pd.DataFrame:
+    def _run_tool(self, tool: _ZOSAPI.Tools.RayTrace.IBatchRayTrace) -> pd.DataFrame:
         """Run the Batch Ray Trace of unpolarized light."""
         tool.Hx = self.settings.hx
         tool.Hy = self.settings.hy
@@ -163,7 +163,7 @@ class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpo
         columns = ["rayNumber","ErrorCode","vignetteCode",
                    "X","Y","Z","L","M","N",
                    "l2","m2","n2","opd","Intensity"]
-        outputs = [norm_unpol_data.ReadNextResult()[1:] for _ in range(number_of_rays)]
+        outputs = [norm_unpol_data.ReadNextResult()[1:] for _ in range(tool.number_of_rays)]
 
         # Convert to DataFrame and return
         return pd.DataFrame(outputs, columns=columns)
