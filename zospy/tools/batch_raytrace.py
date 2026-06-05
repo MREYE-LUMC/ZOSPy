@@ -1,18 +1,23 @@
-"""Batch Ray Trace analysis."""
+"""Batch Ray Trace tool."""
 
 from __future__ import annotations
 
-from typing import Literal, Annotated
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
 from pydantic import Field, PositiveInt, BeforeValidator, model_validator
 
-from zospy.analyses.base import BaseAnalysisWrapper
+from zospy.tools.base import BaseToolWrapper
 from zospy.analyses.decorators import analysis_settings
 from zospy.analyses.parsers.types import ZOSAPIConstant
 from zospy.api import constants
+
+if TYPE_CHECKING:
+    from typing import Literal, Annotated
+    from collections.abc import Sequence, Callable
+    
+    from zospy.api import _ZOSAPI
 
 __all__ = ("BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
 
@@ -88,9 +93,7 @@ class BatchRayTraceNormUnpolSettings:
         return self
     
 
-class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNormUnpolSettings],
-    analysis_type="RayTrace",
-):
+class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpolSettings]):
     """Batch Ray Trace of unpolarized light."""
 
     def __init__(
@@ -113,39 +116,46 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNorm
         """
         super().__init__(settings_kws=locals())
 
-    def run_analysis(self) -> pd.DataFrame:
+    def _get_tool_opener(self, oss) -> Callable[[], _ZOSAPI.Tools.RayTrace.IBatchRayTrace]:
+        """Get a callable that opens the batch raytrace tool in OpticStudio and returns the tool object."""
+        return oss.Tools.OpenBatchRayTrace
+        
+
+    def run_analysis(self, tool: _ZOSAPI.Tools.RayTrace.IBatchRayTrace) -> pd.DataFrame:
         """Run the Batch Ray Trace of unpolarized light."""
-        number_of_rays = len(self.settings.hx)
-        wavelengths = [self.settings.wavelength] * number_of_rays if isinstance(self.settings.wavelength, int) else self.settings.wavelength
-        rays_type = constants.process_constant(
+        tool.Hx = self.settings.hx
+        tool.Hy = self.settings.hy
+        tool.Px = self.settings.px
+        tool.Py = self.settings.py
+        tool.number_of_rays = len(tool.Hx)
+        tool.wavelengths = [self.settings.wavelength] * number_of_rays if isinstance(self.settings.wavelength, int) else self.settings.wavelength
+        tool.rays_type = constants.process_constant(
             constants.Tools.RayTrace.RaysType, self.settings.rays_type
         )
-        opd_mode = constants.process_constant(
+        tool.opd_mode = constants.process_constant(
             constants.Tools.RayTrace.OPDMode, self.settings.opd_mode
         )
-        surface = -1 if self.settings.surface == "Image" else self.settings.surface
+        tool.surface = -1 if self.settings.surface == "Image" else self.settings.surface
 
         # Initiate batch ray trace
-        raytrace = self.oss.Tools.OpenBatchRayTrace()
-        norm_unpol_data = raytrace.CreateNormUnpol(
-            number_of_rays,
-            rays_type,
-            surface,
+        norm_unpol_data = tool.CreateNormUnpol(
+            tool.number_of_rays,
+            tool.rays_type,
+            tool.surface,
         )
 
         # Add rays
         for wavelength, hx, hy, px, py in zip(
-            wavelengths,
-            self.settings.hx,
-            self.settings.hy,
-            self.settings.px,
-            self.settings.py,
+            tool.wavelengths,
+            tool.Hx,
+            tool.Hy,
+            tool.Px,
+            tool.Py,
         ):
-            norm_unpol_data.AddRay(wavelength, hx, hy, px, py, opd_mode)
+            norm_unpol_data.AddRay(wavelength, hx, hy, px, py, tool.opd_mode)
 
         # Run ray trace and read results
-        self.analysis.ApplyAndWaitForCompletion()
-        raytrace.RunAndWaitForCompletion()
+        tool.RunAndWaitForCompletion()
         norm_unpol_data.StartReadingResults()
 
         # Read all results and append to outputs
@@ -154,7 +164,6 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNorm
                    "X","Y","Z","L","M","N",
                    "l2","m2","n2","opd","Intensity"]
         outputs = [norm_unpol_data.ReadNextResult()[1:] for _ in range(number_of_rays)]
-        raytrace.Close()
 
         # Convert to DataFrame and return
         return pd.DataFrame(outputs, columns=columns)
