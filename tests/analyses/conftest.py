@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from tests.config import CONFIG_DATA_FOLDER, REFERENCE_DATA_FOLDER, REFERENCE_VERSION
+from tests.helpers import _all_subclasses
 from zospy.analyses.base import AnalysisResult, BaseAnalysisWrapper
 from zospy.analyses.psf.huygens_psf import BaseHuygensPSF
 from zospy.analyses.systemviewers.base import SystemViewerWrapper
@@ -54,10 +55,6 @@ def reference_data(request) -> AnalysisResult:
         pytest.skip(f"Data file {data_file} does not exist")
 
     return AnalysisResult.from_json(data_file.read_text(encoding="utf-8"))
-
-
-def _all_subclasses(cls):
-    return set(cls.__subclasses__()).union([s for c in cls.__subclasses__() for s in _all_subclasses(c)])
 
 
 _analysis_wrapper_classes = [

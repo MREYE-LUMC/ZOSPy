@@ -137,8 +137,8 @@ def _serialize_analysis_data_type(data: AnalysisData) -> _TypeInfo:
     raise ValueError(f"Cannot serialize data type: {type(data)}")
 
 
-def _deserialize_zospy_class(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
-    if typeinfo["module"].startswith("zospy.analyses"):
+def _deserialize_zospy_class(data: dict, typeinfo: _TypeInfo, module: str) -> object:
+    if typeinfo["module"].startswith(module):
         try:
             m = import_module(typeinfo["module"])
             t = getattr(m, typeinfo["name"])
@@ -150,7 +150,7 @@ def _deserialize_zospy_class(data: dict, typeinfo: _TypeInfo) -> AnalysisData:
     return data
 
 
-def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> AnalysisData:
+def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> object:
     if typeinfo["data_type"] == "none":
         return None
 
@@ -161,7 +161,7 @@ def _deserialize_analysis_data(data: dict | list, typeinfo: _TypeInfo) -> Analys
         return np.array(data)
 
     if typeinfo["data_type"] == "zospy_class":
-        return _deserialize_zospy_class(data, typeinfo)
+        return _deserialize_zospy_class(data, typeinfo, module="zospy.analyses")
 
     raise ValueError(f"Cannot deserialize data type: {typeinfo['data_type']}")
 

@@ -90,14 +90,14 @@ class ToolResult(Generic[ToolOutputData, ToolSettings]):
     ----------
     data : ToolOutputData
         The data of the tool. Can be a `pandas.DataFrame`, `numpy.ndarray`, or a tool-specific dataclass.
-    settings : ToolSettings | None
+    settings : ToolSettings
         The settings of the tool.
     error_message : str | None
         Error message from the analysis. If the tool ran successfully, this will be None.
     """
 
     data: ToolOutputData
-    settings: ToolSettings | None
+    settings: ToolSettings
     error_message: str | None
 
     def to_json(self):
@@ -145,7 +145,9 @@ class ToolResult(Generic[ToolOutputData, ToolSettings]):
             if "__tool_data__" in data:
                 data["data"] = _deserialize_analysis_data(data["data"], data.pop("__tool_data__"))
             if "__tool_settings__" in data:
-                data["settings"] = _deserialize_zospy_class(data["settings"], data.pop("__tool_settings__"))
+                data["settings"] = _deserialize_zospy_class(
+                    data["settings"], data.pop("__tool_settings__"), module="zospy.tools"
+                )
 
         return handler(data)
 
