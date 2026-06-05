@@ -6,7 +6,6 @@ from typing import Literal, Annotated, Union, Sequence
 
 import pandas as pd
 from pydantic import confloat, conint, Field, model_validator
-from System import Int32, Double
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
@@ -133,16 +132,12 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNorm
         raytrace.RunAndWaitForCompletion()
         normUnPolData.StartReadingResults()
 
-        # Create placeholders for all output arguments
-        placeholders = [Int32(1)]*3 + [Double(1.0)]*11
-
         # Read all results and append to outputs
         outputs = []
         columns = ["rayNumber","ErrorCode","vignetteCode",
                    "X","Y","Z","L","M","N",
                    "l2","m2","n2","opd","Intensity"]
-        for ii in range(number_of_rays):
-            outputs.append(normUnPolData.ReadNextResult(*placeholders)[1:])
+        outputs = [normUnPolData.ReadNextResult()[1:] for _ in range(number_of_rays)]
         raytrace.Close()
 
         # Convert to DataFrame and return
