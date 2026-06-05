@@ -6,17 +6,17 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
-from pydantic import Field, PositiveInt, BeforeValidator, model_validator
+from pydantic import BeforeValidator, Field, PositiveInt, model_validator
 
-from zospy.tools.base import BaseToolWrapper
 from zospy.analyses.decorators import analysis_settings
 from zospy.analyses.parsers.types import ZOSAPIConstant
 from zospy.api import constants
+from zospy.tools.base import BaseToolWrapper
 
 if TYPE_CHECKING:
-    from typing import Literal, Annotated
-    from collections.abc import Sequence, Callable
-    
+    from collections.abc import Callable, Sequence
+    from typing import Annotated, Literal
+
     from zospy.api import _ZOSAPI
 
 __all__ = ("BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
@@ -79,19 +79,18 @@ class BatchRayTraceNormUnpolSettings:
         """Validate that hx, hy, px, py (and wavelength) have the same lengths."""
         if not len(self.hx) == len(self.hy) == len(self.px) == len(self.py):
             raise ValueError(
-                f"Hx, Hy, Px, Py must all have the same length."
+                "Hx, Hy, Px, Py must all have the same length."
             )
         expected_len = len(self.hx)
 
-        if isinstance(self.wavelength, Sequence):
-            if len(self.wavelength) != expected_len:
-                raise ValueError(
-                    f"`wavelength` sequence length ({len(self.wavelength)}) must match "
-                    f"the length of Hx, Hy, Px, Py ({expected_len})."
-                )
+        if isinstance(self.wavelength, Sequence) and len(self.wavelength) != expected_len:
+            raise ValueError(
+                f"`wavelength` sequence length ({len(self.wavelength)}) must match "
+                f"the length of Hx, Hy, Px, Py ({expected_len})."
+            )
 
         return self
-    
+
 
 class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpolSettings]):
     """Batch Ray Trace of unpolarized light."""
@@ -119,7 +118,7 @@ class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpo
     def _get_tool_opener(self, oss) -> Callable[[], _ZOSAPI.Tools.RayTrace.IBatchRayTrace]:
         """Get a callable that opens the batch raytrace tool in OpticStudio and returns the tool object."""
         return oss.Tools.OpenBatchRayTrace
-        
+
 
     def _run_tool(self, tool: _ZOSAPI.Tools.RayTrace.IBatchRayTrace) -> pd.DataFrame:
         """Run the Batch Ray Trace of unpolarized light."""
