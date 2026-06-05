@@ -103,9 +103,9 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame | None, BatchRayTr
         """Run the Batch Ray Trace of unpolarized light."""
         number_of_rays = len(self.settings.hx)
         if isinstance(self.settings.wavelength, int):
-            wvls = [self.settings.wavelength]*number_of_rays
+            wavelengths = [self.settings.wavelength]*number_of_rays
         else:
-            wvls = self.settings.wavelength
+            wavelengths = self.settings.wavelength
         rays_type = constants.process_constant(
             constants.Tools.RayTrace.RaysType, self.settings.rays_type
         )
