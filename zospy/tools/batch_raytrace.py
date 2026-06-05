@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Annotated, Literal
+from collections.abc import Sequence
 
 import numpy as np
 import pandas as pd
@@ -14,8 +16,7 @@ from zospy.api import constants
 from zospy.tools.base import BaseToolWrapper
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
-    from typing import Annotated, Literal
+    from collections.abc import Callable
 
     from zospy.api import _ZOSAPI
 
