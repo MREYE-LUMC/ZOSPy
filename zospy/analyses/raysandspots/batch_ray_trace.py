@@ -5,8 +5,9 @@ from __future__ import annotations
 from typing import Literal, Annotated
 from collections.abc import Sequence
 
+import numpy as np
 import pandas as pd
-from pydantic import Field, PositiveInt, model_validator
+from pydantic import Field, PositiveInt, BeforeValidator, model_validator
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
@@ -16,8 +17,22 @@ from zospy.api import constants
 __all__ = ("BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
 
 
+def ndarray_to_list(v):
+    """Function to convert ndarray to list."""
+    if isinstance(v, np.ndarray):
+        return v.tolist()
+    return v
+
 # Constrained types
 NormalizedCoordinate = Annotated[float, Field(le=1.0, ge=-1.0)]
+CoordinateVector = Annotated[
+    Sequence[NormalizedCoordinate],
+    BeforeValidator(ndarray_to_list),
+]
+PositiveIntVector = Annotated[
+    Sequence[PositiveInt],
+    BeforeValidator(ndarray_to_list),
+]
 
 @analysis_settings
 class BatchRayTraceNormUnpolSettings:
@@ -45,11 +60,11 @@ class BatchRayTraceNormUnpolSettings:
         Mode of optical path difference for rays (e.g. 'None'). Defaults to 'None'.
     """
 
-    hx: Sequence[NormalizedCoordinate] = Field(default=[0], description="Normalized X field coordinate")
-    hy: Sequence[NormalizedCoordinate] = Field(default=[0], description="Normalized Y field coordinate")
-    px: Sequence[NormalizedCoordinate] = Field(default=[0], description="Normalized X pupil coordinate")
-    py: Sequence[NormalizedCoordinate] = Field(default=[0], description="Normalized Y pupil coordinate")
-    wavelength: PositiveInt | Sequence[PositiveInt] = Field(default=1, description="Wavelength number")
+    hx: CoordinateVector = Field(default=[0], description="Normalized X field coordinate")
+    hy: CoordinateVector = Field(default=[0], description="Normalized Y field coordinate")
+    px: CoordinateVector = Field(default=[0], description="Normalized X pupil coordinate")
+    py: CoordinateVector = Field(default=[0], description="Normalized Y pupil coordinate")
+    wavelength: PositiveInt | PositiveIntVector = Field(default=1, description="Wavelength number")
     surface: Literal["Image"] | Annotated[int, Field(ge=0)] = Field(default="Image", description="Surface number")
     rays_type: ZOSAPIConstant("Tools.RayTrace.RaysType") = Field(default="Real", description="Type of rays to trace")
     opd_mode: ZOSAPIConstant("Tools.RayTrace.OPDMode") = Field(default="None", description="Mode of optical path difference")
