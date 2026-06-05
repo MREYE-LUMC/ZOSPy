@@ -123,15 +123,14 @@ class NormUnpol(BaseAnalysisWrapper[pd.DataFrame | None, NormUnpolSettings],
         )
 
         # Add rays
-        for ii in range(number_of_rays):
-            normUnPolData.AddRay(
-                wvls[ii],
-                self.settings.hx[ii],
-                self.settings.hy[ii],
-                self.settings.px[ii],
-                self.settings.py[ii],
-                opd_mode,
-            )
+        for wavelength, hx, hy, px, py in zip(
+            wavelengths,
+            self.settings.hx,
+            self.settings.hy,
+            self.settings.px,
+            self.settings.py,
+        ):
+            normUnPolData.AddRay(wavelength, hx, hy, px, py, opd_mode)
 
         # Run ray trace and read results
         self.analysis.ApplyAndWaitForCompletion()
