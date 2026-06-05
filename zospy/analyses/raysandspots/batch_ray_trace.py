@@ -12,7 +12,7 @@ from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
 from zospy.api import constants
 
-__all__ = ("NormUnpol", "NormUnpolSettings")
+__all__ = ("BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
 
 
 # Constrained types
@@ -20,7 +20,7 @@ FloatInRange = Annotated[float, confloat(le=1.0, ge=-1.0)]
 PositiveInt = Annotated[int, conint(gt=0)]
 
 @analysis_settings
-class NormUnpolSettings:
+class BatchRayTraceNormUnpolSettings:
     """Settings for the Batch Ray Trace of unpolarized light.
 
     Attributes
@@ -74,7 +74,7 @@ class NormUnpolSettings:
         return self
     
 
-class NormUnpol(BaseAnalysisWrapper[pd.DataFrame | None, NormUnpolSettings],
+class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame | None, BatchRayTraceNormUnpolSettings],
     analysis_type="RayTrace",
 ):
     """Batch Ray Trace of unpolarized light."""
@@ -95,7 +95,7 @@ class NormUnpol(BaseAnalysisWrapper[pd.DataFrame | None, NormUnpolSettings],
 
         See Also
         --------
-        NormUnpolSettings : Settings for the Batch Ray Trace of unpolarized light.
+        BatchRayTraceNormUnpolSettings : Settings for the Batch Ray Trace of unpolarized light.
         """
         super().__init__(settings_kws=locals())
 
