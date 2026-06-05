@@ -7,8 +7,10 @@ from zospy.analyses.raysandspots.single_ray_trace import (
     SingleRayTrace,
     SingleRayTraceSettings,
 )
-from zospy.analyses.raysandspots.batch_ray_trace import NormUnpol as BatchRayTraceNormUnpol
-from zospy.analyses.raysandspots.batch_ray_trace import NormUnpolSettings as BatchRayTraceNormUnpolSettings
+from zospy.analyses.raysandspots.batch_ray_trace import (
+    BatchRayTraceNormUnpol,
+    BatchRayTraceNormUnpolSettings,
+)
 
 __all__ = ("RayFan", "RayFanSettings", "SingleRayTrace", "SingleRayTraceSettings",
            "BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
