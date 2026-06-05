@@ -10,5 +10,10 @@ from __future__ import annotations
 
 from zospy.tools.base import open_tool
 from zospy.tools.quick_focus import QuickFocus, QuickFocusSettings
+from zospy.tools.batch_raytrace import (
+    BatchRayTraceNormUnpol,
+    BatchRayTraceNormUnpolSettings,
+)
 
-__all__ = ("QuickFocus", "QuickFocusSettings", "open_tool")
+__all__ = ("QuickFocus", "QuickFocusSettings", "open_tool",
+           "BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
