@@ -10,6 +10,7 @@ from pydantic import Field, PositiveInt, model_validator
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
+from zospy.analyses.parsers.types import ZOSAPIConstant
 from zospy.api import constants
 
 __all__ = ("BatchRayTraceNormUnpol", "BatchRayTraceNormUnpolSettings")
@@ -50,8 +51,8 @@ class BatchRayTraceNormUnpolSettings:
     py: Sequence[NormalizedCoordinate] = Field(default=[0], description="Normalized Y pupil coordinate")
     wavelength: PositiveInt | Sequence[PositiveInt] = Field(default=1, description="Wavelength number")
     surface: Literal["Image"] | Annotated[int, Field(ge=0)] = Field(default="Image", description="Surface number")
-    rays_type: Literal["Real", "Paraxial"] = Field(default="Real", description="Type of rays to trace")
-    opd_mode: Literal["None", "Current", "CurrentAndChief"] = Field(default="None", description="Mode of optical path difference")
+    rays_type: ZOSAPIConstant("Tools.RayTrace.RaysType") = Field(default="Real", description="Type of rays to trace")
+    opd_mode: ZOSAPIConstant("Tools.RayTrace.OPDMode") = Field(default="None", description="Mode of optical path difference")
 
     @model_validator(mode="after")
     def validate_lengths(self):
@@ -86,8 +87,8 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNorm
         py: Sequence[float] = (0,),
         wavelength: int | Sequence[int] = 1,
         surface: Literal["Image"] | int = "Image",
-        rays_type: str = "Real",
-        opd_mode: str = "None",
+        rays_type: str | constants.Tools.RayTrace.RaysType = "Real",
+        opd_mode: str | constants.Tools.RayTrace.OPDMode = "None",
     ):
         """Create a new Batch Ray Trace of unpolarized light.
 
@@ -111,7 +112,7 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNorm
 
         # Initiate batch ray trace
         raytrace = self.oss.Tools.OpenBatchRayTrace()
-        normUnPolData = raytrace.CreateNormUnpol(
+        norm_unpol_data = raytrace.CreateNormUnpol(
             number_of_rays,
             rays_type,
             surface,
@@ -125,19 +126,19 @@ class BatchRayTraceNormUnpol(BaseAnalysisWrapper[pd.DataFrame, BatchRayTraceNorm
             self.settings.px,
             self.settings.py,
         ):
-            normUnPolData.AddRay(wavelength, hx, hy, px, py, opd_mode)
+            norm_unpol_data.AddRay(wavelength, hx, hy, px, py, opd_mode)
 
         # Run ray trace and read results
         self.analysis.ApplyAndWaitForCompletion()
         raytrace.RunAndWaitForCompletion()
-        normUnPolData.StartReadingResults()
+        norm_unpol_data.StartReadingResults()
 
         # Read all results and append to outputs
         outputs = []
         columns = ["rayNumber","ErrorCode","vignetteCode",
                    "X","Y","Z","L","M","N",
                    "l2","m2","n2","opd","Intensity"]
-        outputs = [normUnPolData.ReadNextResult()[1:] for _ in range(number_of_rays)]
+        outputs = [norm_unpol_data.ReadNextResult()[1:] for _ in range(number_of_rays)]
         raytrace.Close()
 
         # Convert to DataFrame and return
