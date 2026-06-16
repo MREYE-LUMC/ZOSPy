@@ -47,13 +47,13 @@ class BatchRayTraceNormUnpolSettings:
     Attributes
     ----------
     hx : Sequence[float] | np.ndarray
-        Sequence of normalized X field coordinates. Defaults to [0].
+        Sequence of normalized X field coordinates. Defaults to (0,).
     hy : Sequence[float] | np.ndarray
-        Sequence of normalized Y field coordinates. Defaults to [0].
+        Sequence of normalized Y field coordinates. Defaults to (0,).
     px : Sequence[float] | np.ndarray
-        Sequence of normalized X pupil coordinates. Defaults to [0].
+        Sequence of normalized X pupil coordinates. Defaults to (0,).
     py : Sequence[float] | np.ndarray
-        Sequence of normalized Y pupil coordinates. Defaults to [0].
+        Sequence of normalized Y pupil coordinates. Defaults to (0,).
     wavelength : int | Sequence[int] | np.ndarray
         The wavelength number that is to be used. Must be an integer or a sequence of integers specifying the wavelength number.
         Defaults to 1.
