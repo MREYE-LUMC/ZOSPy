@@ -66,3 +66,7 @@ def assert_dataclass_equal(
         return True
 
     return None
+
+
+def _all_subclasses(cls):
+    return set(cls.__subclasses__()).union([s for c in cls.__subclasses__() for s in _all_subclasses(c)])

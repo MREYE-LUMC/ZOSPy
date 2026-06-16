@@ -12,6 +12,7 @@ ZOS-API can also be added in patch releases.
 ### Added
 
 - Support for Python 3.14 (#221)
+- New `zospy.tools` submodule with `open_tool` (a context manager to open a tool and close it automatically after use) and tool wrappers (#226)
 
 ### Changed
 

@@ -2,7 +2,7 @@
 
 Analyses in OpticStudio are available through `zospy.analyses`.
 This module provides basic classes and functions for interacting with
-analyses (in `zospy.analyses.base`), as well as a procedural interface
+analyses (in `zospy.analyses.base`), as well as an object-oriented interface
 to several analyses.
 
 Examples
