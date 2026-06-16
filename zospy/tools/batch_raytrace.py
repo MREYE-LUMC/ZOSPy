@@ -129,36 +129,32 @@ class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpo
         DataFrame
             The data in long format.
         """
-        tool.Hx = self.settings.hx
-        tool.Hy = self.settings.hy
-        tool.Px = self.settings.px
-        tool.Py = self.settings.py
-        tool.number_of_rays = len(tool.Hx)
-        tool.wavelengths = [self.settings.wavelength] * number_of_rays if isinstance(self.settings.wavelength, int) else self.settings.wavelength
-        tool.rays_type = constants.process_constant(
+        number_of_rays = len(self.settings.hx)
+        wavelengths = [self.settings.wavelength] * number_of_rays if isinstance(self.settings.wavelength, int) else self.settings.wavelength
+        rays_type = constants.process_constant(
             constants.Tools.RayTrace.RaysType, self.settings.rays_type
         )
-        tool.opd_mode = constants.process_constant(
+        opd_mode = constants.process_constant(
             constants.Tools.RayTrace.OPDMode, self.settings.opd_mode
         )
-        tool.surface = -1 if self.settings.surface == "Image" else self.settings.surface
+        surface = -1 if self.settings.surface == "Image" else self.settings.surface
 
         # Initiate batch ray trace
         norm_unpol_data = tool.CreateNormUnpol(
-            tool.number_of_rays,
-            tool.rays_type,
-            tool.surface,
+            number_of_rays,
+            rays_type,
+            surface,
         )
 
         # Add rays
         for wavelength, hx, hy, px, py in zip(
-            tool.wavelengths,
-            tool.Hx,
-            tool.Hy,
-            tool.Px,
-            tool.Py,
+            wavelengths,
+            self.settings.hx,
+            self.settings.hy,
+            self.settings.px,
+            self.settings.py,
         ):
-            norm_unpol_data.AddRay(wavelength, hx, hy, px, py, tool.opd_mode)
+            norm_unpol_data.AddRay(wavelength, hx, hy, px, py, opd_mode)
 
         # Run ray trace and read results
         tool.RunAndWaitForCompletion()
@@ -169,7 +165,7 @@ class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpo
         columns = ["rayNumber","ErrorCode","vignetteCode",
                    "X","Y","Z","L","M","N",
                    "l2","m2","n2","opd","Intensity"]
-        outputs = [norm_unpol_data.ReadNextResult()[1:] for _ in range(tool.number_of_rays)]
+        outputs = [norm_unpol_data.ReadNextResult()[1:] for _ in range(number_of_rays)]
 
         # Convert to DataFrame and return
         return pd.DataFrame(outputs, columns=columns)
