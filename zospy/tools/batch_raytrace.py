@@ -46,15 +46,15 @@ class BatchRayTraceNormUnpolSettings:
 
     Attributes
     ----------
-    hx : Sequence[float]
+    hx : Sequence[float] | np.ndarray
         Sequence of normalized X field coordinates. Defaults to [0].
-    hy : Sequence[float]
+    hy : Sequence[float] | np.ndarray
         Sequence of normalized Y field coordinates. Defaults to [0].
-    px : Sequence[float]
+    px : Sequence[float] | np.ndarray
         Sequence of normalized X pupil coordinates. Defaults to [0].
-    py : Sequence[float]
+    py : Sequence[float] | np.ndarray
         Sequence of normalized Y pupil coordinates. Defaults to [0].
-    wavelength : int | Sequence[int]
+    wavelength : int | Sequence[int] | np.ndarray
         The wavelength number that is to be used. Must be an integer or a sequence of integers specifying the wavelength number.
         Defaults to 1.
     surface : str | int
@@ -66,10 +66,10 @@ class BatchRayTraceNormUnpolSettings:
         Mode of optical path difference for rays (e.g. 'None'). Defaults to 'None'.
     """
 
-    hx: CoordinateVector = Field(default=[0], description="Normalized X field coordinate")
-    hy: CoordinateVector = Field(default=[0], description="Normalized Y field coordinate")
-    px: CoordinateVector = Field(default=[0], description="Normalized X pupil coordinate")
-    py: CoordinateVector = Field(default=[0], description="Normalized Y pupil coordinate")
+    hx: CoordinateVector = Field(default=(0,), description="Normalized X field coordinate")
+    hy: CoordinateVector = Field(default=(0,), description="Normalized Y field coordinate")
+    px: CoordinateVector = Field(default=(0,), description="Normalized X pupil coordinate")
+    py: CoordinateVector = Field(default=(0,), description="Normalized Y pupil coordinate")
     wavelength: PositiveInt | PositiveIntVector = Field(default=1, description="Wavelength number")
     surface: Literal["Image"] | Annotated[int, Field(ge=0)] = Field(default="Image", description="Surface number")
     rays_type: ZOSAPIConstant("Tools.RayTrace.RaysType") = Field(default="Real", description="Type of rays to trace")
@@ -122,7 +122,13 @@ class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpo
 
 
     def _run_tool(self, tool: _ZOSAPI.Tools.RayTrace.IBatchRayTrace) -> pd.DataFrame:
-        """Run the Batch Ray Trace of unpolarized light."""
+        """Run the Batch Ray Trace of unpolarized light.
+
+        Returns
+        -------
+        DataFrame
+            The data in long format.
+        """
         tool.Hx = self.settings.hx
         tool.Hy = self.settings.hy
         tool.Px = self.settings.px
