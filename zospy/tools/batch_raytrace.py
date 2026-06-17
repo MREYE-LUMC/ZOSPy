@@ -11,7 +11,7 @@ from numpy.typing import NDArray
 from pydantic import BeforeValidator, ConfigDict, Field, PositiveInt, model_validator
 
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import ZOSAPIConstant
+from zospy.analyses.parsers.types import ZOSAPIConstant  # noqa: TC001
 from zospy.api import constants
 from zospy.tools.base import BaseToolWrapper
 
@@ -29,6 +29,7 @@ def ndarray_to_list(v: Sequence | NDArray) -> Sequence:
         return v.tolist()
 
     return v
+
 
 # Constrained types
 NormalizedCoordinate = Annotated[float, Field(le=1.0, ge=-1.0)]
@@ -160,12 +161,7 @@ class BatchRayTraceNormUnpol(BaseToolWrapper[pd.DataFrame, BatchRayTraceNormUnpo
 
         # Add rays
         for wavelength, hx, hy, px, py in zip(
-            wavelengths,
-            self.settings.hx,
-            self.settings.hy,
-            self.settings.px,
-            self.settings.py,
-            strict=True
+            wavelengths, self.settings.hx, self.settings.hy, self.settings.px, self.settings.py, strict=True
         ):
             norm_unpol_data.AddRay(wavelength, hx, hy, px, py, opd_mode)
 
