@@ -19,7 +19,7 @@ __all__ = ("analysis_result", "analysis_settings")
 
 def _default_config_dataclass(default_config: ConfigDict, cls=None, config: ConfigDict | None = None, **kwargs):
     """Pydantic dataclass with default configuration."""
-    config = default_config if config is None else default_config.update(config)
+    config = default_config if config is None else default_config | config
 
     if cls is None:
         # Called with parentheses
