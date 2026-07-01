@@ -36,7 +36,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.1.0
       - name: Lint code
         run: |
-          uvx hatch fmt --check
+          uvx hatch check code && uvx hatch check fmt
       - name: Lint docstrings
         if: always() # Run even if previous step fails
         run: |

@@ -705,7 +705,7 @@ class ZOS:
 
     @property
     def version(self) -> Version:
-        """Returns the OpticStudio version as Version object."""
+        """OpticStudio version as Version object."""
         return Version(
             major=self.Application.ZOSMajorVersion,
             minor=self.Application.ZOSMinorVersion,
