@@ -60,10 +60,10 @@ Add your contribution in a new feature branch. When contributing an analysis, pl
 
 ### 3. Format your code
 
-To format your code, run the following command in the project directory:
+To lint and format your code, run the following command in the project directory:
 
 ```shell
-hatch fmt
+hatch check --fix
 ```
 
 To format the docstrings, run the following command:

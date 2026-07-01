@@ -97,10 +97,14 @@ dependencies = ["pyyaml"]
 [tool.hatch.envs.reference-data.scripts]
 generate = "python scripts/generate_test_reference_data {args}"
 
-## Formatting using hatch fmt
-[tool.hatch.envs.hatch-static-analysis]
+## Formatting using hatch check
+[tool.hatch.envs.hatch-check-code]
 config-path = "ruff_defaults.toml"
-dependencies = ["ruff==0.15.15"]
+dependencies = ["ruff==0.15.20"]
+
+[tool.hatch.envs.hatch-check-fmt]
+config-path = "ruff_defaults.toml"
+dependencies = ["ruff==0.15.20"]
 
 # Linting and formatting options
 [tool.ruff]
@@ -164,6 +168,12 @@ required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+# Disable type checking
+[tool.hatch.envs.hatch-check-types.scripts]
+check = ""
+check-summarize = ""
+coverage = ""
 
 [tool.pydocstringformatter]
 style = "numpydoc"
