@@ -32,8 +32,10 @@ class SingleRayTraceTransformer(ZospyTransformer):
         # Fill empty columns with NaN
         for row in rows:
             if (row_length := len(row)) < header_length:
-                # Warning is only raised once for the full loop
-                warn("Header and row length mismatch. Empty columns will be filled with NaN.")
+                # Avoid warning just because surface comment is missing.
+                if not isinstance(row[-1], str) and header[-1] != "Comment":
+                    # Warning is only raised once for the full loop
+                    warn("Header and row length mismatch. Empty columns will be filled with NaN.")
 
                 # Check if the last row value is a comment
                 if isinstance(row[-1], str):

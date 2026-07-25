@@ -138,10 +138,16 @@ def _serialize_analysis_data_type(data: AnalysisData) -> _TypeInfo:
 
 
 def _deserialize_zospy_class(data: dict, typeinfo: _TypeInfo, module: str) -> object:
-    if typeinfo["module"].startswith(module):
+    module_name = typeinfo.get("module")
+    member_name = typeinfo.get("name")
+
+    if not module_name or not member_name:
+        raise ValueError("Missing module information for zospy class deserialization.")
+
+    if module_name.startswith(module):
         try:
-            m = import_module(typeinfo["module"])
-            t = getattr(m, typeinfo["name"])
+            m = import_module(module_name)
+            t = getattr(m, member_name)
 
             return TypeAdapter(t).validate_python(data)
         except (ModuleNotFoundError, AttributeError):
@@ -236,7 +242,9 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
             if "__analysis_data__" in data:
                 data["data"] = _deserialize_analysis_data(data["data"], data.pop("__analysis_data__"))
             if "__analysis_settings__" in data:
-                data["settings"] = _deserialize_zospy_class(data["settings"], data.pop("__analysis_settings__"))
+                data["settings"] = _deserialize_zospy_class(
+                    data["settings"], data.pop("__analysis_settings__"), module="zospy.analyses"
+                )
 
         return handler(data)
 

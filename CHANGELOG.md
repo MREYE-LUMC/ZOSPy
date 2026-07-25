@@ -13,6 +13,7 @@ ZOS-API can also be added in patch releases.
 
 - Support for Python 3.14 (#221)
 - New `zospy.tools` submodule with `open_tool` (a context manager to open a tool and close it automatically after use) and tool wrappers (#226)
+- New Batch Ray Trace tool: `zospy.tools.BatchRayTraceNormUnpol` (#225)
 
 ### Changed
 
