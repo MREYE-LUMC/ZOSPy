@@ -100,11 +100,11 @@ generate = "python scripts/generate_test_reference_data {args}"
 ## Formatting using hatch check
 [tool.hatch.envs.hatch-check-code]
 config-path = "ruff_defaults.toml"
-dependencies = ["ruff==0.15.20"]
+dependencies = ["ruff==0.16.3"]
 
 [tool.hatch.envs.hatch-check-fmt]
 config-path = "ruff_defaults.toml"
-dependencies = ["ruff==0.15.20"]
+dependencies = ["ruff==0.16.3"]
 
 # Linting and formatting options
 [tool.ruff]
