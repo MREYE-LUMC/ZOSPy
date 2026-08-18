@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from pydantic import Field
 
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import ZOSAPIConstant  # noqa: TC001
+from zospy.analyses.parsers.types import ZOSAPIConstant  # ruff: ignore[typing-only-first-party-import]
 from zospy.api import constants
 from zospy.api.constants import process_constant
 from zospy.tools.base import BaseToolWrapper

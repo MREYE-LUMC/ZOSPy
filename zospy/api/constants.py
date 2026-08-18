@@ -25,7 +25,7 @@ from zospy.utils import pyutils as _pyutils
 
 if TYPE_CHECKING:
     from zospy.api import _ZOSAPI
-    from zospy.api.stubs._ZOSAPI_constants import *  # noqa
+    from zospy.api.stubs._ZOSAPI_constants import *  # ruff: ignore[undefined-local-with-import-star]
 
 _logger = _logging.getLogger(__name__)
 

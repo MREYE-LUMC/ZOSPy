@@ -74,16 +74,16 @@ class OpticStudioSystem:
         self._OpenFile = None
 
     @property
-    def SystemName(self) -> str:  # noqa: N802
+    def SystemName(self) -> str:  # ruff: ignore[invalid-function-name]
         """Name of the current optical system."""
         return self._System.SystemName
 
     @SystemName.setter
-    def SystemName(self, value: str):  # noqa: N802
+    def SystemName(self, value: str):  # ruff: ignore[invalid-function-name]
         self._System.SystemName = value
 
     @property
-    def SystemID(self) -> int:  # noqa: N802
+    def SystemID(self) -> int:  # ruff: ignore[invalid-function-name]
         """Unique identifier for the optical system.
 
         This identifier can be used to differentiate between multiple `OpticStudioSystem` instances.
@@ -102,17 +102,17 @@ class OpticStudioSystem:
         return self._System.SystemID
 
     @property
-    def Mode(self) -> str:  # noqa: N802
+    def Mode(self) -> str:  # ruff: ignore[invalid-function-name]
         """Mode of the optical system. Either "Sequential" or "NonSequential"."""
         return str(self._System.Mode)
 
     @property
-    def SystemFile(self) -> str:  # noqa: N802
+    def SystemFile(self) -> str:  # ruff: ignore[invalid-function-name]
         """File path to the current optical system."""
         return self._System.SystemFile
 
     @property
-    def IsNonAxial(self) -> bool:  # noqa: N802
+    def IsNonAxial(self) -> bool:  # ruff: ignore[invalid-function-name]
         """Indicates whether the optical system is axial and sequential.
 
         `True` if the system is non-axial, `False` otherwise.
@@ -120,12 +120,12 @@ class OpticStudioSystem:
         return self._System.IsNonAxial
 
     @property
-    def NeedsSave(self) -> bool:  # noqa: N802
+    def NeedsSave(self) -> bool:  # ruff: ignore[invalid-function-name]
         """Indicates if the optical system contains unsaved changes."""
         return self._System.NeedsSave
 
     @property
-    def SystemData(self) -> _ZOSAPI.SystemData.ISystemData:  # noqa: N802
+    def SystemData(self) -> _ZOSAPI.SystemData.ISystemData:  # ruff: ignore[invalid-function-name]
         """Data for configuring everything in the system explorer.
 
         Examples
@@ -143,47 +143,47 @@ class OpticStudioSystem:
         return self._System.SystemData
 
     @property
-    def LDE(self) -> _ZOSAPI.Editors.LDE.ILensDataEditor:  # noqa: N802
+    def LDE(self) -> _ZOSAPI.Editors.LDE.ILensDataEditor:  # ruff: ignore[invalid-function-name]
         """Lens Data Editor."""
         return self._System.LDE
 
     @property
-    def NCE(self) -> _ZOSAPI.Editors.NCE.INonSeqEditor:  # noqa: N802
+    def NCE(self) -> _ZOSAPI.Editors.NCE.INonSeqEditor:  # ruff: ignore[invalid-function-name]
         """Non-Sequential Component Editor."""
         return self._System.NCE
 
     @property
-    def MFE(self) -> _ZOSAPI.Editors.MFE.IMeritFunctionEditor:  # noqa: N802
+    def MFE(self) -> _ZOSAPI.Editors.MFE.IMeritFunctionEditor:  # ruff: ignore[invalid-function-name]
         """Merit Function Editor."""
         return self._System.MFE
 
     @property
-    def TDE(self) -> _ZOSAPI.Editors.TDE.IToleranceDataEditor:  # noqa: N802
+    def TDE(self) -> _ZOSAPI.Editors.TDE.IToleranceDataEditor:  # ruff: ignore[invalid-function-name]
         """Tolerance Data Editor."""
         return self._System.TDE
 
     @property
-    def MCE(self) -> _ZOSAPI.Editors.MCE.IMultiConfigEditor:  # noqa: N802
+    def MCE(self) -> _ZOSAPI.Editors.MCE.IMultiConfigEditor:  # ruff: ignore[invalid-function-name]
         """Multi-Configuration Editor."""
         return self._System.MCE
 
     @property
-    def Analyses(self) -> _ZOSAPI.Analysis.I_Analyses:  # noqa: N802
+    def Analyses(self) -> _ZOSAPI.Analysis.I_Analyses:  # ruff: ignore[invalid-function-name]
         """Analyses for the current system."""
         return self._System.Analyses
 
     @property
-    def Tools(self) -> _ZOSAPI.Tools.IOpticalSystemTools:  # noqa: N802
+    def Tools(self) -> _ZOSAPI.Tools.IOpticalSystemTools:  # ruff: ignore[invalid-function-name]
         """Interface to run various tools on the optical system."""
         return self._System.Tools
 
     @property
-    def TheApplication(self) -> _ZOSAPI.IZOSAPI_Application:  # noqa: N802
+    def TheApplication(self) -> _ZOSAPI.IZOSAPI_Application:  # ruff: ignore[invalid-function-name]
         """Application in which the optical system is opened."""
         return self._System.TheApplication
 
     @property
-    def LensUpdateMode(self) -> str:  # noqa: N802
+    def LensUpdateMode(self) -> str:  # ruff: ignore[invalid-function-name]
         """Lens update mode of the optical system.
 
         Possible values are ['None', 'EditorsOnly', 'AllWindows'] or `zospy.constants.LensUpdateMode`.
@@ -191,11 +191,11 @@ class OpticStudioSystem:
         return str(self._System.UpdateMode)
 
     @LensUpdateMode.setter
-    def LensUpdateMode(self, value: constants.LensUpdateMode | str):  # noqa: N802
+    def LensUpdateMode(self, value: constants.LensUpdateMode | str):  # ruff: ignore[invalid-function-name]
         self._System.UpdateMode = value
 
     @property
-    def SessionModes(self) -> str:  # noqa: N802
+    def SessionModes(self) -> str:  # ruff: ignore[invalid-function-name]
         """Session mode of the optical system.
 
         Possible values are ['FromPreferences', 'SessionOn', 'SessionOff'], or `zospy.constants.SessionModes`.
@@ -203,7 +203,7 @@ class OpticStudioSystem:
         return str(self._System.SessionMode)
 
     @SessionModes.setter
-    def SessionModes(self, value: constants.SessionModes | str):  # noqa: N802
+    def SessionModes(self, value: constants.SessionModes | str):  # ruff: ignore[invalid-function-name]
         self._System.SessionMode = constants.process_constant(constants.SessionModes, value)
 
     def get_current_status(self) -> str:
@@ -403,7 +403,7 @@ class ZOS:
 
     _instances: WeakValueDictionary = WeakValueDictionary()
 
-    def __new__(cls, *args, **kwargs):  # noqa: ARG004, RUF100
+    def __new__(cls, *args, **kwargs):  # ruff: ignore[unused-static-method-argument]
         """Ensure that only one instance of ZOS exists at any time.
 
         If a ZOS instance already exists, the existing instance is returned. If not, a new instance is created.
@@ -642,7 +642,7 @@ class ZOS:
         # Automatically populate _OpenFile when connecting in extension mode, to prevent unnecessary errors when
         # calling save
         if self.Application.Mode == constants.ZOSAPI_Mode.Plugin:
-            optic_studio_system._OpenFile = optic_studio_system.SystemFile  # noqa: SLF001
+            optic_studio_system._OpenFile = optic_studio_system.SystemFile  # ruff: ignore[private-member-access]
 
         return optic_studio_system
 
@@ -738,7 +738,7 @@ def _disconnect_zos(application: _ZOSAPI.IZOSAPI_Application) -> None:
 
     try:
         application.CloseApplication()
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:  # ruff: ignore[blind-except]
         logger.debug(f"An error occurred while disconnecting from OpticStudio: {e}")
     else:
         logger.info("Disconnected from OpticStudio")

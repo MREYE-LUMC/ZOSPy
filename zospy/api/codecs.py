@@ -12,9 +12,9 @@ from __future__ import annotations
 
 import logging
 
-import clr  # noqa
+import clr  # ruff: ignore[unused-import]
 import Python.Runtime
-import Python.Runtime.Codecs as Codecs  # noqa
+import Python.Runtime.Codecs as Codecs  # ruff: ignore[manual-from-import]
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
         "ZOSAPI.Tools.ISystemTool",
     ))
 
-    def CanEncode(self, clr_type) -> bool:  # noqa: N802
+    def CanEncode(self, clr_type) -> bool:  # ruff: ignore[invalid-function-name]
         """Check if `clr_type` should be encoded.
 
         An object can be encoded if it is an interface and its full name is present in
@@ -64,7 +64,7 @@ class OpticStudioInterfaceEncoder(Codecs.RawProxyEncoder):
         return False
 
     @staticmethod
-    def TryEncode(obj):  # noqa: N802
+    def TryEncode(obj):  # ruff: ignore[invalid-function-name]
         """Try to downcast `obj` to its implementation."""
         logger.debug("Converting %s to its implementation", obj.GetType().FullName)
         return obj.__implementation__

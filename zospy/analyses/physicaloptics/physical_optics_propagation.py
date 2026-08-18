@@ -10,7 +10,7 @@ from pydantic import Field, model_validator
 
 from zospy.analyses.base import BaseAnalysisWrapper, new_analysis
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import (  # noqa: TC001
+from zospy.analyses.parsers.types import (  # ruff: ignore[typing-only-first-party-import]
     WavelengthNumber,
     ZOSAPIConstant,
 )

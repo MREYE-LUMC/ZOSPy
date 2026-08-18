@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 __all__ = ("element_power", "fixed", "material_model", "pickup_chief_ray", "position", "surface_pickup", "variable")
 
-# ruff: noqa: SLF001
+# ruff: file-ignore[private-member-access]
 
 
 def _get_surface_index(surface: _ZOSAPI.Editors.IEditorRow | int) -> int:

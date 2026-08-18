@@ -132,7 +132,7 @@ class AnalysisDataConverter:
 
     def convert_settings_constants(self, settings: dict | None):
         if self.settings_convert_constants is not None and settings is not None:
-            zos = zp.ZOS()  # noqa: F841
+            zos = zp.ZOS()  # ruff: ignore[unused-variable]
 
             for key, constant in self.settings_convert_constants.items():
                 zospy_constant = attrgetter(constant)(zp.constants)

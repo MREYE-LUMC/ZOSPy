@@ -29,7 +29,7 @@ class TestBase:
         def __init__(self, *, number: int = 5, settings: TestBase.MockSystemViewerSettings | None = None):
             super().__init__(locals())
 
-        def _create_analysis(self, *, settings_first=True):  # noqa: ARG002
+        def _create_analysis(self, *, settings_first=True):  # ruff: ignore[unused-method-argument]
             self._analysis = SimpleNamespace(
                 metadata=AnalysisMetadata(DateTime=datetime.now(), LensFile="", LensTitle="", FeatureDescription=""),
                 header_data=None,
@@ -60,7 +60,7 @@ class TestBase:
         viewer = TestBase.MockSystemViewer()
 
         with expectation:
-            result = viewer._validate_path(tmp_path / filename)  # noqa: SLF001
+            result = viewer._validate_path(tmp_path / filename)  # ruff: ignore[private-member-access]
             assert result == str(tmp_path / filename)
 
     @pytest.mark.parametrize(
@@ -97,7 +97,7 @@ class TestBase:
         viewer.run(simple_system)
 
         with expectation:
-            result = viewer._validate_wavelength(wavelength)  # noqa: SLF001
+            result = viewer._validate_wavelength(wavelength)  # ruff: ignore[private-member-access]
             assert result == expected
 
     @pytest.mark.parametrize(
@@ -130,7 +130,7 @@ class TestBase:
         viewer.run(simple_system)
 
         with expectation:
-            result = viewer._validate_field(field)  # noqa: SLF001
+            result = viewer._validate_field(field)  # ruff: ignore[private-member-access]
             assert result == expected
 
     @pytest.mark.parametrize(
@@ -163,7 +163,7 @@ class TestBase:
         viewer.run(simple_system)
 
         with expectation:
-            result = viewer._validate_end_surface(start_surface, end_surface)  # noqa: SLF001
+            result = viewer._validate_end_surface(start_surface, end_surface)  # ruff: ignore[private-member-access]
             assert result == expected
 
     @pytest.mark.skip_for_opticstudio_versions(">=24.1.0", "Settings are supported from OpticStudio 24R1")

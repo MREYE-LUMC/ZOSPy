@@ -12,7 +12,7 @@ from zospy.api.codecs import OpticStudioInterfaceEncoder
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture
 
-# ruff: noqa: SLF001
+# ruff: file-ignore[private-member-access]
 
 
 class TestOpticStudioInterfaceEncoder:
@@ -22,7 +22,7 @@ class TestOpticStudioInterfaceEncoder:
     """
 
     @pytest.fixture(scope="module")
-    def zosapi_interfaces(self, zos):  # noqa: ARG002
+    def zosapi_interfaces(self, zos):  # ruff: ignore[unused-method-argument]
         return Assembly.LoadFile(clr.FindAssembly("ZOSAPI_Interfaces"))
 
     def test_types_exist(self, zosapi_interfaces):
