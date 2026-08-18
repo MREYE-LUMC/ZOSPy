@@ -1,4 +1,4 @@
-# ruff: noqa: RUF069
+# ruff: file-ignore[float-equality-comparison]
 from __future__ import annotations
 
 from contextlib import nullcontext as does_not_raise

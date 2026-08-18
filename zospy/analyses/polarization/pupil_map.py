@@ -11,7 +11,7 @@ from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers import ZospyTransformer
 from zospy.analyses.parsers.transformers import SimpleField
-from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # noqa: TC001
+from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # ruff: ignore[typing-only-first-party-import]
 from zospy.api import constants
 from zospy.utils.pyutils import xtoa
 from zospy.utils.zputils import standardize_sampling

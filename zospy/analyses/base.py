@@ -32,7 +32,7 @@ import weakref
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, is_dataclass
 from datetime import (
-    datetime,  # noqa: TC003 Pydantic needs datetime to be present at runtime
+    datetime,  # ruff: ignore[typing-only-standard-library-import] Pydantic needs datetime to be present at runtime
 )
 from enum import Enum
 from importlib import import_module
@@ -205,7 +205,7 @@ class AnalysisResult(Generic[AnalysisData, AnalysisSettings]):
     def _serialize_data(
         value: AnalysisData,
         nxt: SerializerFunctionWrapHandler,
-        info,  # noqa: ARG004
+        info,  # ruff: ignore[unused-static-method-argument]
     ):
         if isinstance(value, pd.DataFrame):
             return TypeAdapter(ValidatedDataFrame, config=ConfigDict(ser_json_inf_nan="constants")).dump_python(
@@ -328,12 +328,12 @@ class Analysis:
         self._analysis = _validated_setter(analysis)
 
     @property
-    def Settings(self) -> _ZOSAPI.Analysis.Settings.IAS_:  # noqa: N802
+    def Settings(self) -> _ZOSAPI.Analysis.Settings.IAS_:  # ruff: ignore[invalid-function-name]
         """Analysis-specific settings."""
         return _validated_setter(self._analysis.GetSettings())
 
     @property
-    def Results(self) -> _ZOSAPI.Analysis.Data.IAR_:  # noqa: N802
+    def Results(self) -> _ZOSAPI.Analysis.Data.IAR_:  # ruff: ignore[invalid-function-name]
         """Analysis results."""
         return self._analysis.GetResults()
 

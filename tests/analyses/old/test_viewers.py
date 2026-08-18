@@ -16,7 +16,7 @@ from zospy.analyses.old.systemviewers import (
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture
 
-# ruff: noqa: SLF001
+# ruff: file-ignore[private-member-access]
 
 pytestmark = pytest.mark.old_analyses
 

@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
     from pytest_mock import MockerFixture
 
-# ruff: noqa: SLF001
+# ruff: file-ignore[private-member-access]
 
 
 def test_connect_without_valid_license_raises_exception(zos, connection_mode, mocker: MockerFixture):
@@ -38,7 +38,7 @@ def test_load_zos_dlls_with_nethelper_and_opticstudio_directory_raises_valueerro
 
 
 @pytest.mark.must_pass  # Other tests will fail if this one does
-def test_zos_singleton(zos, oss):  # noqa: ARG001
+def test_zos_singleton(zos, oss):  # ruff: ignore[unused-function-argument]
     assert zos.Application is not None
 
     with pytest.warns(match=r"Only a single instance of ZOS can exist at any time\. Returning existing instance\."):
@@ -68,7 +68,7 @@ def test_can_connect(oss):
     assert oss._System is not None
 
 
-def test_can_disconnect(zos, oss):  # noqa: ARG001
+def test_can_disconnect(zos, oss):  # ruff: ignore[unused-function-argument]
     assert zos.Application is not None  # The Application object should be available
 
     zos.disconnect()
@@ -102,7 +102,7 @@ def test_disconnect_detaches_finalizer(zos, connection_mode, mocker: MockerFixtu
 
 
 @pytest.mark.require_mode("extension")
-def test_get_primary_system_populates_openfile(zos, oss):  # noqa: ARG001
+def test_get_primary_system_populates_openfile(zos, oss):  # ruff: ignore[unused-function-argument]
     assert oss._OpenFile == oss.SystemFile
 
 
@@ -214,7 +214,7 @@ def test_get_system(zos, oss, connection_mode):
 
 
 @pytest.mark.require_mode("standalone")
-def test_create_new_system(zos, oss, connection_mode):  # noqa: ARG001
+def test_create_new_system(zos, oss, connection_mode):  # ruff: ignore[unused-function-argument]
     new_system = zos.create_new_system()
 
     assert zos.Application.NumberOfOpticalSystems == 2
@@ -222,7 +222,7 @@ def test_create_new_system(zos, oss, connection_mode):  # noqa: ARG001
 
 
 @pytest.mark.require_mode("extension")
-def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode):  # noqa: ARG001
+def test_create_new_system_raises_valueerror(zos, simple_system, connection_mode):  # ruff: ignore[unused-function-argument]
     with pytest.raises(ValueError, match="Can only create a new system when using a standalone connection"):
         zos.create_new_system()
 
@@ -249,7 +249,7 @@ class TestTxtFileEncoding:
     def test_get_txtfile_encoding_returns_correct_result(
         self, oss_with_modifiable_config, txtfile_encoding, expected_encoding, mocker: MockerFixture
     ):
-        def getencoding(*args, **kwargs):  # noqa: ARG001
+        def getencoding(*args, **kwargs):  # ruff: ignore[unused-function-argument]
             return "LocalePreferredEncoding"
 
         if version_info >= (3, 11):

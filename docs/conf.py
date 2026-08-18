@@ -13,7 +13,7 @@ from shutil import copytree
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ZOSPy"
-copyright = f"2023-{datetime.now().year}, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # noqa: A001, DTZ005
+copyright = f"2023-{datetime.now().year}, Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"  # ruff: ignore[builtin-variable-shadowing, call-datetime-now-without-tzinfo]
 author = "Jan-Willem M. Beenakker, Luc van Vught, Corné Haasjes"
 
 # -- General configuration ---------------------------------------------------
@@ -101,7 +101,7 @@ nbsphinx_prolog = rf"""
 ANNOTATION_SUBSTITUTIONS = {"_ZOSAPI": "ZOSAPI"}
 
 
-def apply_annotation_substitutions(app, obj: object, bound_method):  # noqa: ARG001
+def apply_annotation_substitutions(app, obj: object, bound_method):  # ruff: ignore[unused-function-argument]
     """Substitute certain values in type annotations."""
     if not hasattr(obj, "__annotations__"):
         return

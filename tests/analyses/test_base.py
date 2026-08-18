@@ -111,10 +111,10 @@ class TestAnalysisWrapper:
         return result
 
     def test_get_settings_type(self):
-        assert MockAnalysis._settings_type == MockAnalysisSettings  # noqa: SLF001
+        assert MockAnalysis._settings_type == MockAnalysisSettings  # ruff: ignore[private-member-access]
 
     def test_settings_type_is_specified(self):
-        assert MockAnalysis._settings_type is not AnalysisSettings  # noqa: SLF001
+        assert MockAnalysis._settings_type is not AnalysisSettings  # ruff: ignore[private-member-access]
 
     def test_analyses_correct_analysis_name(self, analysis_wrapper_class):
         assert analysis_wrapper_class.TYPE is not None

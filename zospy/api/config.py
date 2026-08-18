@@ -31,8 +31,8 @@ def set_decimal_point_and_thousands_separator() -> None:
     importing ZOSPy may cause issues. See also https://docs.python.org/3/library/locale.html#locale.setlocale
     for more information.
     """
-    global DECIMAL_POINT  # noqa: PLW0603
-    global THOUSANDS_SEPARATOR  # noqa: PLW0603
+    global DECIMAL_POINT  # ruff: ignore[global-statement]
+    global THOUSANDS_SEPARATOR  # ruff: ignore[global-statement]
 
     old_locale = locale.setlocale(locale.LC_NUMERIC)  # get and save current numeric locale
 
@@ -42,6 +42,6 @@ def set_decimal_point_and_thousands_separator() -> None:
         DECIMAL_POINT = locale.localeconv()["decimal_point"]
         THOUSANDS_SEPARATOR = locale.localeconv()["thousands_sep"]
     except locale.Error:
-        logger.error("Failed to determine decimal point and thousands separator", exc_info=True)  # noqa: G201
+        logger.error("Failed to determine decimal point and thousands separator", exc_info=True)  # ruff: ignore[logging-exc-info]
     finally:
         locale.setlocale(locale.LC_NUMERIC, old_locale)  # restore saved locale

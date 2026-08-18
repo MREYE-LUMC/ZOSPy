@@ -45,7 +45,7 @@ class ValidatedDataFrameAnnotation:
             except (KeyError, ValueError) as e:
                 raise PydanticCustomError(
                     "invalid_dataframe",
-                    "Cannot convert dictionary to DataFrame: {value}",  # noqa: RUF027
+                    "Cannot convert dictionary to DataFrame: {value}",  # ruff: ignore[missing-f-string-syntax]
                     {"value": value},
                 ) from e
 
@@ -94,7 +94,7 @@ class ValidatedNDArrayAnnotation:
             except ValueError as e:
                 raise PydanticCustomError(
                     "invalid_ndarray",
-                    "Cannot convert list to ndarray: {value}",  # noqa: RUF027
+                    "Cannot convert list to ndarray: {value}",  # ruff: ignore[missing-f-string-syntax]
                     {"value": value},
                 ) from e
 
@@ -153,7 +153,7 @@ class ZOSAPIConstantAnnotation:
         return core_schema.no_info_after_validator_function(self._validate_constant, schema, serialization=serializer)
 
 
-def ZOSAPIConstant(enum: str) -> type[str]:  # noqa: N802
+def ZOSAPIConstant(enum: str) -> type[str]:  # ruff: ignore[invalid-function-name]
     """Pydantic validation and serialization for ZOSAPI constants."""
     return Annotated[str | None, ZOSAPIConstantAnnotation(enum)]
 

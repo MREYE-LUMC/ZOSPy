@@ -7,7 +7,7 @@ import re
 import sys
 import traceback
 from argparse import ArgumentParser
-from collections.abc import Callable  # noqa: TC003
+from collections.abc import Callable  # ruff: ignore[typing-only-standard-library-import]
 from operator import attrgetter
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -24,7 +24,7 @@ from pydantic import (
 from pydantic_core import PydanticCustomError
 
 import zospy as zp
-from zospy.analyses.base import BaseAnalysisWrapper  # noqa: TC001
+from zospy.analyses.base import BaseAnalysisWrapper  # ruff: ignore[typing-only-first-party-import]
 
 logger = logging.getLogger("generate_test_reference_data")
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -86,7 +86,7 @@ class TestConfiguration(BaseModel):
                         "invalid_parameters",
                         (
                             "All sets of parameters should contain the same keys as parametrized. Allowed keys: "
-                            "{parametrized}, found keys: {params}"  # noqa: RUF027
+                            "{parametrized}, found keys: {params}"  # ruff: ignore[missing-f-string-syntax]
                         ),
                         {"parametrized": parametrized, "params": params.keys()},
                     )
@@ -150,7 +150,7 @@ def _map_parameter_names(parameters: TestParameters):
 
         for param_name, param in mapped_parameters.items():
             if isinstance(param, dict):
-                mapped_name = hashlib.md5(json.dumps(param, sort_keys=True).encode("utf-8")).hexdigest()  # noqa: S324
+                mapped_name = hashlib.md5(json.dumps(param, sort_keys=True).encode("utf-8")).hexdigest()  # ruff: ignore[hashlib-insecure-hash-function]
 
                 mapped_parameters[param_name] = mapped_name
 
@@ -179,7 +179,7 @@ def process_test(
                 logger.info(f"Skipping {result_file_name} because it requires OpticStudio {parameters.opticstudio}")
                 continue
 
-            parameters = parameters.parameters  # noqa: PLW2901
+            parameters = parameters.parameters  # ruff: ignore[redefined-loop-name]
 
         if parametrized:
             mapped_parameters = _map_parameter_names(parameters=parameters)

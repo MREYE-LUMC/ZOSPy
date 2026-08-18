@@ -155,6 +155,6 @@ def load_zosapi(zosapi_nethelper=None, zemaxdirectory=None, *, preload=False):
         __import__(nsp, globals(), locals(), [], 0)
         logger.debug(f"Nested namespace {nsp} preloaded")
 
-    zospy.api.constants._construct_from_zosapi_and_enumkeys(zosapi, content["enums"])  # noqa
+    zospy.api.constants._construct_from_zosapi_and_enumkeys(zosapi, content["enums"])  # ruff: ignore[private-member-access]
 
     return zosapi

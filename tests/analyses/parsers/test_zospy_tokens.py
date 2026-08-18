@@ -341,7 +341,7 @@ fields: _field+ -> dict
 """
 
 
-def test_field_group(setup_field_test):  # noqa: ARG001
+def test_field_group(setup_field_test):  # ruff: ignore[unused-function-argument]
     parser = Lark(FIELD_GROUP_GRAMMAR, parser="earley", start="start", import_paths=[zospy_grammar_loader])
 
     result = transformer.transform(parser.parse(FIELD_GROUP_VALUE))
@@ -374,7 +374,7 @@ row: _numbers -> list
 """
 
 
-def test_table(setup_field_test):  # noqa: ARG001
+def test_table(setup_field_test):  # ruff: ignore[unused-function-argument]
     parser = Lark(TABLE_GRAMMAR, parser="earley", start="start", import_paths=[zospy_grammar_loader])
 
     result = transformer.transform(parser.parse(TABLE_VALUE))
@@ -391,7 +391,7 @@ def test_table(setup_field_test):  # noqa: ARG001
         ("Simple field : 123\n", SimpleField("Simple field", 123), ["STRING", "simple_field"], "simple_field"),
     ],
 )
-def test_token_precedence(value, expected, tokens, expected_token, setup_field_test):  # noqa: ARG001
+def test_token_precedence(value, expected, tokens, expected_token, setup_field_test):  # ruff: ignore[unused-function-argument]
     grammar = f"""start: _value _NEWLINE?
 
 _value: {" | ".join(tokens)}
