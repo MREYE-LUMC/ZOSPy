@@ -1,6 +1,6 @@
 # Creating an optical system
 
-The {py:class}`OpticStudioSystem <zospy.zpcore.OpticStudioSystem>` object `oss` that has been created in [](01_connection.md)
+The {py:class}`OpticStudioSystem <zospy.zpcore.OpticStudioSystem>` object `oss` that has been created in [](connection.md)
 can be used to control the connected OpticStudio instance from Python.
 This object exposes the ZOS-API namespaces as attributes.
 Documenting these namespaces is not the intention of this documentation, because they are already well-documented in the
@@ -53,7 +53,7 @@ zp.solvers.material_model(surface.MaterialCell, refractive_index=1.5)
 ## Contributing solvers
 
 OpticStudio has many solvers, and not all of them are implemented in ZOSPy (yet).
-If you want to use a solver that is not implemented, consider [contributing](../contributing/contributing.md) it to ZOSPy.
+If you want to use a solver that is not implemented, consider [contributing](../../contributing/contributing.md) it to ZOSPy.
 All solvers follow the same structure, and writing a new one is straightforward.
 Here is an example for a solver that sets the power of an element:
 
