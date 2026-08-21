@@ -52,45 +52,21 @@ in the Journal of Open Source Software:
 Feel free to contact us via e-mail at [zospy@mreye.nl](mailto:zospy@mreye.nl) for any inquiries,
 or visit [mreye.nl](https://mreye.nl) to discover our research.
 
-```{toctree}
-:maxdepth: 1
-:caption: Getting started
-
-installation
-simple_example
-faq
-```
+## Contents
 
 ```{toctree}
 :maxdepth: 1
-:caption: Usage
+:caption: User guide
 :glob:
 
-usage/*
-compatibility
+user_guide/index
 ```
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 :caption: Examples
 
-examples/introduction
-examples/Simple thick lens/Simple thick lens
-examples/Escudero-Sanz eye model/Escudero-Sanz eye model
-examples/Retinal illumination in pseudophakic eyes with and without Negative Dysphotopsia/retinal_illumination
-examples/Ray trace Double Gauss/raytrace_double_gauss
-examples/Polarization Prism/polarization_prism_example
-examples/Modelling of a Shack-Hartmann Sensor for eye aberration evaluation/README
-examples/Patient-specific mapping of fundus photographs to three-dimensional ocular imaging/README
-examples/Relative peripheral refraction a predictor for myopia progression/peripheral_refraction_example
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: Advanced usage
-
-advanced/logging
-advanced/codecs
+examples
 ```
 
 ```{toctree}
@@ -98,34 +74,20 @@ advanced/codecs
 :caption: Contributing
 
 contributing/contributing
-contributing/developing_analyses
-contributing/unit_tests
 ```
 
-```{eval-rst}
-.. currentmodule:: zospy
+```{toctree}
+:maxdepth: 2
+:caption: API
 
-.. autosummary::
-   :toctree: api
-   :caption: API reference
-   :template: custom-module.rst
-   :recursive:
-
-   zospy.zpcore
-   zospy.analyses
-   zospy.api.constants
-   zospy.api.codecs
-   zospy.functions
-   zospy.solvers
+API <api>
 ```
 
 ```{toctree}
 :maxdepth: 1
 :caption: About
 
-license
-changelog
-contact
+about/index
 ```
 
 [opticstudio]: https://www.ansys.com/products/optics/ansys-zemax-opticstudio

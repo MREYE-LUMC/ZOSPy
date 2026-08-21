@@ -31,7 +31,7 @@ oss = zos.connect("standalone")
 To connect to OpticStudio in extension mode, first enable the 'Interactive Extension' mode in OpticStudio under
 Programming > Interactive Extension.
 
-![Interactive Extension](../images/opticstudio_extension.png)
+![Interactive Extension](../../images/opticstudio_extension.png)
 
 Then, use the following code to connect to OpticStudio in extension mode:
 
@@ -80,7 +80,7 @@ The `ZOS` class is responsible for loading the ZOS-API assemblies that allow com
 As you can load the ZOS-API only once, the `ZOS` class is a singleton class which can only be instantiated once.
 Creating a second `ZOS` instance will raise a warning, and return the existing instance:
 
-```pycon
+```python
 >>> import zospy as zp
 >>> zos = zp.ZOS()
 >>> zos2 = zp.ZOS()

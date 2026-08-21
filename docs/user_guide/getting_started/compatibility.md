@@ -3,7 +3,7 @@
 The unit tests automatically check compatibility with different versions of OpticStudio against a reference version.
 The current reference version is OpticStudio {{ REFERENCE_VERSION }}.
 
-```{include} compatibility_table.md
+```{include} ../../compatibility_table.md
 ```
 
 (compatibility/25-1-1)=

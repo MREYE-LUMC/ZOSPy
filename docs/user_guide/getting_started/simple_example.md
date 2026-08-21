@@ -54,4 +54,4 @@ raytrace = zp.analyses.raysandspots.SingleRayTrace(hx=0, hy=1, px=0, py=0, wavel
 )
 ```
 
-![Full example system](images/simple_example.png)
+![Full example system](../../images/simple_example.png)
