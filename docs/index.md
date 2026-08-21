@@ -34,7 +34,7 @@ More information on compatibility can be found in the [compatibility](compatibil
 ## Warranty and liability
 
 The code is provided as is, without any warranty. It is solely intended for research purposes. No warranty is given and
-no rights can be derived from it, as is also stated in the [MIT license](license.md).
+no rights can be derived from it, as is also stated in the [MIT license](about/license.md).
 
 (referencing)=
 ## Referencing

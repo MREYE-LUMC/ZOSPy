@@ -88,7 +88,7 @@ else:
         git_branch = "main"
 
 html_context = {
-    "edit_page_url_template": "{{ github_url }}/{{ github_user }}/{{ github_repo }}/tree/{{ github_version }}/{{ doc_path }}{{ file_name }}",
+    "edit_page_url_template": "{{ github_url }}/{{ github_user }}/{{ github_repo }}/tree/{{ github_version }}/{{ doc_path }}/{{ file_name }}",
     "edit_page_provider_name": "GitHub",
     "github_user": "MREYE-LUMC",
     "github_repo": "ZOSPy",
