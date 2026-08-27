@@ -35,10 +35,10 @@ myst_heading_anchors = 3
 myst_substitutions = {
     "REFERENCE_VERSION": "2025 R1.01",
     "PYTHON_VERSIONS": "3.10 - 3.14",
-    "i_check": "{octicon}`check-circle;1em;sd-text-success`",
-    "i_info": "{octicon}`info;1em;sd-text-info`",
-    "i_alert": "{octicon}`alert;1em;sd-text-warning`",
-    "i_cross": "{octicon}`x-circle;1em;sd-text-danger`",
+    "i_check": "{fa}`circle-check;sd-text-success`",
+    "i_info": "{fa}`circle-info;sd-text-info`",
+    "i_alert": "{fa}`triangle-exclamation;sd-text-warning`",
+    "i_cross": "{fa}`circle-xmark;sd-text-danger`",
 }
 
 templates_path = ["_templates"]
@@ -99,6 +99,8 @@ html_context = {
     "github_version": git_branch,
     "doc_path": "docs",
 }
+
+sd_fontawesome_version = "6"
 
 # -- Options for Sphinx autodoc and numpydoc ---------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
