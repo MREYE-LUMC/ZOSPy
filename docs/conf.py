@@ -5,9 +5,11 @@
 from __future__ import annotations
 
 import importlib.metadata
+import os
 from datetime import datetime
 from pathlib import Path
 from shutil import copytree
+from subprocess import run
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -33,6 +35,10 @@ myst_heading_anchors = 3
 myst_substitutions = {
     "REFERENCE_VERSION": "2025 R1.01",
     "PYTHON_VERSIONS": "3.10 - 3.14",
+    "i_check": "{fa}`circle-check;sd-text-success`",
+    "i_info": "{fa}`circle-info;sd-text-info`",
+    "i_alert": "{fa}`triangle-exclamation;sd-text-warning`",
+    "i_cross": "{fa}`circle-xmark;sd-text-danger`",
 }
 
 templates_path = ["_templates"]
@@ -41,13 +47,60 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/.conda", "**/.ipynb_
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_book_theme"
+html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
+
 html_theme_options = {
-    "home_page_in_toc": True,
-    "repository_url": "https://github.com/MREYE-LUMC/ZOSPy",
-    "use_repository_button": True,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/MREYE-LUMC/ZOSPy",
+            "icon": "fa-brands fa-github",
+        },
+        {
+            "name": "PyPI",
+            "url": "https://pypi.org/project/zospy",
+            "icon": "fa-brands fa-python",
+        },
+        {
+            "name": "MReye.nl",
+            "url": "https://mreye.nl",
+            "icon": "https://mreye.nl/icon.png",
+            "type": "url",
+        },
+    ],
+    "show_toc_level": 1,
+    "use_edit_page_button": True,
+    "secondary_sidebar_items": {
+        "**": ["page-toc"],
+        "user_guide/**": ["page-toc", "download-notebook"],
+        "examples/**/**": ["page-toc", "download-notebook"],
+    },
 }
+
+if os.getenv("READTHEDOCS") == "True":
+    git_branch = os.getenv("READTHEDOCS_GIT_IDENTIFIER", "main")
+else:
+    try:
+        git_branch = run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],  # ruff: ignore[start-process-with-partial-path]
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except:  # ruff: ignore[bare-except]
+        git_branch = "main"
+
+html_context = {
+    "edit_page_url_template": "{{ github_url }}/{{ github_user }}/{{ github_repo }}/tree/{{ github_version }}/{{ doc_path }}/{{ file_name }}",
+    "edit_page_provider_name": "GitHub",
+    "github_user": "MREYE-LUMC",
+    "github_repo": "ZOSPy",
+    "github_version": git_branch,
+    "doc_path": "docs",
+}
+
+sd_fontawesome_version = "6"
 
 # -- Options for Sphinx autodoc and numpydoc ---------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration

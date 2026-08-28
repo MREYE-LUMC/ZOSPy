@@ -97,3 +97,11 @@ Open a Pull Request, wait for our suggestions, and get your contribution merged!
 [hatch-windows]: https://hatch.pypa.io/latest/install/#gui-installer_1
 [uv]: https://docs.astral.sh/uv/
 [pipx]: https://pipx.pypa.io/latest/installation/
+
+```{toctree}
+:maxdepth: 1
+:caption: Contributing
+
+developing_analyses
+unit_tests
+```

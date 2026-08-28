@@ -26,7 +26,7 @@ At the end of a script, it is not necessary to disconnect; this is handled autom
 ## How do I reconnect to OpticStudio?
 :::{attention}
 The information below is only valid for ZOSPy versions before v2.0.0.
-See [](usage/01_connection.md#reconnecting-to-opticstudio) if you are using ZOSPy v2.0.0 or later.
+See [](../usage/connection.md#reconnecting-to-opticstudio) if you are using ZOSPy v2.0.0 or later.
 :::
 
 You can do this by first [disconnecting](faq/disconnect), then creating a new connection to OpticStudio.
@@ -76,7 +76,7 @@ oss = zos.connect("extension")
 ## Why do I get a `ValueError: Cannot have more than one active ZOS instance`?
 :::{attention}
 The information below is only valid for ZOSPy versions before v2.0.0.
-See [](usage/01_connection.md#zos-manages-the-connection-with-the-zos-api) if you are using ZOSPy v2.0.0 or later.
+See [](../usage/connection.md#zos-manages-the-connection-with-the-zos-api) if you are using ZOSPy v2.0.0 or later.
 :::
 
 This error will be raised when creating a new instance of [`ZOS`](zospy.zpcore.ZOS), 
