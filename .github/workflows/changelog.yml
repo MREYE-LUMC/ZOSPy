@@ -12,7 +12,7 @@ jobs:
     if: "!contains(github.event.pull_request.labels.*.name, 'skip changelog')"
     name: Check CHANGELOG.md for updates
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Check for CHANGELOG.md updates
