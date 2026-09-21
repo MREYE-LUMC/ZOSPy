@@ -11,19 +11,25 @@ ZOS-API can also be added in patch releases.
 
 ### Added
 
-- Support for Python 3.14 (#221)
-- New `zospy.tools` submodule with `open_tool` (a context manager to open a tool and close it automatically after use) and tool wrappers (#226)
-- New Batch Ray Trace tool: `zospy.tools.BatchRayTraceNormUnpol` (#225)
-
 ### Changed
 
 ### Fixed
 
-- DataFrames returned by the Wavefront Map analysis now have the same size as the requested sampling, with the first row and column containing NaN values. Row and column labels span the range [-1, 1] for the coordinates inside the pupil (#222)
-
 ### Deprecated
 
 ### Removed
+
+## [[2.2.0]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.2.0) - 2026-09-21
+
+### Added
+
+- Support for Python 3.14 (#221)
+- New `zospy.tools` submodule with `open_tool` (a context manager to open a tool and close it automatically after use) and tool wrappers (#226)
+- New Batch Ray Trace tool: `zospy.tools.BatchRayTraceNormUnpol` (#225)
+
+### Fixed
+
+- DataFrames returned by the Wavefront Map analysis now have the same size as the requested sampling, with the first row and column containing NaN values. Row and column labels span the range [-1, 1] for the coordinates inside the pupil (#222)
 
 ## [[2.1.5]](https://github.com/MREYE-LUMC/ZOSPy/releases/tag/v2.1.5) - 2026-02-13
 
