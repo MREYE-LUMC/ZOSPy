@@ -11,7 +11,7 @@ from numpy.typing import NDArray
 from pydantic import BeforeValidator, ConfigDict, Field, PositiveInt, model_validator
 
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import ZOSAPIConstant  # noqa: TC001
+from zospy.analyses.parsers.types import ZOSAPIConstant  # ruff: ignore[typing-only-first-party-import]
 from zospy.api import constants
 from zospy.tools.base import BaseToolWrapper
 
