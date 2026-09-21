@@ -11,7 +11,7 @@ from pydantic import Field, model_validator
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_result, analysis_settings
 from zospy.analyses.parsers.transformers import ZospyTransformer
-from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # noqa: TC001
+from zospy.analyses.parsers.types import UnitField, ValidatedDataFrame  # ruff: ignore[typing-only-first-party-import]
 from zospy.api import constants
 
 __all__ = ("SingleRayTrace", "SingleRayTraceSettings")
@@ -20,7 +20,7 @@ __all__ = ("SingleRayTrace", "SingleRayTraceSettings")
 class SingleRayTraceTransformer(ZospyTransformer):
     """Transformer for the output of the Single Ray Trace analysis."""
 
-    def NAN(self, args):  # noqa: ARG002, N802
+    def NAN(self, args):  # ruff: ignore[unused-method-argument, invalid-function-name]
         """Transform a NaN value."""
         return float("nan")
 

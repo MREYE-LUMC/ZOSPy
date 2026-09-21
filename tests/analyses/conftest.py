@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-def pytest_make_parametrize_id(config, val, argname):  # noqa: ARG001
+def pytest_make_parametrize_id(config, val, argname):  # ruff: ignore[unused-function-argument]
     """Custom hook to control the name of dictionaries in the description."""
     if isinstance(val, dict):
         return hashlib.md5(json.dumps(val, sort_keys=True).encode("utf-8")).hexdigest()

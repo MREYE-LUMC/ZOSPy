@@ -1,4 +1,6 @@
-# API documentation
+# API reference
+
+This page contains auto-generated API reference documentation.
 
 ```{eval-rst}
 .. currentmodule:: zospy

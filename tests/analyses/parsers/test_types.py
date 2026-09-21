@@ -120,7 +120,7 @@ class TestZOSAPIConstant:
         return True
 
     @pytest.mark.parametrize("annotation", _get_zosapi_constant_instances())
-    def test_constant_exists(self, zos, annotation, optic_studio_version):  # noqa: ARG002
+    def test_constant_exists(self, zos, annotation, optic_studio_version):  # ruff: ignore[unused-method-argument]
         if not self._constant_exists_in_version(annotation.enum, optic_studio_version):
             pytest.skip(f"{annotation.enum} is not available in OpticStudio {optic_studio_version}")
 

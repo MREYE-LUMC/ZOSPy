@@ -114,7 +114,7 @@ class ToolResult(Generic[ToolOutputData, ToolSettings]):
     def _serialize_data(
         value: ToolOutputData,
         nxt: pydantic.SerializerFunctionWrapHandler,
-        info,  # noqa: ARG004
+        info,  # ruff: ignore[unused-static-method-argument]
     ):
         if isinstance(value, pd.DataFrame):
             return pydantic.TypeAdapter(

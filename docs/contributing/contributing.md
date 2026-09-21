@@ -60,10 +60,10 @@ Add your contribution in a new feature branch. When contributing an analysis, pl
 
 ### 3. Format your code
 
-To format your code, run the following command in the project directory:
+To lint and format your code, run the following command in the project directory:
 
 ```shell
-hatch fmt
+hatch check --fix
 ```
 
 To format the docstrings, run the following command:
@@ -97,3 +97,11 @@ Open a Pull Request, wait for our suggestions, and get your contribution merged!
 [hatch-windows]: https://hatch.pypa.io/latest/install/#gui-installer_1
 [uv]: https://docs.astral.sh/uv/
 [pipx]: https://pipx.pypa.io/latest/installation/
+
+```{toctree}
+:maxdepth: 1
+:caption: Contributing
+
+developing_analyses
+unit_tests
+```

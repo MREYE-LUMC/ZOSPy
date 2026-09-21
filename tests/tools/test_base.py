@@ -115,7 +115,7 @@ class MockTool(BaseToolWrapper[MockToolOutputData, MockToolSettings]):
     ):
         super().__init__(settings_kws=locals())
 
-    def _get_tool_opener(self, oss: OpticStudioSystem) -> Callable[[], Any]:  # noqa: ARG002
+    def _get_tool_opener(self, oss: OpticStudioSystem) -> Callable[[], Any]:  # ruff: ignore[unused-method-argument]
         return lambda: SimpleNamespace(
             Close=lambda: None, ErrorMessage=None
         )  # This tool does not actually open anything in OpticStudio
@@ -146,17 +146,17 @@ class TestToolWrapper:
         return result
 
     def test_get_settings_type(self):
-        assert MockTool._settings_type == MockToolSettings  # noqa: SLF001
+        assert MockTool._settings_type == MockToolSettings  # ruff: ignore[private-member-access]
 
     def test_settings_type_is_specified(self):
-        assert MockTool._settings_type is not ToolSettings  # noqa: SLF001
+        assert MockTool._settings_type is not ToolSettings  # ruff: ignore[private-member-access]
 
     def test_tools_correct_tool_opener(self, oss: OpticStudioSystem, tool_wrapper_class):
         instance = tool_wrapper_class()
 
         try:
-            instance._get_tool_opener(oss)  # noqa: SLF001
-        except Exception:  # noqa: BLE001
+            instance._get_tool_opener(oss)  # ruff: ignore[private-member-access]
+        except Exception:  # ruff: ignore[blind-except]
             pytest.fail(f"{tool_wrapper_class.__name__} does not implement _get_tool_opener correctly.")
 
     def test_init_all_keyword_only_parameters(self, tool_wrapper_class):

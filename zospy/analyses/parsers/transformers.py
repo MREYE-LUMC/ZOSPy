@@ -60,15 +60,15 @@ class ZospyTransformer(Transformer):
     DATE = str
     WORD = str
 
-    def INT(self, i: str) -> int:  # noqa: N802
+    def INT(self, i: str) -> int:  # ruff: ignore[invalid-function-name]
         """Integer number."""
         return atox(i, int)
 
-    def UINT(self, i: str) -> int:  # noqa: N802
+    def UINT(self, i: str) -> int:  # ruff: ignore[invalid-function-name]
         """Unsigned integer number."""
         return atox(i, int)
 
-    def FLOAT(self, f: str) -> float:  # noqa: N802
+    def FLOAT(self, f: str) -> float:  # ruff: ignore[invalid-function-name]
         """Floating point number with localized decimal separator."""
         return atox(f, float)
 
@@ -163,6 +163,6 @@ class ZospyTransformer(Transformer):
 
         return tuple(args)
 
-    def text(self, args):  # noqa: ARG002
+    def text(self, args):  # ruff: ignore[unused-method-argument]
         """Discard text that can be ignored."""
         return Discard

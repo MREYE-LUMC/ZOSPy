@@ -127,7 +127,7 @@ def system_enum_to_namedtuple(enum):
     if "None" in names:
         names[names.index("None")] = "None_"
 
-    return namedtuple(label, names)._make(values)  # noqa
+    return namedtuple(label, names)._make(values)  # ruff: ignore[collections-named-tuple]
 
 
 def system_datetime_to_datetime(sdt):
@@ -146,7 +146,7 @@ def system_datetime_to_datetime(sdt):
     datetime.datetime
         The pyton datetime instance
     """
-    return dt(  # noqa: DTZ001
+    return dt(  # ruff: ignore[call-datetime-without-tzinfo]
         year=sdt.Year,
         month=sdt.Month,
         day=sdt.Day,

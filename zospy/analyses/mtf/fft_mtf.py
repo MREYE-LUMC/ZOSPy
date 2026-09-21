@@ -9,7 +9,7 @@ from pydantic import Field
 
 from zospy.analyses.base import BaseAnalysisWrapper
 from zospy.analyses.decorators import analysis_settings
-from zospy.analyses.parsers.types import (  # noqa: TC001
+from zospy.analyses.parsers.types import (  # ruff: ignore[typing-only-first-party-import]
     FieldNumber,
     WavelengthNumber,
     ZOSAPIConstant,

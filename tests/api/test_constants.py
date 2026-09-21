@@ -4,7 +4,7 @@ import pytest
 
 from zospy.api import constants
 
-# ruff: noqa: ARG002
+# ruff: file-ignore[unused-method-argument]
 
 
 class TestProcessConstant:
