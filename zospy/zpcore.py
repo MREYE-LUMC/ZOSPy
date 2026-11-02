@@ -24,7 +24,7 @@ import logging
 import warnings
 import weakref
 from sys import version_info
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, ClassVar, Literal
 from weakref import WeakValueDictionary
 
 from semver.version import Version
@@ -401,7 +401,7 @@ class ZOS:
         >>> oss = zos.connect(mode="standalone")
     """
 
-    _instances: WeakValueDictionary = WeakValueDictionary()
+    _instances: ClassVar[WeakValueDictionary[type, ZOS]] = WeakValueDictionary()
 
     def __new__(cls, *args, **kwargs):  # ruff: ignore[unused-static-method-argument]
         """Ensure that only one instance of ZOS exists at any time.
@@ -418,7 +418,11 @@ class ZOS:
         return cls._instances[cls]
 
     def __init__(
-        self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
+        self,
+        *,
+        preload: bool = False,
+        zosapi_nethelper: str | None = None,
+        opticstudio_directory: str | None = None,
     ):
         """Initiate the OpticStudio API.
 
@@ -451,12 +455,20 @@ class ZOS:
 
         logger.info("ZOS instance initialized")
 
-        self._wakeup(preload=preload, zosapi_nethelper=zosapi_nethelper, opticstudio_directory=opticstudio_directory)
+        self._wakeup(
+            preload=preload,
+            zosapi_nethelper=zosapi_nethelper,
+            opticstudio_directory=opticstudio_directory,
+        )
 
         self.__initialized = True
 
     def _wakeup(
-        self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
+        self,
+        *,
+        preload: bool = False,
+        zosapi_nethelper: str | None = None,
+        opticstudio_directory: str | None = None,
     ):
         """Wake the ZOSAPI instance.
 
@@ -476,12 +488,18 @@ class ZOS:
         """
         if self.Connection is None:
             self._load_zos_dlls(
-                preload=preload, zosapi_nethelper=zosapi_nethelper, opticstudio_directory=opticstudio_directory
+                preload=preload,
+                zosapi_nethelper=zosapi_nethelper,
+                opticstudio_directory=opticstudio_directory,
             )
             self._assign_connection()
 
     def _load_zos_dlls(
-        self, *, preload: bool = False, zosapi_nethelper: str | None = None, opticstudio_directory: str | None = None
+        self,
+        *,
+        preload: bool = False,
+        zosapi_nethelper: str | None = None,
+        opticstudio_directory: str | None = None,
     ):
         """Load the ZOS-API DLLs and makes them available for usage through ZOS.ZOSAPI and ZOS.ZOSAPI_NetHelper.
 
