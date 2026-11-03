@@ -49,7 +49,7 @@ in the Journal of Open Source Software:
 
 ## Contact
 
-Feel free to contact us via e-mail at [zospy@mreye.nl](mailto:zospy@mreye.nl) for any inquiries,
+Feel free to contact us via e-mail at [software@mreye.nl](mailto:software@mreye.nl) for any inquiries,
 or visit [mreye.nl](https://mreye.nl) to discover our research.
 
 ## Contents

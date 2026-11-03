@@ -123,7 +123,7 @@ Please read our [contribution guidelines](CONTRIBUTING.md) prior to opening a Pu
 
 ## Contact
 
-Feel free to contact us via e-mail at [zospy@mreye.nl](mailto:zospy@mreye.nl) for any inquiries,
+Feel free to contact us via e-mail at [software@mreye.nl](mailto:software@mreye.nl) for any inquiries,
 or visit [mreye.nl](https://mreye.nl) to discover our research.
 
 [opticstudio]: https://www.ansys.com/products/optics/ansys-zemax-opticstudio

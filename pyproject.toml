@@ -9,7 +9,7 @@ authors = [
     { name = "Jan-Willem Beenakker" },
     { name = "Corné Haasjes" },
 ]
-maintainers = [{ name = "MReye research group", email = "zospy@mreye.nl" }]
+maintainers = [{ name = "MReye research group", email = "software@mreye.nl" }]
 
 description = "A Python package used to communicate with Zemax OpticStudio through the API"
 readme = "README.md"
